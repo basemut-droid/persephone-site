@@ -19,10 +19,10 @@ const copyright = footer.copyright.replace('{year}', String(year));
 ---
 
 <div class="footer-wave" aria-hidden="true">
-  <svg viewBox="0 0 1440 60" preserveAspectRatio="none">
+  <svg viewBox="0 0 1440 40" preserveAspectRatio="none">
     <path
-      d="M0,32 C240,64 480,0 720,20 C960,40 1200,64 1440,28 L1440,0 L0,0 Z"
-      fill="var(--color-bg-alt)"
+      d="M0,18 C40,12 80,22 130,16 C190,9 230,20 290,14 C350,8 400,19 460,13 C520,7 570,17 630,12 C700,6 750,18 820,11 C880,6 930,16 990,10 C1050,5 1100,15 1160,10 C1220,6 1270,14 1330,9 C1370,6 1400,12 1440,9 L1440,40 L0,40 Z"
+      fill="#e9dccd"
     />
   </svg>
 </div>
@@ -31,7 +31,7 @@ const copyright = footer.copyright.replace('{year}', String(year));
     <div class="footer-brand">
       <Image src={signet} alt="Persephone" width={72} height={73} class="footer-logo" />
       <p class="footer-tagline">{footer.tagline}</p>
-      <span class="eyebrow">{footer.newsletterEyebrow}</span>
+      <span class="eyebrow footer-nl-eyebrow">{footer.newsletterEyebrow}</span>
       <a href="/newsletter/" class="footer-nl-link">{footer.newsletterCta} →</a>
     </div>
 
@@ -57,8 +57,11 @@ const copyright = footer.copyright.replace('{year}', String(year));
 
 <style>
   .footer-wave {
-    background: var(--color-band-bg);
+    /* Transparent: the newsletter band above shows through naturally right
+       up to the painted edge, instead of this wrapper adding its own
+       second flat-color strip on top of the SVG. */
     margin-top: -1px;
+    margin-bottom: 6rem;
   }
 
   .footer-wave svg {
@@ -68,7 +71,9 @@ const copyright = footer.copyright.replace('{year}', String(year));
   }
 
   .site-footer {
-    background: var(--color-bg-alt);
+    /* Same literal color as the separator's fill above, so the painted
+       edge and the footer read as one continuous surface. */
+    background: #e9dccd;
     color: var(--color-text);
     padding-block: 3rem 1.5rem;
   }
@@ -90,6 +95,10 @@ const copyright = footer.copyright.replace('{year}', String(year));
     max-width: 26ch;
     border-left: 3px solid var(--color-accent-strong);
     padding-left: 0.9rem;
+  }
+
+  .footer-nl-eyebrow {
+    color: var(--color-accent-strong);
   }
 
   .footer-nl-link {

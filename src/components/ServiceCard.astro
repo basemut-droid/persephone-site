@@ -58,6 +58,7 @@ const { title, description, href, cta, tone } = Astro.props;
 
   .card-button {
     align-self: flex-start;
+    margin-top: auto;
     background: var(--color-bg);
     color: var(--color-text);
     text-decoration: none;
@@ -82,6 +83,13 @@ const { title, description, href, cta, tone } = Astro.props;
   }
 
   .tone-sage {
-    background: linear-gradient(to right, var(--color-sage), color-mix(in srgb, var(--color-sage) 55%, white));
+    background: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-sage) 60%, var(--color-teal-dark) 40%),
+      var(--color-sage)
+    );
+    /* Cream text reads too weak against this lighter tone — dark teal
+       instead, for real contrast rather than just a darker gradient. */
+    color: var(--color-teal-dark);
   }
 </style>

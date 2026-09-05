@@ -169,13 +169,20 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
     color: var(--color-accent-strong);
   }
 
-  .hero-image img {
-    width: 100%;
-    height: auto;
+  .hero-image {
     /* Deliberately cropped shorter/wider than the source photo — matches
        the original, which crops this same image top and bottom rather
-       than showing it at full height. */
+       than showing it at full height. overflow:hidden + the img being
+       40px taller than its box (shifted up 20px) trims exactly 20px off
+       the top and bottom of what object-fit:cover would otherwise show. */
     aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  .hero-image img {
+    width: 100%;
+    height: calc(100% + 40px);
+    margin-top: -20px;
     object-fit: cover;
     display: block;
   }
@@ -259,7 +266,7 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
 
   @media (min-width: 900px) {
     .hero-grid {
-      grid-template-columns: 1fr 2fr;
+      grid-template-columns: 2fr 3fr;
       align-items: center;
     }
 
