@@ -81,10 +81,6 @@ h4 {
   margin: 0 0 0.5em;
 }
 
-.heading-black {
-  font-weight: var(--weight-heading);
-}
-
 h1 {
   font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
 }
@@ -131,13 +127,16 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.9rem 1.75rem;
+  padding: 0.65rem 1.3rem;
   border-radius: var(--radius);
   font-weight: 500;
+  font-size: 0.95rem;
   text-decoration: none;
   border: 2px solid transparent;
   cursor: pointer;
-  /* 44px is the minimum comfortable touch target (WCAG 2.5.5 / iOS HIG). */
+  /* 44px is the minimum comfortable touch target (WCAG 2.5.5 / iOS HIG) —
+     kept as a min-height rather than padding, so the button can still be
+     visually compact like the original's. */
   min-height: 44px;
   transition:
     transform 0.15s ease,

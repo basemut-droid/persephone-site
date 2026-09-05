@@ -24,7 +24,7 @@ const posts = (usingFallback ? allPosts.filter((p) => p.id.startsWith('de/')) : 
   .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
   .slice(0, 4);
 
-const serviceTones = ['teal', 'teal-dark', 'sage'] as const;
+const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
 ---
 
 <BaseLayout locale={locale} path={path} title={s.meta.title} description={s.meta.description}>
@@ -34,7 +34,7 @@ const serviceTones = ['teal', 'teal-dark', 'sage'] as const;
   <section class="hero">
     <div class="hero-grid">
       <div class="hero-copy">
-        <h1 class="heading-black">{s.hero.headline}</h1>
+        <h1 class="hero-headline">{s.hero.headline}</h1>
         {s.hero.paragraphs.map((p) => <p>{p}</p>)}
         <a href={s.hero.ctaHref} class="button button-primary">{s.hero.cta}</a>
       </div>
@@ -85,7 +85,7 @@ const serviceTones = ['teal', 'teal-dark', 'sage'] as const;
 
   <!-- Philosophy -->
   <section class="section section-alt">
-    <div class="container philosophy-grid">
+    <div class="container philosophy-grid narrow">
       <div>
         <span class="eyebrow">{s.philosophy.eyebrow}</span>
         <h2>{s.philosophy.heading}</h2>
@@ -154,7 +154,7 @@ const serviceTones = ['teal', 'teal-dark', 'sage'] as const;
   .hero-grid {
     display: grid;
     grid-template-columns: 1fr;
-    align-items: stretch;
+    align-items: center;
   }
 
   .hero-copy {
@@ -164,9 +164,16 @@ const serviceTones = ['teal', 'teal-dark', 'sage'] as const;
     justify-content: center;
   }
 
+  .hero-headline {
+    color: var(--color-accent-strong);
+  }
+
   .hero-image img {
     width: 100%;
-    height: 100%;
+    height: auto;
+    /* Deliberately cropped shorter/wider than the source photo — matches
+       the original, which crops this same image top and bottom rather
+       than showing it at full height. */
     aspect-ratio: 4 / 3;
     object-fit: cover;
     display: block;
@@ -210,6 +217,11 @@ const serviceTones = ['teal', 'teal-dark', 'sage'] as const;
     align-items: center;
   }
 
+  .narrow {
+    max-width: 62rem;
+    margin-inline: auto;
+  }
+
   .founder-photo img {
     width: 100%;
     aspect-ratio: 3 / 4;
@@ -247,17 +259,13 @@ const serviceTones = ['teal', 'teal-dark', 'sage'] as const;
   @media (min-width: 900px) {
     .hero-grid {
       grid-template-columns: 1fr 1fr;
-      min-height: 640px;
+      align-items: center;
     }
 
     .hero-copy {
       /* Aligns with the rest of the page's centered 1248px container,
          even though this row itself deliberately bleeds full-width. */
       padding-left: max(2.5rem, calc((100vw - var(--container-max)) / 2 + 2.5rem));
-    }
-
-    .hero-image img {
-      aspect-ratio: auto;
     }
 
     .philosophy-grid,
