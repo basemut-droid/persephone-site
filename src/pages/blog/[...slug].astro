@@ -28,7 +28,7 @@ const dateLabel = post.data.publishDate.toLocaleDateString('de-AT', {
   <article class="post">
     <header class="post-header container">
       {post.data.category && <span class="eyebrow">{post.data.category}</span>}
-      <h1>{post.data.title}</h1>
+      <h1 class="heading-black">{post.data.title}</h1>
       <p class="post-date">{dateLabel}</p>
     </header>
     {
