@@ -1,0 +1,41 @@
+---
+// The one full-bleed colored CTA strip pattern used across the site (the
+// homepage's newsletter section, and every subpage's closing CTA) — kept
+// as one component so all of them stay pixel-identical instead of drifting
+// into slightly different ad-hoc versions per page.
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  paragraphs: string[];
+  ctaLabel: string;
+  ctaHref: string;
+}
+const { eyebrow, heading, paragraphs, ctaLabel, ctaHref } = Astro.props;
+---
+
+<section class="section cta-band">
+  <div class="container cta-inner">
+    {eyebrow && <span class="eyebrow eyebrow-on-band">{eyebrow}</span>}
+    {heading && <h2>{heading}</h2>}
+    {paragraphs.map((p) => <p>{p}</p>)}
+    <a href={ctaHref} class="button button-primary">{ctaLabel}</a>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    background: var(--color-band-bg);
+    color: var(--color-text-on-accent);
+    text-align: center;
+  }
+
+  .cta-inner {
+    max-width: 60ch;
+    margin-inline: auto;
+  }
+
+  .eyebrow-on-band {
+    color: var(--color-text-on-accent);
+    opacity: 0.85;
+  }
+</style>

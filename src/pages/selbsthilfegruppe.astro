@@ -83,9 +83,14 @@ import PageHero from '../components/PageHero.astro';
   }
 
   .principles dt {
-    color: var(--color-accent-strong);
+    /* Matches the value-tile label treatment from the homepage (teal,
+       uppercase, bold) — this list does the same job. */
+    font-size: 0.85rem;
     font-weight: 700;
-    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-accent);
+    margin-bottom: 0.4rem;
   }
 
   .principles dd {

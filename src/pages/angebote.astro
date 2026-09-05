@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import ServiceCard from '../components/ServiceCard.astro';
+import CtaBand from '../components/CtaBand.astro';
 import { getSiteContent } from '../i18n/utils';
 
 const s = await getSiteContent('de');
@@ -55,16 +56,14 @@ const scenarios = [
     </div>
   </section>
 
-  <section class="section cta-band">
-    <div class="container cta-inner">
-      <h2>Wenn sich gerade nichts davon ganz richtig anfühlt</h2>
-      <p>
-        In einem kostenfreien, unverbindlichen Online-Gespräch (ca. 20 Minuten) finden wir
-        gemeinsam heraus, was für Dich gerade passt.
-      </p>
-      <a href="/termine/" class="button button-primary">Kennenlernen vereinbaren</a>
-    </div>
-  </section>
+  <CtaBand
+    heading="Wenn sich gerade nichts davon ganz richtig anfühlt"
+    paragraphs={[
+      'In einem kostenfreien, unverbindlichen Online-Gespräch (ca. 20 Minuten) finden wir gemeinsam heraus, was für Dich gerade passt.',
+    ]}
+    ctaLabel="Kennenlernen vereinbaren"
+    ctaHref="/termine/"
+  />
 </BaseLayout>
 
 <style>
@@ -93,12 +92,4 @@ const scenarios = [
     gap: 1.5rem;
   }
 
-  .cta-band {
-    text-align: center;
-  }
-
-  .cta-inner {
-    max-width: 40rem;
-    margin-inline: auto;
-  }
 </style>

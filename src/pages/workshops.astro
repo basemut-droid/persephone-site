@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
 
 const themen = [
   'Die Rolle der Psyche in der reproduktiven Krise',
@@ -50,13 +51,12 @@ const themen = [
     </div>
   </section>
 
-  <section class="section cta-band">
-    <div class="container cta-inner">
-      <h2>Der Persephone E-Brief</h2>
-      <p>Erfahre als Erste:r, wenn neue Workshoptermine online gehen.</p>
-      <a href="/newsletter/" class="button button-primary">e-Brief abonieren</a>
-    </div>
-  </section>
+  <CtaBand
+    heading="Der Persephone E-Brief"
+    paragraphs={['Erfahre als Erste:r, wenn neue Workshoptermine online gehen.']}
+    ctaLabel="e-Brief abonieren"
+    ctaHref="/newsletter/"
+  />
 </BaseLayout>
 
 <style>
@@ -77,12 +77,4 @@ const themen = [
     margin-bottom: 0.5rem;
   }
 
-  .cta-band {
-    text-align: center;
-  }
-
-  .cta-inner {
-    max-width: 32rem;
-    margin-inline: auto;
-  }
 </style>

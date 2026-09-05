@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
 import founderPhoto from '../assets/founder/marina-portrait.png';
 ---
 
@@ -65,13 +66,13 @@ import founderPhoto from '../assets/founder/marina-portrait.png';
     </div>
   </section>
 
-  <section class="section newsletter-band">
-    <div class="container newsletter-inner">
-      <h2>Der Persephone E-Brief</h2>
-      <p>Regelmäßig neue Blogartikel, kommende Treffen und Workshoptermine.</p>
-      <a href="/newsletter/" class="button button-primary">e-Brief abonieren</a>
-    </div>
-  </section>
+  <CtaBand
+    eyebrow="Bleib in Verbindung"
+    heading="Der Persephone E-Brief"
+    paragraphs={['Regelmäßig neue Blogartikel, kommende Treffen und Workshoptermine.']}
+    ctaLabel="e-Brief abonieren"
+    ctaHref="/newsletter/"
+  />
 </BaseLayout>
 
 <style>
@@ -96,8 +97,14 @@ import founderPhoto from '../assets/founder/marina-portrait.png';
   }
 
   .credentials-grid h2 {
+    /* Matches the value-tile label treatment used on the homepage
+       (teal, uppercase, bold) rather than a plain heading. */
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     color: var(--color-accent);
-    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
   }
 
   .credentials-grid ul {
@@ -107,17 +114,6 @@ import founderPhoto from '../assets/founder/marina-portrait.png';
 
   .credentials-grid li {
     margin-bottom: 0.5rem;
-  }
-
-  .newsletter-band {
-    background: var(--color-band-bg);
-    color: var(--color-text-on-accent);
-    text-align: center;
-  }
-
-  .newsletter-inner {
-    max-width: 40rem;
-    margin-inline: auto;
   }
 
   @media (min-width: 800px) {

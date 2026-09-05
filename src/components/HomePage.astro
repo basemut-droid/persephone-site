@@ -6,6 +6,7 @@ import ServiceCard from './ServiceCard.astro';
 import ValueTile from './ValueTile.astro';
 import QuoteStack from './QuoteStack.astro';
 import BlogTeaserCard from './BlogTeaserCard.astro';
+import CtaBand from './CtaBand.astro';
 import { getSiteContent, type Locale } from '../i18n/utils';
 import heroImage from '../assets/hero/granatapfel-fruchtbarkeit.png';
 import founderPhoto from '../assets/founder/marina-portrait.png';
@@ -136,14 +137,13 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
   }
 
   <!-- Newsletter CTA -->
-  <section class="section newsletter-band">
-    <div class="container newsletter-inner">
-      <span class="eyebrow eyebrow-on-band">{s.newsletter.eyebrow}</span>
-      <h2>{s.newsletter.heading}</h2>
-      {s.newsletter.paragraphs.map((p) => <p>{p}</p>)}
-      <a href={s.newsletter.ctaHref} class="button button-primary">{s.newsletter.cta}</a>
-    </div>
-  </section>
+  <CtaBand
+    eyebrow={s.newsletter.eyebrow}
+    heading={s.newsletter.heading}
+    paragraphs={s.newsletter.paragraphs}
+    ctaLabel={s.newsletter.cta}
+    ctaHref={s.newsletter.ctaHref}
+  />
 </BaseLayout>
 
 <style>
@@ -265,22 +265,6 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
     font-size: 0.9rem;
     color: var(--color-text-muted);
     margin-bottom: 1.5rem;
-  }
-
-  .newsletter-band {
-    background: var(--color-band-bg);
-    color: var(--color-text-on-accent);
-    text-align: center;
-  }
-
-  .newsletter-inner {
-    max-width: 60ch;
-    margin-inline: auto;
-  }
-
-  .eyebrow-on-band {
-    color: var(--color-text-on-accent);
-    opacity: 0.85;
   }
 
   @media (min-width: 900px) {
