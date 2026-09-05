@@ -154,7 +154,7 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
   .hero-grid {
     display: grid;
     grid-template-columns: 1fr;
-    align-items: center;
+    align-items: stretch;
   }
 
   .hero-copy {
@@ -178,13 +178,19 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
   .hero-image {
     /* The artwork has transparent margins around it (no baked-in
        background), so this shows through wherever the image doesn't
-       cover — matching the page instead of a stray dark rectangle. */
+       cover — matching the page instead of a stray dark rectangle.
+       overflow:hidden + the img stretching to height:100% means it
+       always fills this box exactly, at any window size, instead of
+       leaving a gap whenever the row ends up taller than the image's
+       own aspect ratio would otherwise render. */
     background: var(--color-bg);
+    overflow: hidden;
   }
 
   .hero-image img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
   }
 
