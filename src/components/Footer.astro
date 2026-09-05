@@ -59,9 +59,9 @@ const copyright = footer.copyright.replace('{year}', String(year));
   .footer-wave {
     /* Transparent: the newsletter band above shows through naturally right
        up to the painted edge, instead of this wrapper adding its own
-       second flat-color strip on top of the SVG. */
-    margin-top: -1px;
-    margin-bottom: 6rem;
+       second flat-color strip on top of the SVG. Gap goes above the
+       wave (between it and the teal band), not below it. */
+    margin-top: 6rem;
   }
 
   .footer-wave svg {

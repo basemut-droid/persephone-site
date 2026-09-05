@@ -88,8 +88,6 @@ const { title, description, href, cta, tone } = Astro.props;
       color-mix(in srgb, var(--color-sage) 60%, var(--color-teal-dark) 40%),
       var(--color-sage)
     );
-    /* Cream text reads too weak against this lighter tone — dark teal
-       instead, for real contrast rather than just a darker gradient. */
-    color: var(--color-teal-dark);
+    color: var(--color-text-on-accent);
   }
 </style>
