@@ -18,6 +18,14 @@ const year = new Date().getFullYear();
 const copyright = footer.copyright.replace('{year}', String(year));
 ---
 
+<div class="footer-wave" aria-hidden="true">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none">
+    <path
+      d="M0,32 C240,64 480,0 720,20 C960,40 1200,64 1440,28 L1440,0 L0,0 Z"
+      fill="var(--color-bg-alt)"
+    />
+  </svg>
+</div>
 <footer class="site-footer">
   <div class="container footer-grid">
     <div class="footer-brand">
@@ -48,11 +56,21 @@ const copyright = footer.copyright.replace('{year}', String(year));
 </footer>
 
 <style>
+  .footer-wave {
+    background: var(--color-band-bg);
+    margin-top: -1px;
+  }
+
+  .footer-wave svg {
+    display: block;
+    width: 100%;
+    height: 40px;
+  }
+
   .site-footer {
-    background: var(--color-text);
-    color: var(--color-text-on-accent);
+    background: var(--color-bg-alt);
+    color: var(--color-text);
     padding-block: 3rem 1.5rem;
-    margin-top: 4rem;
   }
 
   .footer-grid {
@@ -67,12 +85,15 @@ const copyright = footer.copyright.replace('{year}', String(year));
   }
 
   .footer-tagline {
-    opacity: 0.8;
-    max-width: 32ch;
+    color: var(--color-accent);
+    font-weight: 700;
+    max-width: 26ch;
+    border-left: 3px solid var(--color-accent-strong);
+    padding-left: 0.9rem;
   }
 
   .footer-nl-link {
-    text-decoration: none;
+    text-decoration: underline;
     font-weight: 600;
     display: inline-flex;
     min-height: 44px;
@@ -94,6 +115,7 @@ const copyright = footer.copyright.replace('{year}', String(year));
 
   .footer-column a {
     text-decoration: none;
+    color: var(--color-text);
     opacity: 0.85;
     display: inline-flex;
     min-height: 44px;
@@ -107,8 +129,10 @@ const copyright = footer.copyright.replace('{year}', String(year));
 
   .footer-copyright {
     margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(24, 26, 43, 0.12);
     font-size: 0.8rem;
-    opacity: 0.6;
+    color: var(--color-accent-strong);
   }
 
   @media (max-width: 700px) {

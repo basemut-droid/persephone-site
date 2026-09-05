@@ -60,7 +60,7 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
           )
         }
       </ul>
-      <a href={nav.ctaHref} class="button button-outline nav-cta">{nav.cta}</a>
+      <a href={nav.ctaHref} class="button button-primary nav-cta">{nav.cta}</a>
       <LanguageSwitcher locale={locale} path={path} label={switcherLabel} />
     </nav>
   </div>
@@ -87,9 +87,10 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
   .header-inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
+    justify-content: center;
+    gap: 3rem;
     padding-block: 1rem;
+    flex-wrap: wrap;
   }
 
   .logo {
@@ -98,7 +99,7 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
   }
 
   .logo :global(img) {
-    height: 32px;
+    height: 48px;
     width: auto;
   }
 
@@ -129,7 +130,7 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
   .primary-nav > ul > li > a,
   .nav-dropdown summary {
     text-decoration: none;
-    color: var(--color-text);
+    color: var(--color-accent-strong);
     font-weight: 500;
     cursor: pointer;
     padding: 0.5rem 0;
@@ -178,6 +179,9 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
 
   .nav-cta {
     white-space: nowrap;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
   }
 
   @media (max-width: 900px) {

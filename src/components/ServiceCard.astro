@@ -12,11 +12,13 @@ const { title, description, href, cta, tone } = Astro.props;
 <article class:list={['service-card', `tone-${tone}`]}>
   <h3><a href={href}>{title}</a></h3>
   <p>{description}</p>
-  <a href={href} class="button button-outline">{cta}</a>
+  <a href={href} class="card-button">{cta}</a>
 </article>
 
 <style>
   .service-card {
+    position: relative;
+    overflow: hidden;
     padding: 2.25rem;
     border-radius: var(--radius);
     color: var(--color-text-on-accent);
@@ -25,32 +27,61 @@ const { title, description, href, cta, tone } = Astro.props;
     gap: 1rem;
   }
 
+  /* Decorative pomegranate-seed texture, matching the live site's own
+     card background image — a scattered cluster tucked in one corner. */
+  .service-card::after {
+    content: '';
+    position: absolute;
+    inset: auto -20px -20px auto;
+    width: 180px;
+    height: 180px;
+    background: url('/textures/seed-texture.svg') no-repeat center / contain;
+    opacity: 0.9;
+    pointer-events: none;
+  }
+
+  .service-card h3,
+  .service-card p,
+  .service-card .card-button {
+    position: relative;
+    z-index: 1;
+  }
+
   .service-card h3 {
     margin: 0;
   }
 
-  .service-card a {
-    color: inherit;
-  }
-
   .service-card h3 a {
+    color: inherit;
     text-decoration: none;
   }
 
-  .service-card .button {
+  .card-button {
     align-self: flex-start;
-    border-color: currentColor;
-  }
-
-  .tone-sage {
-    background: var(--color-sage);
-  }
-
-  .tone-teal {
-    background: var(--color-teal);
+    background: var(--color-bg);
+    color: var(--color-text);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-style: italic;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 0.6rem 1.1rem;
+    border-radius: 4px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
   }
 
   .tone-teal-dark {
-    background: var(--color-teal-dark);
+    background: linear-gradient(to right, var(--color-teal-dark), var(--color-teal));
+  }
+
+  .tone-teal {
+    background: linear-gradient(to right, var(--color-teal), var(--color-sage));
+  }
+
+  .tone-sage {
+    background: linear-gradient(to right, var(--color-sage), color-mix(in srgb, var(--color-sage) 55%, white));
   }
 </style>

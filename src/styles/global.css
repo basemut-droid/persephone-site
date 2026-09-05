@@ -72,9 +72,17 @@ h2,
 h3,
 h4 {
   font-family: var(--font-heading);
-  font-weight: var(--weight-heading);
+  /* Regular weight by default — matches the live site, where most section
+     headings read as light/regular, not the Black/900 the brand book shows
+     for a masthead H1. Only the actual page headline (.heading-black,
+     used once per page on the hero <h1>) opts into that heavier weight. */
+  font-weight: 400;
   line-height: 1.2;
   margin: 0 0 0.5em;
+}
+
+.heading-black {
+  font-weight: var(--weight-heading);
 }
 
 h1 {
