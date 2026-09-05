@@ -36,7 +36,7 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
       <div class="hero-copy">
         <h1 class="hero-headline">{s.hero.headline}</h1>
         {s.hero.paragraphs.map((p) => <p>{p}</p>)}
-        <a href={s.hero.ctaHref} class="button button-primary">{s.hero.cta}</a>
+        <a href={s.hero.ctaHref} class="button button-primary hero-cta">{s.hero.cta}</a>
       </div>
       <div class="hero-image">
         <Image
@@ -158,7 +158,7 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
   }
 
   .hero-copy {
-    padding: 3rem clamp(1.25rem, 4vw, 2.5rem);
+    padding: 2rem clamp(1.25rem, 4vw, 2.5rem);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -167,19 +167,31 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
 
   .hero-headline {
     color: var(--color-accent-strong);
-    /* Smaller than the generic h1 clamp specifically here — at the
-       default size, "Zum Kern der Krise" wraps well before this
-       narrower column actually runs out of room. */
-    font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.1rem);
+    font-size: 2.75rem;
+    line-height: 1.2;
+    margin-bottom: 55px;
+  }
+
+  .hero-copy p {
+    font-size: 1.125rem;
+    line-height: 1.75;
+    margin-bottom: 24px;
+  }
+
+  .hero-copy p:last-of-type {
+    margin-bottom: 60px;
+  }
+
+  .hero-cta {
+    padding: 18px 32px;
+    min-height: 57px;
+    font-style: italic;
   }
 
   .hero-image {
     /* The artwork has transparent margins around it (no baked-in
        background), so this shows through wherever the image doesn't
-       cover — matching the page instead of a stray dark rectangle.
-       Explicit height: the absolutely-positioned img below needs a
-       definite height to size against — on the stacked mobile layout
-       there's no grid row stretch to provide one. */
+       cover — matching the page instead of a stray dark rectangle. */
     position: relative;
     height: 320px;
     background: var(--color-bg);
@@ -187,16 +199,10 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
   }
 
   .hero-image img {
-    /* Sized by height, not width: the image stays at a constant scale
-       as the window resizes (matching the row's height, which itself
-       barely moves) — narrowing the window crops its sides via
-       overflow:hidden above, instead of shrinking the whole image. */
-    position: absolute;
-    top: 0;
-    right: 0;
+    width: 100%;
     height: 100%;
-    width: auto;
-    max-width: none;
+    object-fit: cover;
+    object-position: center;
     display: block;
   }
 
@@ -279,7 +285,8 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
 
   @media (min-width: 900px) {
     .hero-grid {
-      grid-template-columns: 1fr 2fr;
+      grid-template-columns: 45% 55%;
+      height: 520px;
     }
 
     .hero-image {
@@ -287,12 +294,8 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
     }
 
     .hero-copy {
-      /* Explicit width + margin:auto, not max-width — max-width alone
-         left the leftover space unresolved (grid's default stretch just
-         parked the box at the column's start instead of centering it).
-         A firm width centers predictably, with each line inside still
-         starting flush left. */
-      width: 66.67%;
+      width: 500px;
+      max-width: 100%;
       margin-inline: auto;
       padding-inline: 0;
     }

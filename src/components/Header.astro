@@ -22,7 +22,7 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
 <header class="site-header">
   <div class="container header-inner">
     <a href={homeHref} class="logo" aria-label="Persephone – zur Startseite">
-      <Image src={wordmark} alt="Persephone" width={243} height={64} />
+      <Image src={wordmark} alt="Persephone" width={400} height={106} />
     </a>
 
     <button
@@ -42,7 +42,7 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
             item.children ? (
               <li>
                 <details class="nav-dropdown">
-                  <summary>{item.label}</summary>
+                  <summary>{item.label} <span class="caret" aria-hidden="true">▾</span></summary>
                   <ul>
                     {item.children.map((child) => (
                       <li>
@@ -78,7 +78,9 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
 
 <style>
   .site-header {
-    background: var(--color-bg-alt);
+    /* Same surface as the hero directly below it — no separate band, no
+       border, they read as one continuous background. */
+    background: var(--color-bg);
     position: sticky;
     top: 0;
     z-index: 50;
@@ -89,7 +91,7 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
     align-items: center;
     justify-content: center;
     gap: 3rem;
-    padding-block: 1rem;
+    padding-block: 2rem;
     flex-wrap: wrap;
   }
 
@@ -99,8 +101,8 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
   }
 
   .logo :global(img) {
-    height: 48px;
-    width: auto;
+    width: 200px;
+    height: auto;
   }
 
   .nav-toggle {
@@ -132,12 +134,13 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
     text-decoration: none;
     color: var(--color-accent-strong);
     font-weight: 500;
+    font-size: 1.0625rem;
     cursor: pointer;
     padding: 0.5rem 0;
-    display: inline-block;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
+    gap: 0.35rem;
   }
 
   .nav-dropdown {
@@ -146,6 +149,15 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
 
   .nav-dropdown summary::-webkit-details-marker {
     display: none;
+  }
+
+  .nav-dropdown summary .caret {
+    font-size: 0.7em;
+    transition: transform 0.15s ease;
+  }
+
+  .nav-dropdown[open] summary .caret {
+    transform: rotate(180deg);
   }
 
   .nav-dropdown[open] summary {
