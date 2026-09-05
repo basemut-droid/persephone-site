@@ -30,8 +30,24 @@ const { eyebrow, heading, paragraphs, ctaLabel, ctaHref } = Astro.props;
   }
 
   .cta-inner {
-    max-width: 60ch;
+    /* 56rem, matching .section-narrow — the same measure the homepage's
+       other centered-copy section (pain-points) uses, rather than the
+       odd one-off 60ch this used to be. */
+    max-width: 56rem;
     margin-inline: auto;
+  }
+
+  /* Explicit rhythm instead of relying on each element's bare default
+     margin — uses the spacing scale from DESIGN-SYSTEM.md. The eyebrow's
+     own default margin-bottom (0.75rem, global.css) already lands
+     exactly on --space-2, so it's left alone; only the two gaps that
+     were compressed get an explicit token. */
+  .cta-inner h2 {
+    margin-bottom: var(--space-6); /* matches .section-heading's rhythm */
+  }
+
+  .cta-inner p:last-of-type {
+    margin-bottom: var(--space-7); /* generous pre-button gap, on-scale */
   }
 
   .eyebrow-on-band {

@@ -35,9 +35,9 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
   <section class="hero">
     <div class="hero-grid">
       <div class="hero-copy">
-        <h1 class="hero-headline">{s.hero.headline}</h1>
+        <h1 class="hero-headline heading-black">{s.hero.headline}</h1>
         {s.hero.paragraphs.map((p) => <p>{p}</p>)}
-        <a href={s.hero.ctaHref} class="button button-primary hero-cta">{s.hero.cta}</a>
+        <a href={s.hero.ctaHref} class="button button-primary button-hero">{s.hero.cta}</a>
       </div>
       <div class="hero-image">
         <Image
@@ -166,8 +166,10 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
   }
 
   .hero-headline {
+    /* Sizing now comes from the shared h1 clamp(2rem, 1.5rem+2vw, 3rem) in
+       global.css — no more local fixed 2.75rem — so this matches every
+       subpage's PageHero h1 exactly and scales down on mobile like they do. */
     color: var(--color-accent-strong);
-    font-size: 2.75rem;
     line-height: 1.2;
     margin-bottom: 55px;
   }
@@ -180,12 +182,6 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
 
   .hero-copy p:last-of-type {
     margin-bottom: 60px;
-  }
-
-  .hero-cta {
-    padding: 18px 32px;
-    min-height: 57px;
-    font-style: italic;
   }
 
   .hero-image {
@@ -204,30 +200,6 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
     object-fit: cover;
     object-position: center;
     display: block;
-  }
-
-  .section {
-    padding-block: clamp(3rem, 5vw, 5rem);
-  }
-
-  .section-alt {
-    background: var(--color-bg-alt);
-  }
-
-  .section-centered {
-    text-align: center;
-  }
-
-  .section-narrow {
-    max-width: 56rem;
-    margin-inline: auto;
-  }
-
-  .section-heading {
-    text-align: center;
-    max-width: 56rem;
-    margin-inline: auto;
-    margin-bottom: 2.5rem;
   }
 
   .service-grid {

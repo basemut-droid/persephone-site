@@ -21,8 +21,8 @@ const copyright = footer.copyright.replace('{year}', String(year));
 <div class="footer-wave" aria-hidden="true">
   <svg viewBox="0 0 1440 40" preserveAspectRatio="none">
     <path
+      class="footer-wave-path"
       d="M0,18 C40,12 80,22 130,16 C190,9 230,20 290,14 C350,8 400,19 460,13 C520,7 570,17 630,12 C700,6 750,18 820,11 C880,6 930,16 990,10 C1050,5 1100,15 1160,10 C1220,6 1270,14 1330,9 C1370,6 1400,12 1440,9 L1440,40 L0,40 Z"
-      fill="#e9dccd"
     />
   </svg>
 </div>
@@ -70,10 +70,14 @@ const copyright = footer.copyright.replace('{year}', String(year));
     height: 40px;
   }
 
+  .footer-wave-path {
+    fill: var(--color-footer-bg);
+  }
+
   .site-footer {
-    /* Same literal color as the separator's fill above, so the painted
-       edge and the footer read as one continuous surface. */
-    background: #e9dccd;
+    /* Same token as the separator's fill above, so the painted edge and
+       the footer read as one continuous surface. */
+    background: var(--color-footer-bg);
     color: var(--color-text);
     padding-block: 3rem 1.5rem;
   }

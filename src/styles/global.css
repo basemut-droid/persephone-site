@@ -33,6 +33,12 @@
   --color-cta-from: var(--color-terracotta);
   --color-cta-to: var(--color-terracotta-dark);
   --color-band-bg: var(--color-teal);
+  /* Not one of the 8 brand-book colors — an extra literal the earlier
+     parsing session picked to match the live site's footer. Tokenized
+     here so it isn't hardcoded twice, but flagged: confirm with the
+     client whether it should instead be one of the official tones
+     (e.g. a tint of Warmes Elfenbein) before it spreads to more pages. */
+  --color-footer-bg: #e9dccd;
 
   /* Typography — DM Sans only (per brand book: it "carries all body text,
      all UI elements, all form labels"; there is no second heading font).
@@ -46,6 +52,22 @@
 
   --radius: 6px;
   --container-max: 1248px;
+
+  /* Spacing scale proposed in DESIGN-SYSTEM.md's audit. Defining the
+     tokens here doesn't change anything by itself — nothing referenced
+     them before this — so this is additive only. Currently used by
+     CtaBand's internal rhythm (see its own comments); not yet rolled
+     out to replace the ad-hoc values elsewhere in the site pending a
+     separate okay to do that site-wide. */
+  --space-1: 0.5rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 2.5rem;
+  --space-7: 3rem;
+  --space-8: 5rem;
+  --space-9: 6rem;
 
   color-scheme: light;
 }
@@ -81,6 +103,15 @@ h4 {
   margin: 0 0 0.5em;
 }
 
+/* The one masthead headline per page — the homepage hero's h1 and every
+   subpage's PageHero h1 — opts into the brand book's Black/900 weight
+   (p.7 "Typografie": H1 30pt/900). Section h2/h3 stay at the regular
+   weight above; the brand book's H2/900 spec is intentionally not
+   applied here, per client decision. */
+.heading-black {
+  font-weight: var(--weight-heading);
+}
+
 h1 {
   font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
 }
@@ -111,6 +142,37 @@ a {
   max-width: var(--container-max);
   margin-inline: auto;
   padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+/* Section rhythm — these were previously trapped inside HomePage.astro's
+   own scoped <style> block, so Astro's automatic per-component scoping
+   meant they only ever matched sections written directly in that one
+   file. Every other component/page using bare class="section" (CtaBand,
+   and nearly every subpage's own sections) silently got none of this —
+   not overridden, just never matched. Moved here so they're actually
+   global, matching what DESIGN-SYSTEM.md already documented them as. */
+.section {
+  padding-block: clamp(3rem, 5vw, 5rem);
+}
+
+.section-alt {
+  background: var(--color-bg-alt);
+}
+
+.section-centered {
+  text-align: center;
+}
+
+.section-narrow {
+  max-width: 56rem;
+  margin-inline: auto;
+}
+
+.section-heading {
+  text-align: center;
+  max-width: 56rem;
+  margin-inline: auto;
+  margin-bottom: 2.5rem;
 }
 
 .eyebrow {
@@ -150,6 +212,16 @@ a {
 .button-primary {
   background: linear-gradient(135deg, var(--color-cta-from), var(--color-cta-to));
   color: var(--color-surface);
+}
+
+/* The homepage hero's CTA only — bigger and italic, distinct from the
+   compact .button-primary used everywhere else (nav, CtaBand, forms).
+   Confirmed with the client as a hero-specific treatment, not the
+   general primary-button style. */
+.button-hero {
+  padding: 18px 32px;
+  min-height: 57px;
+  font-style: italic;
 }
 
 .button-outline {
