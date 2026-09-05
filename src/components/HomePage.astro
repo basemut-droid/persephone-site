@@ -163,34 +163,40 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    /* Centers this (narrower-than-the-column) text block within its
-       1/3 column — the text itself stays left-aligned, but the block as
-       a whole sits in the middle of the column rather than hugging its
-       left edge, matching the original. */
-    max-width: 26rem;
-    margin-inline: auto;
   }
 
   .hero-headline {
     color: var(--color-accent-strong);
+    /* Smaller than the generic h1 clamp specifically here — at the
+       default size, "Zum Kern der Krise" wraps well before this
+       narrower column actually runs out of room. */
+    font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.1rem);
   }
 
   .hero-image {
     /* The artwork has transparent margins around it (no baked-in
        background), so this shows through wherever the image doesn't
        cover — matching the page instead of a stray dark rectangle.
-       overflow:hidden + the img stretching to height:100% means it
-       always fills this box exactly, at any window size, instead of
-       leaving a gap whenever the row ends up taller than the image's
-       own aspect ratio would otherwise render. */
+       Explicit height: the absolutely-positioned img below needs a
+       definite height to size against — on the stacked mobile layout
+       there's no grid row stretch to provide one. */
+    position: relative;
+    height: 320px;
     background: var(--color-bg);
     overflow: hidden;
   }
 
   .hero-image img {
-    width: 100%;
+    /* Sized by height, not width: the image stays at a constant scale
+       as the window resizes (matching the row's height, which itself
+       barely moves) — narrowing the window crops its sides via
+       overflow:hidden above, instead of shrinking the whole image. */
+    position: absolute;
+    top: 0;
+    right: 0;
     height: 100%;
-    object-fit: cover;
+    width: auto;
+    max-width: none;
     display: block;
   }
 
@@ -274,7 +280,21 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
   @media (min-width: 900px) {
     .hero-grid {
       grid-template-columns: 1fr 2fr;
-      align-items: center;
+    }
+
+    .hero-image {
+      height: 100%;
+    }
+
+    .hero-copy {
+      /* Explicit width + margin:auto, not max-width — max-width alone
+         left the leftover space unresolved (grid's default stretch just
+         parked the box at the column's start instead of centering it).
+         A firm width centers predictably, with each line inside still
+         starting flush left. */
+      width: 66.67%;
+      margin-inline: auto;
+      padding-inline: 0;
     }
 
     .philosophy-grid,
