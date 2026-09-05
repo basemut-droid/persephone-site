@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import { getSiteContent } from '../i18n/utils';
+
+const s = await getSiteContent('de');
+const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
+
+const scenarios = [
+  'Du meidest Kindergeburtstage und Familienfeiern.',
+  'Dein Körper tut nicht, was er soll — und das fühlt sich wie Verrat an.',
+  'Medizinische Behandlungszyklen ziehen sich seit Monaten oder Jahren.',
+  'Du und Dein:e Partner:in seht die Situation unterschiedlich.',
+  'Du suchst Austausch mit Menschen, die es wirklich verstehen.',
+  'Du weißt nicht, wie ein Leben ohne Kinder für Dich aussehen könnte.',
+];
+---
+
+<BaseLayout
+  locale="de"
+  path="/angebote/"
+  title="Angebote – Persephone"
+  description="Beratung & Coaching, Workshops & Einzeltrainings, Selbsthilfegruppe — Persephones Angebote für Menschen mit unerfülltem Kinderwunsch."
+>
+  <PageHero eyebrow="Wo stehst Du gerade?" title="Angebote" />
+
+  <section class="section">
+    <div class="container section-narrow">
+      <p>
+        Menschen mit unerfülltem Kinderwunsch kommen an ganz unterschiedlichen Punkten zu
+        Persephone. Deshalb fragen wir zuerst: Wo stehst Du gerade?
+      </p>
+      <ul class="scenario-list">
+        {scenarios.map((s) => <li>{s}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="service-grid">
+        {
+          s.services.items.map((item, i) => (
+            <ServiceCard
+              title={item.title}
+              description={item.description}
+              href={item.href}
+              cta={item.cta}
+              tone={serviceTones[i % serviceTones.length]}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-band">
+    <div class="container cta-inner">
+      <h2>Wenn sich gerade nichts davon ganz richtig anfühlt</h2>
+      <p>
+        In einem kostenfreien, unverbindlichen Online-Gespräch (ca. 20 Minuten) finden wir
+        gemeinsam heraus, was für Dich gerade passt.
+      </p>
+      <a href="/termine/" class="button button-primary">Kennenlernen vereinbaren</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section-narrow {
+    max-width: 56rem;
+    margin-inline: auto;
+  }
+
+  .scenario-list {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .scenario-list li {
+    border-left: 3px solid var(--color-accent-strong);
+    padding-left: 1rem;
+    font-style: italic;
+  }
+
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .cta-band {
+    text-align: center;
+  }
+
+  .cta-inner {
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+</style>

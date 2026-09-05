@@ -1,0 +1,132 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import founderPhoto from '../assets/founder/marina-portrait.png';
+---
+
+<BaseLayout
+  locale="de"
+  path="/ueber-uns/"
+  title="Über uns – Persephone"
+  description="Marina Bletsas, Gründerin von Persephone: von innen und von Fach — ihr Weg von der eigenen Kinderwunschkrise zur psychosozialen Begleitung anderer."
+>
+  <PageHero
+    eyebrow="Über uns"
+    title="Persephone ist die Frucht der eigenen Krise"
+    intro="Was 2021 als leise Suche nach Austausch begann, ist heute ein Ort für alle, die durch dieselbe Schwelle gehen."
+  />
+
+  <section class="section">
+    <div class="container bio-grid">
+      <div class="bio-photo">
+        <Image src={founderPhoto} alt="Marina Bletsas, Gründerin von Persephone" width={700} height={933} />
+      </div>
+      <div class="bio-text">
+        <p>
+          Ich bin Marina Bletsas. Vielleicht kennst Du mich aus meiner Selbsthilfearbeit als
+          Marina von Persephone.
+        </p>
+        <p>
+          2021 habe ich, mitten in meiner eigenen Kinderwunschkrise, eine anonyme Gruppe
+          gegründet — benannt nach der Mythosfigur, die für Abstieg und Wiederkehr mit neuer
+          Frucht steht. Aus der leisen Suche nach Austausch wurde mit der Zeit ein Ort für alle,
+          die durch dieselbe Schwelle gehen.
+        </p>
+        <p>
+          Meinen beruflichen Ursprung habe ich in der Linguistik und der universitären Forschung.
+          Doch je länger ich die Gruppe begleitete, desto klarer wurde: Ich will über die eigene
+          Krise hinaus Menschen mit unerfülltem Kinderwunsch begleiten. Also habe ich mich
+          psychosozial weitergebildet — mit dem Wissen, wie Kommunikation Realitäten formt, und
+          der eigenen Erfahrung dessen, was in keinem Lehrbuch steht.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container credentials-grid">
+      <div>
+        <h2>Ausbildung</h2>
+        <ul>
+          <li>Lebens- und Sozialberaterin i.A.u.S. bei KEPOS</li>
+          <li>Personzentrierte Psychotherapie in Ausbildung bei AGP | IPS</li>
+          <li>Doktorat der Linguistik, Universität Bonn (Schwerpunkt Argumentationstheorie)</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Erfahrung</h2>
+        <ul>
+          <li>Gründerin &amp; Leiterin der Persephone-Selbsthilfegruppe, seit 2021</li>
+          <li>Krisenbegleitung, Caritas Steiermark</li>
+          <li>Therapeutische Ambulanzassistenz, SFU Wien</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section newsletter-band">
+    <div class="container newsletter-inner">
+      <h2>Der Persephone E-Brief</h2>
+      <p>Regelmäßig neue Blogartikel, kommende Treffen und Workshoptermine.</p>
+      <a href="/newsletter/" class="button button-primary">e-Brief abonieren</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .bio-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .bio-photo img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+
+  .credentials-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .credentials-grid h2 {
+    color: var(--color-accent);
+    font-size: 1.1rem;
+  }
+
+  .credentials-grid ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .credentials-grid li {
+    margin-bottom: 0.5rem;
+  }
+
+  .newsletter-band {
+    background: var(--color-band-bg);
+    color: var(--color-text-on-accent);
+    text-align: center;
+  }
+
+  .newsletter-inner {
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 800px) {
+    .bio-grid {
+      grid-template-columns: 1fr 1.5fr;
+    }
+
+    .credentials-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

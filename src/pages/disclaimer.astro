@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+---
+<BaseLayout
+  locale="de"
+  path="/disclaimer/"
+  title="Disclaimer – Persephone"
+  description="Was Persephone leistet – und was nicht."
+>
+  <PageHero title="Was Persephone leistet – und was nicht" />
+
+  <section class="section">
+    <div class="container section-narrow">
+      <p>
+        Persephone bietet psychosoziale Beratung, Psychoedukation und Selbsthilfe bei
+        unerfülltem Kinderwunsch. Persephone bietet <strong>keine Psychotherapie</strong> an.
+      </p>
+      <p>
+        Wenn Du bei Dir eine psychische Erkrankung vermutest oder bereits diagnostiziert wurde,
+        wende Dich bitte vorrangig an eine:n Psychotherapeut:in. Bist Du Dir unsicher, was Du
+        gerade brauchst, melde Dich gerne bei mir — gemeinsam finden wir heraus, welches Angebot
+        passt, notfalls auch außerhalb von Persephone.
+      </p>
+      <p>
+        Meine Beratungstätigkeit findet im Rahmen einer laufenden Ausbildung zur Lebens- und
+        Sozialberaterin bei KEPOS statt, unter fachlicher Supervision. Weitere Qualifikationen
+        findest Du auf der <a href="/ueber-uns/">Über uns</a>-Seite.
+      </p>
+      <p>Persephone — Navigationshilfe im Sturm des Kinderwunsches.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section-narrow {
+    max-width: 56rem;
+    margin-inline: auto;
+  }
+</style>

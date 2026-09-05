@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+---
+<BaseLayout
+  locale="de"
+  path="/beratung/"
+  title="Beratung & Coaching – Persephone"
+  description="Psychosoziale Beratung für Einzelpersonen und Paare im unerfüllten Kinderwunsch — mit Marina Bletsas, Wien und online."
+>
+  <PageHero
+    eyebrow="Angebote"
+    title="Beratung & Coaching"
+    intro="Beratung bietet Dir die Möglichkeit, innezuhalten, zu reflektieren und eine Sprache für das Unaussprechliche zu finden."
+  />
+
+  <section class="section">
+    <div class="container section-narrow">
+      <p>
+        Psychosoziale Beratung setzt an der Begleitung durch Krisen und schwierige
+        Lebenssituationen an — für Menschen, die (noch) keine klinische Psychotherapie
+        benötigen. Sie arbeitet ressourcen- und lösungsorientiert an dem, was gerade ansteht.
+      </p>
+      <p>
+        Als Linguistin und psychosoziale Beraterin in Ausbildung unter Supervision verbinde ich
+        Kommunikationsexpertise mit fachlicher Begleitung.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container format-grid">
+      <article class="format-card">
+        <h2>Einzelberatung</h2>
+        <p class="format-meta">50 Minuten · Wien, online</p>
+        <ul>
+          <li>Emotionale Entlastung</li>
+          <li>Reflexion der eigenen Lebenssituation</li>
+          <li>Umgang mit sozialem Druck</li>
+          <li>Vorbereitung auf ärztliche Termine</li>
+        </ul>
+      </article>
+      <article class="format-card">
+        <h2>Paarberatung</h2>
+        <p class="format-meta">90 Minuten · Wien, online</p>
+        <ul>
+          <li>Unterschiedliche Trauerstile verstehen</li>
+          <li>Kommunikation in der Krise</li>
+          <li>Gemeinsame Entscheidungsfindung</li>
+          <li>Nähe und Intimität im Kinderwunsch</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container section-narrow info-list">
+      <p><strong>Ausbildung:</strong> Ich arbeite in Ausbildung unter Supervision — das sichert die Qualität meiner Arbeit ab.</p>
+      <p><strong>Kosten:</strong> Werden im kostenfreien Erstgespräch individuell besprochen. Zahlung per Bar oder Überweisung.</p>
+      <p><strong>Absagen:</strong> Termine können bis 48 Stunden vorher kostenfrei abgesagt oder verschoben werden.</p>
+      <p><strong>Verschwiegenheit:</strong> Berufliche Verschwiegenheit ist selbstverständlich gewährleistet.</p>
+    </div>
+  </section>
+
+  <section class="section cta-band">
+    <div class="container cta-inner">
+      <p>Das online Kennenlernen (ca. 20 Min.) ist kostenfrei.</p>
+      <a href="/termine/" class="button button-primary">Termin vereinbaren</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section-narrow {
+    max-width: 56rem;
+    margin-inline: auto;
+  }
+
+  .format-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .format-card {
+    background: var(--color-surface);
+    padding: 2rem;
+    border-radius: var(--radius);
+  }
+
+  .format-card h2 {
+    color: var(--color-accent-strong);
+    margin-bottom: 0.25rem;
+  }
+
+  .format-meta {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    color: var(--color-accent);
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+  }
+
+  .format-card ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .format-card li {
+    margin-bottom: 0.4rem;
+  }
+
+  .info-list p {
+    border-bottom: 1px solid rgba(24, 26, 43, 0.1);
+    padding-bottom: 1.25rem;
+  }
+
+  .cta-band {
+    text-align: center;
+  }
+
+  .cta-inner {
+    max-width: 32rem;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 700px) {
+    .format-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

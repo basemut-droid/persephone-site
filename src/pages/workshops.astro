@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+
+const themen = [
+  'Die Rolle der Psyche in der reproduktiven Krise',
+  'Partnerschaft und unerfüllter Kinderwunsch',
+  'Umgang mit Nachfragen und Erwartungen aus Familie und Umfeld',
+  'Trauer und ambivalente Gefühle',
+];
+---
+<BaseLayout
+  locale="de"
+  path="/workshops/"
+  title="Workshops & Einzeltrainings – Persephone"
+  description="Psychoedukative Workshops und Einzeltrainings für Menschen mit unerfülltem Kinderwunsch — in Wien, Graz und online."
+>
+  <PageHero
+    eyebrow="Angebote"
+    title="Workshops & Einzeltrainings"
+    intro="Wissen schafft Orientierung. Persephones psychoedukative Angebote vermitteln fundiertes Verständnis für die reproduktive Krise und unterstützen Dich dabei, eigene Bewältigungsstrategien zu entwickeln."
+  />
+
+  <section class="section">
+    <div class="container section-narrow">
+      <h2>Was ist Psychoedukation?</h2>
+      <p>
+        Psychoedukation macht psychologisches Wissen zugänglich, um Menschen in schwierigen
+        Lebenssituationen zu unterstützen. Sie hilft, die eigenen Krisenprozesse zu verstehen
+        und die Handlungsfähigkeit zurückzugewinnen.
+      </p>
+
+      <h2>Themen</h2>
+      <ul>
+        {themen.map((t) => <li>{t}</li>)}
+      </ul>
+
+      <h2>Orte</h2>
+      <p>Wien, Graz und online.</p>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container section-narrow resources">
+      <h2>Ressourcen</h2>
+      <p>
+        Demnächst verfügbar: herunterladbare Arbeitsblätter, Leselisten, Audio-Reflexionen und
+        Podcasts.
+      </p>
+    </div>
+  </section>
+
+  <section class="section cta-band">
+    <div class="container cta-inner">
+      <h2>Der Persephone E-Brief</h2>
+      <p>Erfahre als Erste:r, wenn neue Workshoptermine online gehen.</p>
+      <a href="/newsletter/" class="button button-primary">e-Brief abonieren</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section-narrow {
+    max-width: 56rem;
+    margin-inline: auto;
+  }
+
+  .section-narrow h2 {
+    margin-top: 2rem;
+  }
+
+  .section-narrow ul {
+    padding-left: 1.25rem;
+  }
+
+  .section-narrow li {
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-band {
+    text-align: center;
+  }
+
+  .cta-inner {
+    max-width: 32rem;
+    margin-inline: auto;
+  }
+</style>

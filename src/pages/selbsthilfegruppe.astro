@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+---
+<BaseLayout
+  locale="de"
+  path="/selbsthilfegruppe/"
+  title="Selbsthilfegruppe – Persephone"
+  description="Persephones Selbsthilfegruppe für Menschen mit unerfülltem Kinderwunsch — monatliche Treffen in Graz und online, moderiert von Marina Bletsas."
+>
+  <PageHero
+    eyebrow="Angebote"
+    title="Selbsthilfegruppe"
+    intro="Ein Raum für Austausch, gegenseitige Unterstützung und gemeinsame Reflexion mit Menschen, die die Erfahrung der Kinderwunschkrise teilen."
+  />
+
+  <section class="section">
+    <div class="container section-narrow">
+      <h2>Über die Gruppe</h2>
+      <p>
+        Ich habe diese Gruppe 2021 gemeinsam mit meinem Mann Claudio in Graz gegründet. Viele
+        Menschen mit Kinderwunsch standen vor ähnlichen Herausforderungen — bei nur begrenzt
+        verfügbarer Unterstützung. Heute läuft die Gruppe niederschwellig über Selbsthilfe
+        Steiermark, mit Treffen in Präsenz und online. Ich moderiere die Gespräche entlang der
+        Themen und Bedürfnisse der Teilnehmenden — als Peer-Support, nicht als Therapie oder
+        Beratung.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container section-narrow">
+      <h2>Grundprinzipien der Gruppe</h2>
+      <dl class="principles">
+        <div>
+          <dt>Vertraulichkeit</dt>
+          <dd>Was in der Gruppe besprochen wird, bleibt in der Gruppe.</dd>
+        </div>
+        <div>
+          <dt>Respekt</dt>
+          <dd>Unterschiedliche Wege und Bewältigungsstrategien werden respektiert.</dd>
+        </div>
+        <div>
+          <dt>Peer-Support</dt>
+          <dd>Die Teilnehmenden unterstützen sich gegenseitig — auf Augenhöhe.</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container section-narrow next-meeting">
+      <span class="eyebrow">Aktuelles</span>
+      <h2>Nächstes SHG-Treffen</h2>
+      <p>
+        Die Treffen finden monatlich an einem Sonntagnachmittag statt, in Graz oder online. Die
+        Teilnahme ist kostenlos, erfordert aber eine verbindliche Anmeldung.
+      </p>
+      <p class="meeting-details">
+        Sonntag, 30. August 2026 · 15–17 Uhr<br />
+        Lauzilgasse 25, 8020 Graz (Jugend am Werk)
+      </p>
+      <p>
+        <em
+          >Anmeldung derzeit über ein Formular, das noch verlinkt werden muss — bitte Link
+          nachreichen.</em
+        >
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section-narrow {
+    max-width: 56rem;
+    margin-inline: auto;
+  }
+
+  .principles {
+    margin: 1.5rem 0 0;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .principles dt {
+    color: var(--color-accent-strong);
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .principles dd {
+    margin: 0;
+  }
+
+  .next-meeting {
+    background: var(--color-bg-alt);
+    padding: 2rem;
+    border-radius: var(--radius);
+  }
+
+  .meeting-details {
+    font-weight: 700;
+    color: var(--color-text);
+  }
+</style>

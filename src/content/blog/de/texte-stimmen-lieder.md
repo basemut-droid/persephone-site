@@ -1,7 +1,7 @@
 ---
 title: "Texte. Stimmen. Lieder."
 description: "Herausforderungen & Ressourcen im Kinderwunsch"
-publishDate: 2026-07-08
+publishDate: 2026-01-31
 category: "Herausforderungen & Ressourcen"
 heroImage: "../../../assets/blog/texte-stimmen-lieder.jpg"
 heroImageAlt: "Symbolbild zu Texten, Stimmen und Liedern als Ressourcen im Kinderwunsch"

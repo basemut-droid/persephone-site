@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ContactForm from '../components/ContactForm.astro';
+---
+<BaseLayout
+  locale="de"
+  path="/kontakt/"
+  title="Kontakt – Persephone"
+  description="Fragen, Feedback oder eine Nachricht an Marina Bletsas — Persephone in Wien, Graz und online."
+>
+  <PageHero
+    eyebrow="Kontakt"
+    title="Lass uns ins Gespräch kommen"
+    intro="Ob Frage, Feedback oder einfach eine Nachricht — schreib mir gerne."
+  />
+
+  <section class="section">
+    <div class="container contact-grid">
+      <div class="contact-info">
+        <p><strong>Dr. Phil. Marina Bletsas</strong> (Marina von Persephone)</p>
+        <p>Ich antworte i.d.R. innerhalb von 48 Std., montags bis freitags.</p>
+
+        <h2>Wien</h2>
+        <p>Praxisraum im 3. Bezirk (Rochusmarkt-Nähe)</p>
+        <p>Walk &amp; Talk im 2. Bezirk (Prater)</p>
+
+        <h2>Online</h2>
+        <p>Via Microsoft Teams</p>
+      </div>
+      <div class="contact-form-wrap">
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .contact-info h2 {
+    font-size: 1.05rem;
+    color: var(--color-accent);
+    margin-top: 1.75rem;
+  }
+
+  @media (min-width: 900px) {
+    .contact-grid {
+      grid-template-columns: 1fr 1.6fr;
+    }
+  }
+</style>

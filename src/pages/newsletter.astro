@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
+---
+<BaseLayout
+  locale="de"
+  path="/newsletter/"
+  title="Newsletter – Persephone"
+  description="Der Persephone e-Brief: neue Blogartikel, kommende Treffen, Workshoptermine — direkt in Dein Postfach."
+>
+  <PageHero eyebrow="Bleib in Verbindung" title="Der Persephone E-Brief" />
+
+  <section class="section">
+    <div class="container section-narrow">
+      <p>
+        Der e-Brief bringt Dir regelmäßig neue Blogartikel, kommende Treffen, Workshoptermine und
+        Marinas persönlichen Blick auf das, was Menschen in reproduktiven Krisen wirklich
+        bewegt — damit Du nicht selbst danach suchen musst, was für Dich relevant sein könnte.
+      </p>
+      <NewsletterForm emailLabel="E-Mail-Adresse" submitLabel="e-Brief abonieren" />
+      <p class="fine-print">
+        Der Versand erfolgt über MailerLite. Mit der Anmeldung erhältst Du eine
+        Bestätigungs-E-Mail (Double-Opt-In). Abmeldung jederzeit über den Link am Ende jedes
+        e-Briefs. Mehr dazu in der <a href="/datenschutz/">Datenschutzerklärung</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section-narrow {
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+
+  .fine-print {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+</style>

@@ -1,10 +1,8 @@
 ---
-title: "Einsam im Kinderwunschprozess?"
+title: "Ist Unfruchtbarkeit immer noch Frauensache?"
 description: "Beziehung & Kinderwunsch"
-publishDate: 2025-10-16
+publishDate: 2025-09-10
 category: "Beziehung & Kinderwunsch"
-heroImage: "../../../assets/blog/einsam-im-prozess.png"
-heroImageAlt: "Licht und Schatten als Symbolbild für Einsamkeit im Kinderwunschprozess"
 draft: false
 ---
 

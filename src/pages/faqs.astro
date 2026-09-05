@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+
+const faqs = [
+  {
+    q: 'Was ist Persephone eigentlich?',
+    a: 'Persephone ist eine Initiative zur psychosozialen Unterstützung von Menschen mit unerfülltem Kinderwunsch — mit Beratung/Coaching, Psychoedukation, einer Selbsthilfegruppe und Fachveranstaltungen.',
+  },
+  {
+    q: 'Was ist der Unterschied zwischen Beratung/Coaching und der Selbsthilfegruppe?',
+    a: 'Die Selbsthilfegruppe ist ein kostenloser, geschützter Raum für Peer-Support und Gemeinschaft. Beratung/Coaching ist individuelle, professionelle Begleitung mit konkreten Zielen, zugeschnitten auf Deine Situation.',
+  },
+  {
+    q: 'Wer ist Persephone überhaupt – warum dieser Name?',
+    a: 'Der Name stammt aus der griechischen Mythologie: Persephone wird zur Göttin des Übergangs, der Wandlung und des Neubeginns — ein Sinnbild für Fruchtbarkeit im übertragenen Sinn und für die Fähigkeit, aus einer Krise Sinn zu schöpfen.',
+  },
+  {
+    q: 'Für wen ist Persephone gedacht?',
+    a: 'Für alle, die eine reproduktive Krise oder unerfüllten Kinderwunsch erleben — ob bei der Ursachensuche, bei alternativen Wegen der Familienplanung oder beim Neuentwurf des eigenen Lebenswegs.',
+  },
+  {
+    q: 'Wie laufen die Selbsthilfe-Treffen von Persephone ab?',
+    a: 'In einem geschützten Rahmen, monatlich, ohne Teilnahmezwang. Vertraulichkeit ist verpflichtend — jede:r teilt nur, was er oder sie möchte.',
+  },
+  {
+    q: 'Sind auch Männer willkommen?',
+    a: 'Ja. Unfruchtbarkeit und Kinderwunsch sind kein Frauenthema — alle Geschlechter sind ausdrücklich willkommen.',
+  },
+  {
+    q: 'Was kostet die Teilnahme?',
+    a: 'Die Selbsthilfetreffen sind kostenlos. Bei besonderen Veranstaltungen mit Verpflegung ist ein freiwilliger Beitrag möglich.',
+  },
+  {
+    q: 'Was passiert, wenn jemand aus der Gruppe schwanger wird?',
+    a: 'Schwangerschaften werden respektvoll mitgefeiert, unterschiedliche Gefühle dazu haben Platz. Werdende Eltern sind eingeladen, noch ein bis zwei Treffen zum Abschluss zu besuchen.',
+  },
+  {
+    q: 'Wie kann ich mitmachen?',
+    a: 'Abonniere den Newsletter für Updates zu Treffen und Veranstaltungen, oder schreib mir für Kooperationsanfragen eine E-Mail.',
+  },
+  {
+    q: 'Wie unterscheidet sich psychosoziale Beratung von Psychotherapie?',
+    a: 'Psychosoziale Beratung setzt an der aktuellen Lebenssituation an und arbeitet ressourcenorientiert. Psychotherapie behandelt diagnostizierte psychische Erkrankungen.',
+  },
+  {
+    q: 'Bleibt das, was ich erzähle, vertraulich?',
+    a: 'Ja, alle Gespräche unterliegen der beruflichen Verschwiegenheitspflicht.',
+  },
+  {
+    q: 'Bietet Persephone auch Psychotherapie an?',
+    a: 'Aktuell nicht. Die Gründerin befindet sich in psychotherapeutischer Ausbildung und plant, innerhalb der nächsten zwei Jahre als Psychotherapeutin zu praktizieren.',
+  },
+  {
+    q: 'Was ist der Unterschied zwischen Beratung und Coaching?',
+    a: 'In Österreich fallen beide unter die Lebens- und Sozialberatung. Beide arbeiten lösungs- und ressourcenorientiert an der aktuellen Situation — ohne psychische Erkrankungen zu behandeln.',
+  },
+];
+---
+<BaseLayout locale="de" path="/faqs/" title="FAQs – Persephone" description="Häufig gestellte Fragen zu Persephones Angeboten.">
+  <PageHero title="Häufig gestellte Fragen" />
+
+  <section class="section">
+    <div class="container section-narrow">
+      {
+        faqs.map((item) => (
+          <details class="faq-item">
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section-narrow {
+    max-width: 52rem;
+    margin-inline: auto;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid rgba(24, 26, 43, 0.12);
+    padding-block: 1.25rem;
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--color-text);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .faq-item[open] summary {
+    color: var(--color-accent-strong);
+  }
+
+  .faq-item p {
+    margin: 1rem 0 0;
+    color: var(--color-text-muted);
+  }
+</style>

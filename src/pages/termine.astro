@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+---
+<BaseLayout
+  locale="de"
+  path="/termine/"
+  title="Kennenlernen vereinbaren – Persephone"
+  description="Vereinbare ein kostenfreies, unverbindliches Online-Kennenlernen mit Marina Bletsas."
+>
+  <PageHero
+    eyebrow="Kennenlernen"
+    title="Vereinbare Dein Kennenlernen"
+    intro="Das online Kennenlernen (ca. 20 Minuten) ist kostenfrei und unverbindlich."
+  />
+
+  <section class="section">
+    <div class="container booking-wrap">
+      <iframe
+        src="https://outlook.office.com/book/ErstgesprchfrDichallein@persephone.at/?ismsaljsauthenabled"
+        width="100%"
+        height="750"
+        style="border:0"
+        title="Terminbuchung — Kennenlernen"
+      />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .booking-wrap {
+    max-width: 56rem;
+    margin-inline: auto;
+  }
+
+  iframe {
+    border-radius: var(--radius);
+  }
+</style>
