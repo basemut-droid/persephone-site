@@ -1,0 +1,147 @@
+{
+  "reviewStatus": "ai-draft",
+  "meta": {
+    "title": "Persephone – Finding Your Way Through the Storm of Involuntary Childlessness",
+    "description": "Persephone supports you and your partner through the fertility crisis with psychosocial counseling, workshops, and a peer support group in Vienna, Graz, and online."
+  },
+  "nav": {
+    "items": [
+      { "label": "About", "href": "/en/about/" },
+      {
+        "label": "Services",
+        "href": "/en/services/",
+        "children": [
+          { "label": "Counseling & Coaching", "href": "/en/counseling/" },
+          { "label": "Workshops & Individual Training", "href": "/en/workshops/" },
+          { "label": "Support Group", "href": "/en/support-group/" }
+        ]
+      },
+      { "label": "Blog", "href": "/en/blog/" },
+      { "label": "Contact", "href": "/en/contact/" }
+    ],
+    "cta": "Book a Get-to-Know Call",
+    "ctaHref": "/en/appointments/"
+  },
+  "hero": {
+    "headline": "To the Heart of the Crisis",
+    "paragraphs": [
+      "Persephone is here for you if you're living with unfulfilled longing for a child and know the feeling that your story has slipped away from you.",
+      "Here you'll find orientation and tools to write it yourself anyway. Page by page."
+    ],
+    "cta": "Subscribe to the e-letter",
+    "ctaHref": "/en/newsletter/"
+  },
+  "painPoints": {
+    "eyebrow": "what's rarely said out loud",
+    "heading": "Involuntary childlessness isn't just a question about a child. It's a life crisis: complex, and often invisible.",
+    "intro": "Reproductive crises take many forms — medical, through adoption, or something else entirely. What they share is what happens inside: emotional, relational, and existential exhaustion and loneliness.",
+    "quotes": [
+      "I don't know when it's allowed — or necessary — to stop.",
+      "I smile at family gatherings and say everything's fine.",
+      "We talk about protocols. Not about how we feel.",
+      "Some days I just function. Others, I don't."
+    ],
+    "closing": "If you recognize yourself in any of these sentences, you're in the right place. Persephone doesn't promise a happy ending. But it does offer a space where you can find your footing again."
+  },
+  "services": {
+    "eyebrow": "What Persephone offers",
+    "heading": "Choose what fits you right now. Or let a no-obligation conversation help you find your way among Persephone's offerings.",
+    "items": [
+      {
+        "title": "Counseling & Coaching",
+        "description": "A protected space for you alone or with your partner. We work on whatever weighs on you right now in the fertility journey: decisions, exhaustion, communication, and more. With heart, presence, and a touch of humor.",
+        "href": "/en/counseling/",
+        "cta": "Learn more"
+      },
+      {
+        "title": "Workshops & Individual Training",
+        "description": "Knowledge and tools to understand your reproductive crisis and regain your sense of agency. Room here for topics like coping strategies, mental load, and communication as a couple.",
+        "href": "/en/workshops/",
+        "cta": "Learn more"
+      },
+      {
+        "title": "Support Group",
+        "description": "Peer support and exchange in a protected setting. At the moderated meetings for people facing involuntary childlessness, you can find relief and draw strength from the community.",
+        "href": "/en/support-group/",
+        "cta": "Learn more"
+      }
+    ]
+  },
+  "philosophy": {
+    "eyebrow": "The Persephone Approach",
+    "heading": "A crisis is also a threshold. Persephone accompanies the passage.",
+    "paragraphs": [
+      "The myth of Persephone tells of a descent into the underworld — and of the ability to return to daylight with what was found there. Not untouched. But more mature. Clearer. Stronger.",
+      "Reproductive crises arrive uninvited, right in the middle of a planned life, right in the middle of confidence. One moment you're still in the sunlit meadow, the next in a dark world you never chose.",
+      "That challenges us to fundamentally rethink our ideas of family, partnership, body, and future. It's a process. And it deserves companionship that takes it seriously. That's exactly what Persephone is here for."
+    ],
+    "values": [
+      {
+        "title": "Couple-focused and inclusive",
+        "description": "Involuntary childlessness isn't a women's issue. It's a couple's and a human issue. Persephone's offerings think in terms of partnership and speak to men just as much as women."
+      },
+      {
+        "title": "Psychosocial and relational",
+        "description": "Reproductive crises don't just affect the body: they touch psyche, relationship, identity, and sense of meaning all at once. Persephone accompanies exactly these dimensions."
+      },
+      {
+        "title": "Open-ended",
+        "description": "Persephone makes no promise of a longed-for child and doesn't aim at a predetermined outcome. Instead, it aims to help you shape your path as your own, wherever it leads."
+      },
+      {
+        "title": "Scientific and humanistic",
+        "description": "What Persephone offers is grounded in current research and starts from the assumption that you already bring the competence to shape your own path. Knowledge as a tool in service of your orientation."
+      }
+    ]
+  },
+  "founder": {
+    "eyebrow": "The Founder: Marina Bletsas, Dr. Phil.",
+    "heading": "From the inside. And from expertise.",
+    "paragraphs": [
+      "My original profession taught me how communication shapes realities. My psychosocial training teaches me what people need in crises. My own fertility crisis showed me what no textbook does.",
+      "Since 2021 I've been accompanying people with unfulfilled longing for a child in my support group. Now I offer well-founded companionship as someone who knows the path."
+    ],
+    "cta": "Learn more",
+    "href": "/en/about/",
+    "imageAlt": "Portrait photo of Marina Bletsas, founder of Persephone"
+  },
+  "newsletter": {
+    "eyebrow": "Stay Connected",
+    "heading": "The Persephone e-Letter",
+    "paragraphs": [
+      "brings you new blog articles, upcoming meetings, workshop dates, and Marina's personal perspective on what really moves people through reproductive crises — regularly.",
+      "So you don't have to go looking for what might be relevant to you."
+    ],
+    "cta": "Subscribe to the e-letter",
+    "ctaHref": "/en/newsletter/"
+  },
+  "footer": {
+    "tagline": "Finding your way through the storm of involuntary childlessness",
+    "newsletterEyebrow": "Persephone's e-letter",
+    "newsletterCta": "Sign up",
+    "columns": [
+      {
+        "title": "Useful Info",
+        "links": [
+          { "label": "Disclaimer", "href": "/en/disclaimer/" },
+          { "label": "FAQs", "href": "/en/faqs/" }
+        ]
+      },
+      {
+        "title": "Legal",
+        "links": [
+          { "label": "Privacy Policy", "href": "/en/privacy/" },
+          { "label": "Legal Notice", "href": "/en/legal-notice/" }
+        ]
+      }
+    ],
+    "copyright": "© {year} Persephone. All rights reserved."
+  },
+  "common": {
+    "skipToContent": "Skip to content",
+    "readMore": "Read more",
+    "languageSwitcherLabel": "Choose language",
+    "draftNotice": "This translation is a machine-generated draft and has not yet been reviewed by a native speaker.",
+    "blogFallbackNotice": "These articles are currently only available in German."
+  }
+}

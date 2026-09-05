@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { Locale } from '../i18n/utils';
+
+const path = Astro.url.pathname;
+const locale: Locale = path.startsWith('/en/') ? 'en' : path.startsWith('/it/') ? 'it' : 'de';
+
+const copy: Record<Locale, { title: string; body: string; cta: string }> = {
+  de: {
+    title: 'Diese Seite gibt es nicht (mehr)',
+    body: 'Der Link war entweder falsch oder die Seite wurde verschoben. Von der Startseite aus findest Du alles Wichtige.',
+    cta: 'Zur Startseite',
+  },
+  en: {
+    title: "This page doesn't exist",
+    body: 'The link was either wrong, or the page has moved. Everything important is reachable from the homepage.',
+    cta: 'Go to homepage',
+  },
+  it: {
+    title: 'Questa pagina non esiste',
+    body: 'Il link era sbagliato oppure la pagina è stata spostata. Dalla homepage puoi raggiungere tutto ciò che ti serve.',
+    cta: 'Vai alla homepage',
+  },
+};
+const home = locale === 'de' ? '/' : `/${locale}/`;
+---
+
+<BaseLayout locale={locale} path={path} title={`404 – ${copy[locale].title}`}>
+  <section class="not-found container">
+    <h1>{copy[locale].title}</h1>
+    <p>{copy[locale].body}</p>
+    <a href={home} class="button button-primary">{copy[locale].cta}</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    padding-block: 5rem;
+    text-align: center;
+    max-width: 50ch;
+  }
+</style>

@@ -1,0 +1,26 @@
+---
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+---
+
+<div role="note" class="draft-notice">
+  <p>{text}</p>
+</div>
+
+<style>
+  .draft-notice {
+    background: #fff3cd;
+    color: #664d03;
+    text-align: center;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .draft-notice p {
+    margin: 0;
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+</style>

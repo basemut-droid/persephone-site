@@ -1,0 +1,56 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  cta: string;
+  tone: 'teal-light' | 'teal' | 'teal-dark';
+}
+const { title, description, href, cta, tone } = Astro.props;
+---
+
+<article class:list={['service-card', `tone-${tone}`]}>
+  <h3><a href={href}>{title}</a></h3>
+  <p>{description}</p>
+  <a href={href} class="button button-outline">{cta}</a>
+</article>
+
+<style>
+  .service-card {
+    padding: 2.25rem;
+    border-radius: var(--radius);
+    color: var(--color-text-on-accent);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .service-card h3 {
+    margin: 0;
+  }
+
+  .service-card a {
+    color: inherit;
+  }
+
+  .service-card h3 a {
+    text-decoration: none;
+  }
+
+  .service-card .button {
+    align-self: flex-start;
+    border-color: currentColor;
+  }
+
+  .tone-teal-light {
+    background: var(--color-teal-light);
+  }
+
+  .tone-teal {
+    background: var(--color-teal);
+  }
+
+  .tone-teal-dark {
+    background: var(--color-teal-dark);
+  }
+</style>

@@ -1,0 +1,107 @@
+# Decap CMS configuration — draft/starting point, not yet deployable.
+#
+# This only becomes usable once the site is actually hosted (see backend
+# below) and a git-based auth bridge is set up. Two common choices:
+#   - Netlify: use `backend: name: git-gateway` (shown here) + Netlify Identity.
+#   - Any other host: use `backend: name: github` + a GitHub OAuth app,
+#     usually proxied through a small serverless function.
+# Pick one once hosting is decided, then fill in the real repo/branch below.
+
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "src/assets/uploads"
+public_folder: "/assets/uploads"
+
+locale: "de"
+
+collections:
+  # --- Site-wide + homepage text (see src/content/site/*.json) ---
+  # NOTE: only a subset of fields is fleshed out below (meta, hero, services)
+  # as a working example of the pattern. The remaining sections
+  # (painPoints, philosophy, founder, newsletter, footer, common) follow the
+  # same nested-object/list shape as src/content.config.ts and should be
+  # completed before this collection is handed to an actual editor.
+  - name: "site"
+    label: "Website-Texte"
+    files:
+      - name: "de"
+        label: "Deutsch"
+        file: "src/content/site/de.json"
+        fields: &site_fields
+          - { label: "Status", name: "reviewStatus", widget: "select", options: ["native", "ai-draft"] }
+          - label: "Meta (SEO)"
+            name: "meta"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Beschreibung", name: "description", widget: "text" }
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Überschrift", name: "headline", widget: "string" }
+              - { label: "Absätze", name: "paragraphs", widget: "list", field: { label: "Absatz", name: "paragraph", widget: "text" } }
+              - { label: "Button-Text", name: "cta", widget: "string" }
+              - { label: "Button-Ziel", name: "ctaHref", widget: "string" }
+          - label: "Angebote"
+            name: "services"
+            widget: "object"
+            fields:
+              - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+              - { label: "Überschrift", name: "heading", widget: "string" }
+              - label: "Karten"
+                name: "items"
+                widget: "list"
+                fields:
+                  - { label: "Titel", name: "title", widget: "string" }
+                  - { label: "Beschreibung", name: "description", widget: "text" }
+                  - { label: "Link", name: "href", widget: "string" }
+                  - { label: "Button-Text", name: "cta", widget: "string" }
+      - name: "en"
+        label: "English"
+        file: "src/content/site/en.json"
+        fields: *site_fields
+      - name: "it"
+        label: "Italiano"
+        file: "src/content/site/it.json"
+        fields: *site_fields
+
+  # --- Blog posts: one folder per locale (Decap's "multiple_folders" i18n
+  # structure), matching src/content/blog/<locale>/*.md ---
+  - name: "blog"
+    label: "Blog"
+    folder: "src/content/blog/de"
+    create: true
+    slug: "{{slug}}"
+    i18n: true
+    fields:
+      - { label: "Titel", name: "title", widget: "string", i18n: true }
+      - { label: "Beschreibung", name: "description", widget: "text", i18n: true }
+      - { label: "Veröffentlicht am", name: "publishDate", widget: "datetime", i18n: "duplicate" }
+      - { label: "Kategorie", name: "category", widget: "string", required: false, i18n: true }
+      - { label: "Titelbild", name: "heroImage", widget: "image", required: false, i18n: "duplicate" }
+      - { label: "Bild Alt-Text", name: "heroImageAlt", widget: "string", required: false, i18n: true }
+      - { label: "Entwurf", name: "draft", widget: "boolean", default: true }
+      - { label: "Inhalt", name: "body", widget: "markdown", i18n: true }
+
+  # --- Events: same locale-folder pattern, ready for phase 2 ---
+  - name: "events"
+    label: "Termine"
+    folder: "src/content/events/de"
+    create: true
+    slug: "{{slug}}"
+    i18n: true
+    fields:
+      - { label: "Titel", name: "title", widget: "string", i18n: true }
+      - { label: "Beschreibung", name: "description", widget: "text", i18n: true }
+      - { label: "Beginn", name: "startDate", widget: "datetime", i18n: "duplicate" }
+      - { label: "Ende", name: "endDate", widget: "datetime", required: false, i18n: "duplicate" }
+      - { label: "Ort", name: "location", widget: "string", i18n: "duplicate" }
+      - { label: "Online?", name: "isOnline", widget: "boolean", default: false, i18n: "duplicate" }
+      - { label: "Bild", name: "image", widget: "image", required: false, i18n: "duplicate" }
+      - { label: "Preis", name: "price", widget: "string", required: false, i18n: true }
+      - { label: "Anmeldelink", name: "registrationUrl", widget: "string", required: false, i18n: "duplicate" }
+      - { label: "Entwurf", name: "draft", widget: "boolean", default: true }
+      - { label: "Inhalt", name: "body", widget: "markdown", i18n: true }

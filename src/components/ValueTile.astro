@@ -1,0 +1,32 @@
+---
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+---
+
+<div class="value-tile">
+  <h4>{title}</h4>
+  <p>{description}</p>
+</div>
+
+<style>
+  .value-tile {
+    padding-block: 1.25rem;
+    border-bottom: 1px solid rgba(24, 26, 43, 0.1);
+  }
+
+  .value-tile:last-child {
+    border-bottom: none;
+  }
+
+  .value-tile h4 {
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .value-tile p {
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,212 @@
+---
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import type { Locale } from '../i18n/utils';
+
+interface NavLink {
+  label: string;
+  href: string;
+  children?: { label: string; href: string }[];
+}
+interface Props {
+  locale: Locale;
+  path: string;
+  nav: { items: NavLink[]; cta: string; ctaHref: string };
+  switcherLabel: string;
+}
+const { locale, path, nav, switcherLabel } = Astro.props;
+const homeHref = locale === 'de' ? '/' : `/${locale}/`;
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href={homeHref} class="logo" aria-label="Persephone – zur Startseite">
+      Persephone
+    </a>
+
+    <button
+      type="button"
+      class="nav-toggle"
+      aria-expanded="false"
+      aria-controls="primary-nav"
+    >
+      <span class="visually-hidden">Menü öffnen</span>
+      <span aria-hidden="true">☰</span>
+    </button>
+
+    <nav id="primary-nav" class="primary-nav" aria-label="Hauptnavigation">
+      <ul>
+        {
+          nav.items.map((item) =>
+            item.children ? (
+              <li>
+                <details class="nav-dropdown">
+                  <summary>{item.label}</summary>
+                  <ul>
+                    {item.children.map((child) => (
+                      <li>
+                        <a href={child.href}>{child.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              </li>
+            ) : (
+              <li>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            )
+          )
+        }
+      </ul>
+      <a href={nav.ctaHref} class="button button-outline nav-cta">{nav.cta}</a>
+      <LanguageSwitcher locale={locale} path={path} label={switcherLabel} />
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+  const nav = document.getElementById('primary-nav');
+  toggle?.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!expanded));
+    nav?.classList.toggle('is-open', !expanded);
+  });
+</script>
+
+<style>
+  .site-header {
+    background: var(--color-bg-alt);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 1rem;
+  }
+
+  .logo {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.25rem;
+    text-decoration: none;
+    color: var(--color-text);
+  }
+
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .primary-nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .primary-nav > ul {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .primary-nav > ul > li > a,
+  .nav-dropdown summary {
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    display: inline-block;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .nav-dropdown {
+    position: relative;
+  }
+
+  .nav-dropdown summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .nav-dropdown[open] summary {
+    color: var(--color-accent);
+  }
+
+  .nav-dropdown ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--color-surface);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-radius: var(--radius);
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0.5rem 0;
+    min-width: 220px;
+  }
+
+  .nav-dropdown li a {
+    display: block;
+    padding: 0.6rem 1.25rem;
+    text-decoration: none;
+    color: var(--color-text);
+    min-height: 44px;
+  }
+
+  .nav-dropdown li a:hover {
+    background: var(--color-bg-alt);
+  }
+
+  .nav-cta {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .nav-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .primary-nav {
+      display: none;
+      position: absolute;
+      inset-inline: 0;
+      top: 100%;
+      background: var(--color-bg-alt);
+      flex-direction: column;
+      align-items: stretch;
+      padding: 1rem 1.5rem 1.5rem;
+    }
+
+    .primary-nav.is-open {
+      display: flex;
+    }
+
+    .primary-nav > ul {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .nav-dropdown ul {
+      position: static;
+      box-shadow: none;
+      padding-left: 1rem;
+    }
+  }
+</style>

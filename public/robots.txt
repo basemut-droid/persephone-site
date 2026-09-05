@@ -1,0 +1,26 @@
+# Everything is allowed for standard search-engine crawlers.
+User-agent: *
+Allow: /
+
+# Explicitly allow known AI/LLM crawlers (GEO requirement) — the default
+# "User-agent: *" above already covers them, but naming them avoids any
+# ambiguity if a stricter rule is ever added above by accident.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+Sitemap: https://persephone.example/sitemap-index.xml

@@ -1,0 +1,104 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  href: string;
+  title: string;
+  category?: string;
+  heroImage?: ImageMetadata;
+  heroImageAlt?: string;
+  readMoreLabel: string;
+}
+const { href, title, category, heroImage, heroImageAlt, readMoreLabel } = Astro.props;
+---
+
+<article class="blog-teaser">
+  <a href={href} class="blog-teaser-image" aria-hidden={heroImage ? undefined : 'true'}>
+    {
+      heroImage ? (
+        <Image src={heroImage} alt={heroImageAlt ?? ''} width={400} height={260} loading="lazy" />
+      ) : (
+        <span class="image-placeholder">Bild folgt</span>
+      )
+    }
+  </a>
+  <div class="blog-teaser-body">
+    {category && <p class="blog-teaser-category">{category}</p>}
+    <h3><a href={href}>{title}</a></h3>
+    <a href={href} class="blog-teaser-link">{readMoreLabel} →</a>
+  </div>
+</article>
+
+<style>
+  .blog-teaser {
+    display: grid;
+    grid-template-columns: minmax(120px, 33%) 1fr;
+    gap: 1.25rem;
+    align-items: stretch;
+    background: var(--color-bg);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .blog-teaser-image {
+    display: block;
+    background: var(--color-teal-light);
+    min-height: 160px;
+  }
+
+  .blog-teaser-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--color-text-on-accent);
+    font-size: 0.8rem;
+  }
+
+  .blog-teaser-body {
+    padding: 1.5rem 1.5rem 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .blog-teaser-category {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: var(--color-accent);
+    margin: 0 0 0.5rem;
+  }
+
+  .blog-teaser-body h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1.3rem;
+  }
+
+  .blog-teaser-body h3 a {
+    text-decoration: none;
+    color: var(--color-text);
+  }
+
+  .blog-teaser-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--color-accent-strong);
+  }
+
+  @media (max-width: 600px) {
+    .blog-teaser {
+      grid-template-columns: 1fr;
+    }
+    .blog-teaser-body {
+      padding: 1rem;
+    }
+  }
+</style>

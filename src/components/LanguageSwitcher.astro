@@ -1,0 +1,55 @@
+---
+import { locales, localeNames, localizedPath, type Locale } from '../i18n/utils';
+
+interface Props {
+  locale: Locale;
+  path: string;
+  label: string;
+}
+const { locale, path, label } = Astro.props;
+---
+
+<nav class="lang-switcher" aria-label={label}>
+  <ul>
+    {
+      locales.map((loc) => (
+        <li>
+          <a
+            href={localizedPath(path, loc)}
+            aria-current={loc === locale ? 'page' : undefined}
+            hreflang={loc}
+            lang={loc}
+          >
+            {localeNames[loc]}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .lang-switcher ul {
+    display: flex;
+    gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .lang-switcher a {
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.4rem 0.5rem;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius);
+  }
+
+  .lang-switcher a[aria-current='page'] {
+    color: var(--color-accent-strong);
+    text-decoration: underline;
+  }
+</style>

@@ -1,0 +1,75 @@
+---
+import '@fontsource/dm-sans/400.css';
+import '@fontsource/dm-sans/500.css';
+import '@fontsource/dm-sans/700.css';
+import '@fontsource/jost/500.css';
+import '@fontsource/jost/600.css';
+import '@fontsource/jost/700.css';
+import '../styles/global.css';
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import DraftNotice from '../components/DraftNotice.astro';
+import type { Locale } from '../i18n/utils';
+import { getSiteContent, locales } from '../i18n/utils';
+
+interface Props {
+  locale: Locale;
+  path: string; // current pathname, e.g. "/", "/blog/", "/en/blog/"
+  title?: string;
+  description?: string;
+}
+
+const { locale, path, title, description } = Astro.props;
+const site = await getSiteContent(locale);
+const pageTitle = title ?? site.meta.title;
+const pageDescription = description ?? site.meta.description;
+const canonicalUrl = getAbsoluteLocaleUrl(locale, path);
+---
+
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    {/* hreflang: one tag per language plus x-default, so search engines
+        connect the three versions of this page instead of treating them
+        as duplicate or unrelated content. */}
+    {
+      locales.map((loc) => (
+        <link rel="alternate" hreflang={loc} href={getAbsoluteLocaleUrl(loc, path.replace(/^\/(en|it)(\/|$)/, '/'))} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl('de', path.replace(/^\/(en|it)(\/|$)/, '/'))} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content={locale} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'ProfessionalService',
+      name: 'Persephone',
+      url: getAbsoluteLocaleUrl('de', '/'),
+      description: 'Psychosoziale Beratung, Workshops und Selbsthilfegruppe bei unerfülltem Kinderwunsch in Wien, Graz und online.',
+      areaServed: ['Wien', 'Graz', 'Online'],
+    })} />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">{site.common.skipToContent}</a>
+    {site.reviewStatus === 'ai-draft' && <DraftNotice text={site.common.draftNotice} />}
+    <Header locale={locale} path={path} nav={site.nav} switcherLabel={site.common.languageSwitcherLabel} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer locale={locale} footer={site.footer} />
+  </body>
+</html>

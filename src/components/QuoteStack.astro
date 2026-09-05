@@ -1,0 +1,42 @@
+---
+// Reproduces the original's "descending" staggered quote layout — a visual
+// echo of Persephone's descent into the underworld running through the
+// whole site's imagery.
+interface Props {
+  quotes: string[];
+}
+const { quotes } = Astro.props;
+---
+
+<div class="quote-stack">
+  {quotes.map((quote) => <blockquote>{quote}</blockquote>)}
+</div>
+
+<style>
+  .quote-stack {
+    display: grid;
+    gap: 1.5rem;
+    margin: 2.5rem 0;
+  }
+
+  blockquote {
+    margin: 0;
+    max-width: 32rem;
+    border-left: 3px solid var(--color-accent-strong);
+    padding-left: 1.25rem;
+    font-style: italic;
+    font-size: 1.1rem;
+  }
+
+  @media (min-width: 700px) {
+    .quote-stack blockquote:nth-child(2) {
+      margin-left: 6rem;
+    }
+    .quote-stack blockquote:nth-child(3) {
+      margin-left: 2rem;
+    }
+    .quote-stack blockquote:nth-child(4) {
+      margin-left: 10rem;
+    }
+  }
+</style>

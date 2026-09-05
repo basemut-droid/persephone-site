@@ -1,0 +1,229 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ServiceCard from './ServiceCard.astro';
+import ValueTile from './ValueTile.astro';
+import QuoteStack from './QuoteStack.astro';
+import BlogTeaserCard from './BlogTeaserCard.astro';
+import { getSiteContent, type Locale } from '../i18n/utils';
+
+interface Props {
+  locale: Locale;
+  path: string;
+}
+const { locale, path } = Astro.props;
+const s = await getSiteContent(locale);
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const localePosts = allPosts.filter((p) => p.id.startsWith(`${locale}/`));
+const usingFallback = localePosts.length === 0 && locale !== 'de';
+const posts = (usingFallback ? allPosts.filter((p) => p.id.startsWith('de/')) : localePosts)
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .slice(0, 4);
+
+const serviceTones = ['teal', 'teal-dark', 'teal-light'] as const;
+---
+
+<BaseLayout locale={locale} path={path} title={s.meta.title} description={s.meta.description}>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <h1>{s.hero.headline}</h1>
+        {s.hero.paragraphs.map((p) => <p>{p}</p>)}
+        <a href={s.hero.ctaHref} class="button button-primary">{s.hero.cta}</a>
+      </div>
+      <div class="hero-image" role="img" aria-label="Granatapfel als Symbol für den Persephone-Mythos"></div>
+    </div>
+  </section>
+
+  <!-- Pain points -->
+  <section class="section section-alt">
+    <div class="container section-narrow">
+      <span class="eyebrow">{s.painPoints.eyebrow}</span>
+      <h2>{s.painPoints.heading}</h2>
+      <p>{s.painPoints.intro}</p>
+      <QuoteStack quotes={s.painPoints.quotes} />
+      <p>{s.painPoints.closing}</p>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section">
+    <div class="container">
+      <div class="section-heading">
+        <span class="eyebrow">{s.services.eyebrow}</span>
+        <h2>{s.services.heading}</h2>
+      </div>
+      <div class="service-grid">
+        {
+          s.services.items.map((item, i) => (
+            <ServiceCard
+              title={item.title}
+              description={item.description}
+              href={item.href}
+              cta={item.cta}
+              tone={serviceTones[i % serviceTones.length]}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Philosophy -->
+  <section class="section section-alt">
+    <div class="container philosophy-grid">
+      <div>
+        <span class="eyebrow">{s.philosophy.eyebrow}</span>
+        <h2>{s.philosophy.heading}</h2>
+        {s.philosophy.paragraphs.map((p) => <p>{p}</p>)}
+      </div>
+      <div class="value-list">
+        {s.philosophy.values.map((v) => <ValueTile title={v.title} description={v.description} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Founder -->
+  <section class="section founder">
+    <div class="container founder-grid">
+      <div>
+        <span class="eyebrow">{s.founder.eyebrow}</span>
+        <h2>{s.founder.heading}</h2>
+        {s.founder.paragraphs.map((p) => <p>{p}</p>)}
+        <a href={s.founder.href} class="button button-outline">{s.founder.cta}</a>
+      </div>
+      <div class="founder-photo" role="img" aria-label={s.founder.imageAlt}></div>
+    </div>
+  </section>
+
+  <!-- Blog teasers -->
+  {
+    posts.length > 0 && (
+      <section class="section">
+        <div class="container">
+          {usingFallback && <p class="blog-fallback-notice">{s.common.blogFallbackNotice}</p>}
+          <div class="blog-grid">
+            {posts.map((post) => (
+              <BlogTeaserCard
+                href={`${locale === 'de' ? '' : `/${locale}`}/blog/${post.id.split('/').slice(1).join('/')}/`}
+                title={post.data.title}
+                category={post.data.category}
+                heroImage={post.data.heroImage}
+                heroImageAlt={post.data.heroImageAlt}
+                readMoreLabel={s.common.readMore}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Newsletter CTA -->
+  <section class="section newsletter-band">
+    <div class="container newsletter-inner">
+      <span class="eyebrow eyebrow-on-band">{s.newsletter.eyebrow}</span>
+      <h2>{s.newsletter.heading}</h2>
+      {s.newsletter.paragraphs.map((p) => <p>{p}</p>)}
+      <a href={s.newsletter.ctaHref} class="button button-primary">{s.newsletter.cta}</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    background: var(--color-bg);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding-block: 3rem;
+  }
+
+  .hero-image {
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(135deg, var(--color-teal-light), var(--color-terracotta));
+    border-radius: var(--radius);
+  }
+
+  .section {
+    padding-block: clamp(3rem, 5vw, 5rem);
+  }
+
+  .section-alt {
+    background: var(--color-bg-alt);
+  }
+
+  .section-narrow {
+    max-width: 65ch;
+  }
+
+  .section-heading {
+    text-align: center;
+    max-width: 50ch;
+    margin-inline: auto;
+    margin-bottom: 2.5rem;
+  }
+
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .philosophy-grid,
+  .founder-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .founder-photo {
+    aspect-ratio: 3 / 4;
+    background: var(--color-teal-light);
+    border-radius: var(--radius);
+  }
+
+  .blog-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .blog-fallback-notice {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .newsletter-band {
+    background: var(--color-band-bg);
+    color: var(--color-text-on-accent);
+    text-align: center;
+  }
+
+  .newsletter-inner {
+    max-width: 60ch;
+  }
+
+  .eyebrow-on-band {
+    color: var(--color-text-on-accent);
+    opacity: 0.85;
+  }
+
+  @media (min-width: 900px) {
+    .hero-grid,
+    .philosophy-grid,
+    .founder-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .blog-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
