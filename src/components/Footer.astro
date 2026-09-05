@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import type { Locale } from '../i18n/utils';
+import signet from '../assets/logo/signet.png';
 
 interface Props {
   locale: Locale;
@@ -19,7 +21,7 @@ const copyright = footer.copyright.replace('{year}', String(year));
 <footer class="site-footer">
   <div class="container footer-grid">
     <div class="footer-brand">
-      <p class="footer-logo">Persephone</p>
+      <Image src={signet} alt="Persephone" width={72} height={73} class="footer-logo" />
       <p class="footer-tagline">{footer.tagline}</p>
       <span class="eyebrow">{footer.newsletterEyebrow}</span>
       <a href="/newsletter/" class="footer-nl-link">{footer.newsletterCta} →</a>
@@ -60,10 +62,8 @@ const copyright = footer.copyright.replace('{year}', String(year));
   }
 
   .footer-logo {
-    font-family: var(--font-heading);
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin: 0 0 0.5rem;
+    border-radius: var(--radius);
+    margin: 0 0 0.75rem;
   }
 
   .footer-tagline {

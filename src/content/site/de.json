@@ -33,8 +33,12 @@
   },
   "painPoints": {
     "eyebrow": "was kaum ausgesprochen wird",
-    "heading": "Unerfüllter Kinderwunsch ist nicht nur eine Frage des Kindes. Er ist eine Lebenskrise: komplex und oft unsichtbar.",
-    "intro": "Reproduktive Krisen verlaufen auf vielen Wegen — medizinisch, adoptiv, oder ganz anders. Was sie gemeinsam haben ist das Innenleben: die emotionale, relationale und existenzielle Erschöpfung und Einsamkeit.",
+    "heading": "Unerfüllter Kinderwunsch ist nicht nur eine Frage des Kindes. Er ist eine <em>Lebenskrise</em>: komplex und oft unsichtbar.",
+    "paragraphs": [
+      "Reproduktive Krisen verlaufen auf vielen Wegen — medizinisch, adoptiv, oder ganz anders. Was sie gemeinsam haben ist das Innenleben: die emotionale, relationale und existenzielle Erschöpfung und Einsamkeit.",
+      "Wenn der Körper nicht tut, was man von ihm erwartet. Wenn Entscheidungen sich wie Labyrinthe anfühlen. Wenn die Beziehung leidet, ohne dass jemand schuld ist. Wenn man nicht mehr weiß, wer man ist, wenn nicht Elternteil. Das ist eine Lebenskrise, die gesehen werden will.",
+      "Rund 17 % der Menschen im reproduktiven Alter sind betroffen — und über 75 % von ihnen erhalten keine gezielte psychosoziale Unterstützung. Weil es sie kaum gibt."
+    ],
     "quotes": [
       "Ich weiß nicht, ab wann man aufhören darf — oder muss.",
       "Ich lächle auf Familienfesten und sage, es ist alles gut.",
@@ -45,7 +49,7 @@
   },
   "services": {
     "eyebrow": "Was Persephone anbietet",
-    "heading": "Wähle, was gerade zu Dir passt. Oder lass Dich in einem unverbindlichen Gespräch zu Persephones Angebote beraten.",
+    "heading": "Wähle, was gerade zu Dir passt.<br />Oder lass Dich in einem unverbindlichen Gespräch zu Persephones Angebote beraten.",
     "items": [
       {
         "title": "Beratung & Coaching",

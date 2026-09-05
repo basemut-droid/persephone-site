@@ -1,7 +1,8 @@
 ---
 // Reproduces the original's "descending" staggered quote layout — a visual
 // echo of Persephone's descent into the underworld running through the
-// whole site's imagery.
+// whole site's imagery. Values (margins, small-caps, font-size) are taken
+// directly from the live site's own CSS for an exact match.
 interface Props {
   quotes: string[];
 }
@@ -14,29 +15,47 @@ const { quotes } = Astro.props;
 
 <style>
   .quote-stack {
-    display: grid;
-    gap: 1.5rem;
-    margin: 2.5rem 0;
+    max-width: 620px;
+    margin: 2.5rem auto;
+    text-align: left;
   }
 
   blockquote {
     margin: 0;
-    max-width: 32rem;
+    max-width: 420px;
     border-left: 3px solid var(--color-accent-strong);
-    padding-left: 1.25rem;
+    padding-left: 22px;
+    color: var(--color-text);
     font-style: italic;
-    font-size: 1.1rem;
+    font-variant: small-caps;
+    font-size: 1.35rem;
+    line-height: 1.5;
   }
 
   @media (min-width: 700px) {
+    .quote-stack blockquote + blockquote {
+      margin-top: 56px;
+    }
+    .quote-stack blockquote:nth-child(1) {
+      margin-left: 0;
+    }
     .quote-stack blockquote:nth-child(2) {
-      margin-left: 6rem;
+      margin-left: 90px;
+      margin-top: 56px;
     }
     .quote-stack blockquote:nth-child(3) {
-      margin-left: 2rem;
+      margin-left: 30px;
+      margin-top: 60px;
     }
     .quote-stack blockquote:nth-child(4) {
-      margin-left: 10rem;
+      margin-left: 160px;
+      margin-top: 48px;
+    }
+  }
+
+  @media (max-width: 699px) {
+    blockquote {
+      margin-top: 30px;
     }
   }
 </style>

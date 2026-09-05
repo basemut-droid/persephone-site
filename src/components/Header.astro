@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import type { Locale } from '../i18n/utils';
+import wordmark from '../assets/logo/wordmark-red.png';
 
 interface NavLink {
   label: string;
@@ -20,7 +22,7 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
 <header class="site-header">
   <div class="container header-inner">
     <a href={homeHref} class="logo" aria-label="Persephone – zur Startseite">
-      Persephone
+      <Image src={wordmark} alt="Persephone" width={243} height={64} />
     </a>
 
     <button
@@ -91,11 +93,13 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
   }
 
   .logo {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 1.25rem;
-    text-decoration: none;
-    color: var(--color-text);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .logo :global(img) {
+    height: 32px;
+    width: auto;
   }
 
   .nav-toggle {

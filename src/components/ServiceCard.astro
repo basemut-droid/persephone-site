@@ -4,7 +4,7 @@ interface Props {
   description: string;
   href: string;
   cta: string;
-  tone: 'teal-light' | 'teal' | 'teal-dark';
+  tone: 'sage' | 'teal' | 'teal-dark';
 }
 const { title, description, href, cta, tone } = Astro.props;
 ---
@@ -42,8 +42,8 @@ const { title, description, href, cta, tone } = Astro.props;
     border-color: currentColor;
   }
 
-  .tone-teal-light {
-    background: var(--color-teal-light);
+  .tone-sage {
+    background: var(--color-sage);
   }
 
   .tone-teal {

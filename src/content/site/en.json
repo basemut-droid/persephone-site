@@ -33,8 +33,12 @@
   },
   "painPoints": {
     "eyebrow": "what's rarely said out loud",
-    "heading": "Involuntary childlessness isn't just a question about a child. It's a life crisis: complex, and often invisible.",
-    "intro": "Reproductive crises take many forms — medical, through adoption, or something else entirely. What they share is what happens inside: emotional, relational, and existential exhaustion and loneliness.",
+    "heading": "Involuntary childlessness isn't just a question about a child. It's a <em>life crisis</em>: complex, and often invisible.",
+    "paragraphs": [
+      "Reproductive crises take many forms — medical, through adoption, or something else entirely. What they share is what happens inside: emotional, relational, and existential exhaustion and loneliness.",
+      "When your body doesn't do what you expect of it. When decisions feel like a labyrinth. When the relationship suffers, without anyone being at fault. When you no longer know who you are, if not a parent. That's a life crisis that deserves to be seen.",
+      "Around 17% of people of reproductive age are affected — and more than 75% of them receive no targeted psychosocial support. Because there's hardly any to be found."
+    ],
     "quotes": [
       "I don't know when it's allowed — or necessary — to stop.",
       "I smile at family gatherings and say everything's fine.",
@@ -45,7 +49,7 @@
   },
   "services": {
     "eyebrow": "What Persephone offers",
-    "heading": "Choose what fits you right now. Or let a no-obligation conversation help you find your way among Persephone's offerings.",
+    "heading": "Choose what fits you right now.<br />Or let a no-obligation conversation help you find your way among Persephone's offerings.",
     "items": [
       {
         "title": "Counseling & Coaching",

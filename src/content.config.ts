@@ -74,8 +74,11 @@ const site = defineCollection({
     }),
     painPoints: z.object({
       eyebrow: z.string(),
+      // Rendered with set:html — trusted, first-party content only, never
+      // user input — so a stray <em> for emphasis (matching the original's
+      // own markup) can survive instead of being flattened to plain text.
       heading: z.string(),
-      intro: z.string(),
+      paragraphs: z.array(z.string()),
       quotes: z.array(z.string()),
       closing: z.string(),
     }),

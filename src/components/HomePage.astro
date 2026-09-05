@@ -1,11 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ServiceCard from './ServiceCard.astro';
 import ValueTile from './ValueTile.astro';
 import QuoteStack from './QuoteStack.astro';
 import BlogTeaserCard from './BlogTeaserCard.astro';
 import { getSiteContent, type Locale } from '../i18n/utils';
+import heroImage from '../assets/hero/granatapfel-fruchtbarkeit.jpg';
+import founderPhoto from '../assets/founder/marina-portrait.png';
 
 interface Props {
   locale: Locale;
@@ -21,7 +24,7 @@ const posts = (usingFallback ? allPosts.filter((p) => p.id.startsWith('de/')) : 
   .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
   .slice(0, 4);
 
-const serviceTones = ['teal', 'teal-dark', 'teal-light'] as const;
+const serviceTones = ['teal', 'teal-dark', 'sage'] as const;
 ---
 
 <BaseLayout locale={locale} path={path} title={s.meta.title} description={s.meta.description}>
@@ -33,16 +36,23 @@ const serviceTones = ['teal', 'teal-dark', 'teal-light'] as const;
         {s.hero.paragraphs.map((p) => <p>{p}</p>)}
         <a href={s.hero.ctaHref} class="button button-primary">{s.hero.cta}</a>
       </div>
-      <div class="hero-image" role="img" aria-label="Granatapfel als Symbol für den Persephone-Mythos"></div>
+      <div class="hero-image">
+        <Image
+          src={heroImage}
+          alt="Aufgeschnittener Granatapfel — Symbol des Persephone-Mythos"
+          width={900}
+          height={700}
+        />
+      </div>
     </div>
   </section>
 
   <!-- Pain points -->
-  <section class="section section-alt">
+  <section class="section section-alt section-centered">
     <div class="container section-narrow">
       <span class="eyebrow">{s.painPoints.eyebrow}</span>
-      <h2>{s.painPoints.heading}</h2>
-      <p>{s.painPoints.intro}</p>
+      <h2 set:html={s.painPoints.heading} />
+      {s.painPoints.paragraphs.map((p) => <p>{p}</p>)}
       <QuoteStack quotes={s.painPoints.quotes} />
       <p>{s.painPoints.closing}</p>
     </div>
@@ -53,7 +63,7 @@ const serviceTones = ['teal', 'teal-dark', 'teal-light'] as const;
     <div class="container">
       <div class="section-heading">
         <span class="eyebrow">{s.services.eyebrow}</span>
-        <h2>{s.services.heading}</h2>
+        <h2 set:html={s.services.heading} />
       </div>
       <div class="service-grid">
         {
@@ -94,7 +104,9 @@ const serviceTones = ['teal', 'teal-dark', 'teal-light'] as const;
         {s.founder.paragraphs.map((p) => <p>{p}</p>)}
         <a href={s.founder.href} class="button button-outline">{s.founder.cta}</a>
       </div>
-      <div class="founder-photo" role="img" aria-label={s.founder.imageAlt}></div>
+      <div class="founder-photo">
+        <Image src={founderPhoto} alt={s.founder.imageAlt} width={700} height={933} />
+      </div>
     </div>
   </section>
 
@@ -142,11 +154,13 @@ const serviceTones = ['teal', 'teal-dark', 'teal-light'] as const;
     grid-template-columns: 1fr;
     gap: 2.5rem;
     padding-block: 3rem;
+    align-items: center;
   }
 
-  .hero-image {
+  .hero-image img {
+    width: 100%;
     aspect-ratio: 4 / 3;
-    background: linear-gradient(135deg, var(--color-teal-light), var(--color-terracotta));
+    object-fit: cover;
     border-radius: var(--radius);
   }
 
@@ -158,8 +172,13 @@ const serviceTones = ['teal', 'teal-dark', 'teal-light'] as const;
     background: var(--color-bg-alt);
   }
 
+  .section-centered {
+    text-align: center;
+  }
+
   .section-narrow {
     max-width: 65ch;
+    margin-inline: auto;
   }
 
   .section-heading {
@@ -183,9 +202,10 @@ const serviceTones = ['teal', 'teal-dark', 'teal-light'] as const;
     align-items: center;
   }
 
-  .founder-photo {
+  .founder-photo img {
+    width: 100%;
     aspect-ratio: 3 / 4;
-    background: var(--color-teal-light);
+    object-fit: cover;
     border-radius: var(--radius);
   }
 
@@ -208,6 +228,7 @@ const serviceTones = ['teal', 'teal-dark', 'teal-light'] as const;
 
   .newsletter-inner {
     max-width: 60ch;
+    margin-inline: auto;
   }
 
   .eyebrow-on-band {

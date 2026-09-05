@@ -33,8 +33,12 @@
   },
   "painPoints": {
     "eyebrow": "ciò che quasi nessuno dice ad alta voce",
-    "heading": "Il desiderio di un figlio insoddisfatto non è solo una questione legata al bambino. È una crisi esistenziale: complessa e spesso invisibile.",
-    "intro": "Le crisi riproduttive seguono percorsi molto diversi — medici, adottivi, o del tutto differenti. Ciò che hanno in comune è il vissuto interiore: l'esaurimento emotivo, relazionale ed esistenziale, e la solitudine.",
+    "heading": "Il desiderio di un figlio insoddisfatto non è solo una questione legata al bambino. È una <em>crisi esistenziale</em>: complessa e spesso invisibile.",
+    "paragraphs": [
+      "Le crisi riproduttive seguono percorsi molto diversi — medici, adottivi, o del tutto differenti. Ciò che hanno in comune è il vissuto interiore: l'esaurimento emotivo, relazionale ed esistenziale, e la solitudine.",
+      "Quando il corpo non fa ciò che ci si aspetta da lui. Quando le decisioni sembrano un labirinto. Quando la relazione soffre, senza che nessuno sia colpevole. Quando non si sa più chi si è, se non si è genitori. Questa è una crisi esistenziale che merita di essere vista.",
+      "Circa il 17% delle persone in età riproduttiva ne è interessato — e oltre il 75% di loro non riceve un supporto psicosociale mirato. Perché ce n'è a malapena."
+    ],
     "quotes": [
       "Non so da quando in poi sia permesso — o necessario — smettere.",
       "Alle feste di famiglia sorrido e dico che va tutto bene.",
@@ -45,7 +49,7 @@
   },
   "services": {
     "eyebrow": "Cosa offre Persephone",
-    "heading": "Scegli ciò che fa per te in questo momento. Oppure lasciati consigliare in un colloquio senza impegno sulle offerte di Persephone.",
+    "heading": "Scegli ciò che fa per te in questo momento.<br />Oppure lasciati consigliare in un colloquio senza impegno sulle offerte di Persephone.",
     "items": [
       {
         "title": "Consulenza & Coaching",

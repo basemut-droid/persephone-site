@@ -1,30 +1,30 @@
 /*
- * Design tokens.
- *
- * These hex values were extracted from persephone.at's own compiled CSS
- * (Avada theme custom color variables), not supplied as an official
- * corporate-design spec — treat them as a best-effort match, ASSUMED
- * correct until confirmed against real CD documentation. The semantic
- * role each color plays below (which one is "the accent", which is "the
- * CTA gradient") is our own inference from how they're used on the live
- * site, not a value read directly off the page.
+ * Design tokens — confirmed against docs/brand/Brandbook.pdf (the client's
+ * official style guide). Names below match the brand book's own German
+ * names for each color so this file can be cross-checked against it
+ * directly.
  */
 :root {
-  /* Backgrounds */
-  --color-bg: #fbf8f5; /* cream — primary section background */
-  --color-bg-alt: #f3ece6; /* warm cream — alternating section background */
-  --color-surface: #ffffff; /* cards, form fields */
+  /* Off-White — "Basisfläche/Papier": the site's base ground, not pure white */
+  --color-bg: #fbf8f5;
+  /* Warmes Elfenbein — background for cards/boxes/image mattes */
+  --color-bg-alt: #f3ece6;
+  --color-surface: #ffffff;
 
-  /* Text */
-  --color-text: #181a2b; /* ink — body text */
-  --color-text-muted: #32373c; /* soft charcoal — secondary text */
-  --color-text-on-accent: #f3ece6; /* cream text on colored/dark surfaces */
+  /* Tinte — main text color, a near-black navy rather than pure black */
+  --color-text: #181a2b;
+  --color-text-muted: #32373c;
+  --color-text-on-accent: #f3ece6;
 
-  /* Brand accents */
-  --color-teal-light: #90c8c0;
+  /* Salbei — "Geborgenheit": soft transition tone between red and teal */
+  --color-sage: #90c8c0;
+  /* Türkis — "Empathie", the secondary brand color */
   --color-teal: #48b0b0;
+  /* Tiefes Türkis — contrast color for darker fills/gradients */
   --color-teal-dark: #309898;
+  /* Granatapfelrot — the primary brand color */
   --color-terracotta: #b33a3b;
+  /* Leuchtrot — accent color, reserved for the wordmark and CTAs */
   --color-terracotta-dark: #d83830;
 
   /* Semantic roles */
@@ -34,10 +34,15 @@
   --color-cta-to: var(--color-terracotta-dark);
   --color-band-bg: var(--color-teal);
 
-  /* Typography — self-hosted via @fontsource, matching the live site's
-     choice to avoid loading fonts from Google's own CDN (see BaseLayout). */
+  /* Typography — DM Sans only (per brand book: it "carries all body text,
+     all UI elements, all form labels"; there is no second heading font).
+     Self-hosted via @fontsource rather than Google's CDN, matching the
+     live site's own choice (see BaseLayout for the font imports). */
   --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Jost', var(--font-body);
+  --font-heading: var(--font-body);
+  --weight-heading: 900; /* Black — H1/H2 per brand book */
+  --weight-subheading: 700; /* Bold — subheads, emphasis */
+  --weight-label: 500; /* Medium — nav, labels, eyebrows use Bold instead */
 
   --radius: 6px;
   --container-max: 1248px;
@@ -67,6 +72,7 @@ h2,
 h3,
 h4 {
   font-family: var(--font-heading);
+  font-weight: var(--weight-heading);
   line-height: 1.2;
   margin: 0 0 0.5em;
 }
@@ -108,7 +114,7 @@ a {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: var(--weight-subheading);
   color: var(--color-accent);
   margin-bottom: 0.75rem;
 }

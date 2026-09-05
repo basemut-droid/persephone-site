@@ -9,7 +9,14 @@ interface Props {
 const { locale, path, label } = Astro.props;
 ---
 
-<nav class="lang-switcher" aria-label={label}>
+<details class="lang-switcher">
+  <summary aria-label={label}>
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3c2.5 2.5 4 5.6 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.6-4-9s1.5-6.5 4-9Z" />
+    </svg>
+    <span>{locale.toUpperCase()}</span>
+  </summary>
   <ul>
     {
       locales.map((loc) => (
@@ -26,30 +33,72 @@ const { locale, path, label } = Astro.props;
       ))
     }
   </ul>
-</nav>
+</details>
 
 <style>
-  .lang-switcher ul {
-    display: flex;
-    gap: 0.75rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  .lang-switcher {
+    position: relative;
   }
 
-  .lang-switcher a {
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
-    padding: 0.4rem 0.5rem;
-    min-height: 44px;
+  .lang-switcher summary {
     display: inline-flex;
     align-items: center;
+    gap: 0.4rem;
+    list-style: none;
+    cursor: pointer;
+    min-height: 44px;
+    padding: 0.5rem 0.6rem;
     border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 0.85rem;
   }
 
-  .lang-switcher a[aria-current='page'] {
+  .lang-switcher summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .lang-switcher[open] summary {
+    color: var(--color-accent);
+  }
+
+  .lang-switcher ul {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin: 0.5rem 0 0;
+    padding: 0.5rem 0;
+    list-style: none;
+    background: var(--color-surface);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-radius: var(--radius);
+    min-width: 160px;
+    z-index: 10;
+  }
+
+  .lang-switcher li a {
+    display: block;
+    padding: 0.6rem 1.25rem;
+    text-decoration: none;
+    color: var(--color-text);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .lang-switcher li a:hover {
+    background: var(--color-bg-alt);
+  }
+
+  .lang-switcher li a[aria-current='page'] {
     color: var(--color-accent-strong);
-    text-decoration: underline;
+    font-weight: 700;
+  }
+
+  @media (max-width: 900px) {
+    .lang-switcher ul {
+      position: static;
+      box-shadow: none;
+      margin-top: 0.25rem;
+    }
   }
 </style>
