@@ -5,9 +5,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <BaseLayout locale="de" path="/impressum/" title="Impressum – Persephone">
   <section class="container legal-page">
     <h1>Impressum</h1>
+    <p>Marina Bletsas</p>
+    <p>Landstraßer Hauptstraße 86, 2/8<br />1030 Wien, Österreich</p>
+    <p>E-Mail: <a href="mailto:hallo@persephone.at">hallo@persephone.at</a></p>
+    <p>Telefon: <a href="tel:+436656721738">+43 665 67221738</a></p>
+    <p>Unternehmensgegenstand: Psychoedukation und Organisation psychosozialer Veranstaltungen</p>
     <p>
-      <em>Platzhalter — der rechtlich verbindliche Text (Diensteanbieter, Kontaktdaten, ggf.
-      Kammer/Gewerbeaufsicht, UID-Nummer) wird noch nachgereicht und hier eingesetzt.</em>
+      Gewerbeberechtigung: Organisation von Veranstaltungen, Märkten und Messen (Eventmanagement)<br
+      />
+      Gewerbebehörde: Magistratisches Bezirksamt für den 3./11. Bezirk, Wien
+    </p>
+    <p>Mitglied der Wirtschaftskammer Wien</p>
+    <p>Berufsrechtliche Vorschriften: Gewerbeordnung: <a href="https://www.ris.bka.gv.at" target="_blank" rel="noopener">www.ris.bka.gv.at</a></p>
+    <p>Trainerin, Lebens- und Sozialberaterin in Ausbildung unter Supervision, Veranstaltungsorganisatorin</p>
+    <p>
+      Mein Anliegen: Einzelne und Paare im Ausnahmezustand des unerfüllten Kinderwunsches mit
+      einschlägiger Information, Reflexionsangeboten und Austauschmöglichkeiten begleiten und
+      unterstützen.
     </p>
   </section>
 </BaseLayout>
@@ -16,5 +30,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .legal-page {
     padding-block: 4rem;
     max-width: 70ch;
+  }
+
+  .legal-page p {
+    margin-bottom: 1.25rem;
   }
 </style>
