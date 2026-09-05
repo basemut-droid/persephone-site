@@ -7,7 +7,7 @@ import ValueTile from './ValueTile.astro';
 import QuoteStack from './QuoteStack.astro';
 import BlogTeaserCard from './BlogTeaserCard.astro';
 import { getSiteContent, type Locale } from '../i18n/utils';
-import heroImage from '../assets/hero/granatapfel-fruchtbarkeit.jpg';
+import heroImage from '../assets/hero/granatapfel-fruchtbarkeit.png';
 import founderPhoto from '../assets/founder/marina-portrait.png';
 
 interface Props {
@@ -43,7 +43,7 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
           src={heroImage}
           alt="Aufgeschnittener Granatapfel — Symbol des Persephone-Mythos"
           width={1600}
-          height={900}
+          height={882}
         />
       </div>
     </div>
@@ -163,6 +163,12 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+    /* Centers this (narrower-than-the-column) text block within its
+       1/3 column — the text itself stays left-aligned, but the block as
+       a whole sits in the middle of the column rather than hugging its
+       left edge, matching the original. */
+    max-width: 26rem;
+    margin-inline: auto;
   }
 
   .hero-headline {
@@ -170,20 +176,15 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
   }
 
   .hero-image {
-    /* Deliberately cropped shorter/wider than the source photo — matches
-       the original, which crops this same image top and bottom rather
-       than showing it at full height. overflow:hidden + the img being
-       40px taller than its box (shifted up 20px) trims exactly 20px off
-       the top and bottom of what object-fit:cover would otherwise show. */
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
+    /* The artwork has transparent margins around it (no baked-in
+       background), so this shows through wherever the image doesn't
+       cover — matching the page instead of a stray dark rectangle. */
+    background: var(--color-bg);
   }
 
   .hero-image img {
     width: 100%;
-    height: calc(100% + 40px);
-    margin-top: -20px;
-    object-fit: cover;
+    height: auto;
     display: block;
   }
 
@@ -266,14 +267,8 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
 
   @media (min-width: 900px) {
     .hero-grid {
-      grid-template-columns: 2fr 3fr;
+      grid-template-columns: 1fr 2fr;
       align-items: center;
-    }
-
-    .hero-copy {
-      /* Aligns with the rest of the page's centered 1248px container,
-         even though this row itself deliberately bleeds full-width. */
-      padding-left: max(2.5rem, calc((100vw - var(--container-max)) / 2 + 2.5rem));
     }
 
     .philosophy-grid,
