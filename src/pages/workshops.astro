@@ -15,8 +15,6 @@ if (!entry) throw new Error('Content collection entry "pages/de/workshops" not f
 const blocks = parseMarkdownBlocks(entry.body ?? '');
 const tracker = new BlockTracker(blocks);
 
-// Verbatim source typo ("Workhops", missing the first "s") — see
-// OPEN-QUESTIONS.md #8. Preserved exactly, not fixed.
 const { eyebrow: heroEyebrow, title: heroTitle, intro: heroIntro } = tracker.heroFields(entry.data.title);
 
 // A bare "Services" paragraph sits between the intro and the first heading

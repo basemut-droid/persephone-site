@@ -51,9 +51,7 @@ const nextHeadingOffset = treffenSection.slice(aktuellesIdx + 1).findIndex((b) =
 const aktuellesBlocks =
   nextHeadingOffset === -1 ? treffenSection.slice(aktuellesIdx + 1) : treffenSection.slice(aktuellesIdx + 1, aktuellesIdx + 1 + nextHeadingOffset);
 const aktuelles = paragraphs(aktuellesBlocks);
-// The live page's own heading here is misspelled "Nächtes" (missing the
-// "s") — see OPEN-QUESTIONS.md #8, preserved verbatim, not fixed.
-const details = section(treffenSection, 'Nächtes SHG-Treffen');
+const details = section(treffenSection, 'Nächstes SHG-Treffen');
 const detailsList = details.find((b) => b.type === 'list');
 const cta = details.find((b) => b.type === 'cta');
 if (!cta || cta.type !== 'cta') throw new Error('Expected the sign-up CTA');

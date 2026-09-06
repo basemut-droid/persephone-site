@@ -236,14 +236,6 @@ function addResult(id, title, blocking, violations) {
       // the real page — owner decision in docs/fuer-marina.md Q4 ("bleibt
       // entfernt").
       'Your Journey to a Fulfilling Life',
-      // TEMPORARY, remove when NIGHT-RUN.md Phase 3 item 1 lands: verbatim
-      // source typo ("Nächtes", missing the "s") — OPEN-QUESTIONS.md #8.
-      // The owner has since approved correcting it (fuer-marina.md Q1),
-      // scheduled for Phase 3's batch of copy fixes, not this phase's
-      // page-composition fix. Listed here only so flipping this check to
-      // blocking (below) doesn't fail the build on an already-tracked,
-      // already-decided, not-yet-executed fix.
-      'Nächtes SHG-Treffen',
     ],
   };
 

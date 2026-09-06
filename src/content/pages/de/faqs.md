@@ -16,7 +16,7 @@ Persephone ist eine Initiative zur psychosozialen Unterstützung von Menschen mi
 
 ### [Was ist der Unterschied zwischen Beratung/Coaching und der Selbsthilfegruppe?](#collapse-1-1891)
 
-Die Selbsthilfegruppe ist ein geschützter, kostenloser Raum, der von mir als (ehmals) Betroffene für Betroffene zur Verfügung gestellt wird. Er dient der Entlastung und dem Austausch und kann eine tolle Geleggenheit sein, sich durch die Gemeinschaft weniger allein zu fühlen und Kraft zu tanken. Meine Rolle dabei ist organisatorisch und moderierend. Beratung bzw. Coaching ist professionelle Einzel- oder Paararbeit mit mir, individuell auf Deine bzw. Eure Situation zugeschnitten. Hier legen wir gemeinsam Ziele fest und arbeiten gezielt darauf hin.
+Die Selbsthilfegruppe ist ein geschützter, kostenloser Raum, der von mir als ehemals Betroffene für Betroffene zur Verfügung gestellt wird. Er dient der Entlastung und dem Austausch und kann eine tolle Gelegenheit sein, sich durch die Gemeinschaft weniger allein zu fühlen und Kraft zu tanken. Meine Rolle dabei ist organisatorisch und moderierend. Beratung bzw. Coaching ist professionelle Einzel- oder Paararbeit mit mir, individuell auf Deine bzw. Eure Situation zugeschnitten. Hier legen wir gemeinsam Ziele fest und arbeiten gezielt darauf hin.
 
 ### [Wer ist Persephone überhaupt – warum dieser Name?](#collapse-1-1898)
 

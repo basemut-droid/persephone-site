@@ -5,7 +5,7 @@ sourceUrl: "https://www.persephone.at/workshops/"
 
 Angebote
 
-# Workhops & Einzeltrainings
+# Workshops & Einzeltrainings
 
 Wissen schafft Orientierung. Persephones psychoedukative Angebote vermitteln fundiertes Verständnis für die reproduktive Krise und unterstützen Dich dabei, eigene Bewältigungsstrategien zu entwickeln.
 
