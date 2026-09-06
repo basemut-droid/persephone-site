@@ -101,7 +101,31 @@ invented.
 
 `npm run build` (22 pages) and `npx astro check` clean throughout.
 
-## Next: Phase 5 (verify)
+## Phase 5 — Verify: COMPLETE
+
+- **Production build:** `npm run build` (now `astro build && node scripts/build-check.mjs`)
+  clean throughout, blocking heading check included.
+- **Legal integrity check (external-review.md 3c):** Disclaimer's text confirmed
+  word-for-word against the live page by direct comparison (curled raw HTML, not
+  eyeballed) — complete, nothing missing, "keine Psychotherapie" and the full
+  training-status disclosure intact. Über uns's three "i.A.u.S." occurrences and
+  Beratung's three "Ausbildung unter Supervision" occurrences both confirmed present,
+  matching the live source's own counts exactly.
+- **Screenshot comparison, every page at 1920px** (`docs/screenshots/2026-09-07/`):
+  container width, section rhythm, backgrounds, and buttons hold consistently
+  site-wide. One real, pre-existing deviation found and documented, not fixed:
+  `PageHero.astro`'s intro paragraph is 768px while `.section-narrow` (everything
+  else) is 896px — external-review.md finding #11, now pinned precisely; see
+  OPEN-QUESTIONS.md #17.
+- **Mobile rendering is still unverified.** As documented repeatedly in this
+  project's history, 390px headless-Edge screenshots are unreliable in this
+  environment (content lays out as if the viewport were wider, then gets cropped) —
+  reproduced again this session on the rebuilt Angebote page. This is an environment
+  limitation, not a site bug, but it means **no page in this repo has been confirmed
+  to render correctly on an actual small screen.** A real device or a manually
+  resized real browser window is needed before launch.
+
+## Next: Phase 6 (leave it so the owner can look at it)
 
 ---
 
