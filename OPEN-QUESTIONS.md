@@ -102,7 +102,43 @@ live 404 — flagging here since it's a content/URL decision, not obviously "jus
 it" if there's a reason those specific slugs existed. Also worth telling whoever
 manages the live WordPress site, independent of this rebuild.
 
-## 8. Not a decision — just worth knowing
+## 8. Selbsthilfegruppe has an unremoved English theme-demo heading and a doubled intro
+
+The live Selbsthilfegruppe page renders **two** h1s back to back: "Selbsthilfegruppe" and,
+immediately after it, "Your Journey to a Fulfilling Life" — English, and reading exactly
+like an Avada theme demo-content default that was never replaced (the same pattern as
+Open Question #4's leftover homepage meta description). It's followed by **two** near-
+identical German intro paragraphs with slightly different wording ("...die die Erfahrung
+der Kinderwunschkrise teilen" vs "...die ähnliche Erfahrungen haben") — not an extraction
+artifact; both are genuinely present in the source, worded differently enough that they
+aren't a simple duplicate.
+
+**Current state:** `src/content/pages/de/selbsthilfegruppe.md` preserves all of it
+verbatim (both headings, both paragraphs) per Task 2's "faithful record" rule.
+
+**Recommendation:** when this page eventually gets built, drop the English demo heading
+and pick one of the two intro paragraphs — your call on which reads better, not a coin
+flip I should make.
+
+## 9. Two verbatim typos worth knowing about before Task 3
+
+Preserved exactly, not fixed, per the "German copy stays verbatim" rule — but flagging
+so they aren't mistaken for new transcription errors when the pages get built:
+
+- The live Workshops page's own on-page `<h1>` reads **"Workhops & Einzeltrainings"**
+  (missing the first "s") — even though its `<title>` tag correctly says "Workshops &
+  Einzeltrainings". Same typo also showed up in Open Question #7's dead link
+  (`/workhops-einzeltrainings/`), so it's a consistent, real slip on the live site, not
+  a one-off.
+- The live Selbsthilfegruppe page has one heading spelled "Nächstes SHG-Treffen" (h1) and
+  a second, lower one spelled **"Nächtes SHG-Treffen"** (h3, missing the "s") for what
+  reads like the same label used twice.
+
+**Recommendation:** correct both when actually building these pages' on-page copy (typos,
+not a style choice) — flagging here rather than silently "fixing" them inside the Phase 2
+extraction, which is supposed to mirror the source exactly, bugs included.
+
+## 10. Not a decision — just worth knowing
 
 Several `<li>` elements in the live Über-uns page's "Ausbildung"/"Felderfahrung" lists
 carry a leftover CSS class, `font-claude-response-body`, in their raw HTML — a tell that
