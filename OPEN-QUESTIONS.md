@@ -159,36 +159,48 @@ so they aren't mistaken for new transcription errors when the pages get built:
 not a style choice) — flagging here rather than silently "fixing" them inside the Phase 2
 extraction, which is supposed to mirror the source exactly, bugs included.
 
-## 9. Important: the live Datenschutzerklärung describes fonts the new site doesn't use
+## 9. Datenschutzerklärung — NEEDS HUMAN SIGN-OFF (not resolved by code)
 
-This one carries real legal weight, not just a copy-fidelity note. The live
-Datenschutzerklärung has two sections — **"6. Google Fonts"** and **"7. Typekit
-Fonts"** — describing font files loaded from Google and Adobe. The **new Astro site
-does not do this**: `CLAUDE.md` and `DESIGN-SYSTEM.md` both confirm DM Sans is
-self-hosted via `@fontsource`, with no external font requests at all. A privacy policy
-has to describe what the site *actually* does, not what the old WordPress site did — so
-these two sections would be **factually false** if carried over unchanged.
+This is a legal document for a real business. Your wife approves the wording, not
+this rebuild — nothing below should be read as "settled," including the parts marked
+"fixed." It also needs a fresh re-check at launch against whatever the live site
+actually loads by then (its fonts/analytics/embeds could easily have changed again
+between now and launch).
 
-**Good news:** this was already caught and fixed once. The current
-`src/pages/datenschutz.astro` (Section 6, "Schriftarten (Fonts)") already replaces both
-live sections with a single accurate one: *"Diese neue Version der Website lädt keine
-Schriftarten von Google Fonts oder Adobe Typekit mehr... direkt auf unserem eigenen
-Server hinterlegt."* That fix should be **kept**, not reverted, whenever this page's
-content gets consolidated into the collection version.
+**What's different from the live source, and why:** the live Datenschutzerklärung has
+two sections — "6. Google Fonts" and "7. Typekit Fonts" — describing font files loaded
+from Google and Adobe. The new Astro site doesn't do this (`CLAUDE.md`/
+`DESIGN-SYSTEM.md` confirm DM Sans is self-hosted via `@fontsource`, no external font
+requests at all), so carrying those two sections over unchanged would describe
+something the new site doesn't actually do. `src/pages/datenschutz.astro`'s own
+Section 6 ("Schriftarten (Fonts)") replaces both with one sentence stating the new
+site self-hosts its font and contacts neither Google nor Adobe. This is the only
+wording change from the live source anywhere in this document; every other sentence
+is the live site's own text, carried over verbatim (via `src/pages/impressum.astro`'s
+sibling page's original session, predating this one).
 
-**Current state:** `src/content/pages/de/datenschutzerklaerung.md` (this session,
-Phase 2) stores the live site's text verbatim, Google Fonts/Typekit sections included —
-correct for Task 2's "faithful record of the source" job, but **not what should ship**.
-The numbered section labels ("1. Verschlüsselte Übertragung", etc.) are also plain
-paragraphs in the live source, not real headings — `src/pages/datenschutz.astro`
-already promotes them to `<h2>`, which is a reasonable accessibility improvement to
-keep, not something to revert to match the source.
+**What this session did to this page (Task 3):** rewrote the page's wrapper markup
+only — swapped a bare `<h1>` + one-off `.legal-page` class for `PageHero` +
+`.section`/`.section-narrow`, matching the rest of the rebuilt site. Verified via
+`git diff` that this changed only tags/classes, zero words — every sentence, including
+the fonts-section rewrite above, is untouched by this session.
 
-**Recommendation:** when this page is next touched, use the existing
-`datenschutz.astro` wording for the fonts section (already correct) rather than the
-freshly re-parsed live text — flagging this prominently since it's the one item in this
-whole list where shipping the "verbatim" source text would actually be wrong, not just
-undecided.
+**Current state:** `src/content/pages/de/datenschutzerklaerung.md` (content
+collection, Task 2) stores the live site's text fully verbatim, Google Fonts/Typekit
+sections included — a faithful record of the source, correct for Task 2's job, but
+**not what's actually shipped**. `src/pages/datenschutz.astro` (the real, live page)
+has the fonts-section rewrite described above and is what visitors see. The two files
+intentionally disagree on this one point; that's not a bug to reconcile away without
+your wife's say.
+
+**Needs from you before launch:**
+- Your wife's sign-off on the fonts-section wording (and everything else on the page,
+  even the parts that are the live site's own existing words — "already live
+  elsewhere" isn't the same as "she's approved it for this rebuild").
+- A re-check of this whole page against whatever the live site (or your actual
+  deployment) loads at launch time — cookies, analytics, embedded forms (Microsoft
+  Bookings/Forms are both referenced in the body text), fonts — since any of that
+  could have changed since this extraction.
 
 ## 10. Über-uns's two closing teaser cards use a plain style, not ServiceCard
 

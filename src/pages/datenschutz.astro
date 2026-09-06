@@ -1,10 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
 ---
 
 <BaseLayout locale="de" path="/datenschutz/" title="Datenschutzerklärung – Persephone">
-  <section class="container legal-page">
-    <h1 class="heading-black">Datenschutzerklärung</h1>
+  <PageHero title="Datenschutzerklärung" />
+
+  <section class="section">
+    <div class="container section-narrow legal-page">
     <p class="byline">Marina Bletsas | Stand: 12.06.2026</p>
 
     <p>
@@ -266,15 +269,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <a href="mailto:hallo@persephone.at">hallo@persephone.at</a><br />
       Tel.: <a href="tel:+436656721738">+43 665 67221738</a>
     </p>
+    </div>
   </section>
 </BaseLayout>
 
 <style>
-  .legal-page {
-    padding-block: 4rem;
-    max-width: 70ch;
-  }
-
   .legal-page p,
   .legal-page ul {
     margin-bottom: 1.25rem;
