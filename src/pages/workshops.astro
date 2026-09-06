@@ -1,80 +1,103 @@
 ---
+import { getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
+import marinaPortrait from '../assets/shared/marina-von-persephone.jpg';
+import logoWissenschaft from '../assets/pages/workshops/logo-wissenschaft.png';
+import { parseMarkdownBlocks, section, paragraphs } from '../lib/parseMarkdownBlocks';
 
-const themen = [
-  'Die Rolle der Psyche in der reproduktiven Krise',
-  'Partnerschaft und unerfüllter Kinderwunsch',
-  'Umgang mit Nachfragen und Erwartungen aus Familie und Umfeld',
-  'Trauer und ambivalente Gefühle',
-];
+// No split-hero image on the live page (masthead row has no --awb-bg-image) —
+// plain PageHero, same as Angebote/Beratung.
+const entry = await getEntry('pages', 'de/workshops');
+if (!entry) throw new Error('Content collection entry "pages/de/workshops" not found');
+const blocks = parseMarkdownBlocks(entry.body ?? '');
+
+const heroEyebrow = (blocks[0].type === 'paragraph' && blocks[0].text) || undefined;
+// Verbatim source typo ("Workhops", missing the first "s") — see
+// OPEN-QUESTIONS.md #8. Preserved exactly, not fixed.
+const heroTitle = blocks[1].type === 'heading' ? blocks[1].text : entry.data.title;
+const heroIntro = (blocks[2].type === 'paragraph' && blocks[2].text) || undefined;
+
+// "Was ist Psychoedukation?" / "Workshops & Trainings" / "Ressourcen" are one
+// continuous section on the live page (single row, light background), same
+// pattern as Beratung's "Was ist Beratung?" group.
+const psychoedukation = paragraphs(section(blocks, 'Was ist Psychoedukation?'));
+const workshopsSection = section(blocks, 'Workshops & Trainings');
+const workshopsIntro = paragraphs(workshopsSection)[0];
+const workshopsList = workshopsSection.find((b) => b.type === 'list');
+const ressourcenSection = section(blocks, 'Ressourcen');
+const ressourcenIntro = paragraphs(ressourcenSection)[0];
+const ressourcenList = ressourcenSection.find((b) => b.type === 'list');
+
+// The closing heading appears twice back-to-back with identical text but
+// different levels (h3 then h1 — a responsive desktop/mobile duplicate
+// pair, same as elsewhere on this site; both preserved verbatim in the
+// content collection per Task 2). section() anchors on the first (h3) and
+// would immediately hit the second (h1, a shallower level) as a false
+// boundary, so this walks past both by hand instead.
+const closingHeadingText = 'Interesse an Psychoedukation im Kinderwunsch?';
+const headingIdxs = blocks.map((b, i) => (b.type === 'heading' && b.text === closingHeadingText ? i : -1)).filter((i) => i !== -1);
+const lastHeadingIdx = headingIdxs[headingIdxs.length - 1];
+if (lastHeadingIdx === undefined) throw new Error(`Expected heading "${closingHeadingText}"`);
+const closing = blocks.slice(lastHeadingIdx + 1);
+const closingParagraphs = paragraphs(closing);
+const cta = closing.find((b) => b.type === 'cta');
+if (!cta || cta.type !== 'cta') throw new Error('Expected a closing CTA');
 ---
-<BaseLayout
-  locale="de"
-  path="/workshops/"
-  title="Workshops & Einzeltrainings – Persephone"
-  description="Psychoedukative Workshops und Einzeltrainings für Menschen mit unerfülltem Kinderwunsch — in Wien, Graz und online."
->
-  <PageHero
-    eyebrow="Angebote"
-    title="Workshops & Einzeltrainings"
-    intro="Wissen schafft Orientierung. Persephones psychoedukative Angebote vermitteln fundiertes Verständnis für die reproduktive Krise und unterstützen Dich dabei, eigene Bewältigungsstrategien zu entwickeln."
-  />
+
+<BaseLayout locale="de" path="/workshops/" title={`${entry.data.title} – Persephone`}>
+  <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
   <section class="section">
     <div class="container section-narrow">
-      <h2>Was ist Psychoedukation?</h2>
-      <p>
-        Psychoedukation macht psychologisches Wissen zugänglich, um Menschen in schwierigen
-        Lebenssituationen zu unterstützen. Sie hilft, die eigenen Krisenprozesse zu verstehen
-        und die Handlungsfähigkeit zurückzugewinnen.
-      </p>
+      {psychoedukation.map((p) => <p>{p}</p>)}
 
-      <h2>Themen</h2>
-      <ul>
-        {themen.map((t) => <li>{t}</li>)}
-      </ul>
+      <h2>Workshops &amp; Trainings</h2>
+      {workshopsIntro && <p>{workshopsIntro}</p>}
+      {
+        workshopsList?.type === 'list' && (
+          <ul>
+            {workshopsList.items.map((item) => <li>{item}</li>)}
+          </ul>
+        )
+      }
 
-      <h2>Orte</h2>
-      <p>Wien, Graz und online.</p>
+      <h2>Ressourcen</h2>
+      {ressourcenIntro && <p>{ressourcenIntro}</p>}
+      {
+        ressourcenList?.type === 'list' && (
+          <ul>
+            {ressourcenList.items.map((item) => <li>{item}</li>)}
+          </ul>
+        )
+      }
     </div>
   </section>
 
   <section class="section section-alt">
-    <div class="container section-narrow resources">
-      <h2>Ressourcen</h2>
-      <p>
-        Demnächst verfügbar: herunterladbare Arbeitsblätter, Leselisten, Audio-Reflexionen und
-        Podcasts.
-      </p>
+    <div class="container section-narrow supporting-image">
+      <Image src={marinaPortrait} alt="" width={300} height={350} />
+      <Image class="badge" src={logoWissenschaft} alt="" width={90} height={90} />
     </div>
   </section>
 
-  <CtaBand
-    heading="Der Persephone E-Brief"
-    paragraphs={['Erfahre als Erste:r, wenn neue Workshoptermine online gehen.']}
-    ctaLabel="e-Brief abonieren"
-    ctaHref="/newsletter/"
-  />
+  <CtaBand heading={closingHeadingText} paragraphs={closingParagraphs} ctaLabel={cta.text} ctaHref={cta.href} />
 </BaseLayout>
 
 <style>
-  .section-narrow {
-    max-width: 56rem;
+  .supporting-image {
+    text-align: center;
+  }
+
+  .supporting-image img {
+    display: inline-block;
+    border-radius: var(--radius);
+  }
+
+  .badge {
+    margin-top: 1rem;
     margin-inline: auto;
   }
-
-  .section-narrow h2 {
-    margin-top: 2rem;
-  }
-
-  .section-narrow ul {
-    padding-left: 1.25rem;
-  }
-
-  .section-narrow li {
-    margin-bottom: 0.5rem;
-  }
-
 </style>
