@@ -2,15 +2,21 @@
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
-import { parseMarkdownBlocks, paragraphs, mdInlineHtml, rewriteLocalLinks } from '../lib/parseMarkdownBlocks';
+import { parseMarkdownBlocks, paragraphs, mdInlineHtml, rewriteLocalLinks, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 const entry = await getEntry('pages', 'de/disclaimer');
 if (!entry) throw new Error('Content collection entry "pages/de/disclaimer" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');
-const heroTitle = blocks[0].type === 'heading' ? blocks[0].text : entry.data.title;
+const tracker = new BlockTracker(blocks);
+const titleBlock = tracker.at(0);
+const heroTitle = titleBlock.type === 'heading' ? titleBlock.text : entry.data.title;
 // Source links are absolute persephone.at URLs (both real, working pages) —
 // rewritten to local routes per docs/content-audit.md's carry-forward note.
-const body = paragraphs(blocks).map((p) => rewriteLocalLinks(p));
+const body = paragraphs(tracker.slice(1)).map((p) => rewriteLocalLinks(p));
+// This page has legal weight (external-review.md 3c: training-status
+// disclosure) — assertAllHandled() here is the guarantee that a future
+// edit adding a paragraph can't silently fail to render it.
+tracker.assertAllHandled('disclaimer.astro');
 ---
 
 <BaseLayout locale="de" path="/disclaimer/" title={`${entry.data.title} – Persephone`}>

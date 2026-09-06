@@ -2,18 +2,21 @@
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
-import { parseMarkdownBlocks, paragraphs, mdInlineHtml } from '../lib/parseMarkdownBlocks';
+import { parseMarkdownBlocks, paragraphs, mdInlineHtml, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 const entry = await getEntry('pages', 'de/impressum');
 if (!entry) throw new Error('Content collection entry "pages/de/impressum" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');
-const heroTitle = blocks[0].type === 'heading' ? blocks[0].text : entry.data.title;
+const tracker = new BlockTracker(blocks);
+const titleBlock = tracker.at(0);
+const heroTitle = titleBlock.type === 'heading' ? titleBlock.text : entry.data.title;
 // The live source's tel: link literally contains spaces (tel:+43 665
 // 67221738) — a non-functional URI. Using the corrected, working format
 // here is a plumbing fix (no text changed), same call made in an earlier
 // session for this exact page (see OPEN-QUESTIONS.md #5's neighboring
 // context on this page).
-const body = paragraphs(blocks).map((p) => mdInlineHtml(p).replace('tel:+43 665 67221738', 'tel:+436656721738'));
+const body = paragraphs(tracker.slice(1)).map((p) => mdInlineHtml(p).replace('tel:+43 665 67221738', 'tel:+436656721738'));
+tracker.assertAllHandled('impressum.astro');
 // entry.data.description is the live site's own mangled, space-less
 // auto-excerpt (OPEN-QUESTIONS.md #5) — not shipped as-is; falls back to
 // BaseLayout's site-wide default instead of inventing a replacement.

@@ -2,29 +2,34 @@
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
-import { parseMarkdownBlocks, parseLinkHeading } from '../lib/parseMarkdownBlocks';
+import { parseMarkdownBlocks, parseLinkHeading, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 const entry = await getEntry('pages', 'de/faqs');
 if (!entry) throw new Error('Content collection entry "pages/de/faqs" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');
+const tracker = new BlockTracker(blocks);
 
-const heroTitle = blocks[0].type === 'heading' ? blocks[0].text : entry.data.title;
+const titleBlock = tracker.at(0);
+const heroTitle = titleBlock.type === 'heading' ? titleBlock.text : entry.data.title;
 
 // blocks[1] is a category-jump nav whose links are all literally "#" on the
 // live site (non-functional even there) — skipped rather than rendered as
 // dead links. Everything after it is 13 Q&A pairs (h3 question, paragraph
 // answer).
+tracker.exclude(tracker.at(1), 'category-jump nav, links are literally "#" even on the live site');
 const faqs: { question: string; answer: string }[] = [];
 for (let i = 2; i < blocks.length; i++) {
   const b = blocks[i];
   if (b.type === 'heading' && b.level === 3) {
     const next = blocks[i + 1];
+    tracker.use(b, next);
     faqs.push({
       question: parseLinkHeading(b.text)?.label ?? b.text,
       answer: next?.type === 'paragraph' ? next.text : '',
     });
   }
 }
+tracker.assertAllHandled('faqs.astro');
 ---
 
 <BaseLayout locale="de" path="/faqs/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>

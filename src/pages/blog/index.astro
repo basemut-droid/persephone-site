@@ -3,7 +3,7 @@ import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import BlogTeaserCard from '../../components/BlogTeaserCard.astro';
-import { parseMarkdownBlocks } from '../../lib/parseMarkdownBlocks';
+import { parseMarkdownBlocks, BlockTracker } from '../../lib/parseMarkdownBlocks';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const posts = allPosts
@@ -18,9 +18,9 @@ const posts = allPosts
 const entry = await getEntry('pages', 'de/blog');
 if (!entry) throw new Error('Content collection entry "pages/de/blog" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');
-const heroEyebrow = (blocks[0].type === 'paragraph' && blocks[0].text) || undefined;
-const heroTitle = blocks[1].type === 'heading' ? blocks[1].text : entry.data.title;
-const heroIntro = (blocks[2].type === 'paragraph' && blocks[2].text) || undefined;
+const tracker = new BlockTracker(blocks);
+const { eyebrow: heroEyebrow, title: heroTitle, intro: heroIntro } = tracker.heroFields(entry.data.title);
+tracker.assertAllHandled('blog/index.astro');
 ---
 <BaseLayout
   locale="de"
