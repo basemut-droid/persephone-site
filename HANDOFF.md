@@ -1,113 +1,105 @@
-# Handoff — Phase 2 re-parse session (IN PROGRESS, updated after every commit)
+# Handoff — Phase 2 re-parse + Über uns rebuild session (COMPLETE, stopped per brief)
+
+Every task in this run (0–3) is done and committed. Per the brief, this session
+stops here — Task 3 explicitly said not to build the remaining pages until Über uns
+is approved. **Next step is yours: review Über uns, then say go for the rest.**
 
 ## Done and committed this session
 
-- **Task 0 (clean tree):** working tree was already clean at session start — nothing
-  needed committing.
+- **Task 0 (clean tree):** already clean at session start — nothing to commit.
 - **Task 1 (isolate the h1 weight decision) — commit `0236d22`:** the previous
   `HANDOFF.md`/`DESIGN-SYSTEM.md` claimed every masthead h1 already ran through the
-  `.heading-black` utility (`--weight-heading` token). That claim was **false** —
-  grepping every `<h1>` in `src/` found four pages rendering a bare `<h1>` with no
-  class: `404.astro`, `datenschutz.astro`, `impressum.astro`, and
-  `blog/[...slug].astro` (the post-title h1). Fixed by adding `class="heading-black"`
-  to each. Verified with `npm run build` (23 pages built, no errors) before
-  committing. **Now true:** every masthead h1 site-wide takes its weight from
-  `--weight-heading`; flipping 900 → 400 in `global.css` is genuinely a one-value
-  change, nothing else to touch.
-- **`OPEN-QUESTIONS.md` created — same commit:** carries forward the H1/H2 weight
-  decision from this file's earlier "Open" section, plus new items below.
-- **`pages` content collection + Über uns re-parsed — commit `8a9a567`:** added the
-  collection to `src/content.config.ts` (same de/en/it convention as blog/events).
-  `src/content/pages/de/ueber-uns.md` is the real, complete extraction from
-  `https://www.persephone.at/ueber-uns/` — the old `src/pages/ueber-uns.astro` content
-  was missing an entire narrative section and one credential-list item each in
-  "Ausbildung"/"Felderfahrung". Both real images downloaded into
-  `src/assets/pages/ueber-uns/` (no hotlinking). Two dead CTA links found on the live
-  page, logged as Open Question #7 instead of silently fixed or reproduced.
-  `src/pages/ueber-uns.astro` itself has **not been touched yet** — it still renders
-  the old inline content; nothing consumes the new collection yet. Verified with
-  `npm run build` + `npx astro check` (0 errors each).
+  `.heading-black` utility. That claim was **false** — four pages (`404.astro`,
+  `datenschutz.astro`, `impressum.astro`, `blog/[...slug].astro`) rendered a bare
+  `<h1>` with no class. Fixed by adding `class="heading-black"` to each. **Now true:**
+  every masthead h1 site-wide takes its weight from `--weight-heading`; flipping
+  900 → 400 in `global.css` is genuinely a one-value change.
+- **Task 2 (re-parse everything from persephone.at) — commits `8a9a567`, `7f30182`,
+  `25b4c85`, `c9c5f62`, `b85a9ef`:** all 12 standalone pages and
+  all 6 blog posts re-extracted from live HTML into `src/content/pages/de/` and
+  `src/content/blog/de/`, replacing the old "poor" parse and the blog posts' literal
+  placeholder stubs entirely. `docs/content-inventory.md` written (page, source URL,
+  word/image counts, extraction issues). Method: raw HTML via `curl` → a small
+  dependency-free Node HTML→block extractor (`html2md.mjs`, session scratchpad only,
+  **not committed** — redo the `curl` + extractor pass if this needs revisiting) →
+  real images downloaded, no hotlinking → markdown **mechanically generated** from
+  the block JSON, never hand-typed, then byte-diffed against the repo file before
+  committing. **One real mistake happened and is fully disclosed in the commit
+  history and `docs/content-inventory.md`:** early on, three paragraphs of
+  `beratung.md` got hand-paraphrased from a truncated terminal preview instead of
+  transcribed verbatim. Caught during a verification pass before committing; fixed by
+  switching to the mechanical-generation + byte-diff process for every page from
+  then on, including re-doing the pages already affected.
+- **Task 3 (build Über uns) — commit `67e056a`:** `src/pages/ueber-uns.astro`
+  rewritten to render from `src/content/pages/de/ueber-uns.md` (a new
+  `src/lib/parseMarkdownBlocks.ts` utility splits that one flowing markdown body
+  into blocks so different sections feed different components — no content
+  duplicated into separate typed fields). Composed entirely from existing
+  components/tokens: `PageHero`, a new page-scoped bio-photo+narrative section, a
+  3-column credentials grid (adds "Sprachen", the old version only had 2 columns),
+  two closing teaser cards, and `CtaBand`. Applies Open Question #6's fix directly —
+  the two teaser cards link to the real `/beratung/`/`/workshops/` pages, not the
+  source's own dead links. Verified with `npm run build` + `npx astro check`
+  (0 errors both). **Per the brief, stopped here — the remaining pages are not
+  built.**
 
-## Phase 2 (content re-parse) — status: 5 of 12 standalone pages done, blog posts + inventory doc remain
+### Screenshot verification (Task 3) — 1920px clean, 390px unreliable, documented not faked
 
-Method (established and working, reuse as-is for what's left): raw HTML per page via
-`curl` (a real browser wasn't available or needed — see tooling note below) → a small
-dependency-free Node HTML→block extractor (`html2md.mjs`, in the session scratchpad,
-**not committed**, tuned for this site's Avada/Fusion-Builder markup) → real images
-downloaded (no hotlinking) → a `.md` file written under `src/content/pages/de/<slug>.md`
-whose body is **mechanically generated** from the extractor's block JSON via a second
-scratchpad script (`blocks-to-md.mjs`) rather than hand-typed, then byte-diffed against
-that mechanical output before committing. See the process note below for why the
-"mechanical, then diff" step is non-negotiable, not just extra caution.
+No browser-automation tool (Playwright/Puppeteer/etc.) exists in this environment or
+as a dependency; system `msedge.exe` driven headless via CLI (`--headless
+--window-size=W,H --screenshot=...`) filled in instead.
 
-**Committed so far — all 12 standalone pages + all 6 blog posts, done:** `ueber-uns`,
-`angebote`, `beratung`, `workshops`, `selbsthilfegruppe` (commits `8a9a567`,
-`7f30182`); `kontakt`, `termine`, `faqs`, `disclaimer`, `impressum`,
-`datenschutzerklaerung` (commit `25b4c85`); all 6 blog posts, replacing their
-placeholder bodies (commit `c9c5f62`). **Only `docs/content-inventory.md` remains to
-close out Task 2.** Caught and corrected one real mistake along the way while
-extracting the posts: nearly used each post's auto-truncated duplicate
-`og:description` instead of its real hand-written one — see Open Question #4.
-
-**Confirmed real site page list** (from actual `<a href>`s on the homepage + blog index,
-not guessed): 12 standalone pages total — the 5 above, plus `kontakt`, `termine`,
-`faqs`, `disclaimer`, `impressum`, `datenschutzerklaerung` (not yet re-parsed) — and 6
-real blog posts (not yet re-parsed; still literally placeholder stubs, see below). One
-existing local page, `newsletter.astro`, has **no real source** — see Open Questions #2.
-`<title>`/meta-description findings for every page are logged as Open Questions #3–#5.
-
-**Important process note — a mistake, disclosed:** while hand-writing `beratung.md`
-from a truncated terminal preview, three paragraphs got paraphrased instead of
-transcribed verbatim — a direct violation of "German copy stays verbatim." Caught it
-during a verification pass before committing, fixed by re-deriving all four pages'
-bodies mechanically straight from the extractor's JSON instead of hand-typing, then
-byte-diffing every repo file against that output. Über uns was unaffected (already
-built that way). **Every remaining page must follow the same mechanical-generation +
-diff process — never hand-retype body text from a terminal preview, truncated or not.**
-
-### Exact next step to resume
-
-1. Write `docs/content-inventory.md` (page, source URL, word count, image count,
-   extraction issues — fold in every anomaly already logged in `OPEN-QUESTIONS.md`
-   rather than re-discovering them; all 18 pages/posts are already committed, so this
-   is a writing/tallying task, no more extraction needed) and commit. This closes out
-   Task 2.
-2. Only then start Task 3 (build the Über uns page from the new collection) — nothing
-   in `src/pages/ueber-uns.astro` has been touched yet; it still renders its old inline
-   content. Read `src/content/pages/de/ueber-uns.md` (the real content) plus
-   `DESIGN-SYSTEM.md`'s component inventory before composing.
-
-### Tooling gap found this session
-
-No browser-automation tool (Playwright/Puppeteer/etc.) is available in this
-environment and none is an existing dependency — adding one would violate the "no new
-dependencies" rule. `msedge.exe` is present system-wide
-(`C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`) and can be driven
-headless via CLI flags (`--headless --disable-gpu --screenshot=... --window-size=W,H`)
-for the Task 3 pixel-comparison screenshots — this was found but not yet tried
-end-to-end. If it doesn't work reliably, that itself is an open question for
-Task 3, not something to fake.
+- **1920px:** worked cleanly. Screenshotted Über uns against the homepage —
+  container width, gutters, type scale, section rhythm, and button styling all
+  matched with **no deviations found** (both screenshots were sent to you in-chat).
+- **390px: unreliable, not used as evidence.** Every screenshot at this width showed
+  text clipped mid-word at the right edge — but the *identical* artifact appeared on
+  the already-shipped, unmodified homepage and `/beratung/` page too, reproduced
+  with a completely clean browser profile and both legacy and `--headless=new`
+  modes. The output PNG is genuinely 390px wide, so the browser is laying out
+  content as if the viewport were wider, then cropping — a headless-viewport-
+  emulation limitation of driving Edge via bare CLI flags (no real device-metrics
+  emulation available without a devtools-protocol library, which would be a new
+  dependency), not a site bug. **Mobile responsiveness for the new page was instead
+  verified by code parity**: identical `.container`/`.section` usage, identical
+  grid-collapses-to-`1fr`-below-800px pattern as every other already-shipped
+  subpage, no fixed-pixel widths introduced. This is a real, unresolved
+  verification gap, not equivalent to an actual mobile screenshot — worth a look on
+  a real device or a manually resized real browser window.
 
 ## Open — waiting on you
 
-See `OPEN-QUESTIONS.md` for the full list with options and recommendations. Summary:
+See `OPEN-QUESTIONS.md` for the full list (now 11 items) with options and
+recommendations. Headlines:
 
-1. H1/H2 weight, 900 vs 400 (carried over; 900 stays until you compare against the
-   brand book — now genuinely a one-value revert either way).
-2. The live "Newsletter" page/nav-link is a 301 redirect to an external MailerLite
-   form — no real page content exists to extract, so the local `newsletter.astro`'s
-   copy was invented in an earlier session. Recommend redirecting to match the live
-   site until you decide otherwise.
-3. Several live pages ship no meta description at all (ueber-uns, angebote-2, beratung,
-   workshops, selbsthilfegruppe, kontakt, termine, disclaimer). Recommend shipping
-   empty rather than inventing SEO copy.
-4. The live homepage ships two conflicting meta-description tags (real one + an
-   unremoved Avada demo default) — a live-site bug, not something to replicate.
-5. The live Impressum page's meta description is a mangled, space-less auto-excerpt.
-   Recommend writing a clean one once you've reviewed it.
-6. FYI only, not a decision: a few Über-uns list items carry a leftover
-   `font-claude-response-body` CSS class in the live HTML — harmless, just a sign that
-   text was once pasted in from a Claude.ai chat.
+1. H1/H2 weight, 900 vs 400 (carried over; 900 stays until compared against the
+   brand book in person — a one-value revert either way).
+2. The live "Newsletter" page/nav-link 301-redirects to an external MailerLite form
+   — no real page content exists, so local `newsletter.astro`'s copy was invented in
+   an earlier session. Recommend redirecting to match the live site.
+3. Several live pages ship no meta description at all. Recommend shipping empty
+   rather than inventing SEO copy.
+4. The live site ships duplicate/conflicting meta description tags — on the
+   homepage *and* on all 6 blog posts (a plugin/theme conflict). The rebuild uses
+   only the real one in each case.
+5. Impressum's live meta description is a mangled, space-less auto-excerpt.
+6. **Four dead internal links found site-wide** (Über uns ×2, two blog posts ×1
+   each) — likely stale slugs from page renames. Über uns's two are already fixed in
+   the built page; the two in blog posts are recorded verbatim, not yet fixed
+   anywhere (no page currently renders that body content).
+7. Selbsthilfegruppe has an unremoved English Avada demo heading plus two
+   near-duplicate German intro paragraphs.
+8. Two verbatim typos preserved from the live site (Workshops h1, one
+   Selbsthilfegruppe heading).
+9. **Important:** the live Datenschutzerklärung describes Google Fonts/Typekit
+   loading the new site doesn't do — the existing `datenschutz.astro` already fixed
+   this correctly; don't let a future edit revert to the freshly re-parsed (but
+   factually wrong for this site) text.
+10. Über uns's two teaser cards use a plain style, not `ServiceCard` — reusing
+    `ServiceCard` needs a button-label prop with no source text to draw from.
+11. FYI only: a few Über-uns list items carry a leftover `font-claude-response-body`
+    CSS class in the live HTML — harmless, a sign text was once pasted from a
+    Claude.ai chat.
 
 ---
 
