@@ -115,6 +115,17 @@
   double-counted the closing paragraph after the sign-up button — bounded
   manually instead.
 
+- **Kontakt — commit `efc066f`:** built from `pages/de/kontakt.md`. Live page's h1
+  appears twice back-to-back (with/without trailing period, responsive
+  duplicate) — first used for PageHero, duplicate skipped. Portrait photo (added
+  inline during Task 2's audit) now actually rendered on the page. `ContactForm`
+  unchanged — already correctly inert. Added OPEN-QUESTIONS.md #11 (form
+  endpoint not decided) since it wasn't previously logged anywhere; caught and
+  corrected a factual error while drafting it — mistakenly claimed this repo
+  deploys via `wrangler.toml` (that's the *other* repo from earlier in this
+  session, `gm-scheduler` — verified this repo has no deploy config at all before
+  the entry was committed).
+
 ---
 
 # Handoff — Phase 2 re-parse + Über uns rebuild session (COMPLETE, stopped per brief)
