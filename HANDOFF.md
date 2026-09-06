@@ -16,6 +16,17 @@
   change, nothing else to touch.
 - **`OPEN-QUESTIONS.md` created — same commit:** carries forward the H1/H2 weight
   decision from this file's earlier "Open" section, plus new items below.
+- **`pages` content collection + Über uns re-parsed — commit `8a9a567`:** added the
+  collection to `src/content.config.ts` (same de/en/it convention as blog/events).
+  `src/content/pages/de/ueber-uns.md` is the real, complete extraction from
+  `https://www.persephone.at/ueber-uns/` — the old `src/pages/ueber-uns.astro` content
+  was missing an entire narrative section and one credential-list item each in
+  "Ausbildung"/"Felderfahrung". Both real images downloaded into
+  `src/assets/pages/ueber-uns/` (no hotlinking). Two dead CTA links found on the live
+  page, logged as Open Question #7 instead of silently fixed or reproduced.
+  `src/pages/ueber-uns.astro` itself has **not been touched yet** — it still renders
+  the old inline content; nothing consumes the new collection yet. Verified with
+  `npm run build` + `npx astro check` (0 errors each).
 
 ## Phase 2 (content re-parse) — status: extraction in progress, NOT yet in the repo
 
