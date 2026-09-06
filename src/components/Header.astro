@@ -38,19 +38,38 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
     <nav id="primary-nav" class="primary-nav" aria-label="Hauptnavigation">
       <ul>
         {
-          nav.items.map((item) =>
+          nav.items.map((item, i) =>
             item.children ? (
-              <li>
-                <details class="nav-dropdown">
-                  <summary>{item.label} <span class="caret" aria-hidden="true">▾</span></summary>
-                  <ul>
-                    {item.children.map((child) => (
-                      <li>
-                        <a href={child.href}>{child.label}</a>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
+              // "Angebote" (the one item with children) has to both navigate to
+              // its own page AND disclose its submenu — a native
+              // <details>/<summary> can only ever do one of those (external-
+              // review.md finding #0). Split into a real <a> for navigation and
+              // a separate toggle <button> for the submenu, so a click/tap on
+              // either does exactly one thing: no ambiguity for touch, where a
+              // single tap has no separate "hover first" step available.
+              // Mouse users additionally get the submenu on hover (CSS below)
+              // as a convenience; keyboard and touch always have the explicit
+              // button.
+              <li class="nav-dropdown">
+                <div class="nav-dropdown-trigger">
+                  <a href={item.href}>{item.label}</a>
+                  <button
+                    type="button"
+                    class="nav-dropdown-toggle"
+                    aria-expanded="false"
+                    aria-controls={`nav-submenu-${i}`}
+                  >
+                    <span class="visually-hidden">{item.label} – Untermenü öffnen</span>
+                    <span class="caret" aria-hidden="true">▾</span>
+                  </button>
+                </div>
+                <ul id={`nav-submenu-${i}`} class="nav-dropdown-menu" hidden>
+                  {item.children.map((child) => (
+                    <li>
+                      <a href={child.href}>{child.label}</a>
+                    </li>
+                  ))}
+                </ul>
               </li>
             ) : (
               <li>
@@ -74,6 +93,42 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
     toggle.setAttribute('aria-expanded', String(!expanded));
     nav?.classList.toggle('is-open', !expanded);
   });
+
+  // Submenu disclosure: a plain aria-expanded/hidden toggle rather than
+  // <details>, so the parent label can stay a real <a> (see the comment in
+  // the markup above for why). Closes on outside click/focus and on Escape,
+  // same behavior <details> gave us for free.
+  for (const dropdown of document.querySelectorAll<HTMLLIElement>('.nav-dropdown')) {
+    const button = dropdown.querySelector<HTMLButtonElement>('.nav-dropdown-toggle');
+    const menu = dropdown.querySelector<HTMLUListElement>('.nav-dropdown-menu');
+    if (!button || !menu) continue;
+
+    const setOpen = (open: boolean) => {
+      button.setAttribute('aria-expanded', String(open));
+      menu.hidden = !open;
+      dropdown.classList.toggle('is-open', open);
+    };
+
+    button.addEventListener('click', () => {
+      setOpen(button.getAttribute('aria-expanded') !== 'true');
+    });
+
+    dropdown.addEventListener('focusout', (e) => {
+      const next = (e as FocusEvent).relatedTarget as Node | null;
+      if (!next || !dropdown.contains(next)) setOpen(false);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target as Node)) setOpen(false);
+    });
+
+    dropdown.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        button.focus();
+      }
+    });
+  }
 </script>
 
 <style>
@@ -129,42 +184,65 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
     padding: 0;
   }
 
-  .primary-nav > ul > li > a,
-  .nav-dropdown summary {
+  .primary-nav > ul > li > a {
     text-decoration: none;
     color: var(--color-accent-strong);
     font-weight: 500;
     font-size: 1.0625rem;
-    cursor: pointer;
     padding: 0.5rem 0;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
   }
 
   .nav-dropdown {
     position: relative;
   }
 
-  .nav-dropdown summary::-webkit-details-marker {
-    display: none;
+  .nav-dropdown-trigger {
+    display: flex;
+    align-items: center;
   }
 
-  .nav-dropdown summary .caret {
+  .nav-dropdown-trigger > a {
+    text-decoration: none;
+    color: var(--color-accent-strong);
+    font-weight: 500;
+    font-size: 1.0625rem;
+    padding: 0.5rem 0;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .nav-dropdown-toggle {
+    background: none;
+    border: none;
+    color: var(--color-accent-strong);
+    cursor: pointer;
+    padding: 0.5rem;
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-dropdown-toggle .caret {
     font-size: 0.7em;
     transition: transform 0.15s ease;
   }
 
-  .nav-dropdown[open] summary .caret {
+  .nav-dropdown-toggle[aria-expanded='true'] .caret {
     transform: rotate(180deg);
   }
 
-  .nav-dropdown[open] summary {
+  .nav-dropdown.is-open .nav-dropdown-trigger > a,
+  .nav-dropdown.is-open .nav-dropdown-toggle {
     color: var(--color-accent);
   }
 
-  .nav-dropdown ul {
+  .nav-dropdown-menu {
     position: absolute;
     top: 100%;
     left: 0;
@@ -177,7 +255,7 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
     min-width: 220px;
   }
 
-  .nav-dropdown li a {
+  .nav-dropdown-menu li a {
     display: block;
     padding: 0.6rem 1.25rem;
     text-decoration: none;
@@ -185,8 +263,27 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
     min-height: 44px;
   }
 
-  .nav-dropdown li a:hover {
+  .nav-dropdown-menu li a:hover {
     background: var(--color-bg-alt);
+  }
+
+  /* Mouse convenience: hover/focus-within reveals the submenu without
+     needing the toggle button. Keyboard-tabbing through the trigger link
+     and toggle button also satisfies :focus-within, so this doesn't
+     conflict with the JS-driven aria-expanded/hidden state — both paths
+     end up showing the same menu; the JS state is what touch and
+     keyboard-Enter/Space rely on when hover isn't available. Fine
+     pointers only, so touch (which reports "coarse") never gets a
+     hover-triggered menu with no way to dismiss it. */
+  @media (hover: hover) and (pointer: fine) {
+    .nav-dropdown:hover .nav-dropdown-menu,
+    .nav-dropdown:focus-within .nav-dropdown-menu {
+      display: block;
+    }
+  }
+
+  .nav-dropdown-menu[hidden] {
+    display: none;
   }
 
   .nav-cta {
@@ -223,7 +320,12 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
       gap: 0.5rem;
     }
 
-    .nav-dropdown ul {
+    .nav-dropdown-trigger {
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .nav-dropdown-menu {
       position: static;
       box-shadow: none;
       padding-left: 1rem;
