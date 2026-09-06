@@ -137,14 +137,27 @@ tracker.assertAllHandled('ueber-uns.astro');
   </section>
 
   <section class="section section-alt">
-    <div class="container teaser-grid">
+    <div class="container photo-teaser-grid">
       {
-        teasers.map((t) => (
-          <article class="teaser-card">
-            <h3>
-              <a href={t.href}>{t.label}</a>
-            </h3>
-            <p>{t.description}</p>
+        teasers.map((t, i) => (
+          <article class={`photo-teaser photo-teaser--${i === 0 ? 'a' : 'b'}`}>
+            {/* NIGHT-RUN.md Phase 4.2 / external-review.md finding #4b: the
+               live design is a black-and-white photo with a cream text card
+               overlapping it. The two real photos are Avada template demo
+               images and are not ours to use (owner-confirmed licence
+               issue) — this is a neutral, obviously-a-placeholder stand-in
+               in the brand palette instead, built so a real photo drops
+               into the same .photo-teaser-image slot later with zero
+               markup changes. The grayscale treatment is a CSS filter on
+               that slot, not baked into an image file, so it applies
+               automatically to whatever image lands there. */}
+            <div class="photo-teaser-image" aria-hidden="true">
+              <span class="photo-teaser-placeholder-label">Foto folgt</span>
+            </div>
+            <div class="photo-teaser-card">
+              <a href={t.href} class="photo-teaser-eyebrow">{t.label}</a>
+              <p>{t.description}</p>
+            </div>
           </article>
         ))
       }
@@ -183,12 +196,7 @@ tracker.assertAllHandled('ueber-uns.astro');
     border-radius: var(--radius);
   }
 
-  /* .teaser-grid/.teaser-card moved to global.css (adversarial review,
-     Task 1) — a generic linked-card pattern (title + description) other
-     subpages will plausibly need too, so it can't stay trapped in this
-     page's scoped style; see global.css's own comment on it.
-
-     .credentials-grid/.credentials-badge stay here: reviewed and judged
+  /* .credentials-grid/.credentials-badge stay here: reviewed and judged
      lower risk — the Ausbildung/Felderfahrung/Sprachen shape is
      page-specific content, not a generic pattern, so promoting it to
      global.css now would be speculative. Revisit if a future page turns
@@ -197,6 +205,116 @@ tracker.assertAllHandled('ueber-uns.astro');
   @media (min-width: 900px) {
     .credentials-grid {
       grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  /* Photo + overlapping text-card teasers (external-review.md finding
+     #4b). Page-scoped, not global.css: this exact photo/card-overlap
+     shape doesn't exist anywhere else on the site yet — see CLAUDE.md's
+     "reuse before you build" rule, which cuts both ways: it also means
+     not promoting a one-off to global.css speculatively. The old
+     .teaser-grid/.teaser-card generic cards this replaced (no image, no
+     overlap) were themselves a placeholder for this real design and are
+     removed from global.css now that nothing needs them. */
+  .photo-teaser-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    /* Room for the text cards to break past the photo's edges without
+       colliding with the section padding or each other. */
+    padding-block: 1rem 3rem;
+  }
+
+  .photo-teaser {
+    position: relative;
+  }
+
+  .photo-teaser-image {
+    aspect-ratio: 3 / 4;
+    border-radius: var(--radius);
+    overflow: hidden;
+    /* Neutral brand-palette placeholder, deliberately not photographic —
+       see the comment in the markup above for why. filter: grayscale(1)
+       is the actual "black-and-white treatment," applied here so a real
+       photo dropped into this same element later gets it automatically. */
+    background: repeating-linear-gradient(
+      135deg,
+      var(--color-sage),
+      var(--color-sage) 14px,
+      var(--color-teal) 14px,
+      var(--color-teal) 28px
+    );
+    filter: grayscale(1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .photo-teaser-placeholder-label {
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-surface);
+    background: rgba(24, 26, 43, 0.35);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+  }
+
+  .photo-teaser-card {
+    background: var(--color-bg-alt);
+    border-radius: var(--radius);
+    box-shadow: 0 12px 32px rgba(24, 26, 43, 0.12);
+    padding: 1.75rem 2rem;
+    /* Breaks out of the photo's bounds: pulled up over its bottom edge
+       and offset to one side rather than centered underneath it. */
+    margin-top: -3rem;
+    margin-inline: 1.5rem;
+    position: relative;
+    max-width: 22rem;
+  }
+
+  .photo-teaser-eyebrow {
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8rem;
+    font-weight: var(--weight-subheading);
+    color: var(--color-accent-strong);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+  }
+
+  .photo-teaser-eyebrow:hover {
+    text-decoration: underline;
+  }
+
+  .photo-teaser-card p {
+    margin: 0;
+  }
+
+  @media (min-width: 900px) {
+    .photo-teaser-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    /* The two teasers stagger vertically — left sits higher, right lower —
+       per the live design (external-review.md finding #4b). */
+    .photo-teaser--b {
+      margin-top: 4rem;
+    }
+
+    /* Cards break out to opposite sides so the two teasers don't read as
+       identical twins — left card hugs (and slightly overhangs) the left
+       edge of its photo, right card the right edge of its. */
+    .photo-teaser--a .photo-teaser-card {
+      margin-right: auto;
+    }
+
+    .photo-teaser--b .photo-teaser-card {
+      margin-left: auto;
     }
   }
 </style>
