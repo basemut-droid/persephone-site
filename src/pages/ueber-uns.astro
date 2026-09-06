@@ -179,42 +179,20 @@ if (!closingCta || closingCta.type !== 'cta') throw new Error('Expected a closin
     border-radius: var(--radius);
   }
 
-  .teaser-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
+  /* .teaser-grid/.teaser-card moved to global.css (adversarial review,
+     Task 1) — a generic linked-card pattern (title + description) other
+     subpages will plausibly need too, so it can't stay trapped in this
+     page's scoped style; see global.css's own comment on it.
 
-  .teaser-card {
-    padding: 2rem;
-    /* The section itself is now .section-alt (beige); the card needs to
-       read as a distinct surface against that, not the old --color-bg-alt
-       fill that used to work only because the section around it was
-       plain --color-bg. */
-    background: var(--color-surface);
-    border-radius: var(--radius);
-  }
+     .credentials-grid/.credentials-badge stay here: reviewed and judged
+     lower risk — the Ausbildung/Felderfahrung/Sprachen shape is
+     page-specific content, not a generic pattern, so promoting it to
+     global.css now would be speculative. Revisit if a future page turns
+     out to need the same shape. */
 
-  .teaser-card h3 {
-    margin-bottom: 0.5rem;
-  }
-
-  .teaser-card h3 a {
-    color: var(--color-accent-strong);
-    text-decoration: none;
-  }
-
-  .teaser-card p {
-    margin: 0;
-  }
-
-  @media (min-width: 800px) {
+  @media (min-width: 900px) {
     .credentials-grid {
       grid-template-columns: 1fr 1fr 1fr;
-    }
-
-    .teaser-grid {
-      grid-template-columns: 1fr 1fr;
     }
   }
 </style>
