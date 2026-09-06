@@ -87,6 +87,17 @@ h2/h3 stay at 400 regardless, unaffected either way.
 - Breakpoints actually used in the codebase: **900px** (nav collapses to burger; hero,
   philosophy/founder, and blog grids go single→multi column), **700px** (footer grid
   collapses; quote-stack stagger changes), **600px** (blog-teaser card stacks to one column)
+- **Two different "narrow" measures, not one.** `.section-narrow` (every body content
+  column, homepage's pain-points section included) is `56rem` (896px). `PageHero.astro`'s
+  own intro paragraph is separately `48rem` (768px) — narrower, and not built from the
+  `.section-narrow` token. NIGHT-RUN.md Phase 5 traced this back to
+  `external-review.md` finding #11 ("homepage inner container 896px, every subpage
+  768px"): both values are still live in the code today, just not on the elements that
+  finding implied — every subpage's *body* content is 896px, same as the homepage;
+  only the *hero intro line* at the top of each subpage is 768px. Flagged, not changed —
+  this may be intentional (a narrower measure for a short lede is common typographic
+  practice), but it isn't recorded anywhere as a decision, so it currently reads as
+  drift rather than a choice. See `OPEN-QUESTIONS.md` #17.
 
 ## Buttons
 

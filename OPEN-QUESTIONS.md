@@ -271,6 +271,23 @@ exist" principle as the switcher fix, applied to the nav itself. Not attempted h
 since it changes what visitors in English/Italian see, not just which links are
 offered.
 
+## 17. PageHero's intro line is narrower than the body content below it
+
+Phase 5 verification, tracing `external-review.md` finding #11: `PageHero.astro`'s
+intro paragraph uses `max-width: 48rem` (768px), while `.section-narrow` — every
+subpage's body content, and the homepage's own pain-points section — is `56rem`
+(896px). Both values are real and in active use; they just apply to different
+elements, not the same one at two widths as the review's original phrasing implied.
+
+**Question:** is the narrower hero intro deliberate (a common typographic choice — a
+short lede often reads better narrower than full body copy), or should it match
+`.section-narrow` for consistency? Not changed here — "do not redesign anything"
+(NIGHT-RUN.md's own rule) covers spacing/layout values, and this is exactly that kind
+of call.
+
+**Recommendation:** leave as-is unless it looks wrong to you in the screenshots in
+`docs/screenshots/`; if so, it's a one-line change in `PageHero.astro`.
+
 ## 16. Termine's page title — needs the owner's wording
 
 Per NIGHT-RUN.md Phase 4.3: "Termine" doesn't say what happens on this page (a
