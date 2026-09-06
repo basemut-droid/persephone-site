@@ -6,24 +6,28 @@ import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import marinaPortrait from '../assets/shared/marina-von-persephone.jpg';
 import logoEmpathie from '../assets/pages/beratung/logo-empathie.png';
-import { parseMarkdownBlocks, section, paragraphs, parseLinkHeading } from '../lib/parseMarkdownBlocks';
+import { parseMarkdownBlocks, paragraphs, parseLinkHeading, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 // No split-hero image on the live page (its masthead row has no
 // --awb-bg-image) — plain PageHero, matching Angebote/Workshops/etc.
 const entry = await getEntry('pages', 'de/beratung');
 if (!entry) throw new Error('Content collection entry "pages/de/beratung" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');
+const tracker = new BlockTracker(blocks);
 
-const heroEyebrow = (blocks[0].type === 'paragraph' && blocks[0].text) || undefined;
-const heroTitle = blocks[1].type === 'heading' ? blocks[1].text : entry.data.title;
-const heroIntro = (blocks[2].type === 'paragraph' && blocks[2].text) || undefined;
+const { eyebrow: heroEyebrow, title: heroTitle, intro: heroIntro } = tracker.heroFields(entry.data.title);
 
 // "Was ist Beratung?", "Formate", "Einzelberatung", "Paarberatung" are all
 // one continuous section on the live page (single row, light background) —
-// not four alternating sections.
-const wasIstBeratung = paragraphs(section(blocks, 'Was ist Beratung?'));
+// not four alternating sections. Both "Was ist Beratung?" and "Formate"
+// (a heading-only grouping label, no body text of its own) render their
+// own heading text now — previously only their contents rendered, which is
+// exactly how external-review.md finding #3 lost them: the heading names
+// were used to *locate* content but never themselves printed anywhere.
+const wasIstBeratung = paragraphs(tracker.section('Was ist Beratung?'));
+tracker.section('Formate'); // heading-only grouping label, no body of its own — rendered below, nothing further to extract
 const formats = ['Einzelberatung', 'Paarberatung'].map((heading) => {
-  const sec = section(blocks, heading);
+  const sec = tracker.section(heading);
   return {
     heading,
     intro: paragraphs(sec)[0],
@@ -33,7 +37,7 @@ const formats = ['Einzelberatung', 'Paarberatung'].map((heading) => {
 
 // "Gut zu wissen" is a real FAQ list (h4 question + paragraph answer, 4
 // pairs) — its own section, beige on the live page.
-const gutZuWissen = section(blocks, 'Gut zu wissen');
+const gutZuWissen = tracker.section('Gut zu wissen');
 const faqs: { question: string; answer: string }[] = [];
 for (let i = 0; i < gutZuWissen.length; i++) {
   const b = gutZuWissen[i];
@@ -48,11 +52,16 @@ for (let i = 0; i < gutZuWissen.length; i++) {
   }
 }
 
-const closing = section(blocks, 'Möchtest Du ein Erstgespräch?');
+const closing = tracker.section('Möchtest Du ein Erstgespräch?');
 const closingParagraphs = paragraphs(closing);
 const cta = closing.find((b) => b.type === 'cta');
 if (!cta || cta.type !== 'cta') throw new Error('Expected a CTA after "Möchtest Du ein Erstgespräch?"');
 const ctaHref = cta.href.replace(/^https?:\/\/(www\.)?persephone\.at/, '');
+// The portrait and badge images in this section are already rendered below
+// via statically-imported assets (astro:assets needs a static import to
+// optimize them, not a path read from content at runtime) — accounted for
+// via the .section() call above, not re-rendered from the block data.
+tracker.assertAllHandled('beratung.astro');
 ---
 
 <BaseLayout locale="de" path="/beratung/" title={`${entry.data.title} – Persephone`}>
@@ -60,7 +69,11 @@ const ctaHref = cta.href.replace(/^https?:\/\/(www\.)?persephone\.at/, '');
 
   <section class="section">
     <div class="container section-narrow">
+      <h2>Was ist Beratung?</h2>
       {wasIstBeratung.map((p) => <p>{p}</p>)}
+    </div>
+    <div class="container">
+      <h2 class="section-heading">Formate</h2>
     </div>
     <div class="container format-grid">
       {
