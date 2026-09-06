@@ -15,7 +15,7 @@ Beratung bietet Dir die Möglichkeit, innezuhalten, zu reflektieren und eine Spr
 
 Psychosoziale Beratung fokussiert auf die Begleitung in Krisen, bei Neuorientierungen und in belastenden Lebenssituationen bei Menschen, die keine klinische Behandlung (Psychotherapie) aufgrund einer psychischen Erkrankung benötigen. Wir arbeiten ressourcen- und lösungsorientiert an Deiner aktuellen Situation.
 
-Als Sprachwissenschaftlerin und psychosoziale Beraterin in Ausbildung unter Supervision verbinde ich Kommunikationsexpertise mit professioneller Begleitung unter strengster Qualitätssicherung. Ich begleite Dich bzw. Euch dabei, die Trümmer der reproduktiven Krise zu ordnen und neue Handlungsspielräume zu entdecken. Mit linguistischem Feingefühl und psychosozialer Tiefe.
+Als Sprachwissenschaftlerin und psychosoziale Beraterin in Ausbildung unter Supervision verbinde ich Kommunikationsexpertise mit professioneller Begleitung unter strengster Qualitätssicherung. Ich begleite Dich bzw. Euch dabei, die Trümmer der reproduktiven Krise zu ordnen und neue Handlungsspielräume zu entdecken. Mit linguistischem Feingefühl und psychosozialer Tiefe.
 
 ## Formate
 

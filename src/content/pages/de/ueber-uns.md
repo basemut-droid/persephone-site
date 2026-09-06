@@ -61,4 +61,6 @@ Manchmal reicht ein kleiner, regelmäßiger Anker: Ehrliche Worte zu einem Thema
 
 [e-Brief abonnieren](https://persephone.at/newsletter)
 
-![Logo Kongruenz und Authenzität_05](../../../assets/pages/ueber-uns/logo-kongruenz-und-authentizitaet.png)
+![Marina-von-Persephone](../../../assets/shared/marina-von-persephone.jpg)
+
+![Logo Kongruenz und Authenzität_05](../../../assets/pages/ueber-uns/logo-kongruenz-und-authentizitaet.png)
