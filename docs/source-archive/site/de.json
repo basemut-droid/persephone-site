@@ -1,0 +1,151 @@
+{
+  "reviewStatus": "native",
+  "meta": {
+    "title": "Persephone – Navigationshilfe im Sturm des Kinderwunsches",
+    "description": "Persephone begleitet Dich und Deine:n Partner:in psychosozial durch die Kinderwunschkrise: mit Beratung, Workshops und einer Selbsthilfegruppe in Wien, Graz und online."
+  },
+  "nav": {
+    "items": [
+      { "label": "Über uns", "href": "/ueber-uns/" },
+      {
+        "label": "Angebote",
+        "href": "/angebote/",
+        "children": [
+          { "label": "Beratung & Coaching", "href": "/beratung/" },
+          { "label": "Workshops & Einzeltrainings", "href": "/workshops/" },
+          { "label": "Selbsthilfegruppe", "href": "/selbsthilfegruppe/" }
+        ]
+      },
+      { "label": "Blog", "href": "/blog/" },
+      { "label": "Kontakt", "href": "/kontakt/" }
+    ],
+    "cta": "Kennenlernen vereinbaren",
+    "ctaHref": "/termine/"
+  },
+  "hero": {
+    "headline": "Zum Kern der Krise",
+    "paragraphs": [
+      "Persephone ist für Dich da, wenn Du mit unerfülltem Kinderwunsch lebst und das Gefühl kennst, dass Dir Deine Geschichte entkommen ist.",
+      "Hier findest Du Orientierung und Werkzeuge, um sie trotzdem selbst zu schreiben. Seite für Seite."
+    ],
+    "cta": "e-Brief abonieren",
+    "ctaHref": "/newsletter/"
+  },
+  "painPoints": {
+    "eyebrow": "was kaum ausgesprochen wird",
+    "heading": "Unerfüllter Kinderwunsch ist nicht nur eine Frage des Kindes. Er ist eine <em>Lebenskrise</em>: komplex und oft unsichtbar.",
+    "paragraphs": [
+      "Reproduktive Krisen verlaufen auf vielen Wegen — medizinisch, adoptiv, oder ganz anders. Was sie gemeinsam haben ist das Innenleben: die emotionale, relationale und existenzielle Erschöpfung und Einsamkeit.",
+      "Wenn der Körper nicht tut, was man von ihm erwartet. Wenn Entscheidungen sich wie Labyrinthe anfühlen. Wenn die Beziehung leidet, ohne dass jemand schuld ist. Wenn man nicht mehr weiß, wer man ist, wenn nicht Elternteil. Das ist eine Lebenskrise, die gesehen werden will.",
+      "Rund 17 % der Menschen im reproduktiven Alter sind betroffen — und über 75 % von ihnen erhalten keine gezielte psychosoziale Unterstützung. Weil es sie kaum gibt."
+    ],
+    "quotes": [
+      "Ich weiß nicht, ab wann man aufhören darf — oder muss.",
+      "Ich lächle auf Familienfesten und sage, es ist alles gut.",
+      "Wir reden über Protokolle. Nicht darüber, wie wir uns fühlen.",
+      "Manche Tage funktioniere ich einfach. Andere nicht."
+    ],
+    "closing": "Wenn Du Dich in einem dieser Sätze erkennst, bist Du hier richtig. Persephone ist kein Versprechen auf ein Happy End. Aber wohl ein Raum, in dem Du Dich wieder verorten kannst."
+  },
+  "services": {
+    "eyebrow": "Was Persephone anbietet",
+    "heading": "Wähle, was gerade zu Dir passt.<br />Oder lass Dich in einem unverbindlichen Gespräch zu Persephones Angebote beraten.",
+    "items": [
+      {
+        "title": "Beratung & Coaching",
+        "description": "Ein geschützter Raum für Dich allein oder mit Partner:in. Wir arbeiten an dem, was gerade in der Kinderwunschzeit drückt: Entscheidungen, Erschöpfung, Kommunikation u.v.m. Mit Herz, Haltung und einer Prise Humor.",
+        "href": "/beratung/",
+        "cta": "Erfahre mehr"
+      },
+      {
+        "title": "Workshops & Einzeltrainings",
+        "description": "Wissen und Werkzeuge, um Deine reproduktive Krise zu verstehen und Handlungsfähigkeit zurückzugewinnen. Hier haben Themen Platz wie Coping Strategien, mentale Last, Paarkommunikation u.v.m.",
+        "href": "/workshops/",
+        "cta": "Erfahre mehr"
+      },
+      {
+        "title": "Selbsthilfegruppe",
+        "description": "Peer-Support und Austausch im geschützten Rahmen. Bei den moderierten Treffen für Menschen mit unerfülltem Kinderwunsch kann man Entlastung finden und Kraft von der Gemeinschaft zehren.",
+        "href": "/selbsthilfegruppe/",
+        "cta": "Erfahre mehr"
+      }
+    ]
+  },
+  "philosophy": {
+    "eyebrow": "Der Persephone-Ansatz",
+    "heading": "Eine Krise ist auch eine Schwelle. Persephone begleitet den Übergang.",
+    "paragraphs": [
+      "Der Mythos der Persephone erzählt von einem Abstieg in die Unterwelt — und von der Fähigkeit, mit dem, was man dort gefunden hat, neu ans Tageslicht zu kommen. Nicht unberührt. Aber reifer. Klarer. Kraftvoller.",
+      "Reproduktive Krisen kommen ungerufen, mitten ins geplante Leben, mitten in die Zuversicht. Einen Moment ist man noch auf der sonnigen Wiese, im nächsten in einer dunklen Welt, die man sich nicht ausgesucht hat.",
+      "Das fordert uns heraus, unsere Vorstellungen von Familie, Partnerschaft, Körper und Zukunft grundlegend zu überdenken. Das ist ein Prozess. Und er verdient Begleitung, die ihn ernst nimmt. Genau dafür ist Persephone da."
+    ],
+    "values": [
+      {
+        "title": "Paarbezogen und inklusiv",
+        "description": "Kinderwunsch ist kein Frauenthema. Er ist ein Paar- und Menschenthema. Persephones Angebote denken partnerschaftlich und sprechen Männer ebenso an wie Frauen."
+      },
+      {
+        "title": "Psychosozial und relational",
+        "description": "Reproduktive Krisen betreffen nicht nur den Körper: Sie berühren Psyche, Beziehung, Identität und Lebenssinn gleichzeitig. Persephone begleitet genau diese Dimensionen."
+      },
+      {
+        "title": "Ergebnisoffen",
+        "description": "Persephone verspricht kein Wunschkind und zielt auf kein vorgefertigtes Ergebnis ab. Sondern darauf, dass Du Deinen Weg als Deinen eigenen gestalten kannst, egal wohin er führt."
+      },
+      {
+        "title": "Wissenschaftlich und humanistisch",
+        "description": "Was bei Persephone vermittelt wird, gründet auf aktueller Forschung und geht davon aus, dass Du bereits die Kompetenz mitbringst, Deinen Weg zu gestalten. Wissen als Werkzeug im Dienste Deiner Orientierung."
+      }
+    ]
+  },
+  "founder": {
+    "eyebrow": "Die Gründerin: Marina Bletsas, Dr. Phil.",
+    "heading": "Von innen. Und von Fach.",
+    "paragraphs": [
+      "Mein Quellberuf hat mir beigebracht, wie Kommunikation Realitäten formt. Meine psychosoziale Ausbildung lehrt mich, was Menschen in Krisen brauchen. Die eigene Kinderwunschkrise hat mir gezeigt, was in keinem Lehrbuch steht.",
+      "Seit 2021 begleite ich Menschen mit unerfülltem Kinderwunsch in meiner Selbsthilfegruppe. Jetzt biete ich fundierte Begleitung als jemand, der den Weg kennt."
+    ],
+    "cta": "Erfahre mehr",
+    "href": "/ueber-uns/",
+    "imageAlt": "Porträtfoto von Marina Bletsas, Gründerin von Persephone"
+  },
+  "newsletter": {
+    "eyebrow": "Bleib in Verbindung",
+    "heading": "Der Persephone E-Brief",
+    "paragraphs": [
+      "bringt Dir regelmäßig neue Blogartikel, kommende Treffen, Workshoptermine und Marinas persönlicher Blick auf das, was Menschen in reproduktiven Krisen wirklich bewegt.",
+      "Um einmal nicht nach dem suchen zu müssen, was für Dich relevant sein könnte."
+    ],
+    "cta": "e-Brief abonieren",
+    "ctaHref": "/newsletter/"
+  },
+  "footer": {
+    "tagline": "Navigationshilfe im Sturm des Kinderwunsches",
+    "newsletterEyebrow": "Persephones e-Brief",
+    "newsletterCta": "Anmelden",
+    "columns": [
+      {
+        "title": "Nützliche Infos",
+        "links": [
+          { "label": "Disclaimer", "href": "/disclaimer/" },
+          { "label": "FAQs", "href": "/faqs/" }
+        ]
+      },
+      {
+        "title": "Rechtliches",
+        "links": [
+          { "label": "Datenschutzerklärung", "href": "/datenschutz/" },
+          { "label": "Impressum", "href": "/impressum/" }
+        ]
+      }
+    ],
+    "copyright": "© {year}. Persephone Forum. Alle Rechte vorbehalten."
+  },
+  "common": {
+    "skipToContent": "Zum Inhalt springen",
+    "readMore": "Weiterlesen",
+    "languageSwitcherLabel": "Sprache wählen",
+    "draftNotice": "Diese Übersetzung ist ein maschineller Entwurf und wurde noch nicht von einer Muttersprachlerin geprüft.",
+    "blogFallbackNotice": "Diese Artikel sind aktuell nur auf Deutsch verfügbar."
+  }
+}

@@ -11,8 +11,19 @@ All pages use tokens from [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md) (implemented as C
 properties in `src/styles/global.css`) and the existing components in `src/components/`.
 Never write one-off CSS for a page.
 
-Site content is German. Never rewrite, shorten, or translate source copy — extract it
-verbatim from the live site.
+Site content is German. `docs/source-archive/` is a frozen, one-time verbatim record of
+the original persephone.at extraction — never rendered, never edited again. `src/content/`
+is the site's real, live copy: editable and correctable once a decision says so (a typo
+fix, an owner-approved wording change, a dead link repaired), the same as any other text
+on the site. The rule that survives from the archive era: content may be **corrected**,
+but never **invented** — a missing description stays empty and goes to
+`OPEN-QUESTIONS.md` rather than getting freehand copy, and a correction always traces back
+to a decision on record (`docs/decisions.md`, `docs/fuer-marina.md`, or an explicit
+instruction), not a guess. See `docs/source-archive/README.md` and
+`docs/external-review.md`'s "governing decision" section for why this split exists: the
+verbatim rule was a method to stop early sessions inventing copy, not a goal in itself, and
+keeping it past that point only preserves defects (typos, dead links, duplicate meta tags)
+that have already been decided against.
 
 **Shared layout classes (`.section`, `.container`, `.button`, etc.) must be defined in
 `global.css`, never inside a single component's `<style>` block.** Astro scopes every
