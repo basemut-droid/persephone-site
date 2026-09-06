@@ -95,6 +95,15 @@
   empty grouping label in the source (no body text) — skipped, logged not
   silently dropped.
 
+- **Workshops & Einzeltrainings — commit `78865b9`:** built from
+  `pages/de/workshops.md`. Same continuous-section pattern as Beratung. Closing
+  heading appears twice back-to-back (h3 then h1, identical text, responsive
+  duplicate) — `section()` would've hit the second as a false boundary, so this
+  page locates the last matching heading by hand instead. Verbatim "Workhops"
+  typo preserved (OQ#8). Two bare location-tag paragraphs ("WIEN, GRAZ, ONLINE"/
+  "ONLINE") not rendered, no existing pattern fits — logged, not dropped
+  silently.
+
 ---
 
 # Handoff — Phase 2 re-parse + Über uns rebuild session (COMPLETE, stopped per brief)
