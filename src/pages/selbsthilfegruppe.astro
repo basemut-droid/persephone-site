@@ -14,16 +14,15 @@ const tracker = new BlockTracker(blocks);
 const [b0, b1] = [tracker.at(0), tracker.at(1)];
 const heroEyebrow = (b0.type === 'paragraph' && b0.text) || undefined;
 const heroTitle = b1.type === 'heading' ? b1.text : entry.data.title;
-// The live source has an unremoved English Avada demo heading here
-// ("Your Journey to a Fulfilling Life") plus two near-duplicate German
-// intro paragraphs — see OPEN-QUESTIONS.md #7. Dropping the demo heading
-// outright (unambiguous, per fuer-marina.md Q4); the choice between the
-// two paragraphs is Phase 3's job (fuer-marina.md Q3) — this retrofit to
-// BlockTracker keeps today's behavior (rendering the second paragraph)
-// unchanged, just makes both blocks explicit instead of silently unread.
-tracker.exclude(tracker.at(2), 'unremoved Avada English demo heading — decided dropped, OPEN-QUESTIONS #7');
-tracker.exclude(tracker.at(3), 'near-duplicate intro paragraph, variant A — which variant to keep is Phase 3\'s decision, OPEN-QUESTIONS #7');
-const heroIntroBlock = tracker.at(4);
+// The live source had an unremoved English Avada demo heading here
+// ("Your Journey to a Fulfilling Life") — dropped outright, per
+// fuer-marina.md Q4. It also had two near-duplicate German intro
+// paragraphs; the owner chose variant A (fuer-marina.md Q3, "weil sie...
+// das Thema konkret benennt") and the second was removed from the
+// content collection itself (OPEN-QUESTIONS.md #7), so only one remains
+// here now.
+tracker.exclude(tracker.at(2), 'unremoved Avada English demo heading — decided dropped, fuer-marina.md Q4');
+const heroIntroBlock = tracker.at(3);
 const heroIntro = heroIntroBlock.type === 'paragraph' ? heroIntroBlock.text : undefined;
 
 const ueberDieGruppe = paragraphs(tracker.section('Über die Gruppe'));

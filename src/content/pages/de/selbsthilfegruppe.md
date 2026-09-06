@@ -11,8 +11,6 @@ Angebote
 
 Ein Raum für Austausch, gegenseitige Unterstützung und gemeinsame Reflexion mit Menschen, die die Erfahrung der Kinderwunschkrise teilen.
 
-Ein Raum für Austausch, gegenseitige Unterstützung und gemeinsame Reflexion mit Menschen, die ähnliche Erfahrungen haben.
-
 ## Über die Gruppe
 
 Die Persephone Selbsthilfegruppe habe ich 2021 in Graz gemeinsam mit meinem Mann Claudio in eigener Sache ins Leben gerufen. Am schweren Weg zu unserer Traumfamilie stellten wir nämlich fest, dass es vielen Wunscheltern genauso wie uns selbst ging – und dass recht wenig Unterstützung zur Verfügung stand. Das sollte sich ändern: Niemand sollte diesen Weg allein gehen müssen.

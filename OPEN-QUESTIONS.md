@@ -116,27 +116,14 @@ WordPress site about all four dead links, since the "likely intended target" gue
 above (especially the two blog-post ones) were judgment calls made without visibility
 into what was actually meant.
 
-## 7. Selbsthilfegruppe has an unremoved English theme-demo heading and a doubled intro
+## 7. Selbsthilfegruppe's English demo heading and doubled intro — RESOLVED 2026-09-06
 
-The live Selbsthilfegruppe page renders **two** h1s back to back: "Selbsthilfegruppe" and,
-immediately after it, "Your Journey to a Fulfilling Life" — English, and reading exactly
-like an Avada theme demo-content default that was never replaced (the same pattern as
-Open Question #4's leftover homepage meta description). It's followed by **two** near-
-identical German intro paragraphs with slightly different wording ("...die die Erfahrung
-der Kinderwunschkrise teilen" vs "...die ähnliche Erfahrungen haben") — not an extraction
-artifact; both are genuinely present in the source, worded differently enough that they
-aren't a simple duplicate.
-
-**Current state:** `src/content/pages/de/selbsthilfegruppe.md` preserves all of it
-verbatim (both headings, both paragraphs) per Task 2's "faithful record" rule. The page
-is now built (`selbsthilfegruppe.astro`): the English demo heading is dropped (that part
-wasn't ambiguous), but the choice between the two intro paragraphs is **still open** —
-the page currently renders "...die ähnliche Erfahrungen haben" as a placeholder, not a
-decision. Swap to `src/lib/parseMarkdownBlocks.ts`'s block index for the other paragraph
-(or new copy) once you've picked.
-
-**Recommendation:** pick whichever reads better — your call, not a coin flip I should
-make.
+Decided in `fuer-marina.md` Q3/Q4: the English Avada demo heading ("Your Journey to a
+Fulfilling Life") stays dropped, and the intro keeps **variant A** ("...die die Erfahrung
+der Kinderwunschkrise teilen") — chosen because it comes first on the live page and names
+the topic concretely. Variant B ("...die ähnliche Erfahrungen haben") is removed from
+`src/content/pages/de/selbsthilfegruppe.md` itself (the frozen verbatim record in
+`docs/source-archive/` still has both, per its own purpose).
 
 ## 8. Two verbatim typos worth knowing about before Task 3
 
