@@ -83,7 +83,26 @@ sign-off)?
 **Recommendation:** write a plain, minimal description once you've reviewed it — flagging
 here rather than guessing at the wording myself.
 
-## 6. Not a decision — just worth knowing
+## 7. Über-uns has two dead-end CTA links on the live site
+
+The live Über-uns page's two closing teaser cards link to `/beratung-coaching/` and
+`/workhops-einzeltrainings/` (note the source's own typo, "workhops") — both return a
+live **404** on persephone.at right now. The obvious matching real pages are
+`/beratung/` (`<title>Beratung & Coaching - Persephone</title>`) and `/workshops/`
+(`<title>Workshops & Einzeltrainings - Persephone</title>`) — titles match almost
+word-for-word, so this reads as stale slugs left over from a page rename rather than a
+deliberate removal.
+
+**Current state:** `src/content/pages/de/ueber-uns.md` records the CTA hrefs exactly as
+found on the live page (Task 2 is a faithful record of the source, bugs included).
+
+**Recommendation:** when the actual Über-uns page gets built (Task 3), point these two
+links at the working `/beratung/` and `/workshops/` pages instead of reproducing a
+live 404 — flagging here since it's a content/URL decision, not obviously "just fix
+it" if there's a reason those specific slugs existed. Also worth telling whoever
+manages the live WordPress site, independent of this rebuild.
+
+## 8. Not a decision — just worth knowing
 
 Several `<li>` elements in the live Über-uns page's "Ausbildung"/"Felderfahrung" lists
 carry a leftover CSS class, `font-claude-response-body`, in their raw HTML — a tell that

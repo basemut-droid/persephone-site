@@ -134,4 +134,26 @@ const site = defineCollection({
   }),
 });
 
-export const collections = { blog, events, site };
+// Standalone marketing/legal pages re-parsed verbatim from persephone.at
+// (Phase 2). One file per page under pages/<locale>/<slug>.md, same
+// disk/i18n convention as blog/events above. Body is the page's full copy as
+// markdown (headings/paragraphs/lists/quotes preserved in source order,
+// CTAs as ordinary markdown links carrying their target URL) — deliberately
+// unstructured beyond that, since different pages need very different
+// components once built; only the meta fields below are typed. Inline
+// images live in the markdown body as standard ![alt](path) syntax, which
+// Astro's content-collection markdown pipeline optimizes automatically as
+// long as the path resolves to a real local file.
+const pages = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(), // on-page <title>, verbatim from the live <title> tag
+      description: z.string().optional(), // meta description, when the live page has one
+      sourceUrl: z.string().url(), // the persephone.at URL this was extracted from
+      heroImage: image().optional(),
+      heroImageAlt: z.string().optional(),
+    }),
+});
+
+export const collections = { blog, events, site, pages };
