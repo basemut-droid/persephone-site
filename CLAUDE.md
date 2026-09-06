@@ -23,6 +23,23 @@ happened once: `.section`'s padding lived inside `HomePage.astro` for a while, s
 other page and component using `class="section"` got zero padding from it, with no error.
 See DESIGN-SYSTEM.md's warning near the top for the full story.
 
+## Reuse before you build
+
+When a live persephone.at page uses a layout the homepage (or any other already-built
+page) already has, reuse that existing component or class — don't build a second
+version of the same shape. This is what went wrong building the first cut of Über
+uns: it got a new two-column photo+text section and a new "PageHero" banner-style
+masthead, when the live page's masthead is actually the same split-hero (text left,
+full-bleed image right) the homepage already has, just with different copy.
+
+Before building any section, check whether the homepage or an existing component
+already covers that shape. If it does, use it — extracting the shared pieces into
+`global.css` (or a shared component) first if the existing version is still trapped
+in another page's scoped `<style>` block. Only build something new when the live
+design genuinely has a shape nothing in the system covers, and say so explicitly in
+the commit message when that's what you're doing, so it's a decision on the record,
+not something to notice later.
+
 ## Development
 
 When starting the dev server, use background mode:

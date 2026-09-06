@@ -147,60 +147,11 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
 </BaseLayout>
 
 <style>
-  .hero {
-    background: var(--color-bg);
-  }
-
-  .hero-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    align-items: stretch;
-  }
-
-  .hero-copy {
-    padding: 2rem clamp(1.25rem, 4vw, 2.5rem);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-  }
-
-  .hero-headline {
-    /* Sizing now comes from the shared h1 clamp(2rem, 1.5rem+2vw, 3rem) in
-       global.css — no more local fixed 2.75rem — so this matches every
-       subpage's PageHero h1 exactly and scales down on mobile like they do. */
-    color: var(--color-accent-strong);
-    line-height: 1.2;
-    margin-bottom: 55px;
-  }
-
-  .hero-copy p {
-    font-size: 1.125rem;
-    line-height: 1.75;
-    margin-bottom: 24px;
-  }
-
-  .hero-copy p:last-of-type {
-    margin-bottom: 60px;
-  }
-
-  .hero-image {
-    /* The artwork has transparent margins around it (no baked-in
-       background), so this shows through wherever the image doesn't
-       cover — matching the page instead of a stray dark rectangle. */
-    position: relative;
-    height: 320px;
-    background: var(--color-bg);
-    overflow: hidden;
-  }
-
-  .hero-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-  }
+  /* .hero/.hero-grid/.hero-copy/.hero-headline/.hero-image now live in
+     global.css — Über uns's masthead reuses the exact same split-hero
+     pattern, so it has to be a real shared class, not scoped here. See
+     CLAUDE.md's "reuse before you build" rule and global.css's own comment
+     on this block for why. */
 
   .service-grid {
     display: grid;
@@ -240,22 +191,6 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
   }
 
   @media (min-width: 900px) {
-    .hero-grid {
-      grid-template-columns: 45% 55%;
-      height: 520px;
-    }
-
-    .hero-image {
-      height: 100%;
-    }
-
-    .hero-copy {
-      width: 500px;
-      max-width: 100%;
-      margin-inline: auto;
-      padding-inline: 0;
-    }
-
     .philosophy-grid,
     .founder-grid {
       grid-template-columns: 1fr 1fr;

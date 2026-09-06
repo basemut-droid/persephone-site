@@ -1,7 +1,7 @@
 ---
 title: "Über uns"
 sourceUrl: "https://www.persephone.at/ueber-uns/"
-heroImage: "../../../assets/shared/marina-von-persephone.jpg"
+heroImage: "../../../assets/pages/ueber-uns/marina-portrait-hero.png"
 heroImageAlt: ""
 ---
 

@@ -240,6 +240,81 @@ textarea:focus-visible,
   outline-offset: 2px;
 }
 
+/* The split hero band: text column + a full-bleed image column (no
+   .container on the image side), stretching to the viewport edge. Moved
+   here from HomePage.astro's own scoped <style> — it was homepage-only at
+   first, but the same split is also the live site's masthead pattern for
+   at least Über uns, so this needs to be a real shared class, not
+   re-implemented per page. See CLAUDE.md's "reuse before you build" rule. */
+.hero {
+  background: var(--color-bg);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+}
+
+.hero-copy {
+  padding: 2rem clamp(1.25rem, 4vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.hero-headline {
+  color: var(--color-accent-strong);
+  line-height: 1.2;
+  margin-bottom: 55px;
+}
+
+.hero-copy p {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  margin-bottom: 24px;
+}
+
+.hero-copy p:last-of-type {
+  margin-bottom: 60px;
+}
+
+.hero-image {
+  /* Assumes the source artwork/photo has no baked-in background of its
+     own — --color-bg shows through wherever the image doesn't cover. */
+  position: relative;
+  height: 320px;
+  background: var(--color-bg);
+  overflow: hidden;
+}
+
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+@media (min-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 45% 55%;
+    height: 520px;
+  }
+
+  .hero-image {
+    height: 100%;
+  }
+
+  .hero-copy {
+    width: 500px;
+    max-width: 100%;
+    margin-inline: auto;
+    padding-inline: 0;
+  }
+}
+
 .skip-link {
   position: absolute;
   left: -9999px;

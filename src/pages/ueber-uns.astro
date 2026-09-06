@@ -2,7 +2,6 @@
 import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import logoKongruenz from '../assets/pages/ueber-uns/logo-kongruenz-und-authentizitaet.png';
 import {
@@ -25,10 +24,21 @@ const entry = await getEntry('pages', 'de/ueber-uns');
 if (!entry) throw new Error('Content collection entry "pages/de/ueber-uns" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');
 
+// Masthead: on the live page this is the same split-hero band the homepage
+// uses (text column + a full-bleed portrait), not PageHero's plain banner —
+// PageHero doesn't fit here and building a second hero-split component
+// would just duplicate src/styles/global.css's .hero/.hero-grid, so this
+// reuses that shared pattern directly. See CLAUDE.md.
 const heroEyebrow = (blocks[0].type === 'paragraph' && blocks[0].text) || undefined;
 const heroTitle = blocks[1].type === 'heading' ? blocks[1].text : entry.data.title;
 const heroIntro = (blocks[2].type === 'paragraph' && blocks[2].text) || undefined;
 
+// "Wer Dir hier begegnet" / "Was aus meiner Kinderwunschkrise wuchs" /
+// "Persephone als soziales Unternehmen" are one single centered section on
+// the live page (no image) — reuses the existing .section-centered +
+// .section-narrow utilities the homepage's pain-points section already
+// established, rather than the two-column photo+text layout this page used
+// to have (that pattern isn't in the live design at all).
 const bioSections = ['Wer Dir hier begegnet', 'Was aus meiner Kinderwunschkrise wuchs', 'Persephone als soziales Unternehmen'].map(
   (heading) => ({ heading, paragraphs: paragraphs(section(blocks, heading)) })
 );
@@ -70,31 +80,37 @@ if (!closingCta || closingCta.type !== 'cta') throw new Error('Expected a closin
 ---
 
 <BaseLayout locale="de" path="/ueber-uns/" title={`${entry.data.title} – Persephone`}>
-  <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
-
-  <section class="section">
-    <div class="container bio-grid">
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        {heroEyebrow && <span class="eyebrow">{heroEyebrow}</span>}
+        <h1 class="hero-headline heading-black">{heroTitle}</h1>
+        {heroIntro && <p>{heroIntro}</p>}
+      </div>
       {
         entry.data.heroImage && (
-          <div class="bio-photo">
-            <Image src={entry.data.heroImage} alt={entry.data.heroImageAlt ?? ''} width={700} height={933} />
+          <div class="hero-image">
+            <Image src={entry.data.heroImage} alt={entry.data.heroImageAlt ?? ''} width={1000} height={1500} />
           </div>
         )
       }
-      <div class="bio-text">
-        {
-          bioSections.map(({ heading, paragraphs: paras }) => (
-            <>
-              <h2>{heading}</h2>
-              {paras.map((p) => <p set:html={mdInlineHtml(p)} />)}
-            </>
-          ))
-        }
-      </div>
     </div>
   </section>
 
-  <section class="section section-alt">
+  <section class="section section-alt section-centered">
+    <div class="container section-narrow">
+      {
+        bioSections.map(({ heading, paragraphs: paras }) => (
+          <>
+            <h2>{heading}</h2>
+            {paras.map((p) => <p set:html={mdInlineHtml(p)} />)}
+          </>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
     <div class="container credentials-grid">
       <div>
         <h2 class="eyebrow">{stripEmphasis('**Ausbildung**')}</h2>
@@ -116,7 +132,7 @@ if (!closingCta || closingCta.type !== 'cta') throw new Error('Expected a closin
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section-alt">
     <div class="container teaser-grid">
       {
         teasers.map((t) => (
@@ -140,19 +156,8 @@ if (!closingCta || closingCta.type !== 'cta') throw new Error('Expected a closin
 </BaseLayout>
 
 <style>
-  .bio-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    align-items: start;
-  }
-
-  .bio-photo img {
-    width: 100%;
-    aspect-ratio: 3 / 4;
-    object-fit: cover;
-    border-radius: var(--radius);
-  }
+  /* .hero/.hero-grid/.hero-copy/.hero-headline/.hero-image are shared
+     (global.css) — nothing page-specific to add for the masthead. */
 
   .credentials-grid {
     display: grid;
@@ -182,7 +187,11 @@ if (!closingCta || closingCta.type !== 'cta') throw new Error('Expected a closin
 
   .teaser-card {
     padding: 2rem;
-    background: var(--color-bg-alt);
+    /* The section itself is now .section-alt (beige); the card needs to
+       read as a distinct surface against that, not the old --color-bg-alt
+       fill that used to work only because the section around it was
+       plain --color-bg. */
+    background: var(--color-surface);
     border-radius: var(--radius);
   }
 
@@ -200,10 +209,6 @@ if (!closingCta || closingCta.type !== 'cta') throw new Error('Expected a closin
   }
 
   @media (min-width: 800px) {
-    .bio-grid {
-      grid-template-columns: 1fr 1.5fr;
-    }
-
     .credentials-grid {
       grid-template-columns: 1fr 1fr 1fr;
     }
