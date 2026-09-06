@@ -1,8 +1,6 @@
 ---
 title: "Workshops & Einzeltrainings"
 sourceUrl: "https://www.persephone.at/workshops/"
-heroImage: "../../../assets/shared/marina-von-persephone.jpg"
-heroImageAlt: ""
 ---
 
 Angebote

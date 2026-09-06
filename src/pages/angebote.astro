@@ -1,95 +1,70 @@
 ---
+import { getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
-import ServiceCard from '../components/ServiceCard.astro';
-import CtaBand from '../components/CtaBand.astro';
-import { getSiteContent } from '../i18n/utils';
+import mg7425 from '../assets/pages/angebote/mg-7425.jpg';
+import logoGeborgenheit from '../assets/pages/angebote/logo-geborgenheit.png';
+import { parseMarkdownBlocks, section, paragraphs } from '../lib/parseMarkdownBlocks';
 
-const s = await getSiteContent('de');
-const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
+// Live page has no split-hero image (confirmed: its masthead row has no
+// --awb-bg-image, unlike Über uns) — a plain PageHero banner is the right
+// fit here, matching the rest of the subpages.
+const entry = await getEntry('pages', 'de/angebote');
+if (!entry) throw new Error('Content collection entry "pages/de/angebote" not found');
+const blocks = parseMarkdownBlocks(entry.body ?? '');
 
-const scenarios = [
-  'Du meidest Kindergeburtstage und Familienfeiern.',
-  'Dein Körper tut nicht, was er soll — und das fühlt sich wie Verrat an.',
-  'Medizinische Behandlungszyklen ziehen sich seit Monaten oder Jahren.',
-  'Du und Dein:e Partner:in seht die Situation unterschiedlich.',
-  'Du suchst Austausch mit Menschen, die es wirklich verstehen.',
-  'Du weißt nicht, wie ein Leben ohne Kinder für Dich aussehen könnte.',
-];
+const heroEyebrow = (blocks[0].type === 'paragraph' && blocks[0].text) || undefined;
+const heroTitle = blocks[1].type === 'heading' ? blocks[1].text : entry.data.title;
+const heroIntro = (blocks[2].type === 'paragraph' && blocks[2].text) || undefined;
+
+// The rest of the body (from the second paragraph on) is one continuous
+// centered section on the live page — same .section-centered/.section-narrow
+// pattern already used by the homepage's pain-points section and Über uns's
+// narrative section, not a new layout.
+const rest = blocks.slice(3).filter((b) => b.type !== 'image'); // images placed explicitly below
+const restParagraphs = paragraphs(rest);
+const subHeading = rest.find((b) => b.type === 'heading' && b.level === 2);
+const subSubHeading = rest.find((b) => b.type === 'heading' && b.level === 3);
+const cta = rest.find((b) => b.type === 'cta');
+if (!cta || cta.type !== 'cta') throw new Error('Expected a CTA in the Angebote body');
+
+// Source links to https://www.persephone.at/termine/ (a real, working live
+// page) — rewritten to this site's own local route rather than left as an
+// absolute persephone.at URL, per docs/content-audit.md's carry-forward note.
+const ctaHref = cta.href.replace(/^https?:\/\/(www\.)?persephone\.at/, '');
 ---
 
-<BaseLayout
-  locale="de"
-  path="/angebote/"
-  title="Angebote – Persephone"
-  description="Beratung & Coaching, Workshops & Einzeltrainings, Selbsthilfegruppe — Persephones Angebote für Menschen mit unerfülltem Kinderwunsch."
->
-  <PageHero eyebrow="Wo stehst Du gerade?" title="Angebote" />
+<BaseLayout locale="de" path="/angebote/" title={`${entry.data.title} – Persephone`}>
+  <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
-  <section class="section">
+  <section class="section section-centered">
     <div class="container section-narrow">
-      <p>
-        Menschen mit unerfülltem Kinderwunsch kommen an ganz unterschiedlichen Punkten zu
-        Persephone. Deshalb fragen wir zuerst: Wo stehst Du gerade?
-      </p>
-      <ul class="scenario-list">
-        {scenarios.map((s) => <li>{s}</li>)}
-      </ul>
-    </div>
-  </section>
-
-  <section class="section section-alt">
-    <div class="container">
-      <div class="service-grid">
-        {
-          s.services.items.map((item, i) => (
-            <ServiceCard
-              title={item.title}
-              description={item.description}
-              href={item.href}
-              cta={item.cta}
-              tone={serviceTones[i % serviceTones.length]}
-            />
-          ))
-        }
+      {restParagraphs[0] && <p>{restParagraphs[0]}</p>}
+      {subHeading?.type === 'heading' && <h2>{subHeading.text}</h2>}
+      {subSubHeading?.type === 'heading' && <h3>{subSubHeading.text}</h3>}
+      {restParagraphs.slice(1).map((p) => <p>{p}</p>)}
+      <a href={ctaHref} class="button button-primary">{cta.text}</a>
+      <div class="supporting-image">
+        <Image src={mg7425} alt="" width={300} height={450} />
       </div>
+      <Image class="badge" src={logoGeborgenheit} alt="" width={90} height={90} />
     </div>
   </section>
-
-  <CtaBand
-    heading="Wenn sich gerade nichts davon ganz richtig anfühlt"
-    paragraphs={[
-      'In einem kostenfreien, unverbindlichen Online-Gespräch (ca. 20 Minuten) finden wir gemeinsam heraus, was für Dich gerade passt.',
-    ]}
-    ctaLabel="Kennenlernen vereinbaren"
-    ctaHref="/termine/"
-  />
 </BaseLayout>
 
 <style>
-  .section-narrow {
-    max-width: 56rem;
+  .supporting-image {
+    margin-top: 2rem;
+  }
+
+  .supporting-image img {
     margin-inline: auto;
+    border-radius: var(--radius);
   }
 
-  .scenario-list {
-    list-style: none;
-    margin: 2rem 0 0;
-    padding: 0;
-    display: grid;
-    gap: 1rem;
+  .badge {
+    margin-top: 1rem;
+    border-radius: var(--radius);
   }
-
-  .scenario-list li {
-    border-left: 3px solid var(--color-accent-strong);
-    padding-left: 1rem;
-    font-style: italic;
-  }
-
-  .service-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.5rem;
-  }
-
 </style>

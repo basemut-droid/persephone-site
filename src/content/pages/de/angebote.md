@@ -1,8 +1,6 @@
 ---
 title: "Angebote"
 sourceUrl: "https://www.persephone.at/angebote-2/"
-heroImage: "../../../assets/pages/angebote/mg-7425.jpg"
-heroImageAlt: ""
 ---
 
 Orientierung
@@ -20,5 +18,7 @@ Manche melden sich, weil sie dringend mit jemandem sprechen müssen, der sich mi
 Das ist ein üblicher Zwischenstand im Chaos der Kinderwunschkrise. Im Kennenlerngespräch sortieren wir gemeinsam, worum es bei Dir gerade geht und welcher Weg dazu passt. Zwanzig Minuten, online, ohne jede Verpflichtung.
 
 [Kennenlernen vereinbaren](https://www.persephone.at/termine/)
+
+![_mg_7425-1](../../../assets/pages/angebote/mg-7425.jpg)
 
 ![Logos geborgenheit_04](../../../assets/pages/angebote/logo-geborgenheit.png)

@@ -1,8 +1,6 @@
 ---
 title: "Beratung & Coaching"
 sourceUrl: "https://www.persephone.at/beratung/"
-heroImage: "../../../assets/shared/marina-von-persephone.jpg"
-heroImageAlt: ""
 ---
 
 Angebote

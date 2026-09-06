@@ -1,8 +1,6 @@
 ---
 title: "Kontakt"
 sourceUrl: "https://www.persephone.at/kontakt/"
-heroImage: "../../../assets/pages/kontakt/mg-7811.png"
-heroImageAlt: ""
 ---
 
 Einladung
@@ -12,6 +10,8 @@ Einladung
 Du hast Fragen, Feedback oder möchtest Dich erst einmal schriftlich an mich wenden? Schreib mir eine Nachricht!
 
 # Lass uns ins Gespräch kommen
+
+![_MG_7811](../../../assets/pages/kontakt/mg-7811.png)
 
 Dr.Phil. Marina Bletsas aka Marina von Persephone
 
