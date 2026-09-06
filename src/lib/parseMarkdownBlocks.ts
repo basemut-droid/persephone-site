@@ -96,13 +96,14 @@ export function stripEmphasis(text: string): string {
 // mechanical rewrite.
 export function toLocalRoute(href: string, corrections: Record<string, string> = {}): string {
   if (corrections[href]) return corrections[href];
-  return href.replace(/^https?:\/\/(www\.)?persephone\.at(\/[a-z0-9-]*\/)$/i, '$2');
+  return href.replace(/^https?:\/\/(www\.)?persephone\.at((?:\/[a-z0-9-]+)+\/)$/i, '$2');
 }
 
 // Same rewrite, applied to every persephone.at link inside a paragraph's
-// inline text (as opposed to toLocalRoute, which takes a bare href).
+// inline text (as opposed to toLocalRoute, which takes a bare href). Path
+// can be more than one segment deep (e.g. /featured/some-slug/).
 export function rewriteLocalLinks(text: string, corrections: Record<string, string> = {}): string {
-  return text.replace(/https?:\/\/(?:www\.)?persephone\.at\/[a-z0-9-]*\//gi, (m) => toLocalRoute(m, corrections));
+  return text.replace(/https?:\/\/(?:www\.)?persephone\.at(?:\/[a-z0-9-]+)+\//gi, (m) => toLocalRoute(m, corrections));
 }
 
 // A heading whose entire text is one `[label](href)` link — this site's

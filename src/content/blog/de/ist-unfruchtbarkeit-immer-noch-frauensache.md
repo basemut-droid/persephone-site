@@ -54,4 +54,4 @@ Seit 2021 bietet die Selbsthilfegruppe *Persephone* einen geschützten Raum für
 
 [Trage Dich in den Newsletter ein](), um über neue Beiträge, Termine und Veranstaltungen auf dem Laufenden zu bleiben – ganz egal, ob Du allein oder mit Partner:in kommen magst.
 
-Komme zu unserem nächsten Treffen! Den Termin und den Link zur Anmeldung findest Du [hier](https://www.persephone.at/aktuelles/).
+Komme zu unserem nächsten Treffen! Den Termin und den Link zur Anmeldung findest Du [hier](/termine/).

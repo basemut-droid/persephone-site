@@ -12,6 +12,13 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
+// Two posts link to persephone.at URLs that are live 404s (stale slugs --
+// see OPEN-QUESTIONS.md #6). Fixed in astro.config.mjs's remarkFixDeadLinks
+// plugin, not here -- render() reads a pre-rendered HTML cache rather than
+// the raw body at request time, so a render-time string patch (what every
+// other page's dead-link fix does) silently has no effect for content
+// rendered via <Content />; the markdown-to-HTML compile step is the only
+// point left to intervene.
 const { Content } = await render(post);
 const dateLabel = post.data.publishDate.toLocaleDateString('de-AT', {
   year: 'numeric',
