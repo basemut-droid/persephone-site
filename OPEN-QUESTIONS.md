@@ -186,7 +186,22 @@ freshly re-parsed live text — flagging this prominently since it's the one ite
 whole list where shipping the "verbatim" source text would actually be wrong, not just
 undecided.
 
-## 10. Not a decision — just worth knowing
+## 10. Über-uns's two closing teaser cards use a plain style, not ServiceCard
+
+The live page's "Beratung & Coaching (i.A.u.S.)" / "Workshops & trainings" closing
+teasers are each just a linked heading + one paragraph — no separate button/CTA
+label exists in the source, unlike the homepage's `ServiceCard` pattern, which
+requires one (`cta` prop, e.g. "Jetzt entdecken"). Writing an invented label just to
+reuse `ServiceCard` would be new copy with no source, so this page renders them as
+plain bordered cards instead (tokens-only: `--color-bg-alt`, `--radius`, no one-off
+values) rather than matching `ServiceCard`'s vibrant gradient treatment.
+
+**Recommendation:** once you're happy with real button copy for these two
+(something like "Mehr erfahren" / "Jetzt entdecken"), switching them to
+`ServiceCard` is a small, contained change — flagging now so the quieter current
+look isn't mistaken for an oversight.
+
+## 11. Not a decision — just worth knowing
 
 Several `<li>` elements in the live Über-uns page's "Ausbildung"/"Felderfahrung" lists
 carry a leftover CSS class, `font-claude-response-body`, in their raw HTML — a tell that

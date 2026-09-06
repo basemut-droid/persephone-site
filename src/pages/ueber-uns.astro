@@ -1,46 +1,95 @@
 ---
+import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
-import founderPhoto from '../assets/founder/marina-portrait.png';
+import logoKongruenz from '../assets/pages/ueber-uns/logo-kongruenz-und-authentizitaet.png';
+import {
+  parseMarkdownBlocks,
+  section,
+  paragraphs,
+  stripEmphasis,
+  parseLinkHeading,
+  mdInlineHtml,
+} from '../lib/parseMarkdownBlocks';
+
+// Über uns's full copy lives in src/content/pages/de/ueber-uns.md (Task 2's
+// verbatim re-parse from persephone.at) as one flowing markdown body —
+// deliberately unstructured there, since every page needs a different
+// component breakdown. This page pulls the specific pieces it needs back
+// out of that one source via parseMarkdownBlocks, rather than duplicating
+// the copy into separate typed frontmatter fields (which would leave two
+// places to edit the same sentence).
+const entry = await getEntry('pages', 'de/ueber-uns');
+if (!entry) throw new Error('Content collection entry "pages/de/ueber-uns" not found');
+const blocks = parseMarkdownBlocks(entry.body ?? '');
+
+const heroEyebrow = (blocks[0].type === 'paragraph' && blocks[0].text) || undefined;
+const heroTitle = blocks[1].type === 'heading' ? blocks[1].text : entry.data.title;
+const heroIntro = (blocks[2].type === 'paragraph' && blocks[2].text) || undefined;
+
+const bioSections = ['Wer Dir hier begegnet', 'Was aus meiner Kinderwunschkrise wuchs', 'Persephone als soziales Unternehmen'].map(
+  (heading) => ({ heading, paragraphs: paragraphs(section(blocks, heading)) })
+);
+
+const ausbildung = section(blocks, '**Ausbildung**').find((b) => b.type === 'list');
+const felderfahrung = section(blocks, '**Felderfahrung**').find((b) => b.type === 'list');
+const sprachen = paragraphs(section(blocks, '**Sprachen**'));
+if (ausbildung?.type !== 'list' || felderfahrung?.type !== 'list') {
+  throw new Error('Expected "Ausbildung"/"Felderfahrung" sections to each contain a list');
+}
+
+// The two closing teaser-card headings link to persephone.at URLs that are
+// live 404s (stale slugs left over from a page rename — see
+// OPEN-QUESTIONS.md #6). The content-collection entry records them exactly
+// as found on the source, per Task 2's "faithful record" rule; this page,
+// actually being built and shipped, points at the real working pages
+// instead of reproducing a dead link.
+const deadLinkFixes: Record<string, string> = {
+  'https://www.persephone.at/beratung-coaching/': '/beratung/',
+  'https://www.persephone.at/workhops-einzeltrainings/': '/workshops/',
+};
+const teaserHeadings = blocks.filter((b) => b.type === 'heading' && b.level === 2 && parseLinkHeading(b.text));
+const teasers = teaserHeadings.map((h) => {
+  if (h.type !== 'heading') throw new Error('unreachable');
+  const link = parseLinkHeading(h.text)!;
+  const idx = blocks.indexOf(h);
+  const next = blocks[idx + 1];
+  return {
+    label: link.label,
+    href: deadLinkFixes[link.href] ?? link.href,
+    description: next?.type === 'paragraph' ? next.text : '',
+  };
+});
+
+const closing = section(blocks, 'Dein nächster Schritt');
+const closingParagraphs = paragraphs(closing);
+const closingCta = closing.find((b) => b.type === 'cta');
+if (!closingCta || closingCta.type !== 'cta') throw new Error('Expected a closing CTA link after "Dein nächster Schritt"');
 ---
 
-<BaseLayout
-  locale="de"
-  path="/ueber-uns/"
-  title="Über uns – Persephone"
-  description="Marina Bletsas, Gründerin von Persephone: von innen und von Fach — ihr Weg von der eigenen Kinderwunschkrise zur psychosozialen Begleitung anderer."
->
-  <PageHero
-    eyebrow="Über uns"
-    title="Persephone ist die Frucht der eigenen Krise"
-    intro="Was 2021 als leise Suche nach Austausch begann, ist heute ein Ort für alle, die durch dieselbe Schwelle gehen."
-  />
+<BaseLayout locale="de" path="/ueber-uns/" title={`${entry.data.title} – Persephone`}>
+  <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
   <section class="section">
     <div class="container bio-grid">
-      <div class="bio-photo">
-        <Image src={founderPhoto} alt="Marina Bletsas, Gründerin von Persephone" width={700} height={933} />
-      </div>
+      {
+        entry.data.heroImage && (
+          <div class="bio-photo">
+            <Image src={entry.data.heroImage} alt={entry.data.heroImageAlt ?? ''} width={700} height={933} />
+          </div>
+        )
+      }
       <div class="bio-text">
-        <p>
-          Ich bin Marina Bletsas. Vielleicht kennst Du mich aus meiner Selbsthilfearbeit als
-          Marina von Persephone.
-        </p>
-        <p>
-          2021 habe ich, mitten in meiner eigenen Kinderwunschkrise, eine anonyme Gruppe
-          gegründet — benannt nach der Mythosfigur, die für Abstieg und Wiederkehr mit neuer
-          Frucht steht. Aus der leisen Suche nach Austausch wurde mit der Zeit ein Ort für alle,
-          die durch dieselbe Schwelle gehen.
-        </p>
-        <p>
-          Meinen beruflichen Ursprung habe ich in der Linguistik und der universitären Forschung.
-          Doch je länger ich die Gruppe begleitete, desto klarer wurde: Ich will über die eigene
-          Krise hinaus Menschen mit unerfülltem Kinderwunsch begleiten. Also habe ich mich
-          psychosozial weitergebildet — mit dem Wissen, wie Kommunikation Realitäten formt, und
-          der eigenen Erfahrung dessen, was in keinem Lehrbuch steht.
-        </p>
+        {
+          bioSections.map(({ heading, paragraphs: paras }) => (
+            <>
+              <h2>{heading}</h2>
+              {paras.map((p) => <p set:html={mdInlineHtml(p)} />)}
+            </>
+          ))
+        }
       </div>
     </div>
   </section>
@@ -48,30 +97,45 @@ import founderPhoto from '../assets/founder/marina-portrait.png';
   <section class="section section-alt">
     <div class="container credentials-grid">
       <div>
-        <h2>Ausbildung</h2>
+        <h2 class="eyebrow">{stripEmphasis('**Ausbildung**')}</h2>
         <ul>
-          <li>Lebens- und Sozialberaterin i.A.u.S. bei KEPOS</li>
-          <li>Personzentrierte Psychotherapie in Ausbildung bei AGP | IPS</li>
-          <li>Doktorat der Linguistik, Universität Bonn (Schwerpunkt Argumentationstheorie)</li>
+          {ausbildung.items.map((item) => <li set:html={mdInlineHtml(item)} />)}
         </ul>
       </div>
       <div>
-        <h2>Erfahrung</h2>
+        <h2 class="eyebrow">{stripEmphasis('**Felderfahrung**')}</h2>
         <ul>
-          <li>Gründerin &amp; Leiterin der Persephone-Selbsthilfegruppe, seit 2021</li>
-          <li>Krisenbegleitung, Caritas Steiermark</li>
-          <li>Therapeutische Ambulanzassistenz, SFU Wien</li>
+          {felderfahrung.items.map((item) => <li set:html={mdInlineHtml(item)} />)}
         </ul>
+      </div>
+      <div>
+        <h2 class="eyebrow">{stripEmphasis('**Sprachen**')}</h2>
+        {sprachen.map((p) => <p>{p}</p>)}
+        <Image class="credentials-badge" src={logoKongruenz} alt="" width={90} height={90} />
       </div>
     </div>
   </section>
 
+  <section class="section">
+    <div class="container teaser-grid">
+      {
+        teasers.map((t) => (
+          <article class="teaser-card">
+            <h3>
+              <a href={t.href}>{t.label}</a>
+            </h3>
+            <p>{t.description}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
   <CtaBand
-    eyebrow="Bleib in Verbindung"
-    heading="Der Persephone E-Brief"
-    paragraphs={['Regelmäßig neue Blogartikel, kommende Treffen und Workshoptermine.']}
-    ctaLabel="e-Brief abonieren"
-    ctaHref="/newsletter/"
+    heading="Dein nächster Schritt"
+    paragraphs={closingParagraphs}
+    ctaLabel={closingCta.text}
+    ctaHref={closingCta.href}
   />
 </BaseLayout>
 
@@ -96,17 +160,6 @@ import founderPhoto from '../assets/founder/marina-portrait.png';
     gap: 2.5rem;
   }
 
-  .credentials-grid h2 {
-    /* Matches the value-tile label treatment used on the homepage
-       (teal, uppercase, bold) rather than a plain heading. */
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-accent);
-    margin-bottom: 0.75rem;
-  }
-
   .credentials-grid ul {
     margin: 0;
     padding-left: 1.25rem;
@@ -116,12 +169,46 @@ import founderPhoto from '../assets/founder/marina-portrait.png';
     margin-bottom: 0.5rem;
   }
 
+  .credentials-badge {
+    margin-top: 1rem;
+    border-radius: var(--radius);
+  }
+
+  .teaser-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .teaser-card {
+    padding: 2rem;
+    background: var(--color-bg-alt);
+    border-radius: var(--radius);
+  }
+
+  .teaser-card h3 {
+    margin-bottom: 0.5rem;
+  }
+
+  .teaser-card h3 a {
+    color: var(--color-accent-strong);
+    text-decoration: none;
+  }
+
+  .teaser-card p {
+    margin: 0;
+  }
+
   @media (min-width: 800px) {
     .bio-grid {
       grid-template-columns: 1fr 1.5fr;
     }
 
     .credentials-grid {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .teaser-grid {
       grid-template-columns: 1fr 1fr;
     }
   }
