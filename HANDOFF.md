@@ -126,6 +126,18 @@
   session, `gm-scheduler` — verified this repo has no deploy config at all before
   the entry was committed).
 
+- **FAQs — commit `dca7e77`:** built from `pages/de/faqs.md`. Kept the existing
+  native `<details>`/`<summary>` accordion (already a good pattern), fed it the
+  real 13 verbatim Q&A pairs instead of paraphrased ones. Live page's own
+  category-jump nav (3 links, all literally `href="#"`) skipped rather than
+  reproduced as dead links. Dropped a one-off `52rem` `.section-narrow` override
+  that didn't match the global `56rem` token. **Tooling note:** the long-running
+  dev server (17+ hrs uptime) briefly 500'd this page after the edit — confirmed
+  via its logs as dev-server module-cache staleness (static build was already
+  correct), fixed by restarting it (`astro dev stop` then `astro dev
+  --background`). Worth remembering if another page 500s unexpectedly later in
+  this session.
+
 ---
 
 # Handoff — Phase 2 re-parse + Über uns rebuild session (COMPLETE, stopped per brief)
