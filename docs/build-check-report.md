@@ -1,6 +1,6 @@
 # Build-check report
 
-Generated 2026-09-06T21:32:24.664Z by `scripts/build-check.mjs`.
+Generated 2026-09-06T21:35:20.184Z by `scripts/build-check.mjs`.
 
 ## Every content page has a route, every route has content — PASS
 
@@ -17,7 +17,16 @@ No violations found.
 
 ## Every page has a unique, non-empty meta description — FAIL (non-blocking)
 
-- Shared description across /angebote/, /beratung/, /blog/, /datenschutz/, /disclaimer/, /, /kontakt/, /selbsthilfegruppe/, /termine/, /ueber-uns/, /workshops/: "Persephone begleitet Dich und Deine:n Partner:in psychosozial durch die Kinderwu…"
+- /angebote/ has no meta description (empty or missing)
+- /beratung/ has no meta description (empty or missing)
+- /blog/ has no meta description (empty or missing)
+- /datenschutz/ has no meta description (empty or missing)
+- /disclaimer/ has no meta description (empty or missing)
+- /kontakt/ has no meta description (empty or missing)
+- /selbsthilfegruppe/ has no meta description (empty or missing)
+- /termine/ has no meta description (empty or missing)
+- /ueber-uns/ has no meta description (empty or missing)
+- /workshops/ has no meta description (empty or missing)
 
 ## Every <img> has a non-empty alt — FAIL (non-blocking)
 

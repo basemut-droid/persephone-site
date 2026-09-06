@@ -21,20 +21,23 @@ invented; a real on-site opt-in page remains a small, well-scoped future additio
 whenever the owner writes real copy for it (per `fuer-marina.md`'s own note: the only
 new thing that would need building then is the sign-up field itself).
 
-## 3. Several live pages ship no meta description at all
+## 3. Ten pages ship no meta description — needs the owner's copy
 
-No `<meta name="description">` or `og:description` exists on the live site for:
-**ueber-uns, angebote-2, beratung, workshops, selbsthilfegruppe, kontakt, termine,
-disclaimer**. (`faqs` has one: "Häufig gestellte Fragen". Blog posts each have their own
-via `og:description`.)
+No `<meta name="description">` exists on the live site for most of these, and Phase 3.8
+(external-review.md finding #5) also stopped a bug where they all silently inherited the
+*homepage's* description instead of shipping their own — worse for search engines than
+having none. `BaseLayout.astro` no longer falls back to a site-wide default; a page
+either passes its own real description or ships none.
 
-**Question:** should the rebuild ship these pages with an empty/omitted description
-(matches the source exactly, but is a real SEO gap), or should new descriptions be
-written for them? Writing new ones is new copy, not extracted content — needs your
-voice/approval, not something to freehand.
+**Currently shipping no description at all — needs real copy from the owner, one
+sentence each, whenever there's time (not blocking launch):**
+Über uns, Angebote, Beratung, Workshops, Selbsthilfegruppe, Kontakt, Termine, Disclaimer,
+Datenschutz, Blog index. (FAQs and Impressum already have their own; every blog post has
+its own via frontmatter.)
 
-**Recommendation:** ship empty for now (matches source, invents nothing); flag as a
-backlog item for you to write real ones later.
+**Recommendation:** ship empty until the owner writes these — inventing SEO copy isn't
+this run's call to make. Not urgent (search engines synthesize a snippet from page text
+in the meantime); worth doing before launch, not overnight.
 
 ## 4. The live site ships duplicate/conflicting meta description tags — homepage and every blog post
 

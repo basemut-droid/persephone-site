@@ -22,7 +22,13 @@ interface Props {
 const { locale, path, title, description } = Astro.props;
 const site = await getSiteContent(locale);
 const pageTitle = title ?? site.meta.title;
-const pageDescription = description ?? site.meta.description;
+// NIGHT-RUN.md Phase 3.8 / external-review.md finding #5: this used to
+// fall back to the homepage's own description (`site.meta.description`)
+// whenever a page didn't pass one, so eleven unrelated pages all shipped
+// the same text — worse for search engines than having none. Every page
+// now either passes its own real description or ships none; see
+// OPEN-QUESTIONS.md for the list still waiting on the owner to write one.
+const pageDescription = description;
 const canonicalUrl = getAbsoluteLocaleUrl(locale, path);
 ---
 
@@ -31,7 +37,7 @@ const canonicalUrl = getAbsoluteLocaleUrl(locale, path);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
-    <meta name="description" content={pageDescription} />
+    {pageDescription && <meta name="description" content={pageDescription} />}
     <link rel="canonical" href={canonicalUrl} />
 
     {/* hreflang: one tag per language plus x-default, so search engines
@@ -46,7 +52,7 @@ const canonicalUrl = getAbsoluteLocaleUrl(locale, path);
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={pageDescription} />
+    {pageDescription && <meta property="og:description" content={pageDescription} />}
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:locale" content={locale} />
     <meta name="twitter:card" content="summary_large_image" />
