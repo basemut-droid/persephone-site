@@ -48,7 +48,7 @@ ONLINE
 
 Melde Dich für den Persephone e-Brief an, um über neue Kurse und Ressourcen informiert zu werden.
 
-[e-Brief abonnieren](https://persephone.at/newsletter)
+[e-Brief abonnieren](/newsletter/)
 
 ![Marina-von-Persephone](../../../assets/shared/marina-von-persephone.jpg)
 

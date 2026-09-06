@@ -1,6 +1,6 @@
 # Build-check report
 
-Generated 2026-09-06T21:35:20.184Z by `scripts/build-check.mjs`.
+Generated 2026-09-06T21:37:22.052Z by `scripts/build-check.mjs`.
 
 ## Every content page has a route, every route has content — PASS
 
@@ -10,10 +10,9 @@ No violations found.
 
 No violations found.
 
-## No href points at persephone.at — FAIL (non-blocking)
+## No href points at persephone.at — PASS
 
-- /ueber-uns/: <a href="https://persephone.at/newsletter">
-- /workshops/: <a href="https://persephone.at/newsletter">
+No violations found.
 
 ## Every page has a unique, non-empty meta description — FAIL (non-blocking)
 

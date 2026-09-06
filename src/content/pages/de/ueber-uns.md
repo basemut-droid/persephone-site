@@ -59,7 +59,7 @@ Psychoedukation für die reproduktive Krise: Wissen, Werkzeuge und Austausch mit
 
 Manchmal reicht ein kleiner, regelmäßiger Anker: Ehrliche Worte zu einem Thema, über das selten offen gesprochen wird. Der Persephone e-Brief begleitet Dich dabei, in Deinem eigenen Tempo Orientierung zu finden.
 
-[e-Brief abonnieren](https://persephone.at/newsletter)
+[e-Brief abonnieren](/newsletter/)
 
 ![Marina-von-Persephone](../../../assets/shared/marina-von-persephone.jpg)
 
