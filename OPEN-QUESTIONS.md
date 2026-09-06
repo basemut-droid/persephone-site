@@ -113,23 +113,14 @@ the topic concretely. Variant B ("...die ähnliche Erfahrungen haben") is remove
 `src/content/pages/de/selbsthilfegruppe.md` itself (the frozen verbatim record in
 `docs/source-archive/` still has both, per its own purpose).
 
-## 8. Two verbatim typos worth knowing about before Task 3
+## 8. Six verbatim typos — RESOLVED 2026-09-06
 
-Preserved exactly, not fixed, per the "German copy stays verbatim" rule — but flagging
-so they aren't mistaken for new transcription errors when the pages get built:
-
-- The live Workshops page's own on-page `<h1>` reads **"Workhops & Einzeltrainings"**
-  (missing the first "s") — even though its `<title>` tag correctly says "Workshops &
-  Einzeltrainings". Same typo also showed up in Open Question #6's dead link
-  (`/workhops-einzeltrainings/`), so it's a consistent, real slip on the live site, not
-  a one-off.
-- The live Selbsthilfegruppe page has one heading spelled "Nächstes SHG-Treffen" (h1) and
-  a second, lower one spelled **"Nächtes SHG-Treffen"** (h3, missing the "s") for what
-  reads like the same label used twice.
-
-**Recommendation:** correct both when actually building these pages' on-page copy (typos,
-not a style choice) — flagging here rather than silently "fixing" them inside the Phase 2
-extraction, which is supposed to mirror the source exactly, bugs included.
+All six corrected per `fuer-marina.md` Q1 (Phase 3.1): Workshops' "Workhops" h1, Über
+uns's "linguistiche", Selbsthilfegruppe's "Einbzeltermine" and its "Nächtes SHG-Treffen"
+heading, and FAQs' "Geleggenheit" and "(ehmals)". The frozen verbatim record in
+`docs/source-archive/` still has the originals, per that archive's own purpose. Note the
+two dead-link slugs in Open Question #6 above (`/workhops-einzeltrainings/`) still carry
+the old typo — that's the *live site's own URL*, not something this rebuild controls.
 
 ## 9. Datenschutzerklärung — NEEDS HUMAN SIGN-OFF (not resolved by code)
 
@@ -174,20 +165,14 @@ your wife's say.
   Bookings/Forms are both referenced in the body text), fonts — since any of that
   could have changed since this extraction.
 
-## 10. Über-uns's two closing teaser cards use a plain style, not ServiceCard
+## 10. Über-uns's two closing teasers — SUPERSEDED 2026-09-06
 
-The live page's "Beratung & Coaching (i.A.u.S.)" / "Workshops & trainings" closing
-teasers are each just a linked heading + one paragraph — no separate button/CTA
-label exists in the source, unlike the homepage's `ServiceCard` pattern, which
-requires one (`cta` prop, e.g. "Jetzt entdecken"). Writing an invented label just to
-reuse `ServiceCard` would be new copy with no source, so this page renders them as
-plain bordered cards instead (tokens-only: `--color-bg-alt`, `--radius`, no one-off
-values) rather than matching `ServiceCard`'s vibrant gradient treatment.
-
-**Recommendation:** once you're happy with real button copy for these two
-(something like "Mehr erfahren" / "Jetzt entdecken"), switching them to
-`ServiceCard` is a small, contained change — flagging now so the quieter current
-look isn't mistaken for an oversight.
+This question proposed adding button copy so the two teasers could reuse
+`ServiceCard`. `external-review.md` finding #4b confirms the opposite is correct: the
+live design has **no button** — the heading itself is the link — and the owner
+confirmed that's intentional (`fuer-marina.md` Q5). Withdrawn; see NIGHT-RUN.md Phase
+4.2 for the actual open work here (the black-and-white photo + offset cream text-card
+layout, still missing — needs placeholder images, not button copy).
 
 ## 11. Kontakt's form has nowhere to submit yet
 
@@ -256,3 +241,19 @@ WordPress/Avada would generate). It has zero visible effect on the live page, an
 actual visible text matches genuine content documented elsewhere (`DESIGN-SYSTEM.md`'s
 own credentials-grid list), so this isn't flagged as a content problem — just an
 FYI in case you want to clean up the live WordPress page's HTML source at some point.
+
+## 14. `astro.config.mjs`'s `site` is still a placeholder — BLOCKED ON HOSTING
+
+`site: 'https://persephone.example'` — every built page's canonical URL, `og:url`, and
+the sitemap all derive from this, and all of them are currently wrong. Left as a
+placeholder deliberately (NIGHT-RUN.md Phase 3.10): guessing a production domain isn't
+this run's call, and the real value depends on the hosting decision, not just the domain
+— see `docs/external-review.md`'s "DECISIONS PENDING" section (item 1: domain, hosting,
+and where the owner writes are three independent choices, and hosting is the one that
+gates everything else — the contact form endpoint, deploy config, the Datenschutz
+re-check, and the DNS cutover).
+
+**Recommendation:** decide hosting first (a European static host simplifies the
+Datenschutzerklärung's processor disclosure — see the review's item 3c), then set `site`
+to the real domain in one line. `astro.config.mjs` carries a `// TODO` comment marking
+exactly where.

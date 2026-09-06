@@ -4,7 +4,12 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO: replace with the real production domain once it's decided (persephone.at or a subdomain).
+  // ============================================================================
+  // TODO — BLOCKED ON THE HOSTING DECISION, SEE OPEN-QUESTIONS.md #14.
+  // This placeholder feeds every page's canonical URL, og:url, and the sitemap.
+  // Replace with the real production domain once hosting is decided — do not
+  // guess at a domain here.
+  // ============================================================================
   site: 'https://persephone.example',
 
   i18n: {
