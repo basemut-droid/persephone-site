@@ -144,6 +144,14 @@
   retrofitted, but every page from here uses the shared one). Both inline links
   rewritten to local routes.
 
+- **Impressum — commit `9ac9eaf`:** content was already accurate but the page
+  used a bare `<h1>` + one-off `.legal-page` class instead of
+  PageHero/`.section`/`.section-narrow` — rewritten to use the design system,
+  now actually rendering from `pages/de/impressum.md`. Kept the earlier
+  session's tel: link format fix (source's own is non-functional, has spaces).
+  Mangled auto-excerpt description (OQ#5) not shipped — falls back to the
+  site-wide default.
+
 ---
 
 # Handoff — Phase 2 re-parse + Über uns rebuild session (COMPLETE, stopped per brief)
