@@ -69,19 +69,12 @@ in `src/content/blog/de/*.md` now does (the first, hand-written `og:description`
 Worth telling whoever manages the live WordPress site to find and remove whatever's
 producing the duplicate tags, independent of this rebuild.
 
-## 5. Impressum's meta description is a mangled auto-excerpt
+## 5. Impressum's meta description — RESOLVED 2026-09-06
 
-The live Impressum page's meta description is plugin-auto-generated from the page's
-visible text with no spacing between merged sentences ("Impressum Marina
-BletsasLandstraßer Hauptstraße 86, 2/81030 Wien, Österreich…" — no space between
-concatenated fragments). Real content, badly formatted, not deliberate copy.
-
-**Question:** carry it verbatim (accurate to source, but visibly broken) or write a
-clean one-sentence description instead (a content change, however small, needs your
-sign-off)?
-
-**Recommendation:** write a plain, minimal description once you've reviewed it — flagging
-here rather than guessing at the wording myself.
+Decided in `fuer-marina.md` Q6: "Impressum und Offenlegung von Persephone – Marina
+Bletsas, Wien." replaces the live site's mangled, space-less auto-excerpt ("Impressum
+Marina BletsasLandstraßer Hauptstraße 86, 2/81030 Wien, Österreich…"). Implemented in
+`src/pages/impressum.astro`.
 
 ## 6. Four dead internal links found across the live site (Über-uns + 2 blog posts)
 

@@ -18,11 +18,12 @@ const heroTitle = titleBlock.type === 'heading' ? titleBlock.text : entry.data.t
 const body = paragraphs(tracker.slice(1)).map((p) => mdInlineHtml(p).replace('tel:+43 665 67221738', 'tel:+436656721738'));
 tracker.assertAllHandled('impressum.astro');
 // entry.data.description is the live site's own mangled, space-less
-// auto-excerpt (OPEN-QUESTIONS.md #5) — not shipped as-is; falls back to
-// BaseLayout's site-wide default instead of inventing a replacement.
+// auto-excerpt (OPEN-QUESTIONS.md #5) — not shipped. Owner decision
+// 2026-09-06 (fuer-marina.md Q6): a clean, minimal description instead.
+const metaDescription = 'Impressum und Offenlegung von Persephone – Marina Bletsas, Wien.';
 ---
 
-<BaseLayout locale="de" path="/impressum/" title={`${entry.data.title} – Persephone`}>
+<BaseLayout locale="de" path="/impressum/" title={`${entry.data.title} – Persephone`} description={metaDescription}>
   <PageHero title={heroTitle} />
 
   <section class="section">
