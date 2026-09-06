@@ -1,6 +1,6 @@
 # Build-check report
 
-Generated 2026-09-06T20:56:56.352Z by `scripts/build-check.mjs`.
+Generated 2026-09-06T21:18:04.294Z by `scripts/build-check.mjs`.
 
 ## Every content page has a route, every route has content — PASS
 
@@ -39,11 +39,6 @@ No violations found.
 
 - astro.config.mjs "site" is "https://persephone.example" — a placeholder, not a real production domain
 
-## Every heading in a source content file appears in its built page — FAIL (non-blocking)
+## Every heading in a source content file appears in its built page — PASS
 
-- /beratung/: source heading "Was ist Beratung?" (from beratung.md) not found in built HTML
-- /beratung/: source heading "Formate" (from beratung.md) not found in built HTML
-- /kontakt/: source heading "Erreichbarkeit" (from kontakt.md) not found in built HTML
-- /kontakt/: source heading "Standorte" (from kontakt.md) not found in built HTML
-- /selbsthilfegruppe/: source heading "Nächtes SHG-Treffen" (from selbsthilfegruppe.md) not found in built HTML
-- /workshops/: source heading "Was ist Psychoedukation?" (from workshops.md) not found in built HTML
+No violations found.

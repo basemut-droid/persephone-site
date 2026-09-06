@@ -120,6 +120,77 @@ tree.
 
 ---
 
+## Page composition: BlockTracker (NIGHT-RUN.md Phase 1.2)
+
+Every standalone page (`ueber-uns`, `angebote`, `beratung`, `workshops`,
+`kontakt`, `selbsthilfegruppe`, `faqs`, `disclaimer`, `impressum`,
+`blog/index`) renders from one flowing markdown body per
+`src/content.config.ts`'s `pages` collection, split into blocks by
+`src/lib/parseMarkdownBlocks.ts`. Before this fix, pages pulled the pieces
+they needed back out of that array purely by position (`blocks[3]`,
+`blocks.slice(5)`) or by heading name via a bare `section()` helper that
+only ever returned a heading's *contents*, never the heading itself. A
+block that nothing happened to reference — or a heading used only to
+*locate* a section, never printed — vanished from the page with no error.
+This is exactly how `external-review.md` findings #3/#4/#8 happened:
+Beratung's "Was ist Beratung?"/"Formate", Workshops' "Was ist
+Psychoedukation?", and Kontakt's "Erreichbarkeit"/"Standorte" headings
+were all used to find their content and then never rendered themselves.
+
+**The choice, and why:** the review's brief offered two options — render
+markdown wholesale via a component mapping, or move to named frontmatter
+blocks. Neither fit cleanly: the content genuinely is one flowing document
+per page, by this project's own deliberate design (see
+`content.config.ts`'s comment on the `pages` schema — "different pages
+need very different components," so it's intentionally *not* pre-split
+into typed fields). Forcing it into named frontmatter fields would
+duplicate the same copy into a second, harder-to-edit shape for every
+page, for no safety benefit beyond what accounting for every block already
+gives — and it would fight the collection's own design rationale. A full
+wholesale-render-with-component-mapping rewrite was also rejected: every
+page already needs bespoke component choices per section (a format grid
+here, an FAQ accordion there, a self-recognition list somewhere else), so
+a generic mapping would just become a large per-page switch statement —
+no safer than positional access, only more indirect.
+
+**What was built instead:** `BlockTracker` (in `parseMarkdownBlocks.ts`)
+wraps the existing block array and makes every access accountable rather
+than replacing positional access outright — a markdown body's structure
+genuinely is positional (an eyebrow, then a title, then an intro
+paragraph, in source order), so removing position from the model entirely
+would fight the actual shape of the content. Every read through
+`.at()`/`.slice()`/`.section()` marks which blocks a page has claimed.
+`.section()` also marks the heading itself as handled, closing the
+specific hole that caused findings #3/#4/#8 (a page could locate a
+section without ever printing its name). `.exclude()` records a block a
+page deliberately isn't rendering, with a reason, so a genuine decision
+(a dead category-jump nav, an Avada taxonomy label, a duplicate
+responsive heading) reads as a decision in the page's own source, not a
+silent gap. `.assertAllHandled()`, called once at the end of a page's
+frontmatter, throws — naming the exact unhandled block — if anything in
+the source was neither claimed nor excluded.
+
+This is the "build-time assertion that every source block is either
+rendered or explicitly excluded by name" the external review recommended.
+It complements, rather than replaces, `scripts/build-check.mjs`'s now-
+**blocking** "every source heading appears in the built page" check
+(NIGHT-RUN.md Phase 1.2): that check catches a heading that silently
+failed to render, from outside, against the final built HTML, so it
+would catch a *new* regression even on a page that doesn't use
+`BlockTracker` at all; `BlockTracker` catches any block — heading,
+paragraph, list, image, or CTA — that a page's own frontmatter never
+touched, from inside, at the moment the page is built, and gives a much
+more specific error (which exact block, in which exact file) than "this
+text is missing from the HTML somewhere."
+
+Retrofitting every page that reads from `parseMarkdownBlocks` to
+`BlockTracker` surfaced two previously-unknown, previously-silent gaps
+beyond the four the external review had already found by hand: a stray
+"Services" taxonomy-label paragraph on Workshops, and two location-tag
+paragraphs ("WIEN, GRAZ, ONLINE" / "ONLINE") on the same page that had
+never been rendered by any version of this page — exactly the class of
+bug this mechanism exists to prevent from recurring.
+
 ## Gap-closing pass (post Phase-1 review)
 
 Fixed directly (mechanical, no design judgment involved):
