@@ -85,6 +85,26 @@ export function stripEmphasis(text: string): string {
   return text.replace(/^\*\*(.*)\*\*$/, '$1');
 }
 
+// Content-collection bodies deliberately keep every persephone.at URL
+// verbatim, dead ones included (see docs/content-audit.md's carry-forward
+// note) — a faithful record of the source is Task 2's job, not the
+// rebuilt page's. Rewriting a real (non-dead) absolute persephone.at URL
+// to this site's own local route is the page's job at build/render time;
+// this is the one place that rewrite is implemented, so every page does
+// it the same way. Pass a map of specific dead-link corrections (live
+// href -> real local route) for any link that needs more than the
+// mechanical rewrite.
+export function toLocalRoute(href: string, corrections: Record<string, string> = {}): string {
+  if (corrections[href]) return corrections[href];
+  return href.replace(/^https?:\/\/(www\.)?persephone\.at(\/[a-z0-9-]*\/)$/i, '$2');
+}
+
+// Same rewrite, applied to every persephone.at link inside a paragraph's
+// inline text (as opposed to toLocalRoute, which takes a bare href).
+export function rewriteLocalLinks(text: string, corrections: Record<string, string> = {}): string {
+  return text.replace(/https?:\/\/(?:www\.)?persephone\.at\/[a-z0-9-]*\//gi, (m) => toLocalRoute(m, corrections));
+}
+
 // A heading whose entire text is one `[label](href)` link — this site's
 // extraction convention for a linked section title (see
 // src/content/pages/de/ueber-uns.md's two closing teaser headings).
