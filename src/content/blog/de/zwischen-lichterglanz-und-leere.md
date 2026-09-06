@@ -67,17 +67,17 @@ Irgendwann widmete ich ein wunderschönes Lobmeyr-Glas mit Deckel, ein Hochzeits
 
 Dieses Ritual machte für mich, die es lange schwer mit Grenzziehung hatte, **das Unsichtbare sichtbar**. Das Glas füllte sich bunt und zeigte mir: *Ich höre auf mich.* Und wie bei den Morning Pages machte gerade das Aufschreiben einen Unterschied: Es machte Muster greifbar. Ich merkte, welche Situationen mich immer wieder überfordern, welche Menschen meine Grenzen chronisch übertreten – und konnte mich gezielter davor schützen.
 
-Wenn das nach egoistischem Rückzug aus der Welt klingt, möchte ich Dich dazu einladen, das eher als** legitime Selbstfürsorge in einer extrem schwierigen Zeit** zu sehen. Man kann später entscheiden, welche Grenzen langfristig bleiben sollten und welche nur in der Krise gedient haben.
+Wenn das nach egoistischem Rückzug aus der Welt klingt, möchte ich Dich dazu einladen, das eher als **legitime Selbstfürsorge in einer extrem schwierigen Zeit** zu sehen. Man kann später entscheiden, welche Grenzen langfristig bleiben sollten und welche nur in der Krise gedient haben.
 
 Und vielleicht magst Du – je nach Einrichtungsstil und Persönlichkeit – ein ganz anderes Gefäß wählen: eine schöne Schachtel, eine Keramikschüssel, ein altes Schraubglas, eine Porzellandose… völlig egal. Hauptsache, es ist für Dich würdig genug, Deine Entscheidungen und Deine Fürsorge zu halten.
 
 ### **3. Ein „untypisches Weihnachten“ – oder: Was ist Familie im Fest?**
 
-Weihnachten muss nicht immer gleich aussehen. Und es muss schon gar nicht immer die Großfamilie sein – oder überhaupt die Blutsfamilie. Für uns war das deutlich spürbar im Jahr 2020: Wir haben damals mit zwei Freund:innen aus dem Ausland gefeiert, die wegen der Pandemie nicht zu ihren Familien reisen konnten. Es wurde eines der besinnlichsten und freudigsten Weihnachtsfeste. Ein Gast vertraute uns sogar an: „Das war das* schönste *Weihnachten meines Lebens.“ Was für eine Ehre, das mit ihm erlebt zu haben. **Mit etwas mehr Glück wäre es nie passiert.**
+Weihnachten muss nicht immer gleich aussehen. Und es muss schon gar nicht immer die Großfamilie sein – oder überhaupt die Blutsfamilie. Für uns war das deutlich spürbar im Jahr 2020: Wir haben damals mit zwei Freund:innen aus dem Ausland gefeiert, die wegen der Pandemie nicht zu ihren Familien reisen konnten. Es wurde eines der besinnlichsten und freudigsten Weihnachtsfeste. Ein Gast vertraute uns sogar an: „Das war das *schönste* Weihnachten meines Lebens.“ Was für eine Ehre, das mit ihm erlebt zu haben. **Mit etwas mehr Glück wäre es nie passiert.**
 
 Vielleicht ist es das, was Dich heuer entlasten könnte: **mit Wahlverwandtschaft feiern**. Menschen, die Dich wirklich sehen, die behutsam und aufgeklärt sind, die Deine Geschichte respektieren. Für mich persönlich waren gerade meine kinderfreien Freund:innen oft die einfühlsamsten Begleiterinnen – vielleicht, weil sie sich auch bewusst mit ihrer eigenen reproduktiven Geschichte auseinandergesetzt hatten und entsprechend feinfühlig mit unserer umzugehen wussten.
 
-Ein untypisches Weihnachten kann aber viele Formen annehmen: ein festliches Essen zu zweit, ein kurzer Besuch bei der Herkunftsfamilie und danach ein Abend mit dem Lieblingshobby, mal selbst das Weihnachtsfest nach eigener Vorstellung organisieren und die anderen zu sich einladen, oder gar alles hinter sich lassen, ins Auto steigen und den lang ersehnten Roadtrip starten. **Vielleicht tut es gerade gut, Dinge zu planen, die mit kleinen Kindern schlicht nicht möglich wären. **Nicht als „Ersatzprogramm“, sondern als Erinnerung daran, dass auch jetzt Möglichkeiten da sind und dass Du das Recht hast, sie zu ergreifen.
+Ein untypisches Weihnachten kann aber viele Formen annehmen: ein festliches Essen zu zweit, ein kurzer Besuch bei der Herkunftsfamilie und danach ein Abend mit dem Lieblingshobby, mal selbst das Weihnachtsfest nach eigener Vorstellung organisieren und die anderen zu sich einladen, oder gar alles hinter sich lassen, ins Auto steigen und den lang ersehnten Roadtrip starten. **Vielleicht tut es gerade gut, Dinge zu planen, die mit kleinen Kindern schlicht nicht möglich wären.** Nicht als „Ersatzprogramm“, sondern als Erinnerung daran, dass auch jetzt Möglichkeiten da sind und dass Du das Recht hast, sie zu ergreifen.
 
 ## Wenn der Nikolaus anklopft: Darf’s heuer ein bisschen mehr Unterstützung sein?
 
@@ -93,6 +93,6 @@ Du musst das nicht allein stemmen. Unterstützung aufzusuchen heißt, Dir und Eu
 
 ## Herzliche Einladung zu einem Ort, an dem Du nicht funktionieren musst
 
-Und wenn Du das Gefühl hast, dass Du darüber hinaus unter Mitbetroffenen und Gleichgesinnten andocken möchtest, kann eine Gruppe wie Persephone auch etwas für Dich sein. Wenn Dir nach Austausch in Gemeinschaft ist, freue ich mich, Dich bei einem unserer Treffen zu sehen. **Du darfst kommen, so wie Du gerade bist. **
+Und wenn Du das Gefühl hast, dass Du darüber hinaus unter Mitbetroffenen und Gleichgesinnten andocken möchtest, kann eine Gruppe wie Persephone auch etwas für Dich sein. Wenn Dir nach Austausch in Gemeinschaft ist, freue ich mich, Dich bei einem unserer Treffen zu sehen. **Du darfst kommen, so wie Du gerade bist.** 
 
 Der Persephone-Newsletter ist der beste Weg, um über die nächsten Termine und andere Impulse am Laufenden zu bleiben.

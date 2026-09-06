@@ -245,7 +245,43 @@ third-party form service has been decided, so nothing was invented here.
 (a) once you know where the site will actually run — either way, an
 infrastructure decision, not something to pick for you.
 
-## 12. Not a decision — just worth knowing
+## 12. Language switcher offers /en/ and /it/ links that 404 (pre-existing bug, not introduced this session)
+
+Task 4's whole-site link check crawled all 23 built pages and found 0 broken
+internal links/images among the site's own content — but it also flags 105
+occurrences of `<a href>` pointing at `/en/...` or `/it/...` paths that don't
+resolve to any built page. All of these come from one place:
+`LanguageSwitcher.astro`, which unconditionally renders a link for every
+locale in `i18n.locales` (`de`, `en`, `it`) via `getRelativeLocaleUrl`,
+regardless of whether a translated version of the current page actually
+exists. Since only the homepage has real English/Italian content right now,
+every other page's switcher offers two links that 404.
+
+This is a real, pre-existing bug (not something this session's page-building
+introduced), but fixing it is a design decision, not a code fix, so it's
+logged here rather than silently patched:
+
+**Options:**
+- **(a)** Hide the switcher entries for locales that have no translation of
+  the current page (check the relevant content-collection entry exists
+  before rendering the link). Cleanest UX, matches what
+  `astro.config.mjs`'s own comment says was intended ("a visible 'not
+  translated yet' notice, not a silent redirect" — implying the switcher
+  itself should already know which locales are real).
+- **(b)** Keep all three links always visible, but point untranslated
+  locales at that locale's homepage instead of a 404 (e.g. `/en/` instead of
+  `/en/ueber-uns/`). Simpler code change, but hides the fact that the page
+  itself isn't translated.
+- **(c)** Leave all pages unprefixed/German-only for now and remove the
+  `en`/`it` entries from the switcher entirely until real translations for
+  more than the homepage exist, re-adding them page-by-page as translations
+  land.
+
+**Recommendation:** (a) — it directly fixes the 404s and matches the
+existing code comment's stated intent, without waiting on new translated
+content or removing the multilingual homepage that already works.
+
+## 13. Not a decision — just worth knowing
 
 Several `<li>` elements in the live Über-uns page's "Ausbildung"/"Felderfahrung" lists
 carry a leftover CSS class, `font-claude-response-body`, in their raw HTML — a tell that

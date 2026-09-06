@@ -168,6 +168,38 @@ it isn't missed page-by-page: **when building each remaining page, rewrite every
 internal persephone.at link to its local route, and to the corrected route from
 `OPEN-QUESTIONS.md` #6 wherever the live link is dead.**
 
+## Addendum (Task 4): bold/italic markdown that failed to render on 4 blog posts
+
+While doing Task 4's whole-site screenshot review, one blog post
+(`maenner-im-kinderwunsch-mythos-maennerohnmacht`) showed literal `**`
+asterisks in the rendered page text instead of bold styling. Root cause: the
+original WordPress source had `<strong>`/`<em>` tags with a leading or
+trailing space *inside* the tag (e.g. `<strong>psychische Belastung </strong>`),
+which converted to `**psychische Belastung **` — invalid per CommonMark's
+emphasis-flanking rule (an emphasis marker can't have whitespace on the
+inside of the span), so Astro's markdown compiler declines to parse it as
+bold/italic and prints the asterisks literally. This affects only the `blog`
+collection, which renders through Astro's native `<Content />` pipeline with
+the strict default compiler — the `pages` collection's custom
+`mdInlineHtml()` renderer is tolerant of the same pattern (confirmed safe via
+`kontakt.md`'s already-correctly-rendering case), so no other page type is
+affected.
+
+A whole-site grep of every built blog post's rendered HTML for literal `*`/`**`
+found the bug in 4 of the site's 6 posts:
+
+| Post | Instances fixed |
+|---|---|
+| `maenner-im-kinderwunsch-mythos-maennerohnmacht` | 2 (one bold, one nested inside a longer bold/plain/bold run) |
+| `maenner-im-kinderwunsch-mythos-stille-staerke` | 1 (italic) |
+| `texte-stimmen-lieder` | 1 (italic wrapping a markdown link) |
+| `zwischen-lichterglanz-und-leere` | 2 (one bold, one italic) |
+
+Each fix moved the stray space from just inside the marker to just outside
+it (e.g. `**text **` → `**text** `) — a pure whitespace relocation, no
+wording changed. Verified by rebuilding and grepping every one of the 6
+built blog post HTML files for literal `*`/`**`: zero remain, site-wide.
+
 ## Method
 
 For each page: read its original `<slug>.json` (html2md.mjs's structured-block

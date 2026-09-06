@@ -22,7 +22,7 @@ In der Kinderwunschzeit wirkt dieser Kreislauf wie ein unsichtbarer Katalysator 
 
 Es ist eine Ausprägung der berühmten **„mentalen und emotionalen Last“** – also der ständigen unsichtbaren Verantwortung, dass „alles läuft“, die Frauen in heterosexuellen Partnerschaften auch sonst im Alltag überproportional häufig tragen. In der reproduktiven Krise kommt die „Fruchtbarkeitslast“ *zusätzlich* dazu, gespeist vom Mythos der Männerohmacht.
 
-Die Forschung belegt: Die **psychische Belastung **ist bei Frauen deutlich höher. [Etwa **jede vierte Frau** und **jeder zehnte Mann in Europa** entwickeln während einer Kinderwunschbehandlung eine depressive Störung; **jede siebte Frau** und **jeder zwanzigste Mann** eine Angststörung](https://pmc.ncbi.nlm.nih.gov/articles/PMC5283173/).
+Die Forschung belegt: Die **psychische Belastung** ist bei Frauen deutlich höher. [Etwa **jede vierte Frau** und **jeder zehnte Mann in Europa** entwickeln während einer Kinderwunschbehandlung eine depressive Störung; **jede siebte Frau** und **jeder zwanzigste Mann** eine Angststörung](https://pmc.ncbi.nlm.nih.gov/articles/PMC5283173/).
 
 Diese Risikodifferenz ist kein Naturgesetz, sondern das Ergebnis mehrerer ineinandergreifender Faktoren:
 
@@ -62,6 +62,6 @@ Am 23. November 2025 haben wir zum Beispiel gemeinsam mit **[Psychologin Verena 
 
 Solche Gespräche möchten wir immer wieder möglich machen. Denn Ohnmachtsgefühle sind kein Schicksal. Sie sind eine Einladung, gemeinsam einen Schritt zurückzutreten, um neue Handlungsmöglichkeiten zu sehen.
 
-**Euer Platz im Kinderwunsch ist aktiv**, nicht passiv.** Selbst in der Krise.** Und er ist geteilt.
+**Euer Platz im Kinderwunsch ist aktiv**, nicht passiv. **Selbst in der Krise.** Und er ist geteilt.
 
 Wenn Du über die nächsten Gespräche, Formate und Impulse auf dem Laufenden bleiben möchtest, lade ich dich ein, unseren Newsletter zu abonnieren.
