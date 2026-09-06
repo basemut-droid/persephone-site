@@ -34,6 +34,36 @@
   Local build screenshotted at 1920px and sent to the user. Verified with
   `npm run build` (23 pages, no errors) and `npx astro check` (0 errors).
 
+- **Task 1 (adversarial design-system review) — subagent report received, fixes
+  pending:** ran via a fresh-context subagent per the brief, reviewing
+  `ueber-uns.astro` against `DESIGN-SYSTEM.md`/`global.css`/`HomePage.astro`. Two
+  real findings: (1) `ueber-uns.astro` uses `@media (min-width: 800px)` for its
+  credentials/teaser grids — the only 800px breakpoint anywhere in the codebase,
+  every other single→multi-column grid site-wide uses 900px; (2) `.teaser-grid`/
+  `.teaser-card` is a generic, content-agnostic "linked card" pattern defined only
+  in this page's scoped `<style>` — the same structural precondition as the
+  `.section` bug DESIGN-SYSTEM.md documents by name. Not yet fixed as of this
+  HANDOFF entry — see next entry or git log for whether that's since been done.
+
+- **Task 2 (content fidelity audit) — commit `bd01275`:** re-verified all 16
+  checkable content-collection pages character-by-character against a fresh
+  render from each page's original extraction JSON (never eyeballed, never
+  word-counted). Found and fixed 2 real mismatches: a lost non-breaking space in
+  `beratung.md` (root cause not fully pinned down — a from-scratch repro of the
+  same regeneration step did *not* reproduce it, so treat this as "verify again
+  after any future bulk regeneration," not a one-time fix), and a misplaced image
+  in `ueber-uns.md` (dropped instead of relocated when Task 0 corrected the
+  masthead) plus a Unicode-normalization (NFC vs NFD) mismatch on that same
+  image's alt text. `docs/content-audit.md` has the full table: heading
+  count/hierarchy, image existence, alt-text status, meta title/description
+  presence, and every internal persephone.at link found with its status.
+  **Important carry-forward for Task 3:** content-collection files correctly keep
+  absolute `persephone.at` URLs (a few real, working ones — `/termine/`,
+  `/kontakt/`, `/ueber-uns/` — turned up in Angebote/Beratung/Disclaimer, not just
+  the already-known dead ones) — every page built from here needs those rewritten
+  to local routes at build time, same pattern Task 0 established for Über uns's
+  two dead links.
+
 ---
 
 # Handoff — Phase 2 re-parse + Über uns rebuild session (COMPLETE, stopped per brief)
