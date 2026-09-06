@@ -28,7 +28,13 @@ const posts = (usingFallback ? allPosts.filter((p) => p.id.startsWith('de/')) : 
 const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
 ---
 
-<BaseLayout locale={locale} path={path} title={s.meta.title} description={s.meta.description}>
+<BaseLayout
+  locale={locale}
+  path={path}
+  title={s.meta.title}
+  description={s.meta.description}
+  availableLocales={['de', 'en', 'it']}
+>
   <!-- Hero: the image column deliberately bleeds to the viewport edge
        (no .container) while the text column keeps the site's usual left
        gutter, matching the original's full-width hero row. -->

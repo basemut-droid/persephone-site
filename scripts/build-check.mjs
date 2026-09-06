@@ -206,6 +206,31 @@ function addResult(id, title, blocking, violations) {
 }
 
 // ---------------------------------------------------------------------
+// 6b. Every internal <a href> resolves to a built page (any of them, not
+// just the language switcher's own — added after Phase 4.4 found the
+// switcher wasn't the only source of dead /en/, /it/ links: the EN/IT
+// homepage's own header nav, built from site/en.json and site/it.json,
+// links to translated-slug subpages that were never built. See
+// OPEN-QUESTIONS.md #16.
+// ---------------------------------------------------------------------
+{
+  const violations = [];
+  for (const [route, html] of routes) {
+    for (const m of html.matchAll(/<a\s[^>]*href="([^"]+)"/gi)) {
+      let href = m[1];
+      if (!href.startsWith('/') || href.startsWith('//')) continue; // external/mailto/tel
+      href = href.split(/[?#]/)[0];
+      if (!href) continue; // bare "#" same-page anchor
+      const normalized = href.endsWith('/') ? href : href + '/';
+      if (!routes.has(normalized)) {
+        violations.push(`${route}: <a href="${href}"> does not resolve to a built page`);
+      }
+    }
+  }
+  addResult('internal-links-resolve', 'Every internal <a href> resolves to a built page', false, violations);
+}
+
+// ---------------------------------------------------------------------
 // 7. `site` in astro.config.mjs is not a placeholder
 // ---------------------------------------------------------------------
 {

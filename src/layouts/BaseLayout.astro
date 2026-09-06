@@ -17,9 +17,19 @@ interface Props {
   path: string; // current pathname, e.g. "/", "/blog/", "/en/blog/"
   title?: string;
   description?: string;
+  // NIGHT-RUN.md Phase 4.4: which locales actually have a translation of
+  // THIS page (not just the site in general) — defaults to just the
+  // current one, since every standalone page except the homepage is
+  // German-only. Drives both the visible language switcher (via Header)
+  // and the hreflang <link> tags below; before this, both unconditionally
+  // advertised all three configured locales regardless of whether a
+  // translation existed, so search engines and visitors alike were
+  // pointed at pages that 404 (external-review.md's "CONFIRMED
+  // PRE-EXISTING" item, OPEN-QUESTIONS.md #12).
+  availableLocales?: readonly Locale[];
 }
 
-const { locale, path, title, description } = Astro.props;
+const { locale, path, title, description, availableLocales = [locale] } = Astro.props;
 const site = await getSiteContent(locale);
 const pageTitle = title ?? site.meta.title;
 // NIGHT-RUN.md Phase 3.8 / external-review.md finding #5: this used to
@@ -44,9 +54,11 @@ const canonicalUrl = getAbsoluteLocaleUrl(locale, path);
         connect the three versions of this page instead of treating them
         as duplicate or unrelated content. */}
     {
-      locales.map((loc) => (
-        <link rel="alternate" hreflang={loc} href={getAbsoluteLocaleUrl(loc, path.replace(/^\/(en|it)(\/|$)/, '/'))} />
-      ))
+      locales
+        .filter((loc) => availableLocales.includes(loc))
+        .map((loc) => (
+          <link rel="alternate" hreflang={loc} href={getAbsoluteLocaleUrl(loc, path.replace(/^\/(en|it)(\/|$)/, '/'))} />
+        ))
     }
     <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl('de', path.replace(/^\/(en|it)(\/|$)/, '/'))} />
 
@@ -72,7 +84,13 @@ const canonicalUrl = getAbsoluteLocaleUrl(locale, path);
   <body>
     <a href="#main" class="skip-link">{site.common.skipToContent}</a>
     {site.reviewStatus === 'ai-draft' && <DraftNotice text={site.common.draftNotice} />}
-    <Header locale={locale} path={path} nav={site.nav} switcherLabel={site.common.languageSwitcherLabel} />
+    <Header
+      locale={locale}
+      path={path}
+      nav={site.nav}
+      switcherLabel={site.common.languageSwitcherLabel}
+      availableLocales={availableLocales}
+    />
     <main id="main">
       <slot />
     </main>

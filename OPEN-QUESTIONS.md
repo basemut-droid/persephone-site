@@ -196,41 +196,21 @@ Sonstiges) so collaboration/interview/press enquiries have a home — the owner
 suggested "Kooperation & Presse", "Zusammenarbeit", or "Anfrage als Medium/
 Organisation" but hasn't picked one. Do not add an option or guess wording.
 
-## 12. Language switcher offers /en/ and /it/ links that 404 (pre-existing bug, not introduced this session)
+## 12. Language switcher offering /en/ and /it/ links that 404 — RESOLVED 2026-09-06
 
-Task 4's whole-site link check crawled all 23 built pages and found 0 broken
-internal links/images among the site's own content — but it also flags 105
-occurrences of `<a href>` pointing at `/en/...` or `/it/...` paths that don't
-resolve to any built page. All of these come from one place:
-`LanguageSwitcher.astro`, which unconditionally renders a link for every
-locale in `i18n.locales` (`de`, `en`, `it`) via `getRelativeLocaleUrl`,
-regardless of whether a translated version of the current page actually
-exists. Since only the homepage has real English/Italian content right now,
-every other page's switcher offers two links that 404.
+Fixed per NIGHT-RUN.md Phase 4.4, option (a): `BaseLayout`/`Header`/`LanguageSwitcher`
+now take an `availableLocales` prop (default: just the current locale) that filters
+both the visible switcher's entries and the `<link rel="alternate" hreflang>` tags in
+`<head>` (the same underlying bug, via a different tag — fixed in the same pass since
+it's the identical shape of problem). Only the homepage passes all three locales
+(`HomePage.astro`); every other page now correctly advertises German-only. Verified:
+`build-check.mjs`'s locale-switcher-links check finds zero violations, and no
+non-homepage page emits an `en`/`it` hreflang tag anymore.
 
-This is a real, pre-existing bug (not something this session's page-building
-introduced), but fixing it is a design decision, not a code fix, so it's
-logged here rather than silently patched:
-
-**Options:**
-- **(a)** Hide the switcher entries for locales that have no translation of
-  the current page (check the relevant content-collection entry exists
-  before rendering the link). Cleanest UX, matches what
-  `astro.config.mjs`'s own comment says was intended ("a visible 'not
-  translated yet' notice, not a silent redirect" — implying the switcher
-  itself should already know which locales are real).
-- **(b)** Keep all three links always visible, but point untranslated
-  locales at that locale's homepage instead of a 404 (e.g. `/en/` instead of
-  `/en/ueber-uns/`). Simpler code change, but hides the fact that the page
-  itself isn't translated.
-- **(c)** Leave all pages unprefixed/German-only for now and remove the
-  `en`/`it` entries from the switcher entirely until real translations for
-  more than the homepage exist, re-adding them page-by-page as translations
-  land.
-
-**Recommendation:** (a) — it directly fixes the 404s and matches the
-existing code comment's stated intent, without waiting on new translated
-content or removing the multilingual homepage that already works.
+**Found while fixing this, out of this item's original scope — see #15 below:** the
+switcher wasn't the only source of dead `/en/`/`/it/` links. The EN/IT homepage's own
+header navigation (from `site/en.json`/`site/it.json`) links to translated-slug
+subpages that were never built at all — a bigger, separate problem than the switcher.
 
 ## 13. Not a decision — just worth knowing
 
@@ -259,7 +239,39 @@ Datenschutzerklärung's processor disclosure — see the review's item 3c), then
 to the real domain in one line. `astro.config.mjs` carries a `// TODO` comment marking
 exactly where.
 
-## 15. Termine's page title — needs the owner's wording
+## 15. EN/IT homepage's own nav links to subpages that don't exist — NEW FINDING, NOT YET FIXED
+
+Discovered while fixing #12 above, and out of Phase 4.4's stated scope (the language
+switcher specifically), so flagged here rather than fixed unilaterally: `site/en.json`
+and `site/it.json` each define a full header-nav config as if translated subpages
+exist — `{"label": "About", "href": "/en/about/"}`, a "Services" dropdown with three
+children, "Blog", "Contact", plus a CTA to `/en/appointments/` and a footer newsletter
+link to `/en/newsletter/` (same shape in Italian). None of these routes are built —
+only `/en/` and `/it/` themselves exist. Since `Header.astro`/`Footer.astro` render
+whatever `nav`/`footer` data the current locale's JSON gives them, visiting the EN or
+IT homepage and clicking almost anything in its own header or footer leads to a 404.
+
+Added a general build-check (`internal-links-resolve`, non-blocking) that catches this
+going forward — confirmed **66 dead links, all confined to `/en/` and `/it/`, zero on
+any German page**.
+
+**Why not fixed in this run:** this is a bigger call than hiding switcher entries — it
+means deciding what the EN/IT homepage's *own navigation* should look like when almost
+nothing behind it is translated (hide the untranslated items? point them at the German
+version with a language notice? something else?). `external-review.md`'s own
+recommendation ("Ship German-only; add locales when there is content to add") would
+solve this by removing EN/IT nav depth entirely, but Phase 4.4 explicitly says not to
+remove the multilingual homepage, which still works as a landing page — the nav
+*inside* it is the part that's broken.
+
+**Recommendation:** trim `nav.items`/`footer.columns` in `site/en.json`/`site/it.json`
+down to only what's real (the homepage link and, once true, anything else translated)
+until more pages are actually translated — the same "don't advertise what doesn't
+exist" principle as the switcher fix, applied to the nav itself. Not attempted here
+since it changes what visitors in English/Italian see, not just which links are
+offered.
+
+## 16. Termine's page title — needs the owner's wording
 
 Per NIGHT-RUN.md Phase 4.3: "Termine" doesn't say what happens on this page (a
 20-minute, free, no-obligation "Kennenlernen" call). **Suggestion:** "Kennenlernen

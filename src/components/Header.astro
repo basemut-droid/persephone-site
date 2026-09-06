@@ -14,8 +14,9 @@ interface Props {
   path: string;
   nav: { items: NavLink[]; cta: string; ctaHref: string };
   switcherLabel: string;
+  availableLocales?: readonly Locale[];
 }
-const { locale, path, nav, switcherLabel } = Astro.props;
+const { locale, path, nav, switcherLabel, availableLocales } = Astro.props;
 const homeHref = locale === 'de' ? '/' : `/${locale}/`;
 ---
 
@@ -80,7 +81,7 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
         }
       </ul>
       <a href={nav.ctaHref} class="button button-primary nav-cta">{nav.cta}</a>
-      <LanguageSwitcher locale={locale} path={path} label={switcherLabel} />
+      <LanguageSwitcher locale={locale} path={path} label={switcherLabel} availableLocales={availableLocales} />
     </nav>
   </div>
 </header>
