@@ -64,6 +64,23 @@
   to local routes at build time, same pattern Task 0 established for Über uns's
   two dead links.
 
+## Task 3 (build remaining pages) — in progress, one commit per page
+
+- **Angebote — commit `c1723f4`:** built from `pages/de/angebote.md`. Plain PageHero
+  (confirmed via raw HTML: this page's masthead has no background-image, unlike
+  Über uns) + one centered `.section-centered`/`.section-narrow` body. Fixed the
+  same class of content-collection error Task 0 found on Über uns: `mg-7425.jpg`
+  was wrongly set as `heroImage` — it's actually a small inline photo near the
+  closing CTA. Corrected. CTA href rewritten from the verbatim
+  `https://www.persephone.at/termine/` to the local `/termine/` route.
+  **Process note:** while fixing Angebote's image, also fixed the *same* wrong-
+  heroImage mistake found on `beratung.md`, `workshops.md`, and `kontakt.md`
+  (all three had `marina-von-persephone.jpg`/`mg-7811.png` wrongly set as
+  `heroImage` too — confirmed via the same raw-HTML check) and staged everything
+  together, so those three fixes landed in this commit rather than each page's
+  own. Their own upcoming page-build commits won't repeat that content fix — it's
+  already done.
+
 ---
 
 # Handoff — Phase 2 re-parse + Über uns rebuild session (COMPLETE, stopped per brief)
