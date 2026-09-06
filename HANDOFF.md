@@ -28,54 +28,60 @@
   the old inline content; nothing consumes the new collection yet. Verified with
   `npm run build` + `npx astro check` (0 errors each).
 
-## Phase 2 (content re-parse) — status: extraction in progress, NOT yet in the repo
+## Phase 2 (content re-parse) — status: 5 of 12 standalone pages done, blog posts + inventory doc remain
 
-Nothing from Phase 2 has been committed yet. What exists so far is scratch work only,
-outside the repo (in the session's temp scratchpad, not persisted):
+Method (established and working, reuse as-is for what's left): raw HTML per page via
+`curl` (a real browser wasn't available or needed — see tooling note below) → a small
+dependency-free Node HTML→block extractor (`html2md.mjs`, in the session scratchpad,
+**not committed**, tuned for this site's Avada/Fusion-Builder markup) → real images
+downloaded (no hotlinking) → a `.md` file written under `src/content/pages/de/<slug>.md`
+whose body is **mechanically generated** from the extractor's block JSON via a second
+scratchpad script (`blocks-to-md.mjs`) rather than hand-typed, then byte-diffed against
+that mechanical output before committing. See the process note below for why the
+"mechanical, then diff" step is non-negotiable, not just extra caution.
 
-- Downloaded raw HTML for every real page on persephone.at (via `curl`, not a browser —
-  see tooling note below) into a scratch dir: homepage, ueber-uns, angebote-2, beratung,
-  workshops, selbsthilfegruppe, kontakt, termine, faqs, disclaimer, impressum,
-  datenschutzerklaerung, blog index, and all 6 blog posts.
-- Built and validated a small dependency-free Node script
-  (`html2md.mjs` in the session scratchpad) that walks a page's `.post-content` block
-  and emits structured blocks (heading/paragraph/list/quote/cta/image) plus a
-  deduplicated image list — tuned for this site's Avada/Fusion-Builder markup, since a
-  real DOM/HTML-parsing library would be a new dependency. Spot-checked thoroughly
-  against `ueber-uns` only so far: correctly extracted 27 blocks including a 4-item
-  "Ausbildung" list and 4-item "Felderfahrung" list that are each **more complete**
-  than what's currently in `src/pages/ueber-uns.astro` (which has only 3 items each) —
-  confirms the existing subpage content is the "poor" old parse and genuinely needs
-  replacing, not just reformatting.
-- Confirmed real site page list (from actual `<a href>`s on the homepage + blog index,
-  not guessed): the 12 non-blog pages listed above are ALL real, plus 6 real blog posts.
-  One existing local page, `newsletter.astro`, has **no real source** — see Open
-  Questions #2.
-- Collected `<title>`/meta-description findings for every page (see Open Questions
-  #3–#5 for the gaps/oddities found).
+**Committed so far:** `ueber-uns`, `angebote`, `beratung`, `workshops`,
+`selbsthilfegruppe` (commits `8a9a567`, `7f30182`).
+
+**Confirmed real site page list** (from actual `<a href>`s on the homepage + blog index,
+not guessed): 12 standalone pages total — the 5 above, plus `kontakt`, `termine`,
+`faqs`, `disclaimer`, `impressum`, `datenschutzerklaerung` (not yet re-parsed) — and 6
+real blog posts (not yet re-parsed; still literally placeholder stubs, see below). One
+existing local page, `newsletter.astro`, has **no real source** — see Open Questions #2.
+`<title>`/meta-description findings for every page are logged as Open Questions #3–#5.
+
+**Important process note — a mistake, disclosed:** while hand-writing `beratung.md`
+from a truncated terminal preview, three paragraphs got paraphrased instead of
+transcribed verbatim — a direct violation of "German copy stays verbatim." Caught it
+during a verification pass before committing, fixed by re-deriving all four pages'
+bodies mechanically straight from the extractor's JSON instead of hand-typing, then
+byte-diffing every repo file against that output. Über uns was unaffected (already
+built that way). **Every remaining page must follow the same mechanical-generation +
+diff process — never hand-retype body text from a terminal preview, truncated or not.**
 
 ### Exact next step to resume
 
-1. Re-run/re-verify the scratch extraction (raw HTML + `html2md.mjs` output) — it was
-   not persisted anywhere durable, so if this session ended, redo the `curl` downloads
-   (URLs are all listed in `docs/content-inventory.md` once that's written, or see the
-   page list above) and re-run the extractor per page.
-2. Add a `pages` collection to `src/content.config.ts` (schema: `title`, `description`
-   meta fields, `sourceUrl`, body = markdown mirroring the extracted heading/paragraph/
-   list/quote/cta structure).
-3. Write one `.md` file per page under `src/content/pages/de/<slug>.md` from the
-   extractor's output, downloading every real (non-decorative, non-data-URI) image
-   into `src/assets/pages/<slug>/` with its alt/title text preserved in frontmatter or
-   inline markdown image syntax.
-4. Replace the 6 blog posts' placeholder bodies
-   (currently literally `_Platzhalter-Eintrag: Der vollständige Originaltext dieses
-   Artikels von persephone.at muss noch übertragen werden._`) with the real extracted
-   article text the same way.
-5. Write `docs/content-inventory.md` (page, source URL, word count, image count,
-   extraction issues) and commit Phase 2 in small chunks (e.g. one commit for the
-   content-collection schema + ueber-uns, one for the rest of the standalone pages,
-   one for blog posts, one for the inventory doc) — not one giant commit.
-6. Only then start Task 3 (build the Über uns page from the new collection).
+1. Re-run the scratch extraction for the 6 remaining standalone pages (`kontakt`,
+   `termine`, `faqs`, `disclaimer`, `impressum`, `datenschutzerklaerung`) — raw HTML is
+   not persisted anywhere durable (session scratchpad only), so redo the `curl`
+   downloads (URLs: `https://www.persephone.at/<slug>/`, `datenschutzerklaerung` for
+   that one) and re-run `html2md.mjs` per page. **Note:** `impressum` and
+   `datenschutz` already have decent verbatim-looking content inline in
+   `src/pages/impressum.astro`/`datenschutz.astro` from an earlier session — re-parse
+   from the live site anyway (Task 2 says discard old parses entirely) but this pair is
+   lower-risk/lower-priority than the others if time runs out.
+2. Same treatment for all 6 blog posts (URLs already known — see the page-list above
+   plus `src/content/blog/de/*.md` filenames) — replace the literal placeholder body
+   text with the real extracted article text, mechanically generated, byte-diffed.
+   Existing frontmatter (title/description/heroImage/category) looked accurate on a
+   skim; verify against each post's `<title>`/`og:description` while there rather than
+   assuming.
+3. Write `docs/content-inventory.md` (page, source URL, word count, image count,
+   extraction issues — fold in every anomaly already logged in `OPEN-QUESTIONS.md`
+   rather than re-discovering them) and commit.
+4. Only then start Task 3 (build the Über uns page from the new collection) — nothing
+   in `src/pages/ueber-uns.astro` has been touched yet; it still renders its old inline
+   content.
 
 ### Tooling gap found this session
 
