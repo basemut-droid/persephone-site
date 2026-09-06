@@ -163,6 +163,11 @@
   page's wording, not this rebuild, and it needs a re-check at launch against
   whatever the site actually loads by then.
 
+- **Termine — commit `a756810`:** the page's eyebrow/title/intro were all
+  invented in an earlier session (the live page has zero narrative text — it's
+  one Microsoft Bookings iframe, nothing else). Replaced with just the real
+  page title, nothing invented. Iframe embed unchanged, already correct.
+
 ---
 
 # Handoff — Phase 2 re-parse + Über uns rebuild session (COMPLETE, stopped per brief)
