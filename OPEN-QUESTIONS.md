@@ -83,7 +83,7 @@ sign-off)?
 **Recommendation:** write a plain, minimal description once you've reviewed it — flagging
 here rather than guessing at the wording myself.
 
-## 7. Über-uns has two dead-end CTA links on the live site
+## 6. Über-uns has two dead-end CTA links on the live site
 
 The live Über-uns page's two closing teaser cards link to `/beratung-coaching/` and
 `/workhops-einzeltrainings/` (note the source's own typo, "workhops") — both return a
@@ -102,7 +102,7 @@ live 404 — flagging here since it's a content/URL decision, not obviously "jus
 it" if there's a reason those specific slugs existed. Also worth telling whoever
 manages the live WordPress site, independent of this rebuild.
 
-## 8. Selbsthilfegruppe has an unremoved English theme-demo heading and a doubled intro
+## 7. Selbsthilfegruppe has an unremoved English theme-demo heading and a doubled intro
 
 The live Selbsthilfegruppe page renders **two** h1s back to back: "Selbsthilfegruppe" and,
 immediately after it, "Your Journey to a Fulfilling Life" — English, and reading exactly
@@ -120,14 +120,14 @@ verbatim (both headings, both paragraphs) per Task 2's "faithful record" rule.
 and pick one of the two intro paragraphs — your call on which reads better, not a coin
 flip I should make.
 
-## 9. Two verbatim typos worth knowing about before Task 3
+## 8. Two verbatim typos worth knowing about before Task 3
 
 Preserved exactly, not fixed, per the "German copy stays verbatim" rule — but flagging
 so they aren't mistaken for new transcription errors when the pages get built:
 
 - The live Workshops page's own on-page `<h1>` reads **"Workhops & Einzeltrainings"**
   (missing the first "s") — even though its `<title>` tag correctly says "Workshops &
-  Einzeltrainings". Same typo also showed up in Open Question #7's dead link
+  Einzeltrainings". Same typo also showed up in Open Question #6's dead link
   (`/workhops-einzeltrainings/`), so it's a consistent, real slip on the live site, not
   a one-off.
 - The live Selbsthilfegruppe page has one heading spelled "Nächstes SHG-Treffen" (h1) and
@@ -137,6 +137,37 @@ so they aren't mistaken for new transcription errors when the pages get built:
 **Recommendation:** correct both when actually building these pages' on-page copy (typos,
 not a style choice) — flagging here rather than silently "fixing" them inside the Phase 2
 extraction, which is supposed to mirror the source exactly, bugs included.
+
+## 9. Important: the live Datenschutzerklärung describes fonts the new site doesn't use
+
+This one carries real legal weight, not just a copy-fidelity note. The live
+Datenschutzerklärung has two sections — **"6. Google Fonts"** and **"7. Typekit
+Fonts"** — describing font files loaded from Google and Adobe. The **new Astro site
+does not do this**: `CLAUDE.md` and `DESIGN-SYSTEM.md` both confirm DM Sans is
+self-hosted via `@fontsource`, with no external font requests at all. A privacy policy
+has to describe what the site *actually* does, not what the old WordPress site did — so
+these two sections would be **factually false** if carried over unchanged.
+
+**Good news:** this was already caught and fixed once. The current
+`src/pages/datenschutz.astro` (Section 6, "Schriftarten (Fonts)") already replaces both
+live sections with a single accurate one: *"Diese neue Version der Website lädt keine
+Schriftarten von Google Fonts oder Adobe Typekit mehr... direkt auf unserem eigenen
+Server hinterlegt."* That fix should be **kept**, not reverted, whenever this page's
+content gets consolidated into the collection version.
+
+**Current state:** `src/content/pages/de/datenschutzerklaerung.md` (this session,
+Phase 2) stores the live site's text verbatim, Google Fonts/Typekit sections included —
+correct for Task 2's "faithful record of the source" job, but **not what should ship**.
+The numbered section labels ("1. Verschlüsselte Übertragung", etc.) are also plain
+paragraphs in the live source, not real headings — `src/pages/datenschutz.astro`
+already promotes them to `<h2>`, which is a reasonable accessibility improvement to
+keep, not something to revert to match the source.
+
+**Recommendation:** when this page is next touched, use the existing
+`datenschutz.astro` wording for the fonts section (already correct) rather than the
+freshly re-parsed live text — flagging this prominently since it's the one item in this
+whole list where shipping the "verbatim" source text would actually be wrong, not just
+undecided.
 
 ## 10. Not a decision — just worth knowing
 
