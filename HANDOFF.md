@@ -40,8 +40,11 @@ scratchpad script (`blocks-to-md.mjs`) rather than hand-typed, then byte-diffed 
 that mechanical output before committing. See the process note below for why the
 "mechanical, then diff" step is non-negotiable, not just extra caution.
 
-**Committed so far:** `ueber-uns`, `angebote`, `beratung`, `workshops`,
-`selbsthilfegruppe` (commits `8a9a567`, `7f30182`).
+**Committed so far — all 12 standalone pages, done:** `ueber-uns`, `angebote`,
+`beratung`, `workshops`, `selbsthilfegruppe` (commits `8a9a567`, `7f30182`), plus
+`kontakt`, `termine`, `faqs`, `disclaimer`, `impressum`, `datenschutzerklaerung`
+(commit `25b4c85`). **Only the 6 blog posts and `docs/content-inventory.md` remain
+for Phase 2.**
 
 **Confirmed real site page list** (from actual `<a href>`s on the homepage + blog index,
 not guessed): 12 standalone pages total — the 5 above, plus `kontakt`, `termine`,
@@ -61,25 +64,25 @@ diff process — never hand-retype body text from a terminal preview, truncated 
 
 ### Exact next step to resume
 
-1. Re-run the scratch extraction for the 6 remaining standalone pages (`kontakt`,
-   `termine`, `faqs`, `disclaimer`, `impressum`, `datenschutzerklaerung`) — raw HTML is
-   not persisted anywhere durable (session scratchpad only), so redo the `curl`
-   downloads (URLs: `https://www.persephone.at/<slug>/`, `datenschutzerklaerung` for
-   that one) and re-run `html2md.mjs` per page. **Note:** `impressum` and
-   `datenschutz` already have decent verbatim-looking content inline in
-   `src/pages/impressum.astro`/`datenschutz.astro` from an earlier session — re-parse
-   from the live site anyway (Task 2 says discard old parses entirely) but this pair is
-   lower-risk/lower-priority than the others if time runs out.
-2. Same treatment for all 6 blog posts (URLs already known — see the page-list above
-   plus `src/content/blog/de/*.md` filenames) — replace the literal placeholder body
-   text with the real extracted article text, mechanically generated, byte-diffed.
+1. Re-parse all 6 blog posts (URLs: `https://www.persephone.at/<slug>/` —
+   `einsam-im-kinderwunschprozess`, `ist-unfruchtbarkeit-immer-noch-frauensache-2`,
+   `maenner-im-kinderwunsch-mythos-maennerohnmacht`,
+   `maenner-im-kinderwunsch-mythos-stille-staerke`, `texte-stimmen-lieder`,
+   `zwischen-lichterglanz-und-leere`; local files are
+   `src/content/blog/de/*.md`, note the live `ist-unfruchtbarkeit...-2` slug vs. the
+   local file's clean `ist-unfruchtbarkeit-immer-noch-frauensache.md` name — same
+   `-2`-suffix-dropping convention already used for `angebote`). Same
+   mechanical-generation + byte-diff process as every page so far — replace the
+   literal placeholder body text
+   (`_Platzhalter-Eintrag: Der vollständige Originaltext dieses Artikels von
+   persephone.at muss noch übertragen werden._`) with the real extracted article text.
    Existing frontmatter (title/description/heroImage/category) looked accurate on a
    skim; verify against each post's `<title>`/`og:description` while there rather than
    assuming.
-3. Write `docs/content-inventory.md` (page, source URL, word count, image count,
+2. Write `docs/content-inventory.md` (page, source URL, word count, image count,
    extraction issues — fold in every anomaly already logged in `OPEN-QUESTIONS.md`
-   rather than re-discovering them) and commit.
-4. Only then start Task 3 (build the Über uns page from the new collection) — nothing
+   rather than re-discovering them) and commit. This closes out Task 2.
+3. Only then start Task 3 (build the Über uns page from the new collection) — nothing
    in `src/pages/ueber-uns.astro` has been touched yet; it still renders its old inline
    content.
 
