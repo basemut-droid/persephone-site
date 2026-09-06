@@ -13,6 +13,19 @@ Manche melden sich, weil sie dringend mit jemandem sprechen müssen, der sich mi
 
 ## Fang einfach dort an, wo Du Dich wiedererkennst
 
+- Ich mache einen Bogen um Kindergeburtstage und Familienfeste.
+- Ich habe das Gefühl, mein Körper lässt mich im Stich.
+- Für andere war es ja noch früh. Für mich war es ein Kind.
+- Wir leben seit Jahren im Zwei-Wochen-Takt.
+- Der Kinderwunsch ist mein zweiter Job geworden.
+- Ich habe das Gefühl, wir erleben unseren Kinderwunsch völlig unterschiedlich.
+- Ich wünsche mir Menschen, die nicht erst verstehen müssen, wovon ich spreche.
+- Ich möchte wissen, wie andere ihren eigenen Weg durch diese Krise gefunden haben.
+- Fremde Menschen entscheiden, ob wir geeignet sind.
+- Ich weiß nicht, wie ein Leben ohne Kind für mich aussehen könnte.
+
+Das könnte jetzt passen
+
 ### Wenn sich gerade nichts davon ganz richtig anfühlt
 
 Das ist ein üblicher Zwischenstand im Chaos der Kinderwunschkrise. Im Kennenlerngespräch sortieren wir gemeinsam, worum es bei Dir gerade geht und welcher Weg dazu passt. Zwanzig Minuten, online, ohne jede Verpflichtung.

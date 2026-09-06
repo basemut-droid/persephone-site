@@ -5,7 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import mg7425 from '../assets/pages/angebote/mg-7425.jpg';
 import logoGeborgenheit from '../assets/pages/angebote/logo-geborgenheit.png';
-import { parseMarkdownBlocks, section, paragraphs } from '../lib/parseMarkdownBlocks';
+import { parseMarkdownBlocks, paragraphs, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 // Live page has no split-hero image (confirmed: its masthead row has no
 // --awb-bg-image, unlike Über uns) — a plain PageHero banner is the right
@@ -13,26 +13,52 @@ import { parseMarkdownBlocks, section, paragraphs } from '../lib/parseMarkdownBl
 const entry = await getEntry('pages', 'de/angebote');
 if (!entry) throw new Error('Content collection entry "pages/de/angebote" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');
+const tracker = new BlockTracker(blocks);
 
-const heroEyebrow = (blocks[0].type === 'paragraph' && blocks[0].text) || undefined;
-const heroTitle = blocks[1].type === 'heading' ? blocks[1].text : entry.data.title;
-const heroIntro = (blocks[2].type === 'paragraph' && blocks[2].text) || undefined;
+const { eyebrow: heroEyebrow, title: heroTitle, intro: heroIntro } = tracker.heroFields(entry.data.title);
+const introPara2 = tracker.at(3);
 
-// The rest of the body (from the second paragraph on) is one continuous
-// centered section on the live page — same .section-centered/.section-narrow
-// pattern already used by the homepage's pain-points section and Über uns's
-// narrative section, not a new layout.
-const rest = blocks.slice(3).filter((b) => b.type !== 'image'); // images placed explicitly below
-const restParagraphs = paragraphs(rest);
-const subHeading = rest.find((b) => b.type === 'heading' && b.level === 2);
-const subSubHeading = rest.find((b) => b.type === 'heading' && b.level === 3);
-const cta = rest.find((b) => b.type === 'cta');
+// The self-recognition list (external-review.md finding #2) is the whole
+// point of this page and was missing entirely from the content collection
+// — re-extracted from the live page's raw HTML (curled directly, not via a
+// summarizing fetch) on 2026-09-06 and confirmed to match
+// docs/external-review.md's own verified list exactly, item for item.
+//
+// On the live page these ten statements are buttons in a client-side
+// "services selector" quiz: clicking one fills in a recommendation card
+// (title/description/link to one specific offering) via JavaScript with no
+// server-rendered fallback content — the card's fields are empty in the
+// page's static HTML. Reproducing that quiz would mean inventing which
+// offering each of the ten statements maps to, which nothing in the source
+// supports; NIGHT-RUN.md's brief is "restore the lost content," not
+// "rebuild the interactive selector," so this renders the ten statements
+// as a plain list (still the page's real self-recognition device) and logs
+// the interactive quiz itself as an open question rather than guessing at
+// its logic — see OPEN-QUESTIONS.md.
+const recognition = tracker.section('Fang einfach dort an, wo Du Dich wiedererkennst');
+const recognitionList = recognition.find((b) => b.type === 'list');
+if (!recognitionList || recognitionList.type !== 'list') throw new Error('Expected the self-recognition list');
+// "Das könnte jetzt passen" is that same quiz's result-card eyebrow on the
+// live page (see above) — real copy, but with no fixed content of its own
+// to follow, since its actual content is chosen per click. Placed here as
+// the eyebrow introducing the next-step block that already exists in the
+// static content, rather than dropped or left to float with nothing under
+// it.
+const passtEyebrow = paragraphs(recognition)[0];
+const nextStepHeading = recognition.find((b) => b.type === 'heading' && b.level === 3);
+if (!nextStepHeading || nextStepHeading.type !== 'heading') throw new Error('Expected the "Wenn sich..." sub-heading');
+const nextStepIntro = paragraphs(recognition)[1];
+const cta = recognition.find((b) => b.type === 'cta');
 if (!cta || cta.type !== 'cta') throw new Error('Expected a CTA in the Angebote body');
 
 // Source links to https://www.persephone.at/termine/ (a real, working live
 // page) — rewritten to this site's own local route rather than left as an
 // absolute persephone.at URL, per docs/content-audit.md's carry-forward note.
 const ctaHref = cta.href.replace(/^https?:\/\/(www\.)?persephone\.at/, '');
+
+tracker.exclude(tracker.at(10), 'portrait photo, rendered via static import below');
+tracker.exclude(tracker.at(11), 'badge logo, rendered via static import below');
+tracker.assertAllHandled('angebote.astro');
 ---
 
 <BaseLayout locale="de" path="/angebote/" title={`${entry.data.title} – Persephone`}>
@@ -40,10 +66,16 @@ const ctaHref = cta.href.replace(/^https?:\/\/(www\.)?persephone\.at/, '');
 
   <section class="section section-centered">
     <div class="container section-narrow">
-      {restParagraphs[0] && <p>{restParagraphs[0]}</p>}
-      {subHeading?.type === 'heading' && <h2>{subHeading.text}</h2>}
-      {subSubHeading?.type === 'heading' && <h3>{subSubHeading.text}</h3>}
-      {restParagraphs.slice(1).map((p) => <p>{p}</p>)}
+      {introPara2.type === 'paragraph' && <p>{introPara2.text}</p>}
+
+      <h2>Fang einfach dort an, wo Du Dich wiedererkennst</h2>
+      <ul class="recognition-list">
+        {recognitionList.items.map((item) => <li>{item}</li>)}
+      </ul>
+
+      {passtEyebrow && <span class="eyebrow">{passtEyebrow}</span>}
+      <h3>{nextStepHeading.text}</h3>
+      {nextStepIntro && <p>{nextStepIntro}</p>}
       <a href={ctaHref} class="button button-primary">{cta.text}</a>
       <div class="supporting-image">
         <Image src={mg7425} alt="" width={300} height={450} />
@@ -54,6 +86,21 @@ const ctaHref = cta.href.replace(/^https?:\/\/(www\.)?persephone\.at/, '');
 </BaseLayout>
 
 <style>
+  .recognition-list {
+    text-align: left;
+    max-width: 40rem;
+    margin: 2rem auto;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .recognition-list li {
+    border-left: 3px solid var(--color-accent-strong);
+    padding-left: 1rem;
+  }
+
   .supporting-image {
     margin-top: 2rem;
   }
