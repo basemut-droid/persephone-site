@@ -109,15 +109,22 @@ All four read as stale slugs left over from page renames, not deliberate removal
 but stale-slug guessing is exactly the kind of thing that shouldn't be silently
 resolved.
 
-**Current state:** every content-collection file (`ueber-uns.md`, the two blog posts)
-records these hrefs exactly as found on the live pages — Task 2 is a faithful record
-of the source, bugs included.
+**Current state — all four now fixed in the built site** (Task 3): Über-uns's two
+teaser cards link to `/beratung/`/`/workshops/`; the two blog posts link to
+`/termine/` and `/blog/ist-unfruchtbarkeit-immer-noch-frauensache/` respectively.
+Über-uns's fix is render-time (a lookup map in `ueber-uns.astro`); the two blog
+posts' fix is a direct edit to their content-collection `.md` files (only the URL,
+zero prose changed) — Astro's `render()` reads a pre-rendered HTML cache for content
+collections, so a render-time patch (what every other page uses) silently has no
+effect for content rendered via `<Content />`, and the alternative
+(`remarkPlugins` in `astro.config.mjs`) requires a new dependency in this Astro
+version. `ueber-uns.md` itself still records its two dead hrefs verbatim (Task 2's
+job); the two blog posts' source files no longer do, by necessity.
 
-**Recommendation:** when each of these pages actually gets built/republished, point
-the links at their likely real targets from the table above instead of reproducing a
-live 404 — flagging here since three of the four involve a judgment call about which
-page was actually intended, not just a typo fix. Also worth telling whoever manages
-the live WordPress site about all four, independent of this rebuild.
+**Still worth doing independent of this rebuild:** tell whoever manages the live
+WordPress site about all four dead links, since the "likely intended target" guesses
+above (especially the two blog-post ones) were judgment calls made without visibility
+into what was actually meant.
 
 ## 7. Selbsthilfegruppe has an unremoved English theme-demo heading and a doubled intro
 

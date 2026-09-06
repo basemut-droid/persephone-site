@@ -168,6 +168,22 @@
   one Microsoft Bookings iframe, nothing else). Replaced with just the real
   page title, nothing invented. Iframe embed unchanged, already correct.
 
+- **Blog — commit `887675f`:** blog index's `PageHero` copy was invented ("Texte
+  über den Weg durch die Krise" has no source) — found the real text by reading
+  the live page's raw HTML directly (its own heading is wrapped oddly, a `<p>`
+  nested inside an `<h1>`), added `pages/de/blog.md` for it matching the usual
+  convention. Post grid itself (`BlogTeaserCard`/`getCollection`) was already
+  correctly content-driven, no change needed. **Important technical finding:**
+  the render-time link-rewrite pattern every other page uses (patch a string,
+  re-render) silently does nothing for blog posts — Astro's `render()` reads a
+  pre-rendered HTML cache, not the live body. A `remarkPlugins` hook in
+  `astro.config.mjs` would work but requires installing `@astrojs/markdown-remark`
+  as a new dependency in this Astro version — blocked by the "no new
+  dependencies" rule. Landed on editing the two affected posts' exact dead URLs
+  directly in their content-collection files instead (only the URL, zero prose)
+  — a deliberate, logged exception to "content collections stay verbatim." Both
+  fixes verified in the built output.
+
 ---
 
 # Handoff — Phase 2 re-parse + Über uns rebuild session (COMPLETE, stopped per brief)
