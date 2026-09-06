@@ -58,16 +58,26 @@ voice/approval, not something to freehand.
 **Recommendation:** ship empty for now (matches source, invents nothing); flag as a
 backlog item for you to write real ones later.
 
-## 4. Homepage ships two conflicting meta descriptions
+## 4. The live site ships duplicate/conflicting meta description tags — homepage and every blog post
 
 The live homepage's `<head>` has **two** `<meta name="description">` tags: the real one
 ("Persephone begleitet Dich und Deine:n Partner:in…") and an unremoved Avada theme demo
-default ("Discover the ultimate Life Coach website built using Avada…"). This is a bug
-on the *live* site itself, not something the rebuild should replicate.
+default ("Discover the ultimate Life Coach website built using Avada…").
 
-**Recommendation:** the rebuild will use only the real one (already what `site/de.json`
-does). Worth telling whoever manages the live WordPress site to remove the leftover
-theme-default tag, independent of this rebuild.
+The same underlying pattern shows up on **all 6 blog posts**, via `og:description`
+instead: a short, clearly hand-written one-sentence hook comes first (e.g. "Wie das
+Teilen von Erfahrungen im unerfüllten Kinderwunsch ein Wendepunkt für psychische
+Gesundheit sein kann."), immediately followed by a second `og:description` tag that's
+just the post's opening ~300 characters auto-generated and cut off mid-clause. Same
+SEO-plugin-vs-theme conflict, most likely, as the homepage's — just via a different
+meta tag. This is a bug on the *live* site itself, not something the rebuild should
+replicate.
+
+**Recommendation:** the rebuild uses only the real one in each case — already what
+`site/de.json` does for the homepage, and what every blog post's re-parsed frontmatter
+in `src/content/blog/de/*.md` now does (the first, hand-written `og:description`).
+Worth telling whoever manages the live WordPress site to find and remove whatever's
+producing the duplicate tags, independent of this rebuild.
 
 ## 5. Impressum's meta description is a mangled auto-excerpt
 
@@ -83,24 +93,31 @@ sign-off)?
 **Recommendation:** write a plain, minimal description once you've reviewed it — flagging
 here rather than guessing at the wording myself.
 
-## 6. Über-uns has two dead-end CTA links on the live site
+## 6. Four dead internal links found across the live site (Über-uns + 2 blog posts)
 
-The live Über-uns page's two closing teaser cards link to `/beratung-coaching/` and
-`/workhops-einzeltrainings/` (note the source's own typo, "workhops") — both return a
-live **404** on persephone.at right now. The obvious matching real pages are
-`/beratung/` (`<title>Beratung & Coaching - Persephone</title>`) and `/workshops/`
-(`<title>Workshops & Einzeltrainings - Persephone</title>`) — titles match almost
-word-for-word, so this reads as stale slugs left over from a page rename rather than a
-deliberate removal.
+The live site has more broken internal links than just one page — found while
+re-parsing Über-uns and the blog posts:
 
-**Current state:** `src/content/pages/de/ueber-uns.md` records the CTA hrefs exactly as
-found on the live page (Task 2 is a faithful record of the source, bugs included).
+| Found on | Live href | HTTP status | Likely intended target |
+|---|---|---|---|
+| Über-uns (2 CTAs) | `/beratung-coaching/` | 404 | `/beratung/` (`<title>Beratung & Coaching - Persephone</title>` matches almost word-for-word) |
+| Über-uns (2 CTAs) | `/workhops-einzeltrainings/` (source's own typo, "workhops") | 404 | `/workshops/` (`<title>Workshops & Einzeltrainings - Persephone</title>`) |
+| Blog: "Mythos Männerohnmacht" | `/featured/unfruchtbarkeit-ist-paarsache/` | 404 | Probably the sibling post `/ist-unfruchtbarkeit-immer-noch-frauensache-2/` (near-identical topic, reversed phrasing) — but could also be a since-deleted third post; not certain enough to just swap in |
+| Blog: "Ist Unfruchtbarkeit...Frauensache" | `/aktuelles/` ("come to our next meeting, find date + signup link here") | 404 | `/termine/` (the real booking/events page) reads like the obvious match given the surrounding sentence |
 
-**Recommendation:** when the actual Über-uns page gets built (Task 3), point these two
-links at the working `/beratung/` and `/workshops/` pages instead of reproducing a
-live 404 — flagging here since it's a content/URL decision, not obviously "just fix
-it" if there's a reason those specific slugs existed. Also worth telling whoever
-manages the live WordPress site, independent of this rebuild.
+All four read as stale slugs left over from page renames, not deliberate removals —
+but stale-slug guessing is exactly the kind of thing that shouldn't be silently
+resolved.
+
+**Current state:** every content-collection file (`ueber-uns.md`, the two blog posts)
+records these hrefs exactly as found on the live pages — Task 2 is a faithful record
+of the source, bugs included.
+
+**Recommendation:** when each of these pages actually gets built/republished, point
+the links at their likely real targets from the table above instead of reproducing a
+live 404 — flagging here since three of the four involve a judgment call about which
+page was actually intended, not just a typo fix. Also worth telling whoever manages
+the live WordPress site about all four, independent of this rebuild.
 
 ## 7. Selbsthilfegruppe has an unremoved English theme-demo heading and a doubled intro
 
