@@ -1,105 +1,125 @@
 ---
+import { getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
+import marinaPortrait from '../assets/shared/marina-von-persephone.jpg';
+import logoEmpathie from '../assets/pages/beratung/logo-empathie.png';
+import { parseMarkdownBlocks, section, paragraphs, parseLinkHeading } from '../lib/parseMarkdownBlocks';
+
+// No split-hero image on the live page (its masthead row has no
+// --awb-bg-image) — plain PageHero, matching Angebote/Workshops/etc.
+const entry = await getEntry('pages', 'de/beratung');
+if (!entry) throw new Error('Content collection entry "pages/de/beratung" not found');
+const blocks = parseMarkdownBlocks(entry.body ?? '');
+
+const heroEyebrow = (blocks[0].type === 'paragraph' && blocks[0].text) || undefined;
+const heroTitle = blocks[1].type === 'heading' ? blocks[1].text : entry.data.title;
+const heroIntro = (blocks[2].type === 'paragraph' && blocks[2].text) || undefined;
+
+// "Was ist Beratung?", "Formate", "Einzelberatung", "Paarberatung" are all
+// one continuous section on the live page (single row, light background) —
+// not four alternating sections.
+const wasIstBeratung = paragraphs(section(blocks, 'Was ist Beratung?'));
+const formats = ['Einzelberatung', 'Paarberatung'].map((heading) => {
+  const sec = section(blocks, heading);
+  return {
+    heading,
+    intro: paragraphs(sec)[0],
+    items: sec.find((b) => b.type === 'list'),
+  };
+});
+
+// "Gut zu wissen" is a real FAQ list (h4 question + paragraph answer, 4
+// pairs) — its own section, beige on the live page.
+const gutZuWissen = section(blocks, 'Gut zu wissen');
+const faqs: { question: string; answer: string }[] = [];
+for (let i = 0; i < gutZuWissen.length; i++) {
+  const b = gutZuWissen[i];
+  if (b.type === 'heading' && b.level === 4) {
+    const next = gutZuWissen[i + 1];
+    // Each question is a same-page anchor link on the live site, part of
+    // an accordion widget this static rebuild isn't reproducing (no
+    // matching #id exists here) — the label is real content, the href
+    // isn't, so only the label is kept.
+    const question = parseLinkHeading(b.text)?.label ?? b.text;
+    faqs.push({ question, answer: next?.type === 'paragraph' ? next.text : '' });
+  }
+}
+
+const closing = section(blocks, 'Möchtest Du ein Erstgespräch?');
+const closingParagraphs = paragraphs(closing);
+const cta = closing.find((b) => b.type === 'cta');
+if (!cta || cta.type !== 'cta') throw new Error('Expected a CTA after "Möchtest Du ein Erstgespräch?"');
+const ctaHref = cta.href.replace(/^https?:\/\/(www\.)?persephone\.at/, '');
 ---
-<BaseLayout
-  locale="de"
-  path="/beratung/"
-  title="Beratung & Coaching – Persephone"
-  description="Psychosoziale Beratung für Einzelpersonen und Paare im unerfüllten Kinderwunsch — mit Marina Bletsas, Wien und online."
->
-  <PageHero
-    eyebrow="Angebote"
-    title="Beratung & Coaching"
-    intro="Beratung bietet Dir die Möglichkeit, innezuhalten, zu reflektieren und eine Sprache für das Unaussprechliche zu finden."
-  />
+
+<BaseLayout locale="de" path="/beratung/" title={`${entry.data.title} – Persephone`}>
+  <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
   <section class="section">
     <div class="container section-narrow">
-      <p>
-        Psychosoziale Beratung setzt an der Begleitung durch Krisen und schwierige
-        Lebenssituationen an — für Menschen, die (noch) keine klinische Psychotherapie
-        benötigen. Sie arbeitet ressourcen- und lösungsorientiert an dem, was gerade ansteht.
-      </p>
-      <p>
-        Als Linguistin und psychosoziale Beraterin in Ausbildung unter Supervision verbinde ich
-        Kommunikationsexpertise mit fachlicher Begleitung.
-      </p>
+      {wasIstBeratung.map((p) => <p>{p}</p>)}
+    </div>
+    <div class="container format-grid">
+      {
+        formats.map((f) => (
+          <article class="format-card">
+            <h2>{f.heading}</h2>
+            {f.intro && <p>{f.intro}</p>}
+            {f.items?.type === 'list' && (
+              <ul>
+                {f.items.items.map((item) => <li>{item}</li>)}
+              </ul>
+            )}
+          </article>
+        ))
+      }
     </div>
   </section>
 
   <section class="section section-alt">
-    <div class="container format-grid">
-      <article class="format-card">
-        <h2>Einzelberatung</h2>
-        <p class="format-meta">50 Minuten · Wien, online</p>
-        <ul>
-          <li>Emotionale Entlastung</li>
-          <li>Reflexion der eigenen Lebenssituation</li>
-          <li>Umgang mit sozialem Druck</li>
-          <li>Vorbereitung auf ärztliche Termine</li>
-        </ul>
-      </article>
-      <article class="format-card">
-        <h2>Paarberatung</h2>
-        <p class="format-meta">90 Minuten · Wien, online</p>
-        <ul>
-          <li>Unterschiedliche Trauerstile verstehen</li>
-          <li>Kommunikation in der Krise</li>
-          <li>Gemeinsame Entscheidungsfindung</li>
-          <li>Nähe und Intimität im Kinderwunsch</li>
-        </ul>
-      </article>
+    <div class="container section-narrow">
+      <h2>Gut zu wissen</h2>
+      {
+        faqs.map((f) => (
+          <div class="faq-item">
+            <h3>{f.question}</h3>
+            <p>{f.answer}</p>
+          </div>
+        ))
+      }
     </div>
   </section>
 
   <section class="section">
-    <div class="container section-narrow info-list">
-      <p><strong>Ausbildung:</strong> Ich arbeite in Ausbildung unter Supervision — das sichert die Qualität meiner Arbeit ab.</p>
-      <p><strong>Kosten:</strong> Werden im kostenfreien Erstgespräch individuell besprochen. Zahlung per Bar oder Überweisung.</p>
-      <p><strong>Absagen:</strong> Termine können bis 48 Stunden vorher kostenfrei abgesagt oder verschoben werden.</p>
-      <p><strong>Verschwiegenheit:</strong> Berufliche Verschwiegenheit ist selbstverständlich gewährleistet.</p>
+    <div class="container section-narrow supporting-image">
+      <Image src={marinaPortrait} alt="" width={300} height={350} />
     </div>
   </section>
 
-  <CtaBand
-    paragraphs={['Das online Kennenlernen (ca. 20 Min.) ist kostenfrei.']}
-    ctaLabel="Termin vereinbaren"
-    ctaHref="/termine/"
-  />
+  <CtaBand heading="Möchtest Du ein Erstgespräch?" paragraphs={closingParagraphs} ctaLabel={cta.text} ctaHref={ctaHref} />
+
+  <section class="section">
+    <div class="container section-narrow">
+      <Image class="badge" src={logoEmpathie} alt="" width={90} height={90} />
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-  .section-narrow {
-    max-width: 56rem;
-    margin-inline: auto;
-  }
-
   .format-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    margin-top: 2.5rem;
   }
 
   .format-card {
     background: var(--color-surface);
     padding: 2rem;
     border-radius: var(--radius);
-  }
-
-  .format-card h2 {
-    color: var(--color-accent-strong);
-    margin-bottom: 0.25rem;
-  }
-
-  .format-meta {
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 0.05em;
-    color: var(--color-accent);
-    font-weight: 700;
-    margin-bottom: 1.25rem;
   }
 
   .format-card ul {
@@ -111,12 +131,38 @@ import CtaBand from '../components/CtaBand.astro';
     margin-bottom: 0.4rem;
   }
 
-  .info-list p {
+  .faq-item {
     border-bottom: 1px solid rgba(24, 26, 43, 0.1);
-    padding-bottom: 1.25rem;
+    padding-block: 1.5rem;
   }
 
-  @media (min-width: 700px) {
+  .faq-item:last-child {
+    border-bottom: none;
+  }
+
+  .faq-item h3 {
+    margin-bottom: 0.5rem;
+  }
+
+  .faq-item p {
+    margin: 0;
+  }
+
+  .supporting-image {
+    text-align: center;
+  }
+
+  .supporting-image img {
+    display: inline-block;
+    border-radius: var(--radius);
+  }
+
+  .badge {
+    border-radius: var(--radius);
+    margin-inline: auto;
+  }
+
+  @media (min-width: 900px) {
     .format-grid {
       grid-template-columns: 1fr 1fr;
     }

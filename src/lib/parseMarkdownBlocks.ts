@@ -55,18 +55,21 @@ export function parseMarkdownBlocks(body: string): MdBlock[] {
   return blocks;
 }
 
-// Returns every paragraph/list immediately following a given heading text,
-// stopping at the next heading of any level. Throws if the heading isn't
-// found, since a missing section means the page and its content collection
-// entry have drifted out of sync — better to fail the build than render a
-// silently-empty section.
+// Returns every block following a given heading text, up to (not
+// including) the next heading at the SAME level or shallower — a deeper
+// sub-heading (e.g. an h4 FAQ question under an h2 section heading, as on
+// Beratung's "Gut zu wissen") is content that belongs to this section, not
+// a boundary. Throws if the heading isn't found, since a missing section
+// means the page and its content collection entry have drifted out of
+// sync — better to fail the build than render a silently-empty section.
 export function section(blocks: MdBlock[], headingText: string): MdBlock[] {
   const start = blocks.findIndex((b) => b.type === 'heading' && b.text === headingText);
   if (start === -1) {
     throw new Error(`parseMarkdownBlocks: heading "${headingText}" not found in content body`);
   }
+  const level = (blocks[start] as { level: number }).level;
   const rest = blocks.slice(start + 1);
-  const end = rest.findIndex((b) => b.type === 'heading');
+  const end = rest.findIndex((b) => b.type === 'heading' && b.level <= level);
   return end === -1 ? rest : rest.slice(0, end);
 }
 
