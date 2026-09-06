@@ -47,6 +47,13 @@ tracker.assertAllHandled('kontakt.astro');
         {erreichbarkeit.map((b) => b.type === 'paragraph' && <p set:html={mdInlineHtml(b.text)} />)}
         <h2>Standorte</h2>
         {standorte.map((b) => b.type === 'paragraph' && <p set:html={mdInlineHtml(b.text)} />)}
+        {/* NIGHT-RUN.md Phase 4.3: a short pointer to the booking page,
+           mirroring the one Termine gives back to this form. Kontakt and
+           Termine stay two separate pages -- this is a cross-link, not a
+           merge. */}
+        <p class="booking-pointer">
+          Direkt <a href="/termine/">Kennenlernen vereinbaren</a> — zwanzig Minuten, online, kostenfrei.
+        </p>
       </div>
       <div class="contact-form-wrap">
         <ContactForm />
@@ -65,6 +72,12 @@ tracker.assertAllHandled('kontakt.astro');
   .contact-info img {
     border-radius: var(--radius);
     margin-bottom: 1.5rem;
+  }
+
+  .booking-pointer {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(24, 26, 43, 0.1);
   }
 
   @media (min-width: 900px) {

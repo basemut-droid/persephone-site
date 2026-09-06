@@ -174,26 +174,27 @@ confirmed that's intentional (`fuer-marina.md` Q5). Withdrawn; see NIGHT-RUN.md 
 4.2 for the actual open work here (the black-and-white photo + offset cream text-card
 layout, still missing — needs placeholder images, not button copy).
 
-## 11. Kontakt's form has nowhere to submit yet
+## 11. Kontakt's form has nowhere to submit yet — DECIDED, BLOCKED ON A FORM URL
 
-`ContactForm.astro` (name/phone/email/topic/message/consent + honeypot) is built and
-styled and now live on the rebuilt Kontakt page, but it's deliberately inert —
-`action="#"`, with a `TODO` comment in the file itself. No backend, endpoint, or
-third-party form service has been decided, so nothing was invented here.
+Decided in `fuer-marina.md` Q10 / `external-review.md` 2c: **Microsoft Forms**, same
+service already used for the Selbsthilfegruppe registration, submitting to
+`marinabletsas@persephone.at`. Chosen because the owner is already on Microsoft 365,
+already uses Microsoft Forms for the Selbsthilfegruppe sign-up, the
+Datenschutzerklärung already covers Microsoft, and running inside her own tenant
+avoids the sender-authentication failure behind the live site's current contact-form
+outage (see the urgent item at the top of `fuer-marina.md`).
 
-**Options:**
-- **(a)** A serverless function on whatever this site ends up hosted on, emailing
-  the submission or writing it somewhere you check. Depends on the hosting
-  decision, which isn't visible in this repo (no deploy config committed yet).
-- **(b)** A hosted form service (Formspree-style) — fastest to wire up regardless of
-  host, but sends submissions through a third party.
-- **(c)** A plain `mailto:` fallback — no backend at all, but a worse UX (opens the
-  visitor's own email client) and no honeypot/spam protection actually functions
-  without a real submit handler.
+`ContactForm.astro` (name/phone/email/topic/message/consent + honeypot) is still
+deliberately inert (`action="#"`) because **no actual Microsoft Forms URL exists yet**
+for this form — the Selbsthilfegruppe's form (`forms.cloud.microsoft/e/gMNUsAsMrn`) is
+a different form for a different purpose, not reusable here. Nothing to fix in code
+until the owner creates the actual Microsoft Form and shares its URL/embed.
 
-**Recommendation:** (b) if you want this working before a hosting decision is made,
-(a) once you know where the site will actually run — either way, an
-infrastructure decision, not something to pick for you.
+**Also still open, per `fuer-marina.md` Q10:** the wording for a fifth Anliegen
+dropdown option (currently Beratung, Workshops & Trainings, Selbsthilfegruppe,
+Sonstiges) so collaboration/interview/press enquiries have a home — the owner
+suggested "Kooperation & Presse", "Zusammenarbeit", or "Anfrage als Medium/
+Organisation" but hasn't picked one. Do not add an option or guess wording.
 
 ## 12. Language switcher offers /en/ and /it/ links that 404 (pre-existing bug, not introduced this session)
 
@@ -257,3 +258,14 @@ re-check, and the DNS cutover).
 Datenschutzerklärung's processor disclosure — see the review's item 3c), then set `site`
 to the real domain in one line. `astro.config.mjs` carries a `// TODO` comment marking
 exactly where.
+
+## 15. Termine's page title — needs the owner's wording
+
+Per NIGHT-RUN.md Phase 4.3: "Termine" doesn't say what happens on this page (a
+20-minute, free, no-obligation "Kennenlernen" call). **Suggestion:** "Kennenlernen
+vereinbaren" — the exact phrase already used site-wide for this same call (the header
+CTA, and now Kontakt's cross-link to this page), so adopting it as the title keeps the
+whole site's language for this one thing consistent rather than introducing a second
+name for it. Not implemented — the page's `<title>`/`<h1>` (from
+`src/content/pages/de/termine.md`'s `title` field) still say "Termine"; changing it is
+the owner's call, one line in that file once decided.
