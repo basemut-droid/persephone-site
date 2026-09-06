@@ -99,17 +99,21 @@ All four read as stale slugs left over from page renames, not deliberate removal
 but stale-slug guessing is exactly the kind of thing that shouldn't be silently
 resolved.
 
-**Current state — all four now fixed in the built site** (Task 3): Über-uns's two
-teaser cards link to `/beratung/`/`/workshops/`; the two blog posts link to
-`/termine/` and `/blog/ist-unfruchtbarkeit-immer-noch-frauensache/` respectively.
-Über-uns's fix is render-time (a lookup map in `ueber-uns.astro`); the two blog
-posts' fix is a direct edit to their content-collection `.md` files (only the URL,
-zero prose changed) — Astro's `render()` reads a pre-rendered HTML cache for content
-collections, so a render-time patch (what every other page uses) silently has no
-effect for content rendered via `<Content />`, and the alternative
-(`remarkPlugins` in `astro.config.mjs`) requires a new dependency in this Astro
-version. `ueber-uns.md` itself still records its two dead hrefs verbatim (Task 2's
-job); the two blog posts' source files no longer do, by necessity.
+**Current state — all four now fixed in the built site**, and confirmed 2026-09-06
+(`fuer-marina.md` Q7): Über-uns's two teaser cards link to `/beratung/`/`/workshops/`;
+the two blog posts link to `/blog/ist-unfruchtbarkeit-immer-noch-frauensache/` (the
+"Mythos Männerohnmacht" link — confirmed correct by its own link text) and, as of
+Phase 3, `/selbsthilfegruppe/` rather than `/termine/` for the second (the sentence
+refers to the next self-help group meeting and its registration link, which lives on
+the Selbsthilfegruppe page). Über-uns's fix is render-time (a lookup map in
+`ueber-uns.astro`); the two blog posts' fix is a direct edit to their
+content-collection `.md` files (only the URL, zero prose changed) — Astro's
+`render()` reads a pre-rendered HTML cache for content collections, so a render-time
+patch (what every other page uses) silently has no effect for content rendered via
+`<Content />`, and the alternative (`remarkPlugins` in `astro.config.mjs`) requires a
+new dependency in this Astro version. `ueber-uns.md` itself still records its two
+dead hrefs verbatim in `docs/source-archive/`, per that archive's own purpose; the
+two blog posts' live source files no longer do, by necessity.
 
 **Still worth doing independent of this rebuild:** tell whoever manages the live
 WordPress site about all four dead links, since the "likely intended target" guesses
