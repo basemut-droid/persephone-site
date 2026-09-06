@@ -131,11 +131,15 @@ artifact; both are genuinely present in the source, worded differently enough th
 aren't a simple duplicate.
 
 **Current state:** `src/content/pages/de/selbsthilfegruppe.md` preserves all of it
-verbatim (both headings, both paragraphs) per Task 2's "faithful record" rule.
+verbatim (both headings, both paragraphs) per Task 2's "faithful record" rule. The page
+is now built (`selbsthilfegruppe.astro`): the English demo heading is dropped (that part
+wasn't ambiguous), but the choice between the two intro paragraphs is **still open** —
+the page currently renders "...die ähnliche Erfahrungen haben" as a placeholder, not a
+decision. Swap to `src/lib/parseMarkdownBlocks.ts`'s block index for the other paragraph
+(or new copy) once you've picked.
 
-**Recommendation:** when this page eventually gets built, drop the English demo heading
-and pick one of the two intro paragraphs — your call on which reads better, not a coin
-flip I should make.
+**Recommendation:** pick whichever reads better — your call, not a coin flip I should
+make.
 
 ## 8. Two verbatim typos worth knowing about before Task 3
 

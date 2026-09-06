@@ -104,6 +104,17 @@
   "ONLINE") not rendered, no existing pattern fits — logged, not dropped
   silently.
 
+- **Selbsthilfegruppe — commit `f9e55dc`:** built from
+  `pages/de/selbsthilfegruppe.md`. Dropped the unremoved English demo heading
+  (unambiguous); still rendering a placeholder choice between the two
+  near-duplicate intro paragraphs pending your call (OQ#7, updated to reflect
+  this). Second masthead-level heading mid-page rendered as plain h2, not a
+  second `.heading-black`. Found a second `section()`-related bug (a caller
+  mistake this time, not the helper): "Aktuelles" hierarchically contains its
+  "Nächtes SHG-Treffen" sub-heading, so pulling "all paragraphs" out of it
+  double-counted the closing paragraph after the sign-up button — bounded
+  manually instead.
+
 ---
 
 # Handoff — Phase 2 re-parse + Über uns rebuild session (COMPLETE, stopped per brief)
