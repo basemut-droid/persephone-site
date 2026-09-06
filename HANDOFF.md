@@ -34,16 +34,16 @@
   Local build screenshotted at 1920px and sent to the user. Verified with
   `npm run build` (23 pages, no errors) and `npx astro check` (0 errors).
 
-- **Task 1 (adversarial design-system review) — subagent report received, fixes
-  pending:** ran via a fresh-context subagent per the brief, reviewing
-  `ueber-uns.astro` against `DESIGN-SYSTEM.md`/`global.css`/`HomePage.astro`. Two
-  real findings: (1) `ueber-uns.astro` uses `@media (min-width: 800px)` for its
-  credentials/teaser grids — the only 800px breakpoint anywhere in the codebase,
-  every other single→multi-column grid site-wide uses 900px; (2) `.teaser-grid`/
-  `.teaser-card` is a generic, content-agnostic "linked card" pattern defined only
-  in this page's scoped `<style>` — the same structural precondition as the
-  `.section` bug DESIGN-SYSTEM.md documents by name. Not yet fixed as of this
-  HANDOFF entry — see next entry or git log for whether that's since been done.
+- **Task 1 (adversarial design-system review) — commit `430f41a`:** fresh-context
+  subagent reviewed `ueber-uns.astro` against `DESIGN-SYSTEM.md`/`global.css`/
+  `HomePage.astro`; both real findings fixed. `@media (min-width: 800px)` (the
+  only 800px breakpoint anywhere in the codebase — everything else uses 900px for
+  the same single→multi-column transition) changed to 900px.
+  `.teaser-grid`/`.teaser-card` (a generic linked-card pattern) moved out of
+  `ueber-uns.astro`'s scoped style into `global.css` — same trapped-scope shape as
+  the historical `.section` bug. `.credentials-grid`/`.credentials-badge` judged
+  lower-risk (page-specific content shape) and left where they were — logged, not
+  acted on; revisit if a future page needs the same layout.
 
 - **Task 2 (content fidelity audit) — commit `bd01275`:** re-verified all 16
   checkable content-collection pages character-by-character against a fresh
