@@ -76,7 +76,32 @@ invented.
 `npm run build` (22 pages — down from 23, the invented newsletter page is gone) and
 `npx astro check` clean throughout.
 
-## Next: Phase 4 (structural fixes)
+## Phase 4 — Structural fixes: COMPLETE
+
+- **4.1 `/angebote/` unreachable:** the header's "Angebote" was a `<details>/<summary>`
+  disclosure, never a link. Split into a real `<a href="/angebote/">` plus a separate
+  toggle `<button>` for the submenu — one tap always does one thing, no ambiguity on
+  touch. Mouse users additionally get hover/focus-within (fine-pointer only).
+- **4.2 Über uns's closing teasers:** built the real design — black-and-white photo
+  (neutral brand-palette placeholder, explicitly labelled "Foto folgt" so it can't ship
+  unnoticed; grayscale via CSS filter, not baked in) with a cream text card overlapping
+  and breaking past its bounds, the two teasers staggered vertically. Heading is the
+  link, no button, confirmed intentional.
+- **4.3 `/termine/`:** added explanatory copy above the booking widget (reusing real
+  sentences from Beratung/Angebote, nothing invented); the Microsoft Bookings iframe
+  now loads only after a click ("Kalender laden — dabei wird eine Verbindung zu
+  Microsoft aufgebaut"), with a permanent fallback link underneath; cross-linked with
+  Kontakt both directions. The two pages stay separate.
+- **4.4 Language switcher:** now hides locale entries (and hreflang tags) for pages
+  that aren't actually translated — only the homepage offers all three locales.
+  **Found in the process, logged not fixed (OPEN-QUESTIONS #15):** the EN/IT
+  homepage's own header nav links to 66 translated-slug subpages that don't exist —
+  a bigger, separate problem from the switcher. A new non-blocking build-check
+  (`internal-links-resolve`) now catches this class of bug going forward.
+
+`npm run build` (22 pages) and `npx astro check` clean throughout.
+
+## Next: Phase 5 (verify)
 
 ---
 
