@@ -6,11 +6,11 @@ import CtaBand from '../components/CtaBand.astro';
 import logoKongruenz from '../assets/pages/ueber-uns/logo-kongruenz-und-authentizitaet.png';
 import {
   parseMarkdownBlocks,
-  section,
   paragraphs,
   stripEmphasis,
   parseLinkHeading,
   mdInlineHtml,
+  BlockTracker,
 } from '../lib/parseMarkdownBlocks';
 
 // Über uns's full copy lives in src/content/pages/de/ueber-uns.md (Task 2's
@@ -23,15 +23,14 @@ import {
 const entry = await getEntry('pages', 'de/ueber-uns');
 if (!entry) throw new Error('Content collection entry "pages/de/ueber-uns" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');
+const tracker = new BlockTracker(blocks);
 
 // Masthead: on the live page this is the same split-hero band the homepage
 // uses (text column + a full-bleed portrait), not PageHero's plain banner —
 // PageHero doesn't fit here and building a second hero-split component
 // would just duplicate src/styles/global.css's .hero/.hero-grid, so this
 // reuses that shared pattern directly. See CLAUDE.md.
-const heroEyebrow = (blocks[0].type === 'paragraph' && blocks[0].text) || undefined;
-const heroTitle = blocks[1].type === 'heading' ? blocks[1].text : entry.data.title;
-const heroIntro = (blocks[2].type === 'paragraph' && blocks[2].text) || undefined;
+const { eyebrow: heroEyebrow, title: heroTitle, intro: heroIntro } = tracker.heroFields(entry.data.title);
 
 // "Wer Dir hier begegnet" / "Was aus meiner Kinderwunschkrise wuchs" /
 // "Persephone als soziales Unternehmen" are one single centered section on
@@ -40,12 +39,12 @@ const heroIntro = (blocks[2].type === 'paragraph' && blocks[2].text) || undefine
 // established, rather than the two-column photo+text layout this page used
 // to have (that pattern isn't in the live design at all).
 const bioSections = ['Wer Dir hier begegnet', 'Was aus meiner Kinderwunschkrise wuchs', 'Persephone als soziales Unternehmen'].map(
-  (heading) => ({ heading, paragraphs: paragraphs(section(blocks, heading)) })
+  (heading) => ({ heading, paragraphs: paragraphs(tracker.section(heading)) })
 );
 
-const ausbildung = section(blocks, '**Ausbildung**').find((b) => b.type === 'list');
-const felderfahrung = section(blocks, '**Felderfahrung**').find((b) => b.type === 'list');
-const sprachen = paragraphs(section(blocks, '**Sprachen**'));
+const ausbildung = tracker.section('**Ausbildung**').find((b) => b.type === 'list');
+const felderfahrung = tracker.section('**Felderfahrung**').find((b) => b.type === 'list');
+const sprachen = paragraphs(tracker.section('**Sprachen**'));
 if (ausbildung?.type !== 'list' || felderfahrung?.type !== 'list') {
   throw new Error('Expected "Ausbildung"/"Felderfahrung" sections to each contain a list');
 }
@@ -66,6 +65,7 @@ const teasers = teaserHeadings.map((h) => {
   const link = parseLinkHeading(h.text)!;
   const idx = blocks.indexOf(h);
   const next = blocks[idx + 1];
+  tracker.use(h, next);
   return {
     label: link.label,
     href: deadLinkFixes[link.href] ?? link.href,
@@ -73,10 +73,14 @@ const teasers = teaserHeadings.map((h) => {
   };
 });
 
-const closing = section(blocks, 'Dein nächster Schritt');
+const closing = tracker.section('Dein nächster Schritt');
 const closingParagraphs = paragraphs(closing);
 const closingCta = closing.find((b) => b.type === 'cta');
 if (!closingCta || closingCta.type !== 'cta') throw new Error('Expected a closing CTA link after "Dein nächster Schritt"');
+// The two images in the closing section are already rendered via
+// statically-imported assets (heroImage frontmatter + CtaBand doesn't use
+// them directly) — accounted for via the .section() call above.
+tracker.assertAllHandled('ueber-uns.astro');
 ---
 
 <BaseLayout locale="de" path="/ueber-uns/" title={`${entry.data.title} – Persephone`}>
