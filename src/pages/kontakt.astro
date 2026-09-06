@@ -1,32 +1,36 @@
 ---
+import { getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import ContactForm from '../components/ContactForm.astro';
+import mg7811 from '../assets/pages/kontakt/mg-7811.png';
+import { parseMarkdownBlocks, mdInlineHtml } from '../lib/parseMarkdownBlocks';
+
+// No split-hero image (masthead row has no --awb-bg-image) — plain PageHero.
+const entry = await getEntry('pages', 'de/kontakt');
+if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not found');
+const blocks = parseMarkdownBlocks(entry.body ?? '');
+
+const heroEyebrow = (blocks[0].type === 'paragraph' && blocks[0].text) || undefined;
+const heroTitle = blocks[1].type === 'heading' ? blocks[1].text : entry.data.title;
+const heroIntro = (blocks[2].type === 'paragraph' && blocks[2].text) || undefined;
+
+// blocks[3] is the portrait image; blocks[4] is a second, duplicate h1
+// (desktop/mobile responsive pair, identical text minus a trailing period —
+// same pattern as elsewhere on this site) — skipped, everything from
+// blocks[5] on is the real body content.
+const bodyBlocks = blocks.slice(5).filter((b) => b.type === 'paragraph');
 ---
-<BaseLayout
-  locale="de"
-  path="/kontakt/"
-  title="Kontakt – Persephone"
-  description="Fragen, Feedback oder eine Nachricht an Marina Bletsas — Persephone in Wien, Graz und online."
->
-  <PageHero
-    eyebrow="Kontakt"
-    title="Lass uns ins Gespräch kommen"
-    intro="Ob Frage, Feedback oder einfach eine Nachricht — schreib mir gerne."
-  />
+
+<BaseLayout locale="de" path="/kontakt/" title={`${entry.data.title} – Persephone`}>
+  <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
   <section class="section">
     <div class="container contact-grid">
       <div class="contact-info">
-        <p><strong>Dr. Phil. Marina Bletsas</strong> (Marina von Persephone)</p>
-        <p>Ich antworte i.d.R. innerhalb von 48 Std., montags bis freitags.</p>
-
-        <h2>Wien</h2>
-        <p>Praxisraum im 3. Bezirk (Rochusmarkt-Nähe)</p>
-        <p>Walk &amp; Talk im 2. Bezirk (Prater)</p>
-
-        <h2>Online</h2>
-        <p>Via Microsoft Teams</p>
+        <Image src={mg7811} alt="" width={240} height={360} />
+        {bodyBlocks.map((p) => <p set:html={mdInlineHtml(p.type === 'paragraph' ? p.text : '')} />)}
       </div>
       <div class="contact-form-wrap">
         <ContactForm />
@@ -42,10 +46,9 @@ import ContactForm from '../components/ContactForm.astro';
     gap: 3rem;
   }
 
-  .contact-info h2 {
-    font-size: 1.05rem;
-    color: var(--color-accent);
-    margin-top: 1.75rem;
+  .contact-info img {
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
   }
 
   @media (min-width: 900px) {

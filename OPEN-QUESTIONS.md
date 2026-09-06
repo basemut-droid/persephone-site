@@ -205,7 +205,28 @@ values) rather than matching `ServiceCard`'s vibrant gradient treatment.
 `ServiceCard` is a small, contained change — flagging now so the quieter current
 look isn't mistaken for an oversight.
 
-## 11. Not a decision — just worth knowing
+## 11. Kontakt's form has nowhere to submit yet
+
+`ContactForm.astro` (name/phone/email/topic/message/consent + honeypot) is built and
+styled and now live on the rebuilt Kontakt page, but it's deliberately inert —
+`action="#"`, with a `TODO` comment in the file itself. No backend, endpoint, or
+third-party form service has been decided, so nothing was invented here.
+
+**Options:**
+- **(a)** A serverless function on whatever this site ends up hosted on, emailing
+  the submission or writing it somewhere you check. Depends on the hosting
+  decision, which isn't visible in this repo (no deploy config committed yet).
+- **(b)** A hosted form service (Formspree-style) — fastest to wire up regardless of
+  host, but sends submissions through a third party.
+- **(c)** A plain `mailto:` fallback — no backend at all, but a worse UX (opens the
+  visitor's own email client) and no honeypot/spam protection actually functions
+  without a real submit handler.
+
+**Recommendation:** (b) if you want this working before a hosting decision is made,
+(a) once you know where the site will actually run — either way, an
+infrastructure decision, not something to pick for you.
+
+## 12. Not a decision — just worth knowing
 
 Several `<li>` elements in the live Über-uns page's "Ausbildung"/"Felderfahrung" lists
 carry a leftover CSS class, `font-claude-response-body`, in their raw HTML — a tell that
