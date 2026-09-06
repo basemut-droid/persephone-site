@@ -1,4 +1,4 @@
-# Handoff — structure-fix + remaining-pages session (IN PROGRESS)
+# Handoff — structure-fix + remaining-pages session (COMPLETE)
 
 ## Done and committed this session
 
@@ -183,6 +183,93 @@
   directly in their content-collection files instead (only the URL, zero prose)
   — a deliberate, logged exception to "content collections stay verbatim." Both
   fixes verified in the built output.
+
+## Task 4 (whole-site check) — commit `47f173f`
+
+- **Production build:** `npm run build` — 23 pages, 0 errors, throughout.
+- **Internal links + images, whole site:** a scratchpad crawler
+  (`link-check.mjs`) walked every built HTML file, extracted every
+  `<a href>`/`<img src>`, and checked internal ones against `dist/`. Result:
+  **0 broken images, 0 broken internal links to the site's own content.**
+  21 external links found (mailto/tel/real third-party URLs), all left
+  alone — out of scope for a static-build correctness check.
+- **Real bug found and fixed: unparsed bold/italic markdown on 4 blog
+  posts.** WordPress-source `<strong>`/`<em>` tags with a leading or
+  trailing space inside them converted to invalid CommonMark
+  (`**text **`), which Astro's strict default compiler for the `blog`
+  collection refuses to render as bold/italic — showing literal asterisks
+  on the page instead. Found via screenshot review, confirmed site-wide via
+  a grep of every built blog post's HTML for literal `*`/`**`. Fixed in
+  `maenner-im-kinderwunsch-mythos-maennerohnmacht.md` (2 instances),
+  `maenner-im-kinderwunsch-mythos-stille-staerke.md` (1),
+  `texte-stimmen-lieder.md` (1), and `zwischen-lichterglanz-und-leere.md`
+  (2) — pure whitespace relocation, no wording touched. Verified clean
+  (zero literal asterisks) across all 6 built posts after the fix.
+  Full technical writeup in `docs/content-audit.md`'s Task 4 addendum.
+- **Real, pre-existing bug found (not fixed — logged as a decision):** the
+  language switcher (`LanguageSwitcher.astro`) offers `/en/`/`/it/` links
+  on every page regardless of whether that page has a real translation,
+  so 105 of the site's links 404 (only the homepage has real EN/IT
+  content). This predates this session's work. Logged as
+  `OPEN-QUESTIONS.md` #12 with three options and a recommendation, since
+  the right fix is a design decision (hide untranslated links vs. point
+  them at the locale homepage vs. remove the switcher entries until more
+  translations exist), not something to silently patch.
+- **Screenshots at 1920px:** every page reviewed — homepage, Über uns,
+  Angebote + all 3 sub-pages, Kontakt, FAQs, all 3 legal pages, Termine,
+  Blog index, all 6 blog posts, 404, EN/IT homepages. No structural
+  inconsistencies found beyond the bold-markdown bug above (already fixed).
+- **Mobile rendering: still unverified.** As documented in this file's
+  earlier Phase-2 entry, 390px headless-Edge screenshots are unreliable in
+  this environment (content lays out as if the viewport were wider, then
+  gets cropped — reproduced even on the already-shipped, unmodified
+  homepage, so it's an environment limitation, not a site bug). This
+  applies to every page built this session too, not just the ones already
+  flagged. **A real device or a manually-resized real browser window is
+  still needed before launch to confirm mobile rendering — this has not
+  been done for any page in this repo.**
+
+## Session summary
+
+**Built:** the 12 remaining standalone pages plus all 6 blog posts (Angebote
+and its 3 sub-pages, Kontakt, FAQs, all 3 legal pages, Termine, Blog index +
+posts), each from its real content-collection entry, each screenshotted and
+checked against the homepage/Über uns for container width, gutters, type
+scale, section rhythm, backgrounds, and buttons before moving on. Über uns's
+masthead/narrative structure was corrected first (Task 0) so the shared
+hero pattern was right before 11 more pages could reuse it.
+
+**Fixed:** two real bugs in the shared `parseMarkdownBlocks.ts` helper
+(a heading-boundary bug and its downstream double-counting implication)
+that would otherwise have silently broken content on multiple pages; 4
+dead internal links (2 on Über uns, 2 in blog posts); several
+wrongly-set `heroImage` frontmatter values (a mistake pattern caught once
+and then swept across all affected files); a lost non-breaking space and a
+Unicode NFC/NFD mismatch; an `800px` breakpoint that didn't match the
+site's established `900px`; and, in Task 4, unparsed bold/italic markdown
+on 4 blog posts.
+
+**Fidelity audit found:** re-verifying all 16 checkable content-collection
+pages character-by-character against a fresh mechanical render from source
+found exactly 2 real mismatches (both fixed) — everything else was already
+verbatim. Full table with heading/image/meta/link checks per page is in
+`docs/content-audit.md`.
+
+**Waiting on your decision** — see `OPEN-QUESTIONS.md` for the full list
+with options and recommendations; the ones that block launch rather than
+just being FYI:
+- **#9 Datenschutzerklärung** needs your wife's sign-off on the wording,
+  and a re-check at launch against whatever the site actually loads by
+  then (legal document, not a code decision).
+- **#11 Kontakt's form** has no submission backend yet — deliberately left
+  inert rather than inventing one; needs a hosting/service decision.
+- **#12 Language switcher** 404s on untranslated pages — needs a decision
+  on how untranslated locales should behave.
+- **#1 H1/H2 weight** (900 vs. 400) — carried over from the previous
+  session, still unresolved pending a look at the brand book in person.
+- **Mobile rendering is unverified sitewide** — needs a real device check
+  before launch, this environment can't produce a trustworthy mobile
+  screenshot.
 
 ---
 
