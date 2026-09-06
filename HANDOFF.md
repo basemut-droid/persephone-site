@@ -152,6 +152,17 @@
   Mangled auto-excerpt description (OQ#5) not shipped — falls back to the
   site-wide default.
 
+- **Datenschutzerklärung — commit `d05ea99`:** per this task's explicit
+  instruction, wording left untouched — only the wrapper markup changed
+  (bare `<h1>`/`.legal-page` → `PageHero`/`.section`/`.section-narrow`),
+  verified via `git diff` to be zero words changed. **Still does not render
+  from the content collection** — `datenschutz.astro`'s existing fonts-section
+  correction stays authoritative; `pages/de/datenschutzerklaerung.md` remains a
+  verbatim (but not-shipped) record. OPEN-QUESTIONS.md #9 rewritten from
+  "resolved" to **needs human sign-off** — the client's wife approves this
+  page's wording, not this rebuild, and it needs a re-check at launch against
+  whatever the site actually loads by then.
+
 ---
 
 # Handoff — Phase 2 re-parse + Über uns rebuild session (COMPLETE, stopped per brief)
