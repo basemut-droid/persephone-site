@@ -45,7 +45,38 @@ NIGHT-RUN.md's own rules for why.
 `npm run build` (23 pages, blocking heading check included) and
 `npx astro check` are clean as of every commit in this phase.
 
-## Next: Phase 2 (separate archive from live copy), then Phase 3 (owner's decisions)
+## Phase 2 — Separate the archive from the live copy: COMPLETE
+
+`docs/source-archive/` freezes a verbatim, never-rendered, never-edited-again copy of
+`src/content/pages/de/`, `src/content/blog/de/`, and `site/de.json` as of right after
+Phase 1's fixes. `src/content/` is now the site's live, editable copy. `CLAUDE.md`
+updated: content may be corrected once a decision says so; it may still never be
+invented.
+
+## Phase 3 — Apply the owner's decisions: COMPLETE (all 10 items)
+
+1. Six typos corrected (Workshops h1, Über uns, Selbsthilfegruppe ×2, FAQs ×2).
+2. `--weight-heading` is 400.
+3. Selbsthilfegruppe intro keeps variant A only; variant B removed from source.
+4. English demo heading stays removed (already the case, no work needed).
+5. Blog "hier" link now points at `/selbsthilfegruppe/`.
+6. Impressum meta description: "Impressum und Offenlegung von Persephone – Marina
+   Bletsas, Wien."
+7. `/newsletter/` redirects to the MailerLite form (Astro `redirects` config);
+   `newsletter.astro`/`NewsletterForm.astro` deleted.
+8. Eleven pages no longer inherit the homepage's meta description — `BaseLayout.astro`'s
+   fallback is gone. Ten pages currently ship none at all; listed in
+   `OPEN-QUESTIONS.md` #3 for the owner to write later, not urgent.
+9. The two absolute `persephone.at/newsletter` links (Über uns, Workshops) are now
+   relative. `build-check.mjs`'s "no href points at persephone.at" check now passes
+   with zero violations.
+10. `astro.config.mjs`'s `site` stays a placeholder with a prominent TODO; logged as
+    `OPEN-QUESTIONS.md` #14, blocked on the hosting decision.
+
+`npm run build` (22 pages — down from 23, the invented newsletter page is gone) and
+`npx astro check` clean throughout.
+
+## Next: Phase 4 (structural fixes)
 
 ---
 
