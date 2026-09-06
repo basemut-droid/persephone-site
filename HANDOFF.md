@@ -138,6 +138,12 @@
   --background`). Worth remembering if another page 500s unexpectedly later in
   this session.
 
+- **Disclaimer — commit `07f477b`:** built from `pages/de/disclaimer.md`. Added a
+  shared `toLocalRoute()`/`rewriteLocalLinks()` pair to `parseMarkdownBlocks.ts`
+  (Angebote/Beratung each had their own inline regex for the same rewrite — not
+  retrofitted, but every page from here uses the shared one). Both inline links
+  rewritten to local routes.
+
 ---
 
 # Handoff — Phase 2 re-parse + Über uns rebuild session (COMPLETE, stopped per brief)
