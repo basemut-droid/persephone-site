@@ -1,3 +1,41 @@
+# Handoff — structure-fix + remaining-pages session (IN PROGRESS)
+
+## Done and committed this session
+
+- **Task 0 (fix Über uns structure) — commit `5e3de9e`:** the previous session's
+  Über uns build got the masthead and narrative section wrong — PageHero's plain
+  banner instead of the live page's actual split-hero (text left, full-bleed
+  portrait right, same pattern the homepage already uses), and a new two-column
+  photo+text component for "Wer Dir hier begegnet" that isn't in the live design at
+  all (that section is centered, no image). Fixed both, extracting
+  `.hero`/`.hero-grid`/`.hero-copy`/`.hero-headline`/`.hero-image` out of
+  `HomePage.astro`'s scoped style into `global.css` so both pages share the exact
+  same component instead of two implementations of the same shape. Section
+  backgrounds now match the live page's actual pattern (light masthead, beige
+  narrative, light credentials, beige teasers, teal CTA — read directly from each
+  row's `--awb-background-color` custom property, cross-referenced against Avada's
+  own dynamic CSS file rather than guessed). Added a new "Reuse before you build"
+  rule to `CLAUDE.md`/`AGENTS.md` per the brief.
+
+  **Also found and fixed while doing this:** the masthead's real image is a CSS
+  `background-image` (`MG_7803`), not an `<img>` tag — the original Task 2
+  extractor only looks for `<img>` tags, so it never found this one. The image
+  previously used as `heroImage` (`marina-von-persephone.jpg`) actually sits next
+  to the closing CTA further down the live page instead. Corrected
+  `ueber-uns.md`'s frontmatter to the real hero image; **the misplaced
+  `marina-von-persephone.jpg` reference has not been relocated yet** — that's
+  Task 2's (content fidelity audit) job, flagged there.
+
+  Screenshot verification: the live page failed to render its JS-driven layout in
+  headless Edge (text/images didn't paint, only the header) — the same known
+  limitation this project's history already documented (see below and
+  `DESIGN-SYSTEM.md`'s H1-weight entry). Verified structure/colors from the raw
+  HTML + Avada's dynamic CSS instead, which doesn't depend on JS executing.
+  Local build screenshotted at 1920px and sent to the user. Verified with
+  `npm run build` (23 pages, no errors) and `npx astro check` (0 errors).
+
+---
+
 # Handoff — Phase 2 re-parse + Über uns rebuild session (COMPLETE, stopped per brief)
 
 Every task in this run (0–3) is done and committed. Per the brief, this session
