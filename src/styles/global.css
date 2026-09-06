@@ -46,7 +46,8 @@
      live site's own choice (see BaseLayout for the font imports). */
   --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
   --font-heading: var(--font-body);
-  --weight-heading: 900; /* Black — H1/H2 per brand book */
+  --weight-heading: 400; /* Owner decision 2026-09-06 (fuer-marina.md Q2): normal weight, matching
+     the live site, over the August-2026 brand book's 900/Black spec — the calmer read wins. */
   --weight-subheading: 700; /* Bold — subheads, emphasis */
   --weight-label: 500; /* Medium — nav, labels, eyebrows use Bold instead */
 
@@ -104,10 +105,12 @@ h4 {
 }
 
 /* The one masthead headline per page — the homepage hero's h1 and every
-   subpage's PageHero h1 — opts into the brand book's Black/900 weight
-   (p.7 "Typografie": H1 30pt/900). Section h2/h3 stay at the regular
-   weight above; the brand book's H2/900 spec is intentionally not
-   applied here, per client decision. */
+   subpage's PageHero h1 — takes its weight from --weight-heading (see
+   :root above). The brand book (p.7 "Typografie") specifies H1 30pt/900
+   (Black); the owner chose to keep the live site's calmer 400/normal
+   weight instead (fuer-marina.md Q2, 2026-09-06) — a one-value change
+   in :root's --weight-heading if that's ever revisited. Section h2/h3
+   stay at the regular weight above either way. */
 .heading-black {
   font-weight: var(--weight-heading);
 }

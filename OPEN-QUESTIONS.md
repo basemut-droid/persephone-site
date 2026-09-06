@@ -4,22 +4,12 @@ Created during the Phase 2 content re-parse session. Each item is something the 
 can't decide and nothing should be guessed at. Current implemented state is noted for
 each so nothing blocks on you overnight.
 
-## 1. H1 masthead weight: 900 vs 400
+## 1. H1 masthead weight: 900 vs 400 — RESOLVED 2026-09-06
 
-Carried over from the previous session's `HANDOFF.md`. `docs/brand/Brandbook.pdf`
-(dated August 2026) specifies H1 *and* H2 at weight 900/Black. The live persephone.at
-actually renders its h1 at weight 400. You previously chose "900 for the masthead h1
-only, H2 stays 400" and asked to see it against the live site before finalizing — that
-comparison is what surfaced the 400-vs-900 conflict.
-
-**Current state:** 900, via the `--weight-heading` token → `.heading-black` utility
-class, applied to the one masthead `<h1>` per page (homepage hero + every subpage's
-`PageHero` title). Verified this session (see Task 1 below): every masthead h1 in the
-codebase goes through this single token — switching 900 → 400 is a one-value edit in
-`src/styles/global.css`, nothing else to touch.
-
-**Recommendation:** keep 900 until you've compared it against the brand book in person;
-it's already a one-line revert if you decide otherwise.
+Decided in `fuer-marina.md` Q2: **400**, matching the live site, over the August-2026
+brand book's 900/Black spec. Implemented in `src/styles/global.css`'s `--weight-heading`
+token, which every masthead `<h1>` site-wide reads from (homepage hero + every subpage's
+`PageHero` title) — still a one-value edit back to 900 if this is ever revisited.
 
 ## 2. The "Newsletter" page has no real source content
 

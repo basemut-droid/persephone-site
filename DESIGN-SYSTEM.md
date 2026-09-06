@@ -54,7 +54,7 @@ no separate heading font (`--font-heading` is just an alias for `--font-body`).
 
 | Element | Weight | Font-size | Line-height | Letter-spacing / transform |
 |---|---|---|---|---|
-| h1, masthead (`.heading-black`) | **900** (`--weight-heading`) | `clamp(2rem, 1.5rem + 2vw, 3rem)` — homepage hero and every subpage's `PageHero` share this one rule now | 1.2 | normal |
+| h1, masthead (`.heading-black`) | **400** (`--weight-heading`) | `clamp(2rem, 1.5rem + 2vw, 3rem)` — homepage hero and every subpage's `PageHero` share this one rule now | 1.2 | normal |
 | h2 | 400 | `clamp(1.5rem, 1.2rem + 1.2vw, 2rem)` | 1.2 | normal |
 | h3 | 400 | `clamp(1.25rem, 1.1rem + 0.6vw, 1.75rem)` | 1.2 | normal |
 | body `p` | 400 | `1rem` (hero copy: `1.125rem`) | 1.6 (hero copy: 1.75) | normal |
@@ -62,13 +62,15 @@ no separate heading font (`--font-heading` is just an alias for `--font-body`).
 | nav link / dropdown summary | 500 (`--weight-label`) | `1.0625rem` | — | normal |
 | button (`.button-primary`) | 500, italic | `0.95rem` | — | normal, not uppercase |
 
-**Resolved:** `.heading-black` is now a real utility class in `global.css`
+**Resolved 2026-09-06 (fuer-marina.md Q2):** `--weight-heading` is **400**, matching the
+live site — the brand book (p.7) specifies H1 at 900/Black (and H2 at 900 too), but the
+owner chose to keep the calmer, already-familiar weight over the newer brand book's
+direction. `.heading-black` is still the real utility class in `global.css`
 (`font-weight: var(--weight-heading)`), applied to the one masthead `<h1>` per page — the
-homepage hero and every subpage's `PageHero` title, which now also share the exact same
-size clamp (the hero's old fixed `2.75rem` override was removed). Section h2/h3
-deliberately stay at 400 — the brand book (p.7) specifies H2 at 900 too, but the client
-chose to reserve the heavier weight for the one page headline only, per the client's
-own original comment about ".heading-black, used once per page."
+homepage hero and every subpage's `PageHero` title, which share the exact same size clamp
+(the hero's old fixed `2.75rem` override was removed) — so switching this back to 900 is
+still a one-value edit in `:root`, nothing else to touch, if that's ever revisited. Section
+h2/h3 stay at 400 regardless, unaffected either way.
 
 ## Spacing & section rhythm
 
@@ -230,9 +232,13 @@ question/answer; summarized here for the record):
 
 - **H1/H2 weight:** the brand book (`docs/brand/Brandbook.pdf`, p. 7 "Typografie")
   specifies **H1 at 30pt/900 (Black)** and **H2 at 20pt/900** too. Screenshots comparing
-  the hero h1 at 400 vs. 900 were shown; the client chose **900 for the masthead h1 only,
-  H2 stays 400**. Implemented via the new `.heading-black` utility class (see Typography
-  above).
+  the hero h1 at 400 vs. 900 were shown; the owner initially chose 900 for the masthead
+  h1 only (H2 staying 400), then revisited the decision once the 900-weight build was
+  compared directly against the live site (whose own h1 renders at 400) and reversed it
+  2026-09-06 (fuer-marina.md Q2): **`--weight-heading` is 400** — the calmer, familiar
+  weight, over the newer brand book's direction. H2 stays 400 regardless. Implemented via
+  the `.heading-black` utility class (see Typography above), which is exactly why this
+  was a one-value change either time.
 - **Hero h1 sizing:** the client chose to have the homepage hero adopt the shared clamp
   outright — its old fixed `2.75rem` override is gone, so it now sizes identically to
   every subpage's `PageHero` h1 (both scale down on mobile to `2rem`, and up to `3rem` at
