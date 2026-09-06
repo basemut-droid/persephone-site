@@ -1,100 +1,110 @@
 ---
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import { parseMarkdownBlocks, section, paragraphs } from '../lib/parseMarkdownBlocks';
+
+// No split-hero image on the live page — plain PageHero, same as the other
+// Angebote subpages.
+const entry = await getEntry('pages', 'de/selbsthilfegruppe');
+if (!entry) throw new Error('Content collection entry "pages/de/selbsthilfegruppe" not found');
+const blocks = parseMarkdownBlocks(entry.body ?? '');
+
+const heroEyebrow = (blocks[0].type === 'paragraph' && blocks[0].text) || undefined;
+const heroTitle = blocks[1].type === 'heading' ? blocks[1].text : entry.data.title;
+// The live source has an unremoved English Avada demo heading here
+// ("Your Journey to a Fulfilling Life") plus two near-duplicate German
+// intro paragraphs — see OPEN-QUESTIONS.md #7. Dropping the demo heading
+// outright (unambiguous), but the choice between the two paragraphs is
+// still open — rendering the second for now, not a final decision.
+const heroIntro = blocks[4].type === 'paragraph' ? blocks[4].text : undefined;
+
+const ueberDieGruppe = paragraphs(section(blocks, 'Über die Gruppe'));
+const grundprinzipien = paragraphs(section(blocks, 'Grundprinzipien der Gruppe'));
+
+// "Nächstes SHG-Treffen" is a second masthead-level (h1) heading mid-page,
+// same live-site pattern as Über uns's "Dein nächster Schritt" — rendered
+// as a regular h2 here, not a second .heading-black, per the design
+// system's "one heading-black per page" rule (DESIGN-SYSTEM.md).
+const treffenHeadingText = 'Nächstes SHG-Treffen';
+const treffenIdx = blocks.findIndex((b) => b.type === 'heading' && b.text === treffenHeadingText);
+const treffenSection = blocks.slice(treffenIdx + 1);
+
+// "Aktuelles" (h2) is a parent heading of the "Nächtes SHG-Treffen" (h3)
+// subsection that follows it — section()'s hierarchical semantics
+// correctly treat that h3 and everything under it as part of "Aktuelles"'
+// own scope, which is right for a nested read but wrong for pulling out
+// just its two immediate intro paragraphs (it would include the h3
+// subsection's own closing paragraph too). Bounded manually here instead,
+// stopping at the very next heading of any level.
+const aktuellesIdx = treffenSection.findIndex((b) => b.type === 'heading' && b.text === 'Aktuelles');
+const nextHeadingOffset = treffenSection.slice(aktuellesIdx + 1).findIndex((b) => b.type === 'heading');
+const aktuellesBlocks =
+  nextHeadingOffset === -1 ? treffenSection.slice(aktuellesIdx + 1) : treffenSection.slice(aktuellesIdx + 1, aktuellesIdx + 1 + nextHeadingOffset);
+const aktuelles = paragraphs(aktuellesBlocks);
+// The live page's own heading here is misspelled "Nächtes" (missing the
+// "s") — see OPEN-QUESTIONS.md #8, preserved verbatim, not fixed.
+const details = section(treffenSection, 'Nächtes SHG-Treffen');
+const detailsList = details.find((b) => b.type === 'list');
+const cta = details.find((b) => b.type === 'cta');
+if (!cta || cta.type !== 'cta') throw new Error('Expected the sign-up CTA');
+const closingNote = treffenSection.find((b, i) => b.type === 'paragraph' && i > treffenSection.indexOf(cta));
 ---
-<BaseLayout
-  locale="de"
-  path="/selbsthilfegruppe/"
-  title="Selbsthilfegruppe – Persephone"
-  description="Persephones Selbsthilfegruppe für Menschen mit unerfülltem Kinderwunsch — monatliche Treffen in Graz und online, moderiert von Marina Bletsas."
->
-  <PageHero
-    eyebrow="Angebote"
-    title="Selbsthilfegruppe"
-    intro="Ein Raum für Austausch, gegenseitige Unterstützung und gemeinsame Reflexion mit Menschen, die die Erfahrung der Kinderwunschkrise teilen."
-  />
+
+<BaseLayout locale="de" path="/selbsthilfegruppe/" title={`${entry.data.title} – Persephone`}>
+  <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
   <section class="section">
     <div class="container section-narrow">
       <h2>Über die Gruppe</h2>
-      <p>
-        Ich habe diese Gruppe 2021 gemeinsam mit meinem Mann Claudio in Graz gegründet. Viele
-        Menschen mit Kinderwunsch standen vor ähnlichen Herausforderungen — bei nur begrenzt
-        verfügbarer Unterstützung. Heute läuft die Gruppe niederschwellig über Selbsthilfe
-        Steiermark, mit Treffen in Präsenz und online. Ich moderiere die Gespräche entlang der
-        Themen und Bedürfnisse der Teilnehmenden — als Peer-Support, nicht als Therapie oder
-        Beratung.
-      </p>
+      {ueberDieGruppe.map((p) => <p>{p}</p>)}
     </div>
   </section>
 
   <section class="section section-alt">
     <div class="container section-narrow">
       <h2>Grundprinzipien der Gruppe</h2>
-      <dl class="principles">
-        <div>
-          <dt>Vertraulichkeit</dt>
-          <dd>Was in der Gruppe besprochen wird, bleibt in der Gruppe.</dd>
-        </div>
-        <div>
-          <dt>Respekt</dt>
-          <dd>Unterschiedliche Wege und Bewältigungsstrategien werden respektiert.</dd>
-        </div>
-        <div>
-          <dt>Peer-Support</dt>
-          <dd>Die Teilnehmenden unterstützen sich gegenseitig — auf Augenhöhe.</dd>
-        </div>
-      </dl>
+      <ul class="principles">
+        {grundprinzipien.map((p) => <li>{p}</li>)}
+      </ul>
     </div>
   </section>
 
   <section class="section">
     <div class="container section-narrow next-meeting">
       <span class="eyebrow">Aktuelles</span>
-      <h2>Nächstes SHG-Treffen</h2>
-      <p>
-        Die Treffen finden monatlich an einem Sonntagnachmittag statt, in Graz oder online. Die
-        Teilnahme ist kostenlos, erfordert aber eine verbindliche Anmeldung.
-      </p>
-      <p class="meeting-details">
-        Sonntag, 30. August 2026 · 15–17 Uhr<br />
-        Lauzilgasse 25, 8020 Graz (Jugend am Werk)
-      </p>
-      <p>
-        <em
-          >Anmeldung derzeit über ein Formular, das noch verlinkt werden muss — bitte Link
-          nachreichen.</em
-        >
-      </p>
+      <h2>{treffenHeadingText}</h2>
+      {aktuelles.map((p) => <p>{p}</p>)}
+      {
+        detailsList?.type === 'list' && (
+          <p class="meeting-details">
+            {detailsList.items.map((item) => (
+              <>
+                {item}
+                <br />
+              </>
+            ))}
+          </p>
+        )
+      }
+      <a href={cta.href} class="button button-primary">{cta.text}</a>
+      {closingNote?.type === 'paragraph' && <p class="closing-note">{closingNote.text}</p>}
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .section-narrow {
-    max-width: 56rem;
-    margin-inline: auto;
-  }
-
   .principles {
     margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
     display: grid;
     gap: 1.25rem;
   }
 
-  .principles dt {
-    /* Matches the value-tile label treatment from the homepage (teal,
-       uppercase, bold) — this list does the same job. */
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-accent);
-    margin-bottom: 0.4rem;
-  }
-
-  .principles dd {
-    margin: 0;
+  .principles li {
+    border-left: 3px solid var(--color-accent-strong);
+    padding-left: 1rem;
   }
 
   .next-meeting {
@@ -106,5 +116,11 @@ import PageHero from '../components/PageHero.astro';
   .meeting-details {
     font-weight: 700;
     color: var(--color-text);
+  }
+
+  .closing-note {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
   }
 </style>
