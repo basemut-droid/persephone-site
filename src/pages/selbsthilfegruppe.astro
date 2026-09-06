@@ -2,25 +2,32 @@
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
-import { parseMarkdownBlocks, section, paragraphs } from '../lib/parseMarkdownBlocks';
+import { parseMarkdownBlocks, section, paragraphs, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 // No split-hero image on the live page — plain PageHero, same as the other
 // Angebote subpages.
 const entry = await getEntry('pages', 'de/selbsthilfegruppe');
 if (!entry) throw new Error('Content collection entry "pages/de/selbsthilfegruppe" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');
+const tracker = new BlockTracker(blocks);
 
-const heroEyebrow = (blocks[0].type === 'paragraph' && blocks[0].text) || undefined;
-const heroTitle = blocks[1].type === 'heading' ? blocks[1].text : entry.data.title;
+const [b0, b1] = [tracker.at(0), tracker.at(1)];
+const heroEyebrow = (b0.type === 'paragraph' && b0.text) || undefined;
+const heroTitle = b1.type === 'heading' ? b1.text : entry.data.title;
 // The live source has an unremoved English Avada demo heading here
 // ("Your Journey to a Fulfilling Life") plus two near-duplicate German
 // intro paragraphs — see OPEN-QUESTIONS.md #7. Dropping the demo heading
-// outright (unambiguous), but the choice between the two paragraphs is
-// still open — rendering the second for now, not a final decision.
-const heroIntro = blocks[4].type === 'paragraph' ? blocks[4].text : undefined;
+// outright (unambiguous, per fuer-marina.md Q4); the choice between the
+// two paragraphs is Phase 3's job (fuer-marina.md Q3) — this retrofit to
+// BlockTracker keeps today's behavior (rendering the second paragraph)
+// unchanged, just makes both blocks explicit instead of silently unread.
+tracker.exclude(tracker.at(2), 'unremoved Avada English demo heading — decided dropped, OPEN-QUESTIONS #7');
+tracker.exclude(tracker.at(3), 'near-duplicate intro paragraph, variant A — which variant to keep is Phase 3\'s decision, OPEN-QUESTIONS #7');
+const heroIntroBlock = tracker.at(4);
+const heroIntro = heroIntroBlock.type === 'paragraph' ? heroIntroBlock.text : undefined;
 
-const ueberDieGruppe = paragraphs(section(blocks, 'Über die Gruppe'));
-const grundprinzipien = paragraphs(section(blocks, 'Grundprinzipien der Gruppe'));
+const ueberDieGruppe = paragraphs(tracker.section('Über die Gruppe'));
+const grundprinzipien = paragraphs(tracker.section('Grundprinzipien der Gruppe'));
 
 // "Nächstes SHG-Treffen" is a second masthead-level (h1) heading mid-page,
 // same live-site pattern as Über uns's "Dein nächster Schritt" — rendered
@@ -28,7 +35,9 @@ const grundprinzipien = paragraphs(section(blocks, 'Grundprinzipien der Gruppe')
 // system's "one heading-black per page" rule (DESIGN-SYSTEM.md).
 const treffenHeadingText = 'Nächstes SHG-Treffen';
 const treffenIdx = blocks.findIndex((b) => b.type === 'heading' && b.text === treffenHeadingText);
-const treffenSection = blocks.slice(treffenIdx + 1);
+if (treffenIdx === -1) throw new Error(`Expected heading "${treffenHeadingText}"`);
+tracker.at(treffenIdx);
+const treffenSection = tracker.slice(treffenIdx + 1);
 
 // "Aktuelles" (h2) is a parent heading of the "Nächtes SHG-Treffen" (h3)
 // subsection that follows it — section()'s hierarchical semantics
@@ -49,6 +58,10 @@ const detailsList = details.find((b) => b.type === 'list');
 const cta = details.find((b) => b.type === 'cta');
 if (!cta || cta.type !== 'cta') throw new Error('Expected the sign-up CTA');
 const closingNote = treffenSection.find((b, i) => b.type === 'paragraph' && i > treffenSection.indexOf(cta));
+// treffenSection (and everything in it — aktuelles/details/cta/closingNote
+// above) was already marked handled in one shot by the tracker.slice()
+// call that produced it.
+tracker.assertAllHandled('selbsthilfegruppe.astro');
 ---
 
 <BaseLayout locale="de" path="/selbsthilfegruppe/" title={`${entry.data.title} – Persephone`}>
