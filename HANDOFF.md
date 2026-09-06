@@ -1,3 +1,54 @@
+# Handoff — night run (2026-09-06), in progress
+
+Working from `docs/NIGHT-RUN.md`, unattended, per `docs/external-review.md`
+(authority for this run) and `docs/fuer-marina.md` (owner decisions). This
+section is updated after every commit, not just at the end — see
+NIGHT-RUN.md's own rules for why.
+
+## Phase 1 — Stop the bleeding: COMPLETE
+
+- **1.1 Build-check script** (`scripts/build-check.mjs`, wired into
+  `npm run build`): eight checks over the built `dist/` output. First
+  non-blocking report (commit `3c93053`) reproduced the external review's
+  findings mechanically. `docs/build-check-report.md` is regenerated on
+  every build.
+- **1.2 Page-composition root cause**: added `BlockTracker` to
+  `src/lib/parseMarkdownBlocks.ts` — every positional/named read is now
+  accountable, and `.assertAllHandled()` throws naming the exact block if
+  anything in a page's source was neither rendered nor explicitly
+  excluded. Full reasoning (why not the review's two suggested
+  alternatives) is in `DESIGN-SYSTEM.md`'s new "Page composition:
+  BlockTracker" section. Retrofitted to every page that reads from
+  `parseMarkdownBlocks` (`ueber-uns`, `angebote`, `beratung`, `workshops`,
+  `kontakt`, `selbsthilfegruppe`, `faqs`, `disclaimer`, `impressum`,
+  `blog/index`) — this surfaced two previously-unknown silent gaps on
+  Workshops beyond what the review had found by hand (a stray "Services"
+  taxonomy label, and two un-rendered location-tag paragraphs, now
+  rendered as a plain caption line). The source-heading check from 1.1 is
+  now **blocking**, with one temporary, commented allowlist entry
+  (Selbsthilfegruppe's "Nächtes" typo — already decided, scheduled for
+  Phase 3, not yet executed).
+- **1.3 Restored lost content**, verified against the live pages:
+  - Beratung: "Was ist Beratung?" and "Formate" headings now render.
+  - Workshops: "Was ist Psychoedukation?" now renders.
+  - Kontakt: "Erreichbarkeit" and "Standorte" now render.
+  - Angebote: the ten self-recognition statements (re-extracted by
+    curling `https://www.persephone.at/angebote-2/` directly, not via a
+    summarizing fetch, then confirmed against `external-review.md`'s own
+    verified list) and the "Fang einfach dort an..." list now render.
+    "Das könnte jetzt passen" turned out to be the eyebrow of a
+    client-side quiz result card with no static content of its own —
+    logged as an open question rather than inventing which offering each
+    statement should recommend; the real eyebrow text is kept and placed
+    where it functions today. See OPEN-QUESTIONS.md.
+
+`npm run build` (23 pages, blocking heading check included) and
+`npx astro check` are clean as of every commit in this phase.
+
+## Next: Phase 2 (separate archive from live copy), then Phase 3 (owner's decisions)
+
+---
+
 # Handoff — structure-fix + remaining-pages session (COMPLETE)
 
 ## Done and committed this session
