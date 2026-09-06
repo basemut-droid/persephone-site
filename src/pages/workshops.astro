@@ -6,30 +6,44 @@ import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import marinaPortrait from '../assets/shared/marina-von-persephone.jpg';
 import logoWissenschaft from '../assets/pages/workshops/logo-wissenschaft.png';
-import { parseMarkdownBlocks, section, paragraphs } from '../lib/parseMarkdownBlocks';
+import { parseMarkdownBlocks, paragraphs, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 // No split-hero image on the live page (masthead row has no --awb-bg-image) —
 // plain PageHero, same as Angebote/Beratung.
 const entry = await getEntry('pages', 'de/workshops');
 if (!entry) throw new Error('Content collection entry "pages/de/workshops" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');
+const tracker = new BlockTracker(blocks);
 
-const heroEyebrow = (blocks[0].type === 'paragraph' && blocks[0].text) || undefined;
 // Verbatim source typo ("Workhops", missing the first "s") — see
 // OPEN-QUESTIONS.md #8. Preserved exactly, not fixed.
-const heroTitle = blocks[1].type === 'heading' ? blocks[1].text : entry.data.title;
-const heroIntro = (blocks[2].type === 'paragraph' && blocks[2].text) || undefined;
+const { eyebrow: heroEyebrow, title: heroTitle, intro: heroIntro } = tracker.heroFields(entry.data.title);
+
+// A bare "Services" paragraph sits between the intro and the first heading
+// — an Avada category-taxonomy label, the same shape as the page-top
+// "Angebote" eyebrow but with no natural render slot of its own here (it's
+// not part of the visible page copy on the live site, just a WordPress
+// term). Excluded rather than invented into a new UI element.
+tracker.exclude(tracker.at(3), 'Avada category-taxonomy label, not visible page prose');
 
 // "Was ist Psychoedukation?" / "Workshops & Trainings" / "Ressourcen" are one
 // continuous section on the live page (single row, light background), same
-// pattern as Beratung's "Was ist Beratung?" group.
-const psychoedukation = paragraphs(section(blocks, 'Was ist Psychoedukation?'));
-const workshopsSection = section(blocks, 'Workshops & Trainings');
+// pattern as Beratung's "Was ist Beratung?" group. Each heading now renders
+// its own text — "Was ist Psychoedukation?" previously only located its
+// paragraphs via section(), never printed itself (external-review.md
+// finding #4).
+const psychoedukation = paragraphs(tracker.section('Was ist Psychoedukation?'));
+const workshopsSection = tracker.section('Workshops & Trainings');
 const workshopsIntro = paragraphs(workshopsSection)[0];
 const workshopsList = workshopsSection.find((b) => b.type === 'list');
-const ressourcenSection = section(blocks, 'Ressourcen');
+// The live page tags each list with which locations it applies to
+// ("WIEN, GRAZ, ONLINE" / "ONLINE") — real content, rendered as a plain
+// caption line rather than a new component.
+const workshopsLocations = paragraphs(workshopsSection)[1];
+const ressourcenSection = tracker.section('Ressourcen');
 const ressourcenIntro = paragraphs(ressourcenSection)[0];
 const ressourcenList = ressourcenSection.find((b) => b.type === 'list');
+const ressourcenLocations = paragraphs(ressourcenSection)[1];
 
 // The closing heading appears twice back-to-back with identical text but
 // different levels (h3 then h1 — a responsive desktop/mobile duplicate
@@ -39,12 +53,16 @@ const ressourcenList = ressourcenSection.find((b) => b.type === 'list');
 // boundary, so this walks past both by hand instead.
 const closingHeadingText = 'Interesse an Psychoedukation im Kinderwunsch?';
 const headingIdxs = blocks.map((b, i) => (b.type === 'heading' && b.text === closingHeadingText ? i : -1)).filter((i) => i !== -1);
+if (headingIdxs.length === 0) throw new Error(`Expected heading "${closingHeadingText}"`);
+headingIdxs.forEach((i) => tracker.at(i)); // both the h3/h1 responsive-duplicate pair
 const lastHeadingIdx = headingIdxs[headingIdxs.length - 1];
-if (lastHeadingIdx === undefined) throw new Error(`Expected heading "${closingHeadingText}"`);
-const closing = blocks.slice(lastHeadingIdx + 1);
+const closing = tracker.slice(lastHeadingIdx + 1);
 const closingParagraphs = paragraphs(closing);
 const cta = closing.find((b) => b.type === 'cta');
 if (!cta || cta.type !== 'cta') throw new Error('Expected a closing CTA');
+// Portrait/badge images below are statically imported, not read from block
+// data — accounted for via the .section() calls above.
+tracker.assertAllHandled('workshops.astro');
 ---
 
 <BaseLayout locale="de" path="/workshops/" title={`${entry.data.title} – Persephone`}>
@@ -52,6 +70,7 @@ if (!cta || cta.type !== 'cta') throw new Error('Expected a closing CTA');
 
   <section class="section">
     <div class="container section-narrow">
+      <h2>Was ist Psychoedukation?</h2>
       {psychoedukation.map((p) => <p>{p}</p>)}
 
       <h2>Workshops &amp; Trainings</h2>
@@ -63,6 +82,7 @@ if (!cta || cta.type !== 'cta') throw new Error('Expected a closing CTA');
           </ul>
         )
       }
+      {workshopsLocations && <p class="location-tag">{workshopsLocations}</p>}
 
       <h2>Ressourcen</h2>
       {ressourcenIntro && <p>{ressourcenIntro}</p>}
@@ -73,6 +93,7 @@ if (!cta || cta.type !== 'cta') throw new Error('Expected a closing CTA');
           </ul>
         )
       }
+      {ressourcenLocations && <p class="location-tag">{ressourcenLocations}</p>}
     </div>
   </section>
 
@@ -99,5 +120,13 @@ if (!cta || cta.type !== 'cta') throw new Error('Expected a closing CTA');
   .badge {
     margin-top: 1rem;
     margin-inline: auto;
+  }
+
+  .location-tag {
+    font-size: 0.8rem;
+    font-weight: var(--weight-subheading);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
   }
 </style>
