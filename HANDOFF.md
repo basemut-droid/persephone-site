@@ -81,6 +81,20 @@
   own. Their own upcoming page-build commits won't repeat that content fix — it's
   already done.
 
+- **Beratung & Coaching — commit `5be643e`:** built from `pages/de/beratung.md`.
+  Same PageHero-banner pattern. Found and fixed a real bug in
+  `parseMarkdownBlocks.ts`'s `section()` helper: it stopped at the next heading
+  of *any* level, so a section heading immediately followed by a deeper
+  sub-heading (exactly "Gut zu wissen" h2 → four h4 FAQ questions, no paragraph
+  between) returned nothing. Fixed to stop only at same-level-or-shallower —
+  **verified this doesn't regress Über uns** (its three narrative headings still
+  render). Also fixed a bug this exposed: FAQ questions are same-page anchor
+  links (no matching `#id` in this static rebuild) — were rendering raw markdown
+  link syntax; now render just the label via `parseLinkHeading`. CTA href
+  rewritten to local `/termine/`. Not rendered: the "Formate" heading is an
+  empty grouping label in the source (no body text) — skipped, logged not
+  silently dropped.
+
 ---
 
 # Handoff — Phase 2 re-parse + Über uns rebuild session (COMPLETE, stopped per brief)
