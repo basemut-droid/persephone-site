@@ -1,18 +1,19 @@
 ---
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+
+// The live page has no narrative copy in its source at all -- the entire
+// page is one embedded Microsoft Bookings calendar (see
+// src/content/pages/de/termine.md). No eyebrow/intro text exists to
+// extract, so none is invented here -- PageHero gets just the page's own
+// title (from the live <title> tag), nothing else.
+const entry = await getEntry('pages', 'de/termine');
+if (!entry) throw new Error('Content collection entry "pages/de/termine" not found');
 ---
-<BaseLayout
-  locale="de"
-  path="/termine/"
-  title="Kennenlernen vereinbaren – Persephone"
-  description="Vereinbare ein kostenfreies, unverbindliches Online-Kennenlernen mit Marina Bletsas."
->
-  <PageHero
-    eyebrow="Kennenlernen"
-    title="Vereinbare Dein Kennenlernen"
-    intro="Das online Kennenlernen (ca. 20 Minuten) ist kostenfrei und unverbindlich."
-  />
+
+<BaseLayout locale="de" path="/termine/" title={`${entry.data.title} – Persephone`}>
+  <PageHero title={entry.data.title} />
 
   <section class="section">
     <div class="container booking-wrap">
@@ -21,7 +22,7 @@ import PageHero from '../components/PageHero.astro';
         width="100%"
         height="750"
         style="border:0"
-        title="Terminbuchung — Kennenlernen"
+        title="Terminbuchung"
       />
     </div>
   </section>
