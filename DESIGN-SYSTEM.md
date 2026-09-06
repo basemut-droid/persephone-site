@@ -97,7 +97,7 @@ h2/h3 stay at 400 regardless, unaffected either way.
   white text, `padding: 18px 32px`, `min-height: 57px`, italic. This bigger/italic
   treatment was originally a homepage-hero-only override; it's now baked into the shared
   class itself (client decision), so every primary CTA site-wide — hero, nav, `CtaBand`,
-  `ContactForm`, `NewsletterForm`, the 404 page — shares one look. The nav CTA's old
+  `ContactForm`, the 404 page — shares one look. The nav CTA's old
   uppercase/small-caps override was removed to match.
 - `.button-outline`: transparent background, `border-color: currentColor`.
 - `ServiceCard`'s `.card-button` is its own inline pseudo-button (not the shared `.button`
@@ -275,7 +275,6 @@ uses it — this is the build-from-this list for Phase 3.
 | `CtaBand.astro` | Full-bleed colored strip: eyebrow/heading/paragraphs/button — **the** shared closing-CTA pattern, built explicitly so every page's CTA stays pixel-identical | `eyebrow?`, `heading?`, `paragraphs`, `ctaLabel`, `ctaHref` | `HomePage` (newsletter section); `angebote`, `workshops`, `beratung`, `ueber-uns` |
 | `DraftNotice.astro` | Top-of-page warning banner for unreviewed AI-translated locales | `text` | `BaseLayout`, conditionally (`en`/`it` currently) |
 | `ContactForm.astro` | The Kontakt page's form: name/phone/email/topic/message/consent + honeypot. Not wired to a backend yet (see its TODO); copy is inline German literals, not props — will need i18n work before EN/IT contact pages exist | — (no props) | `kontakt.astro` only |
-| `NewsletterForm.astro` | Reusable inline email-signup form + honeypot. Not wired to a provider yet (see its TODO) | `emailLabel`, `submitLabel` | `newsletter.astro` (designed to also drop onto future event landing pages) |
 
 ## Header & navigation spec
 
@@ -326,7 +325,7 @@ One shared rule set, defined once in `global.css` rather than per component:
 | **Hover (footer/nav-dropdown links)** | Underline and/or `opacity`/color change, no transform | Footer links, nav-dropdown items, lang-switcher items — plain links deliberately don't get the button's lift |
 | **Open (`<details>` dropdowns)** | Caret rotates 180°; summary text switches to `--color-accent` | Nav dropdown, language switcher |
 | **Active** | **Not defined anywhere in the codebase.** No `:active` rule exists for buttons or links — a gap, not a deliberate choice. | — |
-| **Disabled** | **Not defined anywhere in the codebase.** No form input, button, or link has `:disabled`/`[disabled]` styling — forms (`ContactForm`, `NewsletterForm`) don't yet handle a submitting/disabled state. | — |
+| **Disabled** | **Not defined anywhere in the codebase.** No form input, button, or link has `:disabled`/`[disabled]` styling — `ContactForm` doesn't yet handle a submitting/disabled state. | — |
 
 Flagging active/disabled as gaps rather than filling them in, since neither was asked for
 and both are design decisions (what should a disabled submit button look like?) rather than

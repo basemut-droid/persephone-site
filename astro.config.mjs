@@ -22,4 +22,16 @@ export default defineConfig({
   },
 
   integrations: [sitemap()],
+
+  // NIGHT-RUN.md Phase 3.7 / OPEN-QUESTIONS.md #2: the live site has no
+  // real /newsletter/ page — "e-Brief abonnieren" 301-redirects straight
+  // to an external MailerLite form. src/pages/newsletter.astro used to
+  // carry a full page of copy that was invented during an earlier
+  // session (never sourced from the live site); this redirect matches
+  // the live site's actual behavior instead, with nothing invented.
+  // Astro generates a static HTML page with a meta-refresh + canonical
+  // link for this route, which works under any static host.
+  redirects: {
+    '/newsletter': 'https://preview.mailerlite.io/forms/1771229/164345144764532398/share',
+  },
 });

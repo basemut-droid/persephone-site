@@ -11,27 +11,15 @@ brand book's 900/Black spec. Implemented in `src/styles/global.css`'s `--weight-
 token, which every masthead `<h1>` site-wide reads from (homepage hero + every subpage's
 `PageHero` title) — still a one-value edit back to 900 if this is ever revisited.
 
-## 2. The "Newsletter" page has no real source content
+## 2. The "Newsletter" page — RESOLVED 2026-09-06
 
-`https://www.persephone.at/newsletter/` (and the nav's "e-Brief abonnieren" link,
-`https://persephone.at/newsletter`) both 301-redirect straight to an external hosted
-form: `https://preview.mailerlite.io/forms/1771229/164345144764532398/share`. There is
-no WordPress page behind it — nothing to extract verbatim.
-
-The repo's existing `src/pages/newsletter.astro` (full page, `NewsletterForm` component,
-German copy) therefore was **not** sourced from the live site — it looks like it was
-invented during the earlier "poor" parse.
-
-**Options:**
-- **(a)** Redirect `/newsletter/` straight to the MailerLite form, matching live-site
-  behavior exactly (nothing to invent — recommended for now).
-- **(b)** Keep the existing local page as an interim placeholder until you decide on a
-  newsletter provider/flow for the rebuild.
-- **(c)** Something else — e.g. you want a real on-site opt-in this time instead of an
-  external redirect.
-
-**Recommendation:** (a), until you say otherwise — it's the only option that doesn't
-invent copy.
+Decided in `fuer-marina.md` Q8 (option (a)): `/newsletter/` now redirects straight to
+the MailerLite form via Astro's `redirects` config in `astro.config.mjs`, matching the
+live site's own 301 exactly. `src/pages/newsletter.astro` (the invented full page) and
+the now-unused `src/components/NewsletterForm.astro` are both deleted. Nothing was
+invented; a real on-site opt-in page remains a small, well-scoped future addition
+whenever the owner writes real copy for it (per `fuer-marina.md`'s own note: the only
+new thing that would need building then is the sign-up field itself).
 
 ## 3. Several live pages ship no meta description at all
 

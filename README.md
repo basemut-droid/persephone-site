@@ -12,11 +12,12 @@ DE/EN/IT and blog/events infrastructure already in place for phase 2.
   and shown with a banner on the page — have a native speaker check these before launch.**
 - ✅ Blog + events content collections wired up (`src/content.config.ts`), with 4 stub
   blog posts (titles/teasers only — full article text still needs migrating from WP).
-- ⏳ Not yet real: the newsletter form (`src/components/NewsletterForm.astro`) has no
-  provider wired in; the consent/cookie banner isn't implemented (none was found active
-  on the live site — confirm with the client whether one should exist); Impressum/
-  Datenschutz pages are structural placeholders; colors/fonts are inferred from the live
-  site's CSS, not an official style guide — see `src/styles/global.css` for details.
+- ⏳ Not yet real: `/newsletter/` redirects to the external MailerLite form, matching
+  the live site (no local newsletter provider is wired in — see OPEN-QUESTIONS.md #2);
+  the consent/cookie banner isn't implemented (none was found active on the live site
+  — see `docs/external-review.md` 3c for the one thing that would require one); colors/
+  fonts are inferred from the live site's CSS, cross-checked against
+  `docs/brand/Brandbook.pdf` — see `src/styles/global.css` for details.
 
 ## Assumptions made — please confirm
 

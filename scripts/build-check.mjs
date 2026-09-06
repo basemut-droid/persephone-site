@@ -147,7 +147,9 @@ function addResult(id, title, blocking, violations) {
   /** description -> routes[] */
   const byDescription = new Map();
   for (const [route, html] of routes) {
-    if (route === '/404/' || route.startsWith('/admin/')) continue;
+    // /newsletter/ is a generated redirect stub (Astro's `redirects`
+    // config — see astro.config.mjs), not a real content page.
+    if (route === '/404/' || route.startsWith('/admin/') || route === '/newsletter/') continue;
     const m = /<meta name="description" content="([^"]*)"/i.exec(html);
     const desc = m ? m[1].trim() : '';
     if (!desc) {
