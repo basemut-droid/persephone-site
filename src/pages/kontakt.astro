@@ -5,22 +5,34 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import ContactForm from '../components/ContactForm.astro';
 import mg7811 from '../assets/pages/kontakt/mg-7811.png';
-import { parseMarkdownBlocks, mdInlineHtml } from '../lib/parseMarkdownBlocks';
+import { parseMarkdownBlocks, mdInlineHtml, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 // No split-hero image (masthead row has no --awb-bg-image) — plain PageHero.
 const entry = await getEntry('pages', 'de/kontakt');
 if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');
+const tracker = new BlockTracker(blocks);
 
-const heroEyebrow = (blocks[0].type === 'paragraph' && blocks[0].text) || undefined;
-const heroTitle = blocks[1].type === 'heading' ? blocks[1].text : entry.data.title;
-const heroIntro = (blocks[2].type === 'paragraph' && blocks[2].text) || undefined;
+const { eyebrow: heroEyebrow, title: heroTitle, intro: heroIntro } = tracker.heroFields(entry.data.title);
 
-// blocks[3] is the portrait image; blocks[4] is a second, duplicate h1
-// (desktop/mobile responsive pair, identical text minus a trailing period —
-// same pattern as elsewhere on this site) — skipped, everything from
-// blocks[5] on is the real body content.
-const bodyBlocks = blocks.slice(5).filter((b) => b.type === 'paragraph');
+// blocks[3] is a second, duplicate h1 (desktop/mobile responsive pair,
+// identical text minus a trailing period — same pattern as elsewhere on
+// this site) — not re-rendered as its own heading, since PageHero already
+// shows the first occurrence.
+tracker.exclude(tracker.at(3), 'duplicate responsive h1, PageHero already renders the first occurrence');
+// blocks[4] is the portrait image, rendered below via a statically
+// imported asset rather than read from block data.
+tracker.exclude(tracker.at(4), 'portrait image, rendered via static import below');
+
+const introLine = tracker.at(5);
+// "Erreichbarkeit" and "Standorte" previously had only their paragraphs
+// extracted (a blanket .filter(b => b.type === 'paragraph') over
+// everything from here on, which silently dropped both heading blocks) —
+// exactly external-review.md finding #8. Both now render their own
+// heading text via named sections.
+const erreichbarkeit = tracker.section('Erreichbarkeit');
+const standorte = tracker.section('Standorte');
+tracker.assertAllHandled('kontakt.astro');
 ---
 
 <BaseLayout locale="de" path="/kontakt/" title={`${entry.data.title} – Persephone`}>
@@ -30,7 +42,11 @@ const bodyBlocks = blocks.slice(5).filter((b) => b.type === 'paragraph');
     <div class="container contact-grid">
       <div class="contact-info">
         <Image src={mg7811} alt="" width={240} height={360} />
-        {bodyBlocks.map((p) => <p set:html={mdInlineHtml(p.type === 'paragraph' ? p.text : '')} />)}
+        {introLine.type === 'paragraph' && <p set:html={mdInlineHtml(introLine.text)} />}
+        <h2>Erreichbarkeit</h2>
+        {erreichbarkeit.map((b) => b.type === 'paragraph' && <p set:html={mdInlineHtml(b.text)} />)}
+        <h2>Standorte</h2>
+        {standorte.map((b) => b.type === 'paragraph' && <p set:html={mdInlineHtml(b.text)} />)}
       </div>
       <div class="contact-form-wrap">
         <ContactForm />
