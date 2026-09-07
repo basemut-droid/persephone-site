@@ -306,23 +306,37 @@ tracker.assertAllHandled('ueber-uns.astro');
     position: relative;
   }
 
+  /* Own aspect ratio per side (docs/FEEDBACK-2026-09-08.md #1: measured
+     420x575 / 680x635 at 1440px) — the left photo is a tall portrait, the
+     right one near-square. */
+  .photo-teaser--a .photo-teaser-image {
+    aspect-ratio: 420 / 575;
+  }
+
+  .photo-teaser--b .photo-teaser-image {
+    aspect-ratio: 680 / 635;
+  }
+
   .photo-teaser-image {
-    aspect-ratio: 3 / 4;
     border-radius: var(--radius);
     overflow: hidden;
   }
 
   .photo-teaser-card {
-    background: var(--color-bg-alt);
+    /* FEEDBACK-2026-09-08.md #1: #fbf8f5 (--color-bg), not the beige
+       --color-bg-alt this used to sit on. */
+    background: var(--color-bg);
     border-radius: var(--radius);
     box-shadow: 0 12px 32px rgba(24, 26, 43, 0.12);
     padding: 1.75rem 2rem;
-    /* Breaks out of the photo's bounds: pulled up over its bottom edge
-       and offset to one side rather than centered underneath it. */
-    margin-top: -3rem;
-    margin-inline: 1.5rem;
     position: relative;
     max-width: 22rem;
+    /* Mobile/stacked fallback: a plain card below its photo, pulled up
+       slightly over the bottom edge (the same overlap idea as the ≥900px
+       rule below, just without the precise 130px figure that rule is
+       measured for). */
+    margin-top: -3rem;
+    margin-inline: 1.5rem;
   }
 
   /* .eyebrow (global.css) provides the shape (uppercase, letter-spacing,
@@ -350,28 +364,50 @@ tracker.assertAllHandled('ueber-uns.astro');
     margin: 0;
   }
 
+  /* FEEDBACK-2026-09-08.md #1 / NACHTLAUF-2026-09-08.md B2.2 — live-measured
+     rules, not eyeballed: block 1200px wide, 420fr/680fr columns (the
+     photos' own widths, so fr keeps that exact ratio at any container
+     width) with a fixed 100px gap between them; the right photo starts
+     30px higher than the left (a margin-top on the left one instead of a
+     negative one on the right, so the grid's own row-height calculation —
+     driven only by the in-flow photos — still comes out right); each card
+     is left-aligned with its own photo, sized to ~75%/77% of the photo's
+     width, and anchored to the photo's bottom edge plus exactly 130px via
+     position: absolute + bottom: -130px, growing upward as its text does
+     rather than a fixed height. The measured "right card sits 150px lower
+     than the left" isn't hardcoded separately — it falls out of the -30px
+     photo offset plus each card's own (different) height under this same
+     bottom-anchor rule, so it keeps holding even if the copy length (and
+     so the card height) changes later; verified against the 5-value table
+     in FEEDBACK #1 by direct arithmetic before implementing this way. */
   @media (min-width: 900px) {
     .photo-teaser-grid {
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
+      grid-template-columns: 420fr 680fr;
+      column-gap: 100px;
+      row-gap: 0;
+      max-width: 1200px;
       align-items: start;
+      padding-block: 1rem 150px;
     }
 
-    /* The two teasers stagger vertically — left sits higher, right lower —
-       per the live design (external-review.md finding #4b). */
-    .photo-teaser--b {
-      margin-top: 4rem;
+    .photo-teaser--a {
+      margin-top: 30px;
     }
 
-    /* Cards break out to opposite sides so the two teasers don't read as
-       identical twins — left card hugs (and slightly overhangs) the left
-       edge of its photo, right card the right edge of its. */
+    .photo-teaser-card {
+      position: absolute;
+      left: 0;
+      bottom: -130px;
+      margin: 0;
+      max-width: none;
+    }
+
     .photo-teaser--a .photo-teaser-card {
-      margin-right: auto;
+      width: 75%;
     }
 
     .photo-teaser--b .photo-teaser-card {
-      margin-left: auto;
+      width: 77%;
     }
   }
 </style>
