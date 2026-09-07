@@ -17,8 +17,10 @@ each commit so the tree stays in a good state if interrupted.
 - A2 (`dab71fb`): redrew `book`/`scroll` (was `document`) icons, thickened
   every glyph's stroke and enlarged the check/meeting-detail circle so the
   glyph doesn't overflow. Verified with a local playwright screenshot.
+- A3 (`dce80b6`): Workshops list markers are now small sage `<Icon>`s
+  (book/scroll matching the section tile), not plain dots.
 
-**Not started yet:** A3–A6, all of Teil B, Teil C, Teil D. See
+**Not started yet:** A4–A6, all of Teil B, Teil C, Teil D. See
 `docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
 
 **Session note:** `playwright@1.63.0` is installed locally via
