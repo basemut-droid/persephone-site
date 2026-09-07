@@ -467,6 +467,47 @@ textarea:focus-visible,
   box-sizing: border-box;
 }
 
+/* ImagePlaceholder.astro (NACHTLAUF-2026-09-08.md A4) — a designed "photo
+   pending" stand-in in the brand palette, replacing the earlier grey
+   diagonal-stripe pattern. Fills whatever box the caller sizes (aspect
+   ratio, radius, overflow all stay the caller's concern). */
+.image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.image-placeholder-sage {
+  background: var(--color-sage);
+}
+
+.image-placeholder-beige {
+  background: var(--color-bg-alt);
+}
+
+.image-placeholder-mark {
+  width: 28%;
+  max-width: 96px;
+  height: auto;
+  /* Mutes the signet to a soft monochrome watermark ("in gedeckter
+     Farbe") instead of its full brand colors, so it reads as a page
+     element, not as a stray logo. */
+  filter: grayscale(1) brightness(1.15) opacity(0.45);
+}
+
+.image-placeholder-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  opacity: 0.55;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

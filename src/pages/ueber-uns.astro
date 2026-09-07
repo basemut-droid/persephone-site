@@ -3,6 +3,7 @@ import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ClosingCta from '../components/ClosingCta.astro';
+import ImagePlaceholder from '../components/ImagePlaceholder.astro';
 import logoKongruenz from '../assets/pages/ueber-uns/logo-kongruenz-und-authentizitaet.png';
 import marinaPortrait from '../assets/shared/marina-von-persephone.jpg';
 import {
@@ -151,14 +152,12 @@ tracker.assertAllHandled('ueber-uns.astro');
                live design is a black-and-white photo with a cream text card
                overlapping it. The two real photos are Avada template demo
                images and are not ours to use (owner-confirmed licence
-               issue) — this is a neutral, obviously-a-placeholder stand-in
-               in the brand palette instead, built so a real photo drops
-               into the same .photo-teaser-image slot later with zero
-               markup changes. The grayscale treatment is a CSS filter on
-               that slot, not baked into an image file, so it applies
-               automatically to whatever image lands there. */}
+               issue) — ImagePlaceholder.astro (NACHTLAUF-2026-09-08.md A4)
+               stands in instead, so a real photo drops into this same slot
+               later with zero markup changes beyond swapping the
+               component out for an <Image>. */}
             <div class="photo-teaser-image" aria-hidden="true">
-              <span class="photo-teaser-placeholder-label">Foto folgt</span>
+              <ImagePlaceholder />
             </div>
             <div class="photo-teaser-card">
               <h3 class="eyebrow photo-teaser-eyebrow">
@@ -245,32 +244,6 @@ tracker.assertAllHandled('ueber-uns.astro');
     aspect-ratio: 3 / 4;
     border-radius: var(--radius);
     overflow: hidden;
-    /* Neutral brand-palette placeholder, deliberately not photographic —
-       see the comment in the markup above for why. filter: grayscale(1)
-       is the actual "black-and-white treatment," applied here so a real
-       photo dropped into this same element later gets it automatically. */
-    background: repeating-linear-gradient(
-      135deg,
-      var(--color-sage),
-      var(--color-sage) 14px,
-      var(--color-teal) 14px,
-      var(--color-teal) 28px
-    );
-    filter: grayscale(1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .photo-teaser-placeholder-label {
-    font-weight: 700;
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-surface);
-    background: rgba(24, 26, 43, 0.35);
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius);
   }
 
   .photo-teaser-card {
@@ -286,15 +259,13 @@ tracker.assertAllHandled('ueber-uns.astro');
     max-width: 22rem;
   }
 
-  {
-    /* .eyebrow (global.css) provides the shape (uppercase, letter-spacing,
-       size, weight) — this only overrides its default teal for the
-       terracotta external-review.md confirmed here, and styles the link
-       the heading now wraps (task 5b: swap the element, keep the class;
-       the credentials columns already do this for a plain-text eyebrow —
-       this one wraps a link instead, since the heading itself is the
-       teaser's only click target). */
-  }
+  /* .eyebrow (global.css) provides the shape (uppercase, letter-spacing,
+     size, weight) — this only overrides its default teal for the
+     terracotta external-review.md confirmed here, and styles the link
+     the heading now wraps (task 5b: swap the element, keep the class;
+     the credentials columns already do this for a plain-text eyebrow —
+     this one wraps a link instead, since the heading itself is the
+     teaser's only click target). */
   .photo-teaser-eyebrow {
     color: var(--color-accent-strong);
     margin-bottom: 0.5rem;

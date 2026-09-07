@@ -1,0 +1,28 @@
+---
+// Shared "photo pending" placeholder (NACHTLAUF-2026-09-08.md A4) — replaces
+// the earlier grey diagonal-stripe pattern with a designed element in the
+// brand palette: a flat tone panel, the Persephone fruit-icon signet
+// (src/assets/logo/fruit-icon.png, no wordmark/sunburst — that's the full
+// logo, a different asset) muted to a soft monochrome watermark so it reads
+// as "belongs to the page" rather than as branding, and a small "Foto
+// folgt" label underneath. Gestalterische Freiheit ausdrücklich erteilt —
+// see the component's use sites for why sage was chosen as the default
+// tone (matching BlogTeaserCard's existing sage placeholder fill).
+//
+// Fills its parent completely (100%/100%) — the caller controls the actual
+// size/aspect-ratio via the wrapping element, same contract the old
+// per-page placeholder markup had.
+import { Image } from 'astro:assets';
+import fruitIcon from '../assets/logo/fruit-icon.png';
+
+interface Props {
+  tone?: 'sage' | 'beige';
+  label?: string;
+}
+const { tone = 'sage', label = 'Foto folgt' } = Astro.props;
+---
+
+<div class={`image-placeholder image-placeholder-${tone}`}>
+  <Image src={fruitIcon} alt="" aria-hidden="true" width={200} height={200} class="image-placeholder-mark" />
+  <span class="image-placeholder-label">{label}</span>
+</div>
