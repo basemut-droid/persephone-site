@@ -23,7 +23,10 @@ const introFromAngebote = 'Zwanzig Minuten, online, ohne jede Verpflichtung.';
 ---
 
 <BaseLayout locale="de" path="/termine/" title={`${entry.data.title} – Persephone`}>
-  <PageHero title={entry.data.title} />
+  {/* Confirmed no hero image on the live page (RUN-2026-09-07.md Phase E):
+     its raw HTML has no --awb-bg-image anywhere, unlike the six pages that
+     do. */}
+  <PageHero title={entry.data.title} image={false} />
 
   <section class="section">
     <div class="container booking-wrap">

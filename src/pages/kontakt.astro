@@ -7,7 +7,11 @@ import ContactForm from '../components/ContactForm.astro';
 import mg7811 from '../assets/pages/kontakt/mg-7811.png';
 import { parseMarkdownBlocks, mdInlineHtml, BlockTracker } from '../lib/parseMarkdownBlocks';
 
-// No split-hero image (masthead row has no --awb-bg-image) — plain PageHero.
+// Corrected 2026-09-07 (RUN Phase E): the live masthead DOES have a split
+// hero image (--awb-bg-image: persephone-granatapfel-fruchtbarkeit.jpg —
+// the same file the homepage itself uses). An earlier comment here
+// claiming otherwise was wrong; see docs/external-review.md's correction
+// and FIXES-2026-09-07.md task 2. PageHero now defaults to that image.
 const entry = await getEntry('pages', 'de/kontakt');
 if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');

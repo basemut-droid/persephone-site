@@ -33,7 +33,9 @@ tracker.assertAllHandled('faqs.astro');
 ---
 
 <BaseLayout locale="de" path="/faqs/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
-  <PageHero title={heroTitle} />
+  {/* Confirmed no hero image on the live page (RUN-2026-09-07.md Phase E):
+     its raw HTML has no --awb-bg-image anywhere. */}
+  <PageHero title={heroTitle} image={false} />
 
   <section class="section">
     <div class="container section-narrow">

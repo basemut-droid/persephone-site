@@ -13,6 +13,27 @@ the live site already uses it in the context of a stated partnership, so it was
 carried into the rebuild rather than left out, but per the task's own instruction:
 please confirm Selbsthilfe Steiermark is fine with continued use before launch.
 
+## 0b. The ochre/amber curved shape on subpage heroes — could not confirm from markup
+
+`FIXES-2026-09-07.md` task 2 asks for an "ochre/amber curved shape at the lower-left
+edge of the hero image area", visible in the owner's screenshots. Checked the raw
+HTML of every subpage hero (Beratung, Angebote, Workshops, Selbsthilfegruppe,
+Kontakt, homepage) for a separate decorative element there — found none; the hero
+image itself is a single CSS `background-image`, no extra shape layered on top of
+it in the markup. Downloaded the full source illustration
+(`Hintergrund.jpg`/`persephone-granatapfel-fruchtbarkeit.jpg`, the same artwork
+already in the repo) and looked at it directly: it has a salmon/coral scalloped
+shape near the top-left, but nothing ochre/amber at the lower-left matching the
+description. The shape may come from the live theme's own compiled CSS (a
+`::before`/`::after` with its own background-image) rather than anything in the
+page's inline styles or the source illustration — that stylesheet wasn't fetched
+this run, so this is genuinely unconfirmed, not guessed.
+
+**Not built**, rather than inventing an untokenized color for a shape whose exact
+form isn't confirmed. **Recommendation:** send a cropped screenshot of just that
+corner of the hero, or the live theme's compiled CSS file, and it can be added in
+one pass — it's a small decorative detail once the shape itself is known.
+
 ## 1. Ten pages ship no meta description — needs the owner's copy
 
 No `<meta name="description">` exists on the live site for most of these, and a bug

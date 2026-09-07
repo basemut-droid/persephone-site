@@ -8,8 +8,11 @@ import type { IconName } from '../components/Icon.astro';
 import steiermarkLogo from '../assets/pages/selbsthilfegruppe/selbsthilfe-steiermark-logo.png';
 import { parseMarkdownBlocks, section, paragraphs, BlockTracker } from '../lib/parseMarkdownBlocks';
 
-// No split-hero image on the live page — plain PageHero, same as the other
-// Angebote subpages.
+// Corrected 2026-09-07 (RUN Phase E): the live masthead DOES have a split
+// hero image (the same pomegranate illustration as the homepage). An
+// earlier comment here claiming otherwise was wrong; see
+// docs/external-review.md's correction and FIXES-2026-09-07.md task 2.
+// PageHero now defaults to that image.
 const entry = await getEntry('pages', 'de/selbsthilfegruppe');
 if (!entry) throw new Error('Content collection entry "pages/de/selbsthilfegruppe" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');

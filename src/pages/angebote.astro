@@ -7,9 +7,11 @@ import mg7425 from '../assets/pages/angebote/mg-7425.jpg';
 import logoGeborgenheit from '../assets/pages/angebote/logo-geborgenheit.png';
 import { parseMarkdownBlocks, BlockTracker } from '../lib/parseMarkdownBlocks';
 
-// Live page has no split-hero image (confirmed: its masthead row has no
-// --awb-bg-image, unlike Über uns) — a plain PageHero banner is the right
-// fit here, matching the rest of the subpages.
+// Corrected 2026-09-07 (RUN Phase E): the live masthead DOES have a split
+// hero image (--awb-bg-image: Hintergrund.jpg — the same pomegranate
+// illustration as the homepage). An earlier comment here claiming otherwise
+// was wrong; see docs/external-review.md's correction and
+// FIXES-2026-09-07.md task 2. PageHero now defaults to that image.
 const entry = await getEntry('pages', 'de/angebote');
 if (!entry) throw new Error('Content collection entry "pages/de/angebote" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');

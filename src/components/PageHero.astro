@@ -1,21 +1,67 @@
 ---
+// Split-hero masthead for subpages (RUN-2026-09-07.md Phase E /
+// FIXES-2026-09-07.md task 2): confirmed against the owner's screenshots that
+// eleven pages were missing their live hero image entirely — a text-only fetch
+// of the live pages simply doesn't show a CSS background-image, and that
+// absence was wrongly written up as "correct" earlier in this project (see
+// the correction at the top of docs/external-review.md). Reuses the exact
+// .hero/.hero-grid/.hero-copy/.hero-headline/.hero-image classes the homepage
+// and Über uns already established — not a second hero pattern.
+//
+// Shared default + per-page override, as the live site itself does: most
+// subpages show the same pomegranate illustration as the homepage, so that's
+// the default here; a page needing a different image (or confirmed to have
+// none) passes its own `image`/`imageAlt`, or `image={false}` for the plain
+// text-only banner this component used to always render.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import defaultHeroImage from '../assets/hero/granatapfel-fruchtbarkeit.png';
+
 interface Props {
   eyebrow?: string;
   title: string;
   intro?: string;
+  image?: ImageMetadata | false;
+  imageAlt?: string;
 }
-const { eyebrow, title, intro } = Astro.props;
+const {
+  eyebrow,
+  title,
+  intro,
+  image = defaultHeroImage,
+  imageAlt = 'Aufgeschnittener Granatapfel — Symbol des Persephone-Mythos',
+} = Astro.props;
 ---
 
-<section class="page-hero">
-  <div class="container page-hero-inner">
-    {eyebrow && <span class="eyebrow">{eyebrow}</span>}
-    <h1 class="heading-black">{title}</h1>
-    {intro && <p class="page-hero-intro">{intro}</p>}
-  </div>
-</section>
+{
+  image ? (
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+          <h1 class="hero-headline heading-black">{title}</h1>
+          {intro && <p>{intro}</p>}
+        </div>
+        <div class="hero-image">
+          <Image src={image} alt={imageAlt} width={1600} height={882} />
+        </div>
+      </div>
+    </section>
+  ) : (
+    <section class="page-hero">
+      <div class="container page-hero-inner">
+        {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+        <h1 class="heading-black">{title}</h1>
+        {intro && <p class="page-hero-intro">{intro}</p>}
+      </div>
+    </section>
+  )
+}
 
 <style>
+  /* .hero/.hero-grid/.hero-copy/.hero-headline/.hero-image are shared
+     (global.css) — nothing to add for the image-hero case. */
+
   .page-hero {
     background: var(--color-bg-alt);
     padding-block: clamp(3rem, 6vw, 5rem);

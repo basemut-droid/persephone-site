@@ -3,6 +3,7 @@ import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import BlogTeaserCard from '../../components/BlogTeaserCard.astro';
+import blogHeroImage from '../../assets/pages/blog/marina-schreibtisch.png';
 import { parseMarkdownBlocks, BlockTracker } from '../../lib/parseMarkdownBlocks';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
@@ -27,7 +28,21 @@ tracker.assertAllHandled('blog/index.astro');
   path="/blog/"
   title={`${entry.data.title} – Persephone`}
 >
-  <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
+  {
+    /* Confirmed against the live page's raw HTML (RUN-2026-09-07.md Phase E /
+       FIXES-2026-09-07.md task 2): a different photo from the other subpages
+       — Marina at her desk under a copper lamp — downloaded from the live
+       Blog page's own --awb-bg-image (MG_7767-scaled.png), not the shared
+       pomegranate. Owner-confirmed rights (task 2, "Photo rights"): her
+       husband photographed every portrait of her on this site. */
+  }
+  <PageHero
+    eyebrow={heroEyebrow}
+    title={heroTitle}
+    intro={heroIntro}
+    image={blogHeroImage}
+    imageAlt="Marina von Persephone arbeitet am Laptop an ihrem Schreibtisch"
+  />
 
   <section class="section">
     <div class="container">

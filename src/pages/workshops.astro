@@ -9,8 +9,11 @@ import marinaPortrait from '../assets/shared/marina-von-persephone.jpg';
 import logoWissenschaft from '../assets/pages/workshops/logo-wissenschaft.png';
 import { parseMarkdownBlocks, paragraphs, BlockTracker } from '../lib/parseMarkdownBlocks';
 
-// No split-hero image on the live page (masthead row has no --awb-bg-image) —
-// plain PageHero, same as Angebote/Beratung.
+// Corrected 2026-09-07 (RUN Phase E): the live masthead DOES have a split
+// hero image (--awb-bg-image: Hintergrund.jpg — the same pomegranate
+// illustration as the homepage). An earlier comment here claiming otherwise
+// was wrong; see docs/external-review.md's correction and
+// FIXES-2026-09-07.md task 2. PageHero now defaults to that image.
 const entry = await getEntry('pages', 'de/workshops');
 if (!entry) throw new Error('Content collection entry "pages/de/workshops" not found');
 const blocks = parseMarkdownBlocks(entry.body ?? '');
