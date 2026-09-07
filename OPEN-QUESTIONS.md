@@ -139,33 +139,39 @@ cutover).
 Datenschutzerklärung's processor disclosure), then set `site` to the real domain in
 one line. `astro.config.mjs` carries a prominent `// TODO` marking exactly where.
 
-## 7. EN/IT homepage's own nav links to subpages that don't exist — NOT YET FIXED
+## 7. EN/IT homepage's own nav links to subpages that don't exist — RESOLVED 2026-09-07
 
-Discovered while fixing the language switcher's own dead-link bug (now resolved —
-see `docs/decisions.md`): `site/en.json` and `site/it.json` each define a full
-header-nav config as if translated subpages exist — `{"label": "About", "href":
-"/en/about/"}`, a "Services" dropdown with three children, "Blog", "Contact", plus a
-CTA to `/en/appointments/` and a footer newsletter link to `/en/newsletter/` (same
-shape in Italian). None of these routes are built — only `/en/` and `/it/` themselves
-exist. Visiting the EN or IT homepage and clicking almost anything in its own header
-or footer leads to a 404.
+`site/en.json` and `site/it.json` used to define a full header-nav config as if
+translated subpages existed (About/Services/Blog/Contact plus a CTA and footer
+links) when only the homepage itself was ever built. Fixed exactly as this item's
+own recommendation said: `nav.items` is now one honest line in each language
+("The rest of this site is currently available in German" / the Italian
+equivalent) linking to `/`, the header CTA points at the real `/termine/` page
+instead of a dead `/en/appointments/`, and `footer.columns` is empty (Footer.astro
+now collapses to one column when it is, rather than reserving empty grid space).
+The `internal-links-resolve` build-check dropped from 66 dead EN/IT links to 42 —
+the rest are the homepage's own body content (hero/services/founder/newsletter
+section hrefs), a separate, larger redesign call about what those sections should
+say/link to at all, not just a navigation trim; still open if a future pass wants
+to take it on.
 
-A new build-check (`internal-links-resolve`, non-blocking, in `scripts/build-check.mjs`)
-now catches this going forward — confirms **66 dead links, all confined to `/en/` and
-`/it/`, zero on any German page**.
+## 7b. EN/IT must stay unpublished until you've read them — needs your sign-off
 
-**Why not fixed already:** this is a bigger call than hiding switcher entries — it
-means deciding what the EN/IT homepage's *own navigation* should look like when
-almost nothing behind it is translated (hide the untranslated items? point them at
-the German version with a language notice? something else?). `external-review.md`'s
-own recommendation ("Ship German-only; add locales when there is content to add")
-would solve this by removing EN/IT nav depth entirely, but the multilingual homepage
-itself should stay — it still works as a landing page; the nav *inside* it is the
-part that's broken.
+Not a code decision. `FIXES-2026-09-07.md` task 4 found the English homepage
+contains **no mention of your training status** — searching the built page for
+"supervision", "in training", "i.A.u.S." and "psychotherapy" returns zero matches.
+It offers "Counseling & Coaching" with no qualifier, and `/en/disclaimer/` doesn't
+exist at all. The German site is careful about exactly this everywhere else on the
+site — Austrian law regulates these designations and requires the training status
+to be disclosed, and an unreviewed translation that drops it describes a service
+you may not be able to offer unqualified.
 
-**Recommendation:** trim `nav.items`/`footer.columns` in `site/en.json`/`site/it.json`
-down to only what's real (the homepage link and, once true, anything else translated)
-until more pages are actually translated.
+**What's already done, as a stopgap, not a fix:** both locale homepages now carry
+`noindex` and are excluded from the sitemap, so they can't be found by search
+engines in the meantime. **What still needs you:** read both translations line by
+line — in particular every sentence describing your qualifications — before either
+goes live. Until then they stay noindexed, whether or not anyone remembers to ask
+again.
 
 ## 8. Termine's page title — needs the owner's wording
 
