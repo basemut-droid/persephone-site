@@ -565,3 +565,78 @@ offset cream text-card layout) landed in the 2026-09-06/07 night run, Phase 4.2.
 (default: just the current locale) filtering both the visible switcher's entries and
 the hreflang `<link>` tags in `<head>`. Only the homepage passes all three locales;
 every other page correctly advertises German-only now.
+
+## Run 2026-09-07 (`docs/RUN-2026-09-07.md` / `docs/FIXES-2026-09-07.md`) — done and committed
+
+Full order-of-operations and findings live in those two files; this is the record of
+what shipped, for future reference. Every commit below passed a clean
+`npm run build` first. Live-site claims were verified against raw HTML (`curl -A
+"Mozilla/5.0 ..." <url>`), never a text/summary fetch — see RUN-2026-09-07.md's own
+"HOW TO VERIFY" section for why that rule exists (three of the previous night's four
+wrong conclusions came from exactly that shortcut).
+
+- **Phase A** (`c947478`) — the Angebote nav dropdown was physically unreachable by
+  mouse: an empty margin between trigger and menu broke `:hover` mid-transit, no
+  close delay existed, and a CSS `:focus-within` fallback fought the JS-driven
+  Escape-close. Fixed in `Header.astro`; also tightened the visual gap before "Blog"
+  that the toggle button's touch target was creating. Verified with a real
+  Chromium session: a stepped pointer path across the gap, full keyboard flow, and a
+  touch-emulated 390px context.
+- **Phase B** (`c9675a0`) — `Icon.astro` (shared inline-SVG set: book, document, pin,
+  calendar, clock, shield, heart, group, check) and `Pill.astro` (shared sage
+  badge), recorded in DESIGN-SYSTEM.md's new "Icon set"/"Badge/pill" sections.
+- **Phase C** (`f4df68d`) — `ClosingCta.astro`, the site-wide two-column
+  portrait-over-tile closing CTA, replacing four pages' worth of stray badges and
+  ad-hoc centered layouts. Beratung and Über uns were confirmed (not assumed) to
+  have the same live composition before applying it.
+- **Phase D** — the four Angebote subpages, one commit each:
+  - D1 `7acb408` (Beratung): re-extracted duration/location badges (new
+    `formatBadges` schema field), eyebrow/centering fixes, beige no-border cards,
+    teal circular check-mark list.
+  - D2 `b68d8eb` (Workshops): eyebrow/centering, card treatment reusing Beratung's
+    card shape, circular section icons, sage list markers, location pills.
+  - D3 `3fbd105` (Angebote): the ten-statement self-recognition selector, rebuilt
+    from real data — the live page's own inline script literal (all ten
+    statement/response/offer triples, confirmed word-for-word against the owner's
+    screenshot) turned out to be sitting in the raw HTML the whole time, not fetched
+    client-side as an earlier session assumed. New `recognitionPanel` schema field;
+    the interaction itself is radio+label+CSS `:has()`, zero JavaScript.
+  - D4 `4abe81f` (Selbsthilfegruppe): three principle labels (new `principles`
+    field), a real meeting-details card with teal icons in the live page's actual
+    order, the downloaded Selbsthilfe-Steiermark partner logo/band, and a top-to-
+    bottom re-check that found "Über die Gruppe"/"Grundprinzipien"/"Aktuelles" are
+    one continuous background section on the live site, not three alternating
+    bands as previously built.
+- **Phase E** (`f3cf4c9`) — hero images. `PageHero.astro` now supports the same
+  split-hero pattern the homepage/Über uns already used, with a default pomegranate
+  image and a per-page override. Confirmed via raw HTML, not assumed: Angebote,
+  Beratung, Workshops, Selbsthilfegruppe, Kontakt get the pomegranate; Blog gets its
+  own downloaded photo (Marina at her desk); Termine, FAQs, Impressum, Datenschutz,
+  Disclaimer confirmed to genuinely have none. The ochre/amber decorative shape at
+  the hero's lower-left could not be found in any page's markup or the source
+  illustration itself — logged in OPEN-QUESTIONS.md #0b rather than invented.
+- **Phase F** — the rest:
+  - Task 3 `308cb9d`: blog listing rebuilt as single-column rows (date badge,
+    description, byline, `<time>`), `category` widened to a list on the schema
+    (two posts needed a second category, two needed the existing one's name
+    corrected — all re-confirmed against each post's own live page).
+  - Task 4 `582ab34`: EN/IT get `noindex` + sitemap exclusion (a legal problem, not
+    cosmetic — the English homepage was found to drop the training-status
+    disclosure entirely) and an honest one-line nav pointing back to German,
+    replacing a full set of dead links.
+  - Task 5a `3529cc5`: fixed doubled canonical URLs on the locale homepages
+    (`/en/en/` → `/en/`).
+  - Tasks 5b/5c/6 `30c641d`: Über uns's teaser eyebrows became real headings; every
+    image on the five flagged pages got either real alt text (Marina's portrait,
+    reusing the founder photo's existing approved copy) or `aria-hidden="true"`
+    directly on the `<img>`; `scripts/build-check.mjs` gained two new BLOCKING
+    checks (alt-text, and a new "every schema field is rendered or allow-listed"
+    check that caught blog's unused `updatedDate` field — closed by rendering it,
+    not allow-listing it away).
+  - Task 5e `af9fcdd`: Termine's calendar embeds directly again (owner's husband's
+    decision, reverting the click-to-load version), with the consent-banner
+    trade-off recorded in OPEN-QUESTIONS.md #0c rather than decided in code.
+
+**Open questions this run added**, all in `OPEN-QUESTIONS.md`: #0 (Selbsthilfe
+Steiermark logo permission), #0b (the ochre hero shape), #0c (Termine's consent-
+banner trade-off), #7b (EN/IT need the owner's line-by-line read before publishing).
