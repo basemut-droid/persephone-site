@@ -18,7 +18,7 @@
       "Qui trovi orientamento e strumenti per scriverla comunque tu stessa/o. Pagina dopo pagina."
     ],
     "cta": "Iscriviti alla e-letter",
-    "ctaHref": "/it/newsletter/"
+    "ctaHref": "/newsletter/"
   },
   "painPoints": {
     "eyebrow": "ciò che quasi nessuno dice ad alta voce",
@@ -43,19 +43,19 @@
       {
         "title": "Consulenza & Coaching",
         "description": "Uno spazio protetto per te da sola/o o con la tua persona partner. Lavoriamo su ciò che pesa in questo momento del percorso: decisioni, esaurimento, comunicazione e molto altro. Con cuore, presenza e un pizzico di umorismo.",
-        "href": "/it/consulenza/",
+        "href": "/it/",
         "cta": "Scopri di più"
       },
       {
         "title": "Workshop & Percorsi individuali",
         "description": "Conoscenze e strumenti per comprendere la tua crisi riproduttiva e ritrovare capacità d'azione. Qui trovano spazio temi come le strategie di coping, il carico mentale e la comunicazione di coppia.",
-        "href": "/it/workshop/",
+        "href": "/it/",
         "cta": "Scopri di più"
       },
       {
         "title": "Gruppo di auto-aiuto",
         "description": "Sostegno tra pari e confronto in un contesto protetto. Negli incontri moderati per persone con desiderio di un figlio insoddisfatto si può trovare sollievo e trarre forza dalla comunità.",
-        "href": "/it/gruppo-di-auto-aiuto/",
+        "href": "/it/",
         "cta": "Scopri di più"
       }
     ]
@@ -95,7 +95,7 @@
       "Dal 2021 accompagno persone con desiderio di un figlio insoddisfatto nel mio gruppo di auto-aiuto. Ora offro un accompagnamento fondato come chi conosce già questo percorso."
     ],
     "cta": "Scopri di più",
-    "href": "/it/chi-siamo/",
+    "href": "/it/",
     "imageAlt": "Foto ritratto di Marina Bletsas, fondatrice di Persephone"
   },
   "newsletter": {
@@ -106,7 +106,7 @@
       "Così non devi cercare tu ciò che potrebbe essere rilevante per te."
     ],
     "cta": "Iscriviti alla e-letter",
-    "ctaHref": "/it/newsletter/"
+    "ctaHref": "/newsletter/"
   },
   "footer": {
     "tagline": "Un aiuto nella tempesta del desiderio di un figlio",

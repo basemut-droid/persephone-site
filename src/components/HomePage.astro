@@ -128,7 +128,7 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
           <div class="blog-grid">
             {posts.map((post) => (
               <BlogTeaserCard
-                href={`${locale === 'de' ? '' : `/${locale}`}/blog/${post.id.split('/').slice(1).join('/')}/`}
+                href={`${usingFallback ? '' : locale === 'de' ? '' : `/${locale}`}/blog/${post.id.split('/').slice(1).join('/')}/`}
                 title={post.data.title}
                 category={post.data.category}
                 heroImage={post.data.heroImage}

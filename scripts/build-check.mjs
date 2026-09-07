@@ -236,7 +236,11 @@ function addResult(id, title, blocking, violations) {
       }
     }
   }
-  addResult('internal-links-resolve', 'Every internal <a href> resolves to a built page', false, violations);
+  // Blocking as of RUN-2026-09-07-B1.md Phase 0.1: this was non-blocking
+  // when it first caught the EN/IT dead links documented in
+  // OPEN-QUESTIONS.md #7 — and got read past as a result. The report said
+  // FAIL, the build still passed, and the fix never happened.
+  addResult('internal-links-resolve', 'Every internal <a href> resolves to a built page', true, violations);
 }
 
 // ---------------------------------------------------------------------

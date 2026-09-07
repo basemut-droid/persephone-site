@@ -18,7 +18,7 @@
       "Here you'll find orientation and tools to write it yourself anyway. Page by page."
     ],
     "cta": "Subscribe to the e-letter",
-    "ctaHref": "/en/newsletter/"
+    "ctaHref": "/newsletter/"
   },
   "painPoints": {
     "eyebrow": "what's rarely said out loud",
@@ -43,19 +43,19 @@
       {
         "title": "Counseling & Coaching",
         "description": "A protected space for you alone or with your partner. We work on whatever weighs on you right now in the fertility journey: decisions, exhaustion, communication, and more. With heart, presence, and a touch of humor.",
-        "href": "/en/counseling/",
+        "href": "/en/",
         "cta": "Learn more"
       },
       {
         "title": "Workshops & Individual Training",
         "description": "Knowledge and tools to understand your reproductive crisis and regain your sense of agency. Room here for topics like coping strategies, mental load, and communication as a couple.",
-        "href": "/en/workshops/",
+        "href": "/en/",
         "cta": "Learn more"
       },
       {
         "title": "Support Group",
         "description": "Peer support and exchange in a protected setting. At the moderated meetings for people facing involuntary childlessness, you can find relief and draw strength from the community.",
-        "href": "/en/support-group/",
+        "href": "/en/",
         "cta": "Learn more"
       }
     ]
@@ -95,7 +95,7 @@
       "Since 2021 I've been accompanying people with unfulfilled longing for a child in my support group. Now I offer well-founded companionship as someone who knows the path."
     ],
     "cta": "Learn more",
-    "href": "/en/about/",
+    "href": "/en/",
     "imageAlt": "Portrait photo of Marina Bletsas, founder of Persephone"
   },
   "newsletter": {
@@ -106,7 +106,7 @@
       "So you don't have to go looking for what might be relevant to you."
     ],
     "cta": "Subscribe to the e-letter",
-    "ctaHref": "/en/newsletter/"
+    "ctaHref": "/newsletter/"
   },
   "footer": {
     "tagline": "Finding your way through the storm of involuntary childlessness",

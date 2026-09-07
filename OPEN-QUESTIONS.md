@@ -13,7 +13,34 @@ the live site already uses it in the context of a stated partnership, so it was
 carried into the rebuild rather than left out, but per the task's own instruction:
 please confirm Selbsthilfe Steiermark is fine with continued use before launch.
 
-## 0b. The ochre/amber curved shape on subpage heroes — could not confirm from markup
+## 0b. The ochre/amber curved shape — RESOLVED 2026-09-07, no longer a question
+
+**Found.** It is `hero-graphic-2.svg`, applied as a `background-image` with
+`background-size: cover` to the **outer** `div.fusion-fullwidth.fullwidth-box` of the
+hero band — 1425 × ~600 px, spanning the full page width, *behind* the 783 px photo
+column. Measured in a live browser on Home, Angebote, Beratung, Workshops,
+Selbsthilfegruppe, Kontakt and Blog: present on all of them, absent on Über uns.
+
+The reason the earlier check missed it is worth keeping: it looked at the hero *image*
+element and at the source illustration, and both were the wrong place. The shape is not
+in the artwork and not layered on top — it is a second, larger background one level up
+the DOM.
+
+**Und damit erledigt, nicht zu bauen.** Die Datei ist 569 Bytes: ein Pfad, eine Farbe
+(`#EDA444`), ein Bogen. Sie liegt unter `/uploads/2023/02/` — Avada-Demo-Import.
+Vom Besitzer am 7.9.2026 bestätigt: der Bogen gehört zur Avada-Vorlage, Marina hat den
+Granatapfel bzw. die Porträts darübergelegt.
+
+**Entscheidung: ersatzlos weglassen** — nicht laden, nicht nachzeichnen, kein Ersatz, und
+`#EDA444` kommt nicht ins Farbsystem. Die Frage nach der „ockerfarbenen Kurve" ist damit
+endgültig geschlossen und darf nicht erneut als Fehlbefund auftauchen.
+
+See `docs/VERGLEICH-2026-09-07.md` section A4.
+
+<details>
+<summary>Original entry (kept for the record)</summary>
+
+## 0b-old. The ochre/amber curved shape on subpage heroes — could not confirm from markup
 
 `FIXES-2026-09-07.md` task 2 asks for an "ochre/amber curved shape at the lower-left
 edge of the hero image area", visible in the owner's screenshots. Checked the raw
@@ -33,6 +60,8 @@ this run, so this is genuinely unconfirmed, not guessed.
 form isn't confirmed. **Recommendation:** send a cropped screenshot of just that
 corner of the hero, or the live theme's compiled CSS file, and it can be added in
 one pass — it's a small decorative detail once the shape itself is known.
+
+</details>
 
 ## 0c. Termine's calendar is embedded directly again — this costs a cookie banner
 
@@ -161,21 +190,38 @@ cutover).
 Datenschutzerklärung's processor disclosure), then set `site` to the real domain in
 one line. `astro.config.mjs` carries a prominent `// TODO` marking exactly where.
 
-## 7. EN/IT homepage's own nav links to subpages that don't exist — RESOLVED 2026-09-07
+## 7. EN/IT homepage's own nav links to subpages that don't exist — RESOLVED 2026-09-07, corrected 2026-09-07 (run B1)
 
 `site/en.json` and `site/it.json` used to define a full header-nav config as if
 translated subpages existed (About/Services/Blog/Contact plus a CTA and footer
-links) when only the homepage itself was ever built. Fixed exactly as this item's
-own recommendation said: `nav.items` is now one honest line in each language
-("The rest of this site is currently available in German" / the Italian
-equivalent) linking to `/`, the header CTA points at the real `/termine/` page
-instead of a dead `/en/appointments/`, and `footer.columns` is empty (Footer.astro
-now collapses to one column when it is, rather than reserving empty grid space).
-The `internal-links-resolve` build-check dropped from 66 dead EN/IT links to 42 —
-the rest are the homepage's own body content (hero/services/founder/newsletter
-section hrefs), a separate, larger redesign call about what those sections should
-say/link to at all, not just a navigation trim; still open if a future pass wants
-to take it on.
+links) when only the homepage itself was ever built. First fix (earlier same-day
+run) trimmed `nav.items` to one honest line per language and pointed the header
+CTA at `/termine/` — but left the homepage's own body content untouched, so both
+locale homepages still shipped nine dead internal links each (services cards,
+the founder "Learn more" link, both e-letter buttons, and four blog-teaser
+image/title/read-more links). The closing report of that run called this an
+"honest reduced nav" and `docs/build-check-report.md` from the same run listed
+the 42 remaining dead links as non-blocking — true, but the nav itself was never
+the whole story, and this item was marked RESOLVED before the body content was
+actually fixed. See `docs/RUN-2026-09-07-B1.md` Phase 0.1 for how this was found.
+
+**What run B1 actually did:**
+- The three service cards and the founder card's "Learn more" link now point at
+  the locale homepage itself (`/en/`, `/it/`) — the only page that exists in
+  that language, same principle as the nav trim.
+- Both e-letter buttons (hero + newsletter band) now link to `/newsletter/`
+  (no locale prefix) — the real redirect stub to the external Mailerlite
+  subscribe form (see `astro.config.mjs`'s `redirects`), which works from any
+  locale and is exactly what the button promises, rather than a self-link.
+- The four blog-teaser cards use the German fallback posts' *real* URLs
+  (`/blog/<slug>/`, no locale prefix) instead of a fabricated `/en/blog/<slug>/`
+  path — consistent with the fallback notice already telling the visitor these
+  articles are only available in German.
+- `internal-links-resolve` in `scripts/build-check.mjs` is now **blocking** —
+  it was the non-blocking report that caught this in the first place and then
+  got read past; see Phase 0.1's own note on why.
+
+Zero dead internal links remain on either locale homepage as of this run.
 
 ## 7b. EN/IT must stay unpublished until you've read them — needs your sign-off
 
@@ -220,3 +266,149 @@ settled, and this is exactly that kind of call.
 
 **Recommendation:** leave as-is unless it looks wrong in the screenshots in
 `docs/screenshots/`; if so, it's a one-line change in `PageHero.astro`.
+
+---
+
+# Neu aus dem Live-Vergleich vom 7.9.2026 (abends)
+
+Aufgenommen aus `docs/VERGLEICH-2026-09-07.md`. Alle Werte dort sind im echten Browser
+gemessen, nicht aus Text erschlossen.
+
+## 10. Hero-Eyebrow — ENTSCHIEDEN 7.9.2026: einheitlich teal
+
+**Entscheidung (Claudio): durchgehend teal #309898, auf allen Seiten, auch in der
+Hero-Zeile.** Der Rebuild macht das bereits richtig — nichts zu tun. Der Eintrag bleibt nur
+als Begründung stehen, damit die Abweichung von live nicht später erneut „korrigiert" wird.
+
+<details><summary>Befund</summary>
+
+Gemessen in der Hero-Zeile jeder Seite:
+
+| Seite | Farbe des Eyebrows live |
+|---|---|
+| Beratung, Workshops, Selbsthilfegruppe, Kontakt | **#b33a3b terrakotta** |
+| Angebote, Über uns, Blog | **#309898 teal** |
+
+Der Rebuild verwendet durchgehend teal. Das ist auf vier Seiten eine Abweichung — aber die
+Live-Seite widerspricht sich hier selbst, es gibt also kein „richtig" zum Abschreiben.
+
+**Frage an Marina:** einheitlich teal (wie der Rebuild es jetzt macht, und wie es in den
+Abschnitten innerhalb der Seiten überall aussieht) oder terrakotta in der Hero-Zeile und
+teal darunter?
+
+**Empfehlung:** einheitlich teal. Das Terrakotta in der Hero-Zeile steht direkt neben der
+terrakottafarbenen H1 und verliert dort seine Funktion als abgesetztes Label.
+
+</details>
+
+## 11. `Hintergrund.jpg` — ERLEDIGT 7.9.2026: Avada-Material, wird nicht verwendet
+
+**Antwort (Claudio): `Hintergrund.jpg` ist ein Element der Avada-Vorlage, das Marina nie
+entfernen konnte. Es bestehen keine Rechte daran. Nicht herunterladen, nicht einsetzen.**
+
+**Regel für Hero-Fotos:** der Granatapfel ist das Hauptmotiv — Ausnahme nur dort, wo ein
+Porträt hingehört (Über uns, Blog). Der Rebuild macht das auf allen Seiten bereits richtig;
+Beratung und Workshops zeigen zu Recht den Granatapfel, nicht `Hintergrund.jpg`.
+
+**Nachtrag zur Hero-Kurve:** `hero-graphic-2.svg` stammt aus demselben Avada-Demo-Import
+und wird **ersatzlos weggelassen** — siehe Punkt 0b.
+
+**Faustregel für alles Weitere:** Upload-Pfad `2023/…` = Avada-Demo, tabu. Marinas eigene
+Uploads liegen unter `2026/`. Betrifft auch `texture-bg.svg` und `hero-graphic-3.svg`, falls
+die noch gebraucht werden.
+
+<details><summary>Ursprüngliche Frage</summary>
+
+Beratung & Coaching und Workshops verwenden live **nicht** den Granatapfel, sondern eine
+Datei namens `Hintergrund.jpg` als Hero-Foto. Der Rebuild zeigt auf beiden Seiten den
+Granatapfel — das ist schlicht das falsche Bild.
+
+Die Datei ist nicht im Repo. Bevor sie geladen wird, muss geklärt sein, was sie ist:
+
+- ein Foto von Claudio → freie Verwendung, Rechte bei Marina, herunterladen und einsetzen
+- ein Avada-Template-Bild → **darf nicht** übernommen werden, wie `banner-2.jpg` und
+  `banner-3.jpg` auf Über uns
+
+Der Dateiname (generisch, deutsch, ohne Persephone-Bezug) spricht eher für ein
+Template-Bild, ist aber kein Beweis.
+
+**Frage an Claudio:** kurz auf `https://www.persephone.at/beratung/` schauen — ist das ein
+Bild von Dir? Falls nicht: Platzhalter wie auf Über uns, und Marina sucht ein Motiv aus.
+
+</details>
+
+## 12. Vier bewusste Abweichungen — ENTSCHIEDEN 7.9.2026: alle vier bleiben
+
+Der Rebuild weicht hier von live ab, und in allen vier Fällen halte ich den Rebuild für
+besser. Es sind trotzdem Abweichungen, und der Auftrag war „gleich aussehen und anfühlen".
+
+1. **Seitentitel der Startseite.** Live „Homepage - Persephone". Rebuild „Persephone –
+   Navigationshilfe im Sturm des Kinderwunsches". Der neue ist für Suchmaschinen deutlich
+   besser — aber er ist erfunden und niemand hat ihn freigegeben.
+2. **Blog-Titel in der Übersicht.** Live 20 px terrakotta in Versalien, Rebuild 26 px
+   dunkel in normaler Schreibung. Der Rebuild ist ruhiger und besser lesbar.
+3. **Datumsformat in der Blogliste.** Live „16 / 07, 2026", Rebuild „16 / JULI 2026".
+4. **Neuer Satz auf Kontakt:** „Direkt Kennenlernen vereinbaren — zwanzig Minuten, online,
+   kostenfrei." Steht live nicht. Er erfüllt die gewünschte Querverbindung zu `/termine/`,
+   ist aber neuer Text.
+
+**Entscheidung (Claudio): alle vier bleiben so, wie der Rebuild sie hat** — einschließlich
+des neuen Startseiten-Titels. Nichts zu tun; nicht an live angleichen.
+
+Einziger Nachtrag: der Startseiten-Titel ist das, was in den Suchergebnissen steht. Er ist
+freigegeben, aber Marina soll ihn einmal gelesen haben — als Eintrag in `fuer-marina.md`,
+nicht als Blocker.
+
+## 13. Über uns, Qualifikationsblock — ENTSCHIEDEN 7.9.2026: Teal-Band wiederherstellen
+
+Live ist das ein **volles Band in Teal (#309898)** mit weißer Schrift, zentrierten
+Überschriften und den Sprachen in 34 px — ein deutlicher Farbakzent mitten auf der Seite.
+Der Rebuild macht daraus einen cremefarbenen Abschnitt mit kleinen tealen Überschriften.
+
+Das ist der auffälligste Einzelunterschied der Seite und keine Kleinigkeit: er verändert
+den Rhythmus der ganzen Seite.
+
+**Entscheidung (Claudio): wiederherstellen** — volles Band in #309898, weiße Schrift,
+zentrierte Überschriften, Sprachen in 34 px, wie live. Der Block trägt die Qualifikationen;
+genau das soll bei einer Beraterin in Ausbildung sichtbar sein.
+
+## 14. FAQs: die drei Kategorien fehlen
+
+Live sind die dreizehn Fragen in drei Reitern gruppiert: „Zu Persephone", „Zu Coaching und
+Beratung", „Zur Selbsthilfe". Der Rebuild zeigt eine flache Liste. Die Zuordnung Frage →
+Kategorie ist im Repo nicht vorhanden und muss von der Live-Seite geholt werden.
+
+**Keine Frage an Marina, sondern eine Aufgabe** — hier steht nur, dass es kein
+Darstellungsproblem ist, sondern fehlende Daten.
+
+## 15. 301-Weiterleitungen — blockiert durch die Hosting-Entscheidung
+
+Drei URL-Muster ändern sich:
+
+| live | Rebuild |
+|---|---|
+| `/angebote-2/` | `/angebote/` |
+| `/datenschutzerklaerung/` | `/datenschutz/` |
+| `/<artikel-slug>/` (Blogartikel direkt an der Wurzel) | `/blog/<artikel-slug>/` |
+
+Ohne Weiterleitungen laufen beim Domainwechsel alle bestehenden Links und alle
+Suchmaschinentreffer ins Leere — betrifft **jeden** Blogartikel. Wie das eingerichtet wird,
+hängt vom Hosting ab.
+
+**Nichts zu tun, bis die Hosting-Entscheidung steht** — aber es gehört auf die Liste der
+Dinge, die vor dem Umschalten fertig sein müssen.
+
+## 16. Datenschutzerklärung — die eine Wortänderung gehört Marina explizit gezeigt
+
+Punkt 3 oben beschreibt es korrekt und vollständig. Hier nur der Nachtrag: die Änderung
+(„6. Google Fonts" + „7. Typekit Fonts" → „6. Schriftarten (Fonts)") ist die **einzige**
+Wortänderung im Dokument, sie ist inhaltlich richtig, und sie soll **stehen bleiben**.
+
+Sie darf Marina nur nicht in einem Fließtext untergehen: sie gibt sonst eine Fassung frei,
+die sie so nicht gelesen hat. Der Punkt gehört in `fuer-marina.md` als eigener Eintrag mit
+beiden Fassungen nebeneinander.
+
+**Unabhängig davon** nennt die Live-Erklärung Matomo und Cookies. Wenn die neue Seite kein
+Matomo einsetzt, beschreibt sie eine Verarbeitung, die nicht stattfindet — das ist derselbe
+Fehler wie eine fehlende Beschreibung, nur andersherum. Zusammen mit dem eingebetteten
+Microsoft-Kalender (Punkt 0c) muss die Seite vor dem Launch ohnehin neu gelesen werden.

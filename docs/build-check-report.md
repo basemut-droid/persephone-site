@@ -1,6 +1,6 @@
 # Build-check report
 
-Generated 2026-09-07T11:41:56.946Z by `scripts/build-check.mjs`.
+Generated 2026-09-07T16:16:50.874Z by `scripts/build-check.mjs`.
 
 ## Every content page has a route, every route has content — PASS
 
@@ -35,50 +35,9 @@ No violations found.
 
 No violations found.
 
-## Every internal <a href> resolves to a built page — FAIL (non-blocking)
+## Every internal <a href> resolves to a built page — PASS
 
-- /en/: <a href="/en/newsletter/"> does not resolve to a built page
-- /en/: <a href="/en/counseling/"> does not resolve to a built page
-- /en/: <a href="/en/counseling/"> does not resolve to a built page
-- /en/: <a href="/en/workshops/"> does not resolve to a built page
-- /en/: <a href="/en/workshops/"> does not resolve to a built page
-- /en/: <a href="/en/support-group/"> does not resolve to a built page
-- /en/: <a href="/en/support-group/"> does not resolve to a built page
-- /en/: <a href="/en/about/"> does not resolve to a built page
-- /en/: <a href="/en/blog/maenner-im-kinderwunsch-mythos-stille-staerke/"> does not resolve to a built page
-- /en/: <a href="/en/blog/maenner-im-kinderwunsch-mythos-stille-staerke/"> does not resolve to a built page
-- /en/: <a href="/en/blog/maenner-im-kinderwunsch-mythos-stille-staerke/"> does not resolve to a built page
-- /en/: <a href="/en/blog/texte-stimmen-lieder/"> does not resolve to a built page
-- /en/: <a href="/en/blog/texte-stimmen-lieder/"> does not resolve to a built page
-- /en/: <a href="/en/blog/texte-stimmen-lieder/"> does not resolve to a built page
-- /en/: <a href="/en/blog/zwischen-lichterglanz-und-leere/"> does not resolve to a built page
-- /en/: <a href="/en/blog/zwischen-lichterglanz-und-leere/"> does not resolve to a built page
-- /en/: <a href="/en/blog/zwischen-lichterglanz-und-leere/"> does not resolve to a built page
-- /en/: <a href="/en/blog/einsam-im-kinderwunschprozess/"> does not resolve to a built page
-- /en/: <a href="/en/blog/einsam-im-kinderwunschprozess/"> does not resolve to a built page
-- /en/: <a href="/en/blog/einsam-im-kinderwunschprozess/"> does not resolve to a built page
-- /en/: <a href="/en/newsletter/"> does not resolve to a built page
-- /it/: <a href="/it/newsletter/"> does not resolve to a built page
-- /it/: <a href="/it/consulenza/"> does not resolve to a built page
-- /it/: <a href="/it/consulenza/"> does not resolve to a built page
-- /it/: <a href="/it/workshop/"> does not resolve to a built page
-- /it/: <a href="/it/workshop/"> does not resolve to a built page
-- /it/: <a href="/it/gruppo-di-auto-aiuto/"> does not resolve to a built page
-- /it/: <a href="/it/gruppo-di-auto-aiuto/"> does not resolve to a built page
-- /it/: <a href="/it/chi-siamo/"> does not resolve to a built page
-- /it/: <a href="/it/blog/maenner-im-kinderwunsch-mythos-stille-staerke/"> does not resolve to a built page
-- /it/: <a href="/it/blog/maenner-im-kinderwunsch-mythos-stille-staerke/"> does not resolve to a built page
-- /it/: <a href="/it/blog/maenner-im-kinderwunsch-mythos-stille-staerke/"> does not resolve to a built page
-- /it/: <a href="/it/blog/texte-stimmen-lieder/"> does not resolve to a built page
-- /it/: <a href="/it/blog/texte-stimmen-lieder/"> does not resolve to a built page
-- /it/: <a href="/it/blog/texte-stimmen-lieder/"> does not resolve to a built page
-- /it/: <a href="/it/blog/zwischen-lichterglanz-und-leere/"> does not resolve to a built page
-- /it/: <a href="/it/blog/zwischen-lichterglanz-und-leere/"> does not resolve to a built page
-- /it/: <a href="/it/blog/zwischen-lichterglanz-und-leere/"> does not resolve to a built page
-- /it/: <a href="/it/blog/einsam-im-kinderwunschprozess/"> does not resolve to a built page
-- /it/: <a href="/it/blog/einsam-im-kinderwunschprozess/"> does not resolve to a built page
-- /it/: <a href="/it/blog/einsam-im-kinderwunschprozess/"> does not resolve to a built page
-- /it/: <a href="/it/newsletter/"> does not resolve to a built page
+No violations found.
 
 ## astro.config.mjs "site" is not a placeholder — FAIL (non-blocking)
 
