@@ -13,7 +13,15 @@
 
   /* Tinte — main text color, a near-black navy rather than pure black */
   --color-text: #181a2b;
-  --color-text-muted: #32373c;
+  /* NACHTLAUF-2026-09-08.md A1: #32373c was a WordPress default gray that
+     leaked into the rebuild (FAQ answers, the blog listing's byline, and
+     Termine's fallback notice all measured this instead of the live site's
+     own ink color) — never a deliberate second text tone, so this token now
+     just carries the correct value instead of a separate wrong one. One
+     change here fixes all three call sites (they already shared this custom
+     property) plus PageHero's hero-intro paragraph and the homepage's blog-
+     fallback notice, which had quietly inherited the same leaked gray. */
+  --color-text-muted: #181a2b;
   --color-text-on-accent: #f3ece6;
 
   /* Salbei — "Geborgenheit": soft transition tone between red and teal */
@@ -446,7 +454,11 @@ textarea:focus-visible,
    <li>, on a small teal circle. */
 .icon-list-check .icon {
   color: var(--color-surface);
-  background: var(--color-accent);
+  /* NACHTLAUF-2026-09-08.md A1: live measures this circle at #48b0b0
+     (--color-teal), not the darker #309898 (--color-accent) — affects both
+     call sites at once (Beratung's checkmarks, Selbsthilfegruppe's meeting-
+     detail icons), since both already share this one class. */
+  background: var(--color-teal);
   border-radius: 50%;
   padding: 0.3rem;
   width: 1.25rem;
