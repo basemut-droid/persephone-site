@@ -125,15 +125,15 @@ h1 {
   font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
 }
 
-h2 {
-  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
-}
-
+/* h2 and h3 share one size: PRUEFUNG-B1.md #2 — VERGLEICH-2026-09-07.md A1's
+   table only named "H3-Ebene: 28px", an omission in the table (not the B1
+   implementation) that mapped straight through, since the live site itself
+   uses only one size at this level regardless of which heading tag renders
+   it. Both reach their 1.75rem (28px) cap by 600px viewport width, so every
+   layout width this site is actually checked at (900px+) renders exactly
+   28px, with a smaller minimum kept only for narrow phones. */
+h2,
 h3 {
-  /* Live measures 28px flat at 1440px (VERGLEICH-2026-09-07.md A1) — this
-     clamp reaches its 1.75rem cap by 600px viewport width, so every layout
-     width this site is actually checked at (900px+) renders exactly 28px,
-     with a smaller minimum kept only for narrow phones. */
   font-size: clamp(1.5rem, 1.3rem + 1.2vw, 1.75rem);
 }
 
