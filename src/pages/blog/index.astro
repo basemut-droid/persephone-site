@@ -2,7 +2,7 @@
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
-import BlogTeaserCard from '../../components/BlogTeaserCard.astro';
+import BlogListingRow from '../../components/BlogListingRow.astro';
 import blogHeroImage from '../../assets/pages/blog/marina-schreibtisch.png';
 import { parseMarkdownBlocks, BlockTracker } from '../../lib/parseMarkdownBlocks';
 
@@ -45,16 +45,19 @@ tracker.assertAllHandled('blog/index.astro');
   />
 
   <section class="section">
-    <div class="container">
-      <div class="blog-grid">
+    <div class="container section-narrow">
+      <div class="blog-list">
         {
           posts.map((post) => (
-            <BlogTeaserCard
+            <BlogListingRow
               href={`/blog/${post.id.split('/').slice(1).join('/')}/`}
               title={post.data.title}
+              description={post.data.description}
+              publishDate={post.data.publishDate}
               category={post.data.category}
               heroImage={post.data.heroImage}
               heroImageAlt={post.data.heroImageAlt}
+              byline="Marina von Persephone"
               readMoreLabel="Weiterlesen"
             />
           ))
@@ -65,14 +68,11 @@ tracker.assertAllHandled('blog/index.astro');
 </BaseLayout>
 
 <style>
-  .blog-grid {
-    display: grid;
-    gap: 1.5rem;
-  }
-
-  @media (min-width: 900px) {
-    .blog-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
+  /* Single column of full-width rows with a divider between them
+     (FIXES-2026-09-07.md task 3) — the earlier two-column card grid this
+     replaced didn't match the live layout. */
+  .blog-list {
+    display: flex;
+    flex-direction: column;
   }
 </style>

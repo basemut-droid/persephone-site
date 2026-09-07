@@ -2,7 +2,7 @@
 title: "Zwischen Lichterglanz und Leere"
 description: "Wenn der Kinderwunsch die Feiertage überschattet."
 publishDate: 2025-12-16
-category: "Herausforderungen & Ressourcen"
+category: ["Herausforderungen & Ressourcen im Kinderwunsch"]
 heroImage: "../../../assets/blog/zwischen-lichterglanz.jpg"
 heroImageAlt: "Adventlicher Stern im Licht, Symbolbild für Weihnachten im Kinderwunsch"
 draft: false

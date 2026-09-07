@@ -16,7 +16,15 @@ const blog = defineCollection({
       updatedDate: z.date().optional(),
       heroImage: image().optional(),
       heroImageAlt: z.string().optional(),
-      category: z.string().optional(),
+      // Widened from a single string to a list (FIXES-2026-09-07.md task 3):
+      // the live listing shows up to two categories per post
+      // ("Beziehung & Kinderwunsch, Männer im Kinderwunsch"), which a single
+      // string can't hold without losing one. Re-confirmed against each
+      // post's own live page (its category tag links) — two posts needed a
+      // second category added, and two needed the first category's own name
+      // corrected ("Herausforderungen & Ressourcen" was missing "im
+      // Kinderwunsch", present on the live tag).
+      category: z.array(z.string()).optional(),
       draft: z.boolean().default(false),
       // Per-page SEO, kept separate from the on-page title/description so
       // either can be tuned independently for search/social.

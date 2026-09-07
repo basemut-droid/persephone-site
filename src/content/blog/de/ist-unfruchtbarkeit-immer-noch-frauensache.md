@@ -2,7 +2,7 @@
 title: "Ist Unfruchtbarkeit immer noch Frauensache?"
 description: "Ein Denkanstoß für alle, die sich in der reproduktiven Krise allein fühlen – und für Paare, die es anders machen wollen."
 publishDate: 2025-09-10
-category: "Beziehung & Kinderwunsch"
+category: ["Beziehung & Kinderwunsch"]
 heroImage: "../../../assets/blog/paar-in-der-kinderwunschkrise.png"
 heroImageAlt: "Paar in der Kinderwunschkrise"
 draft: false

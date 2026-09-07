@@ -2,7 +2,7 @@
 title: "Männer im Kinderwunsch: Mythos „stille Stärke“"
 description: "Von unbeabsichtigten Belastungen und intentionaler Nähe."
 publishDate: 2026-07-16
-category: "Männer im Kinderwunsch"
+category: ["Beziehung & Kinderwunsch", "Männer im Kinderwunsch"]
 heroImage: "../../../assets/blog/maenner-im-kinderwunsch.jpg"
 heroImageAlt: "Gemälde: ein weinender Mann (Odysseus), Sinnbild für verborgene männliche Trauer im Kinderwunsch"
 draft: false

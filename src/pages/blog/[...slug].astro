@@ -34,9 +34,13 @@ const dateLabel = post.data.publishDate.toLocaleDateString('de-AT', {
 >
   <article class="post">
     <header class="post-header container">
-      {post.data.category && <span class="eyebrow">{post.data.category}</span>}
+      {post.data.category && post.data.category.length > 0 && (
+        <span class="eyebrow">{post.data.category.join(', ')}</span>
+      )}
       <h1 class="heading-black">{post.data.title}</h1>
-      <p class="post-date">{dateLabel}</p>
+      <time class="post-date" datetime={post.data.publishDate.toISOString().slice(0, 10)}>
+        {dateLabel}
+      </time>
     </header>
     {
       post.data.heroImage && (
@@ -62,6 +66,7 @@ const dateLabel = post.data.publishDate.toLocaleDateString('de-AT', {
   }
 
   .post-date {
+    display: block;
     color: var(--color-text-muted);
     font-size: 0.9rem;
   }

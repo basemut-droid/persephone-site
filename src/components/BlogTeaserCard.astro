@@ -4,7 +4,7 @@ import { Image } from 'astro:assets';
 interface Props {
   href: string;
   title: string;
-  category?: string;
+  category?: string[];
   heroImage?: ImageMetadata;
   heroImageAlt?: string;
   readMoreLabel: string;
@@ -23,7 +23,7 @@ const { href, title, category, heroImage, heroImageAlt, readMoreLabel } = Astro.
     }
   </a>
   <div class="blog-teaser-body">
-    {category && <p class="blog-teaser-category">{category}</p>}
+    {category && category.length > 0 && <p class="blog-teaser-category">{category.join(', ')}</p>}
     <h3><a href={href}>{title}</a></h3>
     <a href={href} class="blog-teaser-link">{readMoreLabel} →</a>
   </div>

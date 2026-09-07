@@ -2,7 +2,7 @@
 title: "Einsam im Kinderwunschprozess?"
 description: "Wie das Teilen von Erfahrungen im unerfüllten Kinderwunsch ein Wendepunkt für psychische Gesundheit sein kann."
 publishDate: 2025-10-16
-category: "Beziehung & Kinderwunsch"
+category: ["Beziehung & Kinderwunsch"]
 heroImage: "../../../assets/blog/einsam-im-prozess.png"
 heroImageAlt: "Licht und Schatten als Symbolbild für Einsamkeit im Kinderwunschprozess"
 draft: false
