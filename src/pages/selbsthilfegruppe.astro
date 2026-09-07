@@ -116,6 +116,15 @@ const detailItems = detailsList?.type === 'list' ? detailsList.items : [];
     </div>
 
     <div class="container section-narrow next-meeting">
+      {
+        /* NACHTLAUF-2026-09-08.md B6: live has this heading a second time,
+           big, above the "Aktuelles" eyebrow — not a duplicate to remove,
+           the small <h3> inside the card below is also real on the live
+           page. Same "second masthead-level heading mid-page" pattern as
+           Über uns's "Dein nächster Schritt"; not .heading-black, per the
+           design system's "one heading-black per page" rule. */
+      }
+      <h2 class="shg-treffen-heading">{treffenHeadingText}</h2>
       <span class="eyebrow">Aktuelles</span>
       {aktuelles.map((p) => <p>{p}</p>)}
 
@@ -140,7 +149,7 @@ const detailItems = detailsList?.type === 'list' ? detailsList.items : [];
   <section class="steiermark-band">
     <div class="container steiermark-grid">
       <div class="steiermark-logo">
-        <Image src={steiermarkLogo} alt="Selbsthilfe Steiermark – Jugend am Werk" width={300} height={145} />
+        <Image src={steiermarkLogo} alt="Selbsthilfe Steiermark – Jugend am Werk" width={368} height={177} />
       </div>
       <p>{closingNote.text}</p>
     </div>
@@ -177,6 +186,15 @@ const detailItems = detailsList?.type === 'list' ? detailsList.items : [];
 
   .next-meeting {
     margin-top: 3rem;
+  }
+
+  /* NACHTLAUF-2026-09-08.md B6: live measures this at 40px — its own
+     size, not the shared 28px h2/h3 scale (same pattern as the founder
+     heading and Über uns's CTA heading: a one-off size for one specific
+     heading, not a scale change). */
+  .shg-treffen-heading {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
   }
 
   .meeting-card {
@@ -241,15 +259,24 @@ const detailItems = detailsList?.type === 'list' ? detailsList.items : [];
     align-items: center;
   }
 
+  .steiermark-logo {
+    /* NACHTLAUF-2026-09-08.md B6: right-aligned in its column, live-measured
+       368x177 (was 220x106) — justify-self shrinks the grid item to its
+       image's own width so "end" actually moves it, instead of the item
+       stretching to fill the column by grid's own default. */
+    justify-self: end;
+  }
+
   .steiermark-logo :global(img) {
-    max-width: 220px;
+    max-width: 368px;
     height: auto;
   }
 
   .steiermark-grid p {
     color: var(--color-surface);
     margin: 0;
-    font-size: 1.05rem;
+    /* NACHTLAUF-2026-09-08.md B6: live 20px, not the 17px this measured at. */
+    font-size: 1.25rem;
   }
 
   @media (min-width: 700px) {
