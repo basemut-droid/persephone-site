@@ -12,7 +12,7 @@ const { title, description, href, cta, tone } = Astro.props;
 <article class:list={['service-card', `tone-${tone}`]}>
   <h3><a href={href}>{title}</a></h3>
   <p>{description}</p>
-  <a href={href} class="card-button">{cta}</a>
+  <a href={href} class="button button-outline card-cta">{cta}</a>
 </article>
 
 <style>
@@ -42,7 +42,7 @@ const { title, description, href, cta, tone } = Astro.props;
 
   .service-card h3,
   .service-card p,
-  .service-card .card-button {
+  .service-card .card-cta {
     position: relative;
     z-index: 1;
   }
@@ -56,26 +56,16 @@ const { title, description, href, cta, tone } = Astro.props;
     text-decoration: none;
   }
 
-  .card-button {
+  /* PRUEFUNG-B1.md #1: this used to be its own ".card-button" class with a
+     stale 12px/italic style that the Phase 1.3 button rework never reached
+     — two classes for the same kind of button was exactly why one of them
+     got missed. Dissolved into the shared .button.button-outline (already
+     correct: 17px, upright, r 4px, bg-alt fill, teal text); only the
+     card's own layout (bottom-aligned in the flex column, above the
+     decorative corner texture) stays as a local modifier. */
+  .card-cta {
     align-self: flex-start;
     margin-top: auto;
-    background: var(--color-bg);
-    color: var(--color-teal-dark);
-    text-decoration: none;
-    text-transform: uppercase;
-    font-style: italic;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    padding: 0.6rem 1.1rem;
-    /* Matches .button's own radius (VERGLEICH-2026-09-07.md A3) — this was
-       hardcoded 4px before --radius-button existed; DESIGN-SYSTEM.md had
-       flagged it as an inconsistency with --radius (6px), but it was the
-       live site's own button radius all along. */
-    border-radius: var(--radius-button);
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
   }
 
   .tone-teal-dark {

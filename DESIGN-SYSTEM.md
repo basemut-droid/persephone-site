@@ -125,13 +125,14 @@ A3, measured live):**
 - `.button-outline` (the site's "secondary" button, e.g. "Erfahre mehr"): solid
   `var(--color-bg-alt)` fill, `var(--color-accent)` (teal) text, uppercase — not actually a
   transparent/bordered treatment despite the class name; kept as-is to avoid a wider rename,
-  every call site already means "secondary".
+  every call site already means "secondary". `ServiceCard`'s three "Erfahre mehr" card
+  buttons now use this shared class too (`.button.button-outline.card-cta`, `.card-cta`
+  holding only the card's own bottom-alignment) — they used to have their own separate
+  `.card-button` class with a stale 12px/italic style the Phase 1.3 button rework never
+  reached (`docs/PRUEFUNG-B1.md` #1, fixed in `RUN-2026-09-07-B2.md` Phase 1b.1). Two
+  classes for the same kind of button was exactly why one of them got missed.
 - Selbsthilfegruppe's "MELDE DICH AN" (`.meeting-cta`, a one-off `.button-primary` variant):
   13px, uppercase, upright (italic removed, same as above).
-- `ServiceCard`'s `.card-button` now references `var(--radius-button)` too — it had
-  hardcoded the same 4px value before this token existed, previously flagged here as an
-  inconsistency with `--radius`/6px; it turns out to have been the live site's own button
-  radius all along.
 
 ## Images & border radius
 
