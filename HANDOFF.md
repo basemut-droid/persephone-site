@@ -57,7 +57,12 @@ each commit so the tree stays in a good state if interrupted.
 - B2.3 (`939be74`): Über uns's ClosingCta instance opts into 48px heading /
   336x390 portrait via new ClosingCta props (default unaffected elsewhere).
 
-**Not started yet:** B3–B9, Teil C, Teil D. See
+- B3 (`97c1122`): Angebote — ClosingCta's new `layout='pair'` renders two
+  equal same-size images side by side (live's actual composition) instead
+  of the usual overlap; response card is sticky (>=900px) while scrolling
+  the statement list.
+
+**Not started yet:** B4–B9, Teil C, Teil D. See
 `docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
 
 **Session note:** `playwright@1.63.0` is installed locally via
