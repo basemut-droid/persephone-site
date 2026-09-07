@@ -85,13 +85,24 @@ letter-spacing), `ec2966f` (1.3 — buttons solid/17px/4px-radius/upright),
 `038cf74` (1.4 — hero band on `--color-bg-alt`), `d7bdfc9` (DESIGN-SYSTEM.md
 brought back in sync).
 
-**Mid-run: `docs/RUN-2026-09-07-B2.md` Phase 1b only** (the three follow-ups from
-`docs/PRUEFUNG-B1.md`, measured against the live dev server after B1). **Phase 1c and
-Phase 2 are out of scope for this pass — do not start them.**
+**`docs/RUN-2026-09-07-B2.md` Phase 1b is complete** (the three follow-ups from
+`docs/PRUEFUNG-B1.md`, measured against the live dev server after B1). **Phase 1c,
+Phase 2, Phase 3, Phase 4 were explicitly out of scope for this pass and were not
+started.**
 
-- 1b.1 done (`6cc2f84`): `ServiceCard`'s `.card-button` (stale 12px/italic, missed by
-  the B1 button rework) dissolved into the shared `.button.button-outline`.
-- Still to do: 1b.2 (H2 32px→28px — `VERGLEICH-2026-09-07.md` A1's table only named
-  H3, an omission in the table not the B1 implementation), 1b.3 (`.hero-grid`
-  `height`→`min-height`, closes `OPEN-QUESTIONS.md` #17 — measured zero overflow on
-  any hero page at 1024–1920px per `PRUEFUNG-B1.md`).
+- 1b.1 (`6cc2f84`): `ServiceCard`'s `.card-button` (stale 12px/italic, missed by the
+  B1 button rework) dissolved into the shared `.button.button-outline`.
+- 1b.2 (`4b8f457`): h2 32px→28px, now sharing h3's clamp — `VERGLEICH-2026-09-07.md`
+  A1's table only named H3, an omission in the table, not the B1 implementation.
+- 1b.3 (`d1b389d`): `.hero-grid` `height`→`min-height` — measured zero overflow on
+  any hero page at 1024–1920px per `PRUEFUNG-B1.md`; fixed structurally anyway.
+
+**Flag for the next session, not acted on:** `OPEN-QUESTIONS.md` and
+`docs/fuer-marina.md` were modified on disk outside git (uncommitted, pre-dating this
+session) between the B1 and B2 passes — most of it is genuine new content (Marina's
+8.9.2026 answers, items #21–24), but item #7 was also reverted from B1's "RESOLVED,
+corrected" text back to "NICHT ERLEDIGT," and B1's #17 (the `.hero-grid` height flag
+this pass just closed in code) is gone from the file entirely. The dead-link fix
+itself is still intact in the actual source (`src/content/site/en.json`/`it.json`,
+verified via `git diff`) — only the doc's description of #7 is now stale. Left
+as-is per instruction (don't revert someone else's on-disk edit); worth a look.
