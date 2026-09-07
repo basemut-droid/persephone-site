@@ -338,12 +338,29 @@ textarea:focus-visible,
      own — matches .hero's own background so nothing shows through as a
      mismatched color wherever the image doesn't cover. */
   position: relative;
-  height: 320px;
+  /* NACHTLAUF-2026-09-08.md A0: an explicit height of the container's own
+     (not derived from the image, see .hero-image img below), expressed as
+     aspect-ratio rather than a flat px guess so it still gives a sensible
+     shape regardless of a future image's own orientation. Replaces the old
+     fixed 320px, which happened to visually match this ratio at common
+     phone widths anyway. */
+  aspect-ratio: 6 / 5;
   background: var(--color-bg-alt);
   overflow: hidden;
 }
 
 .hero-image img {
+  /* NACHTLAUF-2026-09-08.md A0: taken out of flow so the image can never
+     contribute its own intrinsic (aspect-ratio-derived) height to the grid
+     row it sits in. Before this, a portrait source image with no height of
+     its own beat .hero-grid's min-height (Phase 1b's height->min-height
+     change) at the row's auto-sizing pass and bloated the whole band —
+     measured on Über uns at 1176px instead of 520px, since its portrait
+     784x1176-scaled photo has no landscape source to fall back to. Every
+     other hero photo is landscape and happened to stay under 520px, which
+     is why only one page showed it. */
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -365,6 +382,16 @@ textarea:focus-visible,
   }
 
   .hero-image {
+    /* NACHTLAUF-2026-09-08.md A0: aspect-ratio was only ever meant to give
+       the image cell its own height below the breakpoint — at this width
+       the grid stretch (align-items: stretch) does that job instead. Left
+       set, aspect-ratio still feeds a definite used-height into the grid's
+       auto row-sizing pass (a percentage height doesn't count as definite
+       there), so every page's row grew to the image's own 6:5 shape
+       (792x660) regardless of copy length — the same class of bug A0 is
+       fixing, just uniform instead of Über-uns-only. auto: unset here so
+       nothing but the copy column and min-height decide the row. */
+    aspect-ratio: auto;
     height: 100%;
   }
 
