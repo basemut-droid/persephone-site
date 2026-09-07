@@ -48,7 +48,10 @@
   --font-heading: var(--font-body);
   --weight-heading: 400; /* Owner decision 2026-09-06 (fuer-marina.md Q2): normal weight, matching
      the live site, over the August-2026 brand book's 900/Black spec — the calmer read wins. */
-  --weight-subheading: 700; /* Bold — subheads, emphasis */
+  --weight-subheading: 700; /* Bold — subheads, emphasis. No longer used by
+     .eyebrow as of RUN-2026-09-07-B1.md Phase 1.2 (live measures eyebrows
+     at weight 400, not bold) — kept defined in case a future subheading
+     role needs it; flagged rather than deleted. */
   --weight-label: 500; /* Medium — nav, labels, eyebrows use Bold instead */
 
   --radius: 6px;
@@ -188,11 +191,17 @@ a {
 }
 
 .eyebrow {
+  /* VERGLEICH-2026-09-07.md A2: live is a calm, normal-weight label in
+     text size (18px/400/no letter-spacing) — this was a small, bold,
+     letter-spaced caption instead. Color and uppercase already matched.
+     Color: teal throughout, including the hero row, per the owner's
+     2026-09-07 decision (VERGLEICH A2 / OPEN-QUESTIONS #10) — the live
+     site's own terracotta-in-the-hero inconsistency is not carried over. */
   display: block;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.8rem;
-  font-weight: var(--weight-subheading);
+  letter-spacing: 0;
+  font-size: 1.125rem;
+  font-weight: 400;
   color: var(--color-accent);
   margin-bottom: 0.75rem;
 }
