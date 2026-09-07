@@ -19,8 +19,12 @@ each commit so the tree stays in a good state if interrupted.
   glyph doesn't overflow. Verified with a local playwright screenshot.
 - A3 (`dce80b6`): Workshops list markers are now small sage `<Icon>`s
   (book/scroll matching the section tile), not plain dots.
+- A4 (`456ede2`): new shared `ImagePlaceholder.astro` — muted fruit-icon
+  signet + "Foto folgt" on a sage panel, replacing grey diagonal stripes.
+  Used by Über uns's closing teasers today; B2.2 will reuse it at new
+  dimensions. Gestalterische Freiheit genutzt (see commit message for why).
 
-**Not started yet:** A4–A6, all of Teil B, Teil C, Teil D. See
+**Not started yet:** A5–A6, all of Teil B, Teil C, Teil D. See
 `docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
 
 **Session note:** `playwright@1.63.0` is installed locally via
