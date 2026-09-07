@@ -48,7 +48,16 @@ each commit so the tree stays in a good state if interrupted.
   blog category order. Aria-labels on image-only links were already fixed
   in a prior run.
 
-**Not started yet:** B2–B9, Teil C, Teil D. See
+- B2.1 (`395e7f7`): Über uns qualification block rebuilt as three
+  full-bleed alternating teal/#309898 bands + granatapfel illustration,
+  with A6's .reveal fade-in. Removed the duplicate 90x90 badge.
+- B2.2 (`751642b`): Über uns closing teasers to FEEDBACK #1's measured
+  proportions (1200px block, 420fr/680fr columns, per-photo aspect ratios,
+  card = 75%/77% of photo width anchored bottom:-130px, left photo +30px).
+- B2.3 (`939be74`): Über uns's ClosingCta instance opts into 48px heading /
+  336x390 portrait via new ClosingCta props (default unaffected elsewhere).
+
+**Not started yet:** B3–B9, Teil C, Teil D. See
 `docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
 
 **Session note:** `playwright@1.63.0` is installed locally via
