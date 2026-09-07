@@ -13,7 +13,7 @@ const { href, title, category, heroImage, heroImageAlt, readMoreLabel } = Astro.
 ---
 
 <article class="blog-teaser">
-  <a href={href} class="blog-teaser-image" aria-hidden={heroImage ? undefined : 'true'}>
+  <a href={href} class="blog-teaser-image" aria-label={heroImage ? title : undefined} aria-hidden={heroImage ? undefined : 'true'}>
     {
       heroImage ? (
         <Image src={heroImage} alt={heroImageAlt ?? ''} width={400} height={260} loading="lazy" />

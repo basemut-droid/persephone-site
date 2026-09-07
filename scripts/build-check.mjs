@@ -384,6 +384,33 @@ function addResult(id, title, blocking, violations) {
 }
 
 // ---------------------------------------------------------------------
+// 10. Every <a> has an accessible name — text content or aria-label.
+//    BLOCKING per docs/RUN-2026-09-07-B1.md Phase 0.2: an image-only link
+//    (a blog-teaser/blog-row thumbnail wrapped in <a href>, no text inside)
+//    reads to a screen reader as just "Link" — no build-check caught this
+//    class of bug before now, exactly why this run's own image links slipped
+//    through in the first place.
+// ---------------------------------------------------------------------
+{
+  const violations = [];
+  for (const [route, html] of routes) {
+    for (const m of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
+      const [, attrs, inner] = m;
+      const ariaLabel = /aria-label="([^"]*)"/i.exec(attrs)?.[1]?.trim();
+      const textContent = inner
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (!ariaLabel && !textContent) {
+        violations.push(`${route}: <a${attrs}> has no text content and no aria-label`);
+      }
+    }
+  }
+  addResult('link-accessible-name', 'Every <a> has an accessible name (text content or aria-label)', true, violations);
+}
+
+// ---------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------
 const lines = [];

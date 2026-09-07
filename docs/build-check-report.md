@@ -1,6 +1,6 @@
 # Build-check report
 
-Generated 2026-09-07T16:16:50.874Z by `scripts/build-check.mjs`.
+Generated 2026-09-07T16:17:54.855Z by `scripts/build-check.mjs`.
 
 ## Every content page has a route, every route has content — PASS
 
@@ -48,5 +48,9 @@ No violations found.
 No violations found.
 
 ## Every collection schema field is rendered or explicitly allow-listed — PASS
+
+No violations found.
+
+## Every <a> has an accessible name (text content or aria-label) — PASS
 
 No violations found.

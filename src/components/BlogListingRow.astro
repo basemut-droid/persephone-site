@@ -29,7 +29,7 @@ const isoDate = publishDate.toISOString().slice(0, 10);
 ---
 
 <article class="blog-row">
-  <a href={href} class="blog-row-image" aria-hidden={heroImage ? undefined : 'true'}>
+  <a href={href} class="blog-row-image" aria-label={heroImage ? title : undefined} aria-hidden={heroImage ? undefined : 'true'}>
     {
       heroImage ? (
         <Image src={heroImage} alt={heroImageAlt ?? ''} width={300} height={220} loading="lazy" />
