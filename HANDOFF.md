@@ -53,8 +53,21 @@ that matter most:
   option's wording (#11), Termine's title could be better (#16), and a few smaller
   items — all listed in `OPEN-QUESTIONS.md`, none urgent.
 
-## Next step
+## Next step — mid-run, 2026-09-07
 
-Nothing is queued. The site is in a consistent, working, committed state — pick up
-whatever `OPEN-QUESTIONS.md` item matters most, or ask for a new pass once the owner
-has answered some of them.
+Working through `docs/RUN-2026-09-07.md` (order-of-operations for
+`docs/FIXES-2026-09-07.md`, today's authority — supersedes older notes where they
+disagree). **Phase A done and committed** (`c947478`): the Angebote dropdown's dead
+hover gap, missing close delay, and an Escape/`:focus-within` conflict are fixed in
+`Header.astro`, verified with a real Chromium session (pointer path, keyboard,
+touch-emulated 390px — see that commit message for specifics).
+
+**Next: Phase B** — build the shared pieces (eyebrow pattern, icon set, badge/pill
+component) before touching Beratung/Workshops/Selbsthilfegruppe/Angebote, so they're
+built once and reused, not rebuilt three times. Then Phase C (closing-CTA component),
+D (the pages), E (hero images), F (the rest). Full order and rules in
+`docs/RUN-2026-09-07.md`; findings in `docs/FIXES-2026-09-07.md`.
+
+If cut off mid-run: check `git log` for the last commit's phase/task label, then
+resume at the next uncommitted task in `docs/RUN-2026-09-07.md`'s order. Nothing here
+should be half-applied — every commit in this run is preceded by a clean build.
