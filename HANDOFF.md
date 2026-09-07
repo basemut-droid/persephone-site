@@ -4,6 +4,20 @@ Read this first at the start of every session. History and past decisions moved 
 `docs/decisions.md` (2026-09-07) so this file stays short enough to actually read —
 see `external-review.md`'s "PROCESS NOTE" for why that matters.
 
+## Nachtlauf 2026-09-08 — in progress
+
+Working through `docs/NACHTLAUF-2026-09-08.md` (replaces `RUN-2026-09-07-B2.md`),
+unattended overnight, per its own rules: no questions, open items go to
+`OPEN-QUESTIONS.md`, build + commit per finished task, this section updated after
+each commit so the tree stays in a good state if interrupted.
+
+**Done:**
+- A1 (`7444f73`): `.icon-list-check .icon` background #309898→#48b0b0 (teal);
+  `--color-text-muted` #32373c→#181a2b (leaked WordPress gray, not a real tone).
+
+**Not started yet:** A2–A6, all of Teil B, Teil C, Teil D. See
+`docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
+
 ## What's built
 
 All 14 pages (homepage + 12 standalone pages + blog) render from their real content
