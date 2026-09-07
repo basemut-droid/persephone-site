@@ -11,7 +11,7 @@
 // whatever color/size the wrapping element sets, the same way a font-icon would.
 export type IconName =
   | 'book'
-  | 'document'
+  | 'scroll'
   | 'pin'
   | 'calendar'
   | 'clock'
@@ -26,11 +26,30 @@ interface Props {
 }
 const { name, size = 24 } = Astro.props;
 
+// NACHTLAUF-2026-09-08.md A2: the Selbsthilfegruppe meeting-detail icons
+// measured too fine to read at their small circle size — thickened every
+// glyph's stroke (1.5 -> 2, check stays a touch heavier at 2.5 since a
+// checkmark reads thin fastest).
+const strokeWidth = name === 'check' ? 2.5 : 2;
+
 const paths: Record<IconName, string> = {
-  // Open book — Workshops & Trainings card icon.
-  book: 'M12 6.5c-1.5-1.2-3.5-1.8-5.5-1.8v12.6c2 0 4 .6 5.5 1.8 1.5-1.2 3.5-1.8 5.5-1.8V4.7c-2 0-4 .6-5.5 1.8Zm0 0v12.6',
-  // Scroll/document — Ressourcen card icon.
-  document: 'M7 3.5h7l3.5 3.5v13.5H7V3.5Z M14 3.5v3.5h3.5 M9.5 12h5 M9.5 15.5h5',
+  // Open book — Workshops & Trainings card icon and its list-marker
+  // (NACHTLAUF-2026-09-08.md A2/A3: redrawn with page-lines so it reads as
+  // a book rather than an abstract fan shape at both the 28px section-icon
+  // size and the 16px list-marker size).
+  book:
+    'M12 6.7c-1.7-1.4-3.9-2-6-2a1 1 0 0 0-1 1v11.2a1 1 0 0 0 1 1c2.1 0 4.3.6 6 2 1.7-1.4 3.9-2 6-2a1 1 0 0 0 1-1V5.7a1 1 0 0 0-1-1c-2.1 0-4.3.6-6 2Z ' +
+    'M12 6.7v12.2 M7.5 9h2.8 M7.5 11.8h2.8 M13.7 9h2.8 M13.7 11.8h2.8',
+  // Scroll — Ressourcen card icon and its list-marker (NACHTLAUF-2026-09-08.md
+  // A2/A3: replaces the earlier folded-corner "document" glyph, which the
+  // feedback found not recognizable; a rolled parchment — curled top and
+  // bottom edges around two lines of "text" — reads as a scroll at both the
+  // 28px section-icon size and the 16px list-marker size).
+  scroll:
+    'M6 5.5c0-1 2.7-1.5 6-1.5s6 .5 6 1.5-2.7 1.5-6 1.5-6-.5-6-1.5Z ' +
+    'M6 5.5v12.5 M18 5.5v12.5 ' +
+    'M6 18c0-1 2.7-1.5 6-1.5s6 .5 6 1.5-2.7 1.5-6 1.5-6-.5-6-1.5Z ' +
+    'M9 10h6 M9 14h6',
   // Pin — badge/pill location icon, meeting-details card.
   pin: 'M12 21s6.5-6.02 6.5-11A6.5 6.5 0 0 0 5.5 10c0 4.98 6.5 11 6.5 11Z M12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z',
   // Calendar — meeting-details date.
@@ -55,7 +74,7 @@ const paths: Record<IconName, string> = {
   viewBox="0 0 24 24"
   fill="none"
   stroke="currentColor"
-  stroke-width={name === 'check' ? 2.5 : 1.5}
+  stroke-width={strokeWidth}
   stroke-linecap="round"
   stroke-linejoin="round"
   aria-hidden="true"
