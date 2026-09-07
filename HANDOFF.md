@@ -14,9 +14,21 @@ each commit so the tree stays in a good state if interrupted.
 **Done:**
 - A1 (`7444f73`): `.icon-list-check .icon` background #309898→#48b0b0 (teal);
   `--color-text-muted` #32373c→#181a2b (leaked WordPress gray, not a real tone).
+- A2 (`dab71fb`): redrew `book`/`scroll` (was `document`) icons, thickened
+  every glyph's stroke and enlarged the check/meeting-detail circle so the
+  glyph doesn't overflow. Verified with a local playwright screenshot.
 
-**Not started yet:** A2–A6, all of Teil B, Teil C, Teil D. See
+**Not started yet:** A3–A6, all of Teil B, Teil C, Teil D. See
 `docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
+
+**Session note:** `playwright@1.63.0` is installed locally via
+`npm install --no-save` for this run's own visual QA (screenshots), same as
+a previous session — not in `package.json`/lock, reuses the chromium binary
+already cached under `%LOCALAPPDATA%\ms-playwright`. A throwaway
+`scratch-shot.mjs` (git-ignored via `.git/info/exclude`, not tracked) takes
+clipped screenshots for checking icon/layout detail without a full-page
+image. Safe to `npm install` again next session if `node_modules/playwright`
+is gone.
 
 ## What's built
 
