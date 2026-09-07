@@ -70,7 +70,11 @@ each commit so the tree stays in a good state if interrupted.
 - B5 (`534db28`): Workshops cards equal-height, location pill anchored to
   bottom (same mechanism as B4). Icons were already done in Teil A.
 
-**Not started yet:** B6–B9, Teil C, Teil D. See
+- B6 (`360edbb`): Selbsthilfegruppe — added the missing 40px "Nächstes
+  SHG-Treffen" heading above "AKTUELLES", Steiermark logo to 368x177
+  right-aligned, companion text to 20px.
+
+**Not started yet:** B7–B9, Teil C, Teil D. See
 `docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
 
 **Session note:** `playwright@1.63.0` is installed locally via
