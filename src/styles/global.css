@@ -286,7 +286,12 @@ textarea:focus-visible,
    at least Über uns, so this needs to be a real shared class, not
    re-implemented per page. See CLAUDE.md's "reuse before you build" rule. */
 .hero {
-  background: var(--color-bg);
+  /* VERGLEICH-2026-09-07.md A4: live hero band is --color-bg-alt (#f3ece6),
+     not the page's base --color-bg (#fbf8f5) — the only hero change this
+     run makes; the ochre curve once suspected missing here is Avada demo
+     material and stays out (OPEN-QUESTIONS #0b), and the hero photos
+     themselves are untouched. */
+  background: var(--color-bg-alt);
 }
 
 .hero-grid {
@@ -322,10 +327,11 @@ textarea:focus-visible,
 
 .hero-image {
   /* Assumes the source artwork/photo has no baked-in background of its
-     own — --color-bg shows through wherever the image doesn't cover. */
+     own — matches .hero's own background so nothing shows through as a
+     mismatched color wherever the image doesn't cover. */
   position: relative;
   height: 320px;
-  background: var(--color-bg);
+  background: var(--color-bg-alt);
   overflow: hidden;
 }
 
