@@ -112,7 +112,22 @@
     "tagline": "Un aiuto nella tempesta del desiderio di un figlio",
     "newsletterEyebrow": "La e-letter di Persephone",
     "newsletterCta": "Iscriviti",
-    "columns": [],
+    "columns": [
+      {
+        "title": "Informazioni utili",
+        "links": [
+          { "label": "Disclaimer (in tedesco)", "href": "/disclaimer/" },
+          { "label": "FAQ (in tedesco)", "href": "/faqs/" }
+        ]
+      },
+      {
+        "title": "Note legali",
+        "links": [
+          { "label": "Informativa sulla privacy (in tedesco)", "href": "/datenschutz/" },
+          { "label": "Note legali / Impressum (in tedesco)", "href": "/impressum/" }
+        ]
+      }
+    ],
     "copyright": "© {year}. Persephone Forum. Tutti i diritti riservati."
   },
   "common": {

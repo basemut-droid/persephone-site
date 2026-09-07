@@ -88,10 +88,12 @@ const copyright = footer.copyright.replace('{year}', String(year));
     gap: 2rem;
   }
 
-  /* EN/IT currently have no footer link columns at all (task 4 — every
-     link they'd otherwise hold points at a page that doesn't exist yet).
-     Without this, the brand column would sit in a 3-column grid with two
-     empty tracks reserved beside it. */
+  /* Guards against a page ever shipping zero footer columns (a locale with
+     no legal links of its own yet, say) — without this, the brand column
+     would sit in a 3-column grid with two empty tracks reserved beside it.
+     EN/IT used to hit this every time (RUN-2026-09-07-B1.md Phase 0.3
+     gave them the German legal pages instead), so the class stays as a
+     safety net rather than being removed now that it's unused. */
   .footer-grid-brand-only {
     grid-template-columns: 1fr;
   }

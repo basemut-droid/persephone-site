@@ -112,7 +112,22 @@
     "tagline": "Finding your way through the storm of involuntary childlessness",
     "newsletterEyebrow": "Persephone's e-letter",
     "newsletterCta": "Sign up",
-    "columns": [],
+    "columns": [
+      {
+        "title": "Useful Info",
+        "links": [
+          { "label": "Disclaimer (German)", "href": "/disclaimer/" },
+          { "label": "FAQs (German)", "href": "/faqs/" }
+        ]
+      },
+      {
+        "title": "Legal",
+        "links": [
+          { "label": "Privacy Policy (German)", "href": "/datenschutz/" },
+          { "label": "Legal Notice / Impressum (German)", "href": "/impressum/" }
+        ]
+      }
+    ],
     "copyright": "© {year}. Persephone Forum. All rights reserved."
   },
   "common": {
