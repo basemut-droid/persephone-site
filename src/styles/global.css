@@ -55,6 +55,9 @@
   --weight-label: 500; /* Medium — nav, labels, eyebrows use Bold instead */
 
   --radius: 6px;
+  /* Buttons use their own, smaller radius — see .button's own comment
+     (VERGLEICH-2026-09-07.md A3) for why this isn't just --radius. */
+  --radius-button: 4px;
   --container-max: 1248px;
 
   /* Spacing scale proposed in DESIGN-SYSTEM.md's audit. Defining the
@@ -211,9 +214,14 @@ a {
   align-items: center;
   gap: 0.5rem;
   padding: 0.65rem 1.3rem;
-  border-radius: var(--radius);
+  /* VERGLEICH-2026-09-07.md A3: live buttons are 4px, distinct from cards/
+     dropdowns/photos at --radius (6px) — ServiceCard's .card-button had
+     already hardcoded this same 4px, flagged in DESIGN-SYSTEM.md as an
+     "inconsistency" that turns out to have been correct all along. */
+  border-radius: var(--radius-button);
   font-weight: 500;
-  font-size: 0.95rem;
+  /* VERGLEICH-2026-09-07.md A3: live is 17px against this rebuild's 15px. */
+  font-size: 1.0625rem;
   text-decoration: none;
   border: 2px solid transparent;
   cursor: pointer;
@@ -231,23 +239,33 @@ a {
 }
 
 .button-primary {
-  background: linear-gradient(135deg, var(--color-cta-from), var(--color-cta-to));
-  color: var(--color-surface);
+  /* VERGLEICH-2026-09-07.md A3: live fill is a solid terracotta, not a
+     gradient, and the text is --color-bg (#fbf8f5), not pure white.
+     --color-cta-from/--color-cta-to are now unused by this rule — kept
+     defined (CtaBand/ClosingCta don't reference them either) and flagged
+     rather than deleted, in case a gradient treatment returns elsewhere. */
+  background: var(--color-accent-strong);
+  color: var(--color-bg);
 }
 
-/* The homepage hero's CTA only — bigger and italic, distinct from the
-   compact .button-primary used everywhere else (nav, CtaBand, forms).
-   Confirmed with the client as a hero-specific treatment, not the
-   general primary-button style. */
+/* The homepage hero's CTA only — bigger than the compact .button-primary
+   used everywhere else (nav, CtaBand, forms). Confirmed with the client as
+   a hero-specific treatment. VERGLEICH-2026-09-07.md A3: the italic here
+   was a rebuild invention — it appears nowhere on the live site — removed
+   ersatzlos, not replaced. */
 .button-hero {
   padding: 18px 32px;
   min-height: 57px;
-  font-style: italic;
 }
 
 .button-outline {
-  border-color: currentColor;
-  background: transparent;
+  /* VERGLEICH-2026-09-07.md A3: the live secondary button ("ERFAHRE MEHR")
+     is a solid --color-bg-alt fill with teal text and no border — not a
+     transparent/outlined treatment despite the class name (kept for now
+     to avoid a wider rename; every call site already means "secondary"). */
+  background: var(--color-bg-alt);
+  color: var(--color-accent);
+  text-transform: uppercase;
 }
 
 /* Visible focus state for every interactive element — required for keyboard

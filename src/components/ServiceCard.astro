@@ -68,7 +68,11 @@ const { title, description, href, cta, tone } = Astro.props;
     font-weight: 500;
     letter-spacing: 0.04em;
     padding: 0.6rem 1.1rem;
-    border-radius: var(--radius);
+    /* Matches .button's own radius (VERGLEICH-2026-09-07.md A3) — this was
+       hardcoded 4px before --radius-button existed; DESIGN-SYSTEM.md had
+       flagged it as an inconsistency with --radius (6px), but it was the
+       live site's own button radius all along. */
+    border-radius: var(--radius-button);
     min-height: 44px;
     display: inline-flex;
     align-items: center;

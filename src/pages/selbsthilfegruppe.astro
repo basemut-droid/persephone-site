@@ -205,14 +205,14 @@ const detailItems = detailsList?.type === 'list' ? detailsList.items : [];
     margin: 0 0 1.5rem;
   }
 
-  /* Confirmed against the live page's other buttons (nav-cta is the only
-     other uppercase one, and it isn't italic; the hero CTA is italic but
-     not uppercase) — no button on this site is consistently both, so this
-     is a one-off variant here, not a sitewide token (FIXES-2026-09-07.md
-     task 2e.3). Colour is unchanged, per the DO NOT list. */
+  /* VERGLEICH-2026-09-07.md A3: live is massiv terracotta, 13px, uppercase,
+     upright — smaller than every other primary button on the site (a
+     one-off variant, not a sitewide token). The italic here was the same
+     rebuild invention flagged for .button-hero; removed for the same
+     reason (FIXES-2026-09-07.md task 2e.3's italic call is superseded by
+     this). Colour is unchanged, per the DO NOT list. */
   .meeting-cta {
-    font-size: 0.85rem;
-    font-style: italic;
+    font-size: 0.8125rem;
     text-transform: uppercase;
     letter-spacing: 0.03em;
   }
