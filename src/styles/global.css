@@ -333,6 +333,69 @@ textarea:focus-visible,
   left: 0;
 }
 
+/* Icon presentations built on Icon.astro (DESIGN-SYSTEM.md "Icon set" /
+   RUN-2026-09-07.md Phase B2) — one shared set of wrapper styles so Beratung,
+   Workshops and Selbsthilfegruppe render the same icon shapes the same way
+   instead of three near-identical one-offs. */
+
+/* Circular terracotta section icon — top-left of a card (Workshops &
+   Trainings / Ressourcen), or above a label (Selbsthilfegruppe principles). */
+.icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: var(--color-accent-strong);
+  color: var(--color-surface);
+  flex-shrink: 0;
+}
+
+/* A list whose items carry a small circular sage-green marker instead of a
+   default bullet, or a teal check mark — used in place of a bare <ul> so
+   the marker is a real icon, not a ::marker hack that can't hold an SVG
+   consistently across browsers. */
+.icon-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.icon-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.icon-list .icon {
+  flex-shrink: 0;
+  margin-top: 0.15em;
+}
+
+/* Sage circular marker (Workshops list items) — a plain filled dot rather
+   than one of Icon.astro's glyphs, since the live marker carries no shape
+   of its own beyond "small sage circle". A pseudo-element keeps the markup
+   a bare <ul class="icon-list icon-list-sage"><li> with no extra element
+   needed per item. */
+.icon-list-sage li::before {
+  content: '';
+  flex-shrink: 0;
+  width: 0.6rem;
+  height: 0.6rem;
+  margin-top: 0.5em;
+  border-radius: 50%;
+  background: var(--color-sage);
+}
+
+/* Teal check mark (Beratung list items) — the real Icon.astro "check" glyph,
+   one per <li>, in the accent teal, matching the live site's check icons. */
+.icon-list-check .icon {
+  color: var(--color-accent);
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

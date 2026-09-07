@@ -1,0 +1,65 @@
+---
+// Shared inline-SVG icon set (docs/RUN-2026-09-07.md Phase B2 / FIXES-2026-09-07.md
+// task 2d.4) — used by Beratung, Workshops and Selbsthilfegruppe wherever the live
+// site shows a functional icon (section icons, list markers, badge pins, meeting
+// details). These are functional UI glyphs, not brand marks, so a simple
+// hand-drawn/open equivalent stands in for the live site's Avada icon-font glyphs —
+// no icon font or new dependency was added; see DESIGN-SYSTEM.md's "Icon set"
+// section for the record of this choice.
+//
+// Every icon shares a 24×24 viewBox, stroke-based, currentColor — so it inherits
+// whatever color/size the wrapping element sets, the same way a font-icon would.
+export type IconName =
+  | 'book'
+  | 'document'
+  | 'pin'
+  | 'calendar'
+  | 'clock'
+  | 'shield'
+  | 'heart'
+  | 'group'
+  | 'check';
+
+interface Props {
+  name: IconName;
+  size?: number;
+}
+const { name, size = 24 } = Astro.props;
+
+const paths: Record<IconName, string> = {
+  // Open book — Workshops & Trainings card icon.
+  book: 'M12 6.5c-1.5-1.2-3.5-1.8-5.5-1.8v12.6c2 0 4 .6 5.5 1.8 1.5-1.2 3.5-1.8 5.5-1.8V4.7c-2 0-4 .6-5.5 1.8Zm0 0v12.6',
+  // Scroll/document — Ressourcen card icon.
+  document: 'M7 3.5h7l3.5 3.5v13.5H7V3.5Z M14 3.5v3.5h3.5 M9.5 12h5 M9.5 15.5h5',
+  // Pin — badge/pill location icon, meeting-details card.
+  pin: 'M12 21s6.5-6.02 6.5-11A6.5 6.5 0 0 0 5.5 10c0 4.98 6.5 11 6.5 11Z M12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z',
+  // Calendar — meeting-details date.
+  calendar: 'M4.5 6.5h15v13.5h-15V6.5Z M4.5 10h15 M8 4v3.5 M16 4v3.5 M8 13.5h2.5 M13.5 13.5H16',
+  // Clock — meeting-details time.
+  clock: 'M12 20.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17Z M12 7.5V12l3 2',
+  // Shield — Verschwiegenheit principle.
+  shield: 'M12 3.5 19 6.5v5c0 5-3 8.2-7 9.5-4-1.3-7-4.5-7-9.5v-5L12 3.5Z',
+  // Heart — Respekt principle.
+  heart: 'M12 20s-7-4.35-9-8.5C1.6 8.4 3.2 5.5 6.2 5.5c1.9 0 3.4 1 4.8 2.7C12.4 6.5 13.9 5.5 15.8 5.5c3 0 4.6 2.9 3.2 6-2 4.15-9 8.5-9 8.5Z',
+  // Group of people — Peer-Support principle.
+  group: 'M8.5 11a2.75 2.75 0 1 0 0-5.5 2.75 2.75 0 0 0 0 5.5Z M15.5 11a2.75 2.75 0 1 0 0-5.5 2.75 2.75 0 0 0 0 5.5Z M3 19c.4-2.8 2.5-4.5 5.5-4.5s5.1 1.7 5.5 4.5 M12 19c.4-2.8 2.5-4.5 5.5-4.5.9 0 1.7.15 2.5.5',
+  // Check — Beratung/Selbsthilfegruppe list-item marker.
+  check: 'm5 12.5 4.5 4.5L19 7.5',
+};
+---
+
+<svg
+  class="icon"
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={name === 'check' ? 2.5 : 1.5}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d={paths[name]} />
+</svg>

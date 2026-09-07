@@ -267,6 +267,42 @@ question/answer; summarized here for the record):
   and `.../it` currently hold only a `.gitkeep` — it explains to an EN/IT visitor why they're
   seeing German posts, and will keep being relevant until real EN/IT posts exist. Both stay.
 
+## Icon set (RUN-2026-09-07.md Phase B2)
+
+`Icon.astro` is one shared inline-SVG icon component — no icon font, no new
+dependency — used by Beratung, Workshops and Selbsthilfegruppe wherever the live site
+shows a functional icon: `book` (Workshops & Trainings card), `document` (Ressourcen
+card), `pin` (badge/pill location), `calendar`/`clock` (meeting-details card),
+`shield`/`heart`/`group` (the three Selbsthilfegruppe principles), `check`
+(Beratung's list items). Every icon is a 24×24 stroke-based glyph on `currentColor`,
+so it inherits size/color from its wrapper the way a font-icon would.
+
+**These are functional UI glyphs, not brand marks**, so a plain hand-drawn/open
+equivalent stands in for whatever icon font the live Avada theme actually uses —
+nothing was scraped from the live site's icon font, and no icon-font package was
+added as a dependency. An exact shape match was not the goal; a reasonable
+functional equivalent was.
+
+Three shared presentation classes in `global.css` consume it:
+
+- `.icon-circle` — the circular terracotta section icon (card top-left, or above a
+  principle label).
+- `.icon-list` / `.icon-list-sage` — a list with a small filled sage circle per item
+  (a CSS `::before`, not an `<Icon>` — the live marker has no shape beyond "small
+  sage dot", so no SVG is needed for it).
+- `.icon-list` / `.icon-list-check` — a list with `Icon.astro`'s `check` glyph, in
+  the accent teal, one per `<li>`.
+
+## Badge/pill (RUN-2026-09-07.md Phase B3)
+
+`Pill.astro` is the one shared sage-green pill badge component: rounded-full, sage
+background, small uppercase bold text, with an optional leading icon (used for the
+pin on Workshops' location pills). It renders both Beratung's duration/location
+badges ("50 MINUTEN", "WIEN, ONLINE") and Workshops' location tags ("WIEN, GRAZ,
+ONLINE", "ONLINE") — see `FIXES-2026-09-07.md` tasks 2c.1/2d.3 for why those two are
+the same visual shape despite one being a missing-content problem and the other a
+missing-styling one.
+
 ## Component inventory
 
 Every component in `src/components/`, what it's for, its interface, and what currently

@@ -1,0 +1,39 @@
+---
+// The shared sage-green pill badge (docs/RUN-2026-09-07.md Phase B3 /
+// FIXES-2026-09-07.md tasks 2c.1 and 2d.3). Beratung's duration/location
+// badges ("50 MINUTEN", "WIEN, ONLINE") and Workshops' location tags
+// ("WIEN, GRAZ, ONLINE", "ONLINE") both render through this one component
+// instead of two near-identical hand-rolled versions — see FIXES-2026-09-07.md
+// for why those two are the same shape despite one being missing content
+// and the other only missing styling.
+import Icon from './Icon.astro';
+import type { IconName } from './Icon.astro';
+
+interface Props {
+  text: string;
+  icon?: IconName;
+}
+const { text, icon } = Astro.props;
+---
+
+<span class="pill">
+  {icon && <Icon name={icon} size={14} />}
+  {text}
+</span>
+
+<style>
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--color-sage);
+    color: var(--color-text);
+    border-radius: 999px;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.75rem;
+    font-weight: var(--weight-subheading);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+</style>
