@@ -6,6 +6,7 @@ import ClosingCta from '../components/ClosingCta.astro';
 import ImagePlaceholder from '../components/ImagePlaceholder.astro';
 import logoKongruenz from '../assets/pages/ueber-uns/logo-kongruenz-und-authentizitaet.png';
 import marinaPortrait from '../assets/shared/marina-von-persephone.jpg';
+import granatapfel from '../assets/hero/granatapfel-fruchtbarkeit.png';
 import {
   parseMarkdownBlocks,
   paragraphs,
@@ -50,6 +51,19 @@ const sprachen = paragraphs(tracker.section('**Sprachen**'));
 if (ausbildung?.type !== 'list' || felderfahrung?.type !== 'list') {
   throw new Error('Expected "Ausbildung"/"Felderfahrung" sections to each contain a list');
 }
+
+// NACHTLAUF-2026-09-08.md B2.1: three full-bleed two-column bands, sides
+// alternating (panel left / illustration right, then reversed, then
+// again) — rebuilt from scratch rather than copied, since live's panel is
+// info-bg-3.svg, an Avada asset (BILDRECHTE). "logo-kongruenz..." used to
+// also render here as a 90x90 badge (B2.3's duplicate-tile bug — it
+// belongs only in the closing CTA below, at 360x360) and is dropped from
+// this data entirely rather than carried through unused.
+const qualBands = [
+  { heading: stripEmphasis('**Ausbildung**'), kind: 'list' as const, items: ausbildung.items, side: 'left' as const },
+  { heading: stripEmphasis('**Felderfahrung**'), kind: 'list' as const, items: felderfahrung.items, side: 'right' as const },
+  { heading: stripEmphasis('**Sprachen**'), kind: 'lines' as const, items: sprachen, side: 'left' as const },
+];
 
 // The two closing teaser-card headings link to persephone.at URLs that are
 // live 404s (stale slugs left over from a page rename — see
@@ -118,30 +132,33 @@ tracker.assertAllHandled('ueber-uns.astro');
     </div>
   </section>
 
-  <section class="section">
-    <div class="container credentials-grid">
-      <div>
-        <h2 class="eyebrow">{stripEmphasis('**Ausbildung**')}</h2>
-        <ul>
-          {ausbildung.items.map((item) => <li set:html={mdInlineHtml(item)} />)}
-        </ul>
-      </div>
-      <div>
-        <h2 class="eyebrow">{stripEmphasis('**Felderfahrung**')}</h2>
-        <ul>
-          {felderfahrung.items.map((item) => <li set:html={mdInlineHtml(item)} />)}
-        </ul>
-      </div>
-      <div>
-        <h2 class="eyebrow">{stripEmphasis('**Sprachen**')}</h2>
-        {sprachen.map((p) => <p>{p}</p>)}
-        {/* Decorative brand tile, deliberately empty alt + aria-hidden
-           (FIXES-2026-09-07.md task 5c) — confirmed deliberate placement
-           per external-review.md's withdrawn finding #9. */}
-        <Image class="credentials-badge" src={logoKongruenz} alt="" aria-hidden="true" width={90} height={90} />
-      </div>
-    </div>
-  </section>
+  {
+    qualBands.map((band) => (
+      <section class={`reveal quals-band quals-band--${band.side}`}>
+        <div class="quals-grid">
+          <div class="quals-panel">
+            <h2 class="quals-heading">{band.heading}</h2>
+            {band.kind === 'list' ? (
+              <ul class="quals-list">
+                {band.items.map((item) => (
+                  <li set:html={mdInlineHtml(item)} />
+                ))}
+              </ul>
+            ) : (
+              <div class="quals-list quals-lines">
+                {band.items.map((line) => (
+                  <p>{line}</p>
+                ))}
+              </div>
+            )}
+          </div>
+          <div class="quals-image">
+            <Image src={granatapfel} alt="" aria-hidden="true" width={1000} height={800} />
+          </div>
+        </div>
+      </section>
+    ))
+  }
 
   <section class="section section-alt">
     <div class="container photo-teaser-grid">
@@ -187,35 +204,84 @@ tracker.assertAllHandled('ueber-uns.astro');
   /* .hero/.hero-grid/.hero-copy/.hero-headline/.hero-image are shared
      (global.css) — nothing page-specific to add for the masthead. */
 
-  .credentials-grid {
+  /* Qualification bands (NACHTLAUF-2026-09-08.md B2.1) — three full-bleed
+     two-column rows, alternating sides. Page-scoped, not global.css: this
+     shape (a solid-color column stretching the full row height, paired
+     with an image column, alternating per row) doesn't exist anywhere
+     else on the site yet — see CLAUDE.md's "reuse before you build" rule,
+     which cuts both ways: not promoting a one-off speculatively either.
+     Revisit if a future page needs the same alternating-band shape. */
+  .quals-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2.5rem;
   }
 
-  .credentials-grid ul {
+  .quals-panel {
+    background: var(--color-teal-dark);
+    color: var(--color-bg);
+    padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 5vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .quals-heading {
+    color: inherit;
+    margin-bottom: 1.5rem;
+  }
+
+  .quals-list {
+    list-style: none;
     margin: 0;
-    padding-left: 1.25rem;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
   }
 
-  .credentials-grid li {
-    margin-bottom: 0.5rem;
+  /* Language lines: NACHTLAUF-2026-09-08.md B2.1 measures these at 34px on
+     the live page — its own size, not the 20px body default. */
+  .quals-lines p {
+    font-size: 2.125rem;
+    margin: 0;
   }
 
-  .credentials-badge {
-    margin-top: 1rem;
-    border-radius: var(--radius);
+  .quals-image {
+    /* Same construction as .hero-image/.hero-image img (global.css) and
+       for the same reason — NACHTLAUF-2026-09-08.md A0: the img is taken
+       out of flow so it can never feed its own intrinsic aspect-ratio back
+       into the grid row's auto-sizing pass. */
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
   }
 
-  /* .credentials-grid/.credentials-badge stay here: reviewed and judged
-     lower risk — the Ausbildung/Felderfahrung/Sprachen shape is
-     page-specific content, not a generic pattern, so promoting it to
-     global.css now would be speculative. Revisit if a future page turns
-     out to need the same shape. */
+  .quals-image img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
 
   @media (min-width: 900px) {
-    .credentials-grid {
-      grid-template-columns: 1fr 1fr 1fr;
+    .quals-grid {
+      grid-template-columns: 1fr 1fr;
+      min-height: 26rem;
+    }
+
+    .quals-image {
+      aspect-ratio: auto;
+      height: 100%;
+    }
+
+    /* Alternating sides: the panel is always the band's first DOM child
+       (markup stays simple/linear either way) — order flips which side it
+       renders on. */
+    .quals-band--right .quals-panel {
+      order: 2;
     }
   }
 
