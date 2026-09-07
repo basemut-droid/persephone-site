@@ -13,13 +13,12 @@ const bookingUrl = 'https://outlook.office.com/book/ErstgesprchfrDichallein@pers
 
 // NIGHT-RUN.md Phase 4.3 / external-review.md finding #1b: the page had
 // no explanatory copy at all -- just the word "Termine" and an embed.
-// Rather than invent new marketing sentences, this reuses the two real,
-// already-verified sentences that describe this exact same 20-minute,
-// free, no-obligation "Kennenlernen" call elsewhere on the site:
-// beratung.md's own line about the call itself, and angebote.md's
-// "ohne jede Verpflichtung" framing.
-const introFromBeratung = 'Das online Kennenlernen (ca. 20 Min.) ist kostenfrei und dient dem gegenseitigen Beschnuppern und der Klärung Deines Anliegens.';
-const introFromAngebote = 'Zwanzig Minuten, online, ohne jede Verpflichtung.';
+// Rather than invent a new marketing sentence, this reuses the real,
+// already-verified sentence that describes this exact same 20-minute,
+// free, no-obligation "Kennenlernen" call elsewhere on the site
+// (beratung.md's own line about the call itself). FIXES-2026-09-07.md task
+// 5e: both intro sentences used to state the 20-minute length; kept one.
+const intro = 'Das online Kennenlernen (ca. 20 Min.) ist kostenfrei und dient dem gegenseitigen Beschnuppern und der Klärung Deines Anliegens.';
 ---
 
 <BaseLayout locale="de" path="/termine/" title={`${entry.data.title} – Persephone`}>
@@ -30,26 +29,30 @@ const introFromAngebote = 'Zwanzig Minuten, online, ohne jede Verpflichtung.';
 
   <section class="section">
     <div class="container booking-wrap">
-      <p>{introFromBeratung}</p>
-      <p>{introFromAngebote}</p>
+      <p>{intro}</p>
 
-      {/* NIGHT-RUN.md Phase 4.3 / external-review.md 3c: the live site
-         only *links* to this Bookings URL -- clicking is the visitor's
-         choice to contact Microsoft. Embedding it as an always-on iframe
-         would contact Microsoft's servers on every page view before any
-         consent, which is the one thing on this site that would require
-         a cookie banner. Loading the iframe only after a click keeps
-         that behavior, and the visible fallback link means the booking
-         is never unreachable if a visitor doesn't click, or if the
-         embed is blocked. */}
-      <div id="booking-loader" class="booking-loader">
-        <button type="button" id="booking-load-button" class="button button-primary">
-          Kalender laden — dabei wird eine Verbindung zu Microsoft aufgebaut
-        </button>
-        <p class="booking-fallback">
-          Oder <a href={bookingUrl}>direkt bei Microsoft buchen</a>, ohne den Kalender hier zu laden.
-        </p>
-      </div>
+      {/* FIXES-2026-09-07.md task 5e — decision by the owner's husband,
+         2026-09-07: go back to the calendar embedded directly, without the
+         click-to-load step this session had built as the consent-safer
+         alternative. That earlier version's own comment explained the
+         trade-off it was avoiding; recorded now in OPEN-QUESTIONS.md
+         instead, as a decision for the owner rather than settled by
+         code — an unconditional iframe here contacts Microsoft on every
+         page view, before any consent, which is the one thing on this
+         otherwise tracker-free site that makes a cookie banner necessary.
+         Implementing what was asked; not adding a banner on this run's own
+         initiative either way. */}
+      <iframe
+        src={bookingUrl}
+        width="100%"
+        height="750"
+        style="border:0"
+        title="Terminbuchung"
+        class="booking-iframe"
+      />
+      <p class="booking-fallback">
+        Lädt der Kalender nicht? <a href={bookingUrl}>Direkt bei Microsoft buchen</a>.
+      </p>
     </div>
   </section>
 
@@ -63,41 +66,21 @@ const introFromAngebote = 'Zwanzig Minuten, online, ohne jede Verpflichtung.';
   </section>
 </BaseLayout>
 
-<script define:vars={{ bookingUrl }}>
-  const loader = document.getElementById('booking-loader');
-  const button = document.getElementById('booking-load-button');
-  button?.addEventListener('click', () => {
-    const iframe = document.createElement('iframe');
-    iframe.src = bookingUrl;
-    iframe.width = '100%';
-    iframe.height = '750';
-    iframe.style.border = '0';
-    iframe.title = 'Terminbuchung';
-    iframe.className = 'booking-iframe';
-    loader?.replaceWith(iframe);
-  });
-</script>
-
 <style>
   .booking-wrap {
     max-width: 56rem;
     margin-inline: auto;
   }
 
-  .booking-loader {
-    background: var(--color-bg-alt);
+  .booking-iframe {
     border-radius: var(--radius);
-    padding: 3rem 2rem;
-    text-align: center;
+    display: block;
   }
 
   .booking-fallback {
     margin: 1.25rem 0 0;
     font-size: 0.9rem;
     color: var(--color-text-muted);
-  }
-
-  :global(.booking-iframe) {
-    border-radius: var(--radius);
+    text-align: center;
   }
 </style>

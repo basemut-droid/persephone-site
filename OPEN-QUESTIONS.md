@@ -34,6 +34,28 @@ form isn't confirmed. **Recommendation:** send a cropped screenshot of just that
 corner of the hero, or the live theme's compiled CSS file, and it can be added in
 one pass — it's a small decorative detail once the shape itself is known.
 
+## 0c. Termine's calendar is embedded directly again — this costs a cookie banner
+
+Decision by the owner's husband, 2026-09-07: go back to embedding the Microsoft
+Bookings calendar directly on `/termine/`, without the click-to-load button a
+previous session had built specifically to avoid this. Implemented as asked
+(`FIXES-2026-09-07.md` task 5e) — but recording the consequence rather than
+burying it, since it's a real trade-off and not this run's decision to make:
+
+**An embedded calendar contacts Microsoft's servers on every page load, for
+every visitor, before any consent.** That's the one thing on this otherwise
+tracker-free site (self-hosted fonts, no analytics) that makes a cookie
+consent banner necessary — a banner on every page, for every visitor, plus an
+additional passage in the Datenschutzerklärung describing an unconditional
+third-party load.
+
+**This needs a decision from you, not a settled matter:** the direct embed is
+more convenient by one click and costs a consent banner site-wide. The
+alternatives — the click-to-load version that was briefly built and then
+reverted, or a plain link out to Microsoft (what the live site does today) —
+both keep the site banner-free. No consent banner has been added on this run's
+own initiative either way; that decision, and its wording if wanted, is yours.
+
 ## 1. Ten pages ship no meta description — needs the owner's copy
 
 No `<meta name="description">` exists on the live site for most of these, and a bug
