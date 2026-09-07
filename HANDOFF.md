@@ -34,7 +34,11 @@ each commit so the tree stays in a good state if interrupted.
   Used by Über uns's closing teasers today; B2.2 will reuse it at new
   dimensions. Gestalterische Freiheit genutzt (see commit message for why).
 
-**Not started yet:** A5–A6, all of Teil B, Teil C, Teil D. See
+- A5 (`bc5597e`): footer wave divider redrawn as an irregular, tapering
+  brushstroke path instead of a regular scallop wave. Gestalterische
+  Freiheit genutzt.
+
+**Not started yet:** A6, all of Teil B, Teil C, Teil D. See
 `docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
 
 **Session note:** `playwright@1.63.0` is installed locally via
