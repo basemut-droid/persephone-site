@@ -87,12 +87,25 @@ raw HTML, not fetched on demand as an earlier session assumed. New
 `:has()`, no JavaScript at all, verified working (scripted click, keyboard arrow
 nav, exactly one panel visible, no console errors — see commit message).
 
-Still to do in Phase D: D4 (Selbsthilfegruppe — principle labels, meeting-details
-card, Selbsthilfe-Steiermark logo banner + download, full top-to-bottom re-check —
-the last page in Phase D). Then Phase E (hero images — six confirmed, five need a
-live-HTML check), Phase F (blog listing, EN/IT noindex, smaller fixes, build-check
-widening). Full order and rules in `docs/RUN-2026-09-07.md`; findings in
-`docs/FIXES-2026-09-07.md`.
+D4 done (`4abe81f`) — **Phase D complete.** Selbsthilfegruppe: three principle
+labels (new `principles` schema field), meeting-details card with teal circular
+icons in the live page's actual order, downloaded Selbsthilfe-Steiermark logo +
+partner band, and the 2e.5 re-check found a real structural fix: "Über die
+Gruppe"/"Grundprinzipien"/"Aktuelles" are one continuous background section on the
+live site, not three alternating cream/beige bands as previously built — fixed.
+Logo-permission question logged in `OPEN-QUESTIONS.md` #0.
+
+**Next: Phase E** (hero images) — six pages confirmed (Angebote, Beratung,
+Workshops, Selbsthilfegruppe, Kontakt use the homepage pomegranate already in the
+repo; Blog needs its own photo downloaded from the live Blog page). Five unknown
+(Termine, FAQs, Impressum, Datenschutz, Disclaimer) — determine each from that
+page's own live raw HTML; only log to OPEN-QUESTIONS.md if raw HTML is genuinely
+unavailable. Also reproduce the ochre curved shape at the hero's lower-left, and
+give PageHero a shared default image + per-page override (homepage/Über uns already
+show this split-hero pattern working — reuse `.hero`/`.hero-grid`/`.hero-image` from
+global.css, don't rebuild it). Then Phase F (blog listing, EN/IT noindex, smaller
+fixes, build-check widening). Full order and rules in `docs/RUN-2026-09-07.md`;
+findings in `docs/FIXES-2026-09-07.md`.
 
 Live raw HTML for Beratung/Über uns/Workshops/Angebote is cached in the session
 scratchpad (`*-live.html`) if still needed — otherwise re-curl with a real
