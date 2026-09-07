@@ -99,12 +99,17 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
   // <details>, so the parent label can stay a real <a> (see the comment in
   // the markup above for why). Closes on outside click/focus and on Escape,
   // same behavior <details> gave us for free.
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
   for (const dropdown of document.querySelectorAll<HTMLLIElement>('.nav-dropdown')) {
     const button = dropdown.querySelector<HTMLButtonElement>('.nav-dropdown-toggle');
     const menu = dropdown.querySelector<HTMLUListElement>('.nav-dropdown-menu');
     if (!button || !menu) continue;
 
+    let closeTimer: ReturnType<typeof setTimeout> | undefined;
+
     const setOpen = (open: boolean) => {
+      clearTimeout(closeTimer);
       button.setAttribute('aria-expanded', String(open));
       menu.hidden = !open;
       dropdown.classList.toggle('is-open', open);
@@ -129,6 +134,21 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
         button.focus();
       }
     });
+
+    // Mouse convenience: open on entering the whole trigger+menu region,
+    // close after a short delay so a diagonal or momentarily-imprecise
+    // pointer path (e.g. cutting the corner toward the first menu item)
+    // doesn't close the menu before it arrives. Fine pointers only — touch
+    // (reports "coarse") never gets a hover-only open with no dismiss.
+    if (canHover) {
+      dropdown.addEventListener('mouseenter', () => {
+        clearTimeout(closeTimer);
+        setOpen(true);
+      });
+      dropdown.addEventListener('mouseleave', () => {
+        closeTimer = setTimeout(() => setOpen(false), 180);
+      });
+    }
   }
 </script>
 
@@ -227,6 +247,12 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    /* The 44px touch target is wider than the caret glyph it wraps, which
+       otherwise reads as extra whitespace before the next nav item ("Blog")
+       — bigger than the gap between any other two items. Pull the following
+       item back in with a negative margin rather than shrinking the hit
+       area itself, which must stay at least 44px. */
+    margin-right: -0.75rem;
   }
 
   .nav-dropdown-toggle .caret {
@@ -256,6 +282,22 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
     min-width: 220px;
   }
 
+  /* The 0.5rem margin-top above is a deliberate visual gap, but an empty
+     margin is unhoverable: a pointer moving straight down from the trigger
+     into that gap leaves both the trigger's and the menu's own box, breaking
+     :hover/mouseenter before it ever reaches the menu. This transparent
+     pseudo-element sits exactly in that gap (same size, no background) so a
+     descendant box covers the whole path — the pointer never leaves the
+     dropdown while crossing it. */
+  .nav-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -0.5rem;
+    height: 0.5rem;
+  }
+
   .nav-dropdown-menu li a {
     display: block;
     padding: 0.6rem 1.25rem;
@@ -268,20 +310,15 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
     background: var(--color-bg-alt);
   }
 
-  /* Mouse convenience: hover/focus-within reveals the submenu without
-     needing the toggle button. Keyboard-tabbing through the trigger link
-     and toggle button also satisfies :focus-within, so this doesn't
-     conflict with the JS-driven aria-expanded/hidden state — both paths
-     end up showing the same menu; the JS state is what touch and
-     keyboard-Enter/Space rely on when hover isn't available. Fine
-     pointers only, so touch (which reports "coarse") never gets a
-     hover-triggered menu with no way to dismiss it. */
-  @media (hover: hover) and (pointer: fine) {
-    .nav-dropdown:hover .nav-dropdown-menu,
-    .nav-dropdown:focus-within .nav-dropdown-menu {
-      display: block;
-    }
-  }
+  /* No CSS-only :focus-within/:hover rule here on purpose: a native <button>
+     already fires 'click' on Enter/Space, so the toggle's click handler
+     covers keyboard without any extra CSS — and a :focus-within fallback
+     actively breaks Escape-to-close, since Escape moves focus back to the
+     toggle (by design, for a sighted keyboard user to keep their place),
+     which re-satisfies :focus-within and forces the menu back open via CSS
+     the instant JS just closed it. One state (aria-expanded/hidden), set
+     only by JS, avoids that fight. Mouse hover is handled by the
+     mouseenter/mouseleave listeners below, with a close delay. */
 
   .nav-dropdown-menu[hidden] {
     display: none;
