@@ -74,7 +74,10 @@ each commit so the tree stays in a good state if interrupted.
   SHG-Treffen" heading above "AKTUELLES", Steiermark logo to 368x177
   right-aligned, companion text to 20px.
 
-**Not started yet:** B7–B9, Teil C, Teil D. See
+- B7 (`0a22bc3`): Kontakt — icon eyebrows (clock/pin, .icon-circle reused)
+  for Erreichbarkeit/Standorte, submit button "Senden".
+
+**Not started yet:** B8–B9, Teil C, Teil D. See
 `docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
 
 **Session note:** `playwright@1.63.0` is installed locally via
