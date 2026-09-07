@@ -79,19 +79,26 @@ D2 done (`b68d8eb`): Workshops' eyebrow/centered copy, card treatment (reusing
 Beratung's beige-card shape), circular section icons, sage list markers, location
 pills with a pin icon.
 
-Still to do in Phase D: D3 (Angebote
-— the interactive tabs panel + re-extracted ten statements/responses/offers, the
-biggest single piece of this run), D4 (Selbsthilfegruppe — principle labels,
-meeting-details card, Selbsthilfe-Steiermark logo banner + download, full
-top-to-bottom re-check). Then Phase E (hero images — six confirmed, five need a
+D3 done (`3fbd105`): Angebote's interactive self-recognition selector rebuilt for
+real — the live page's client-side script's *data* (all ten statement/response/
+offer triples, and the three offers' full copy) turned out to be directly in its
+raw HTML, not fetched on demand as an earlier session assumed. New
+`recognitionPanel` schema field; the interaction itself is radio+label+CSS
+`:has()`, no JavaScript at all, verified working (scripted click, keyboard arrow
+nav, exactly one panel visible, no console errors — see commit message).
+
+Still to do in Phase D: D4 (Selbsthilfegruppe — principle labels, meeting-details
+card, Selbsthilfe-Steiermark logo banner + download, full top-to-bottom re-check —
+the last page in Phase D). Then Phase E (hero images — six confirmed, five need a
 live-HTML check), Phase F (blog listing, EN/IT noindex, smaller fixes, build-check
 widening). Full order and rules in `docs/RUN-2026-09-07.md`; findings in
 `docs/FIXES-2026-09-07.md`.
 
-Live raw HTML for Beratung and Über uns is cached in the session scratchpad
-(`beratung-live.html`, `ueber-uns-live.html`) if still needed — otherwise re-curl
-with a real User-Agent header (`curl -A "Mozilla/5.0 ..." <url>`), not a summarizing
-fetch tool, per RUN-2026-09-07.md's verification method.
+Live raw HTML for Beratung/Über uns/Workshops/Angebote is cached in the session
+scratchpad (`*-live.html`) if still needed — otherwise re-curl with a real
+User-Agent header (`curl -A "Mozilla/5.0 ..." <url>`), not a summarizing fetch
+tool, per RUN-2026-09-07.md's verification method. Selbsthilfegruppe's live page
+hasn't been fetched yet — do that first in D4.
 
 A playwright Chromium install was fetched via `npx` for verification only (not
 added to `package.json`) — reuse it (`npx --yes playwright@1.63.0`) rather than
