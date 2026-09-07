@@ -29,17 +29,17 @@ by the file's own comments against `docs/brand/Brandbook.pdf`. Components consum
 
 | Token | Value | Brand-book name | Used for |
 |---|---|---|---|
-| `--color-bg` | `#fbf8f5` | Basisfläche/Papier (Off-White) | page background, hero, sticky header |
-| `--color-bg-alt` | `#f3ece6` | Warmes Elfenbein | alternating section background (`.section-alt`) |
-| `--color-surface` | `#ffffff` | — | dropdown menus, skip-link, primary-button text |
+| `--color-bg` | `#fbf8f5` | Basisfläche/Papier (Off-White) | page background, sticky header, `.button-primary` text |
+| `--color-bg-alt` | `#f3ece6` | Warmes Elfenbein | alternating section background (`.section-alt`), hero band (`.hero`/`.hero-image`, since `RUN-2026-09-07-B1.md` Phase 1.4 — was `--color-bg` before), `.button-outline` fill |
+| `--color-surface` | `#ffffff` | — | dropdown menus, skip-link |
 | `--color-text` | `#181a2b` | Tinte | body text |
 | `--color-text-muted` | `#32373c` | — | blog fallback notice only |
 | `--color-text-on-accent` | `#f3ece6` | — | text on colored fills (service cards, CTA band) |
 | `--color-sage` | `#90c8c0` | Salbei (Geborgenheit) | service-card "sage" tone, blog-teaser image placeholder bg |
 | `--color-teal` | `#48b0b0` | Türkis (Empathie) | service-card "teal" tone; `--color-band-bg` (newsletter strip) |
 | `--color-teal-dark` | `#309898` | Tiefes Türkis | `--color-accent` → eyebrows, hover states, focus ring, card-button text |
-| `--color-terracotta` | `#b33a3b` | Granatapfelrot (primary) | `--color-accent-strong` → H1, nav links, footer border/copyright, CTA gradient start |
-| `--color-terracotta-dark` | `#d83830` | Leuchtrot | CTA gradient end (`--color-cta-to`) |
+| `--color-terracotta` | `#b33a3b` | Granatapfelrot (primary) | `--color-accent-strong` → H1, nav links, footer border/copyright, `.button-primary` fill |
+| `--color-terracotta-dark` | `#d83830` | Leuchtrot | `--color-cta-to` — unused since Phase 1.3 made `.button-primary` a solid fill instead of a gradient; kept defined, not deleted |
 | — (literal, untokenized) | `#e9dccd` | — | footer background + footer-wave SVG fill |
 | — (literal, untokenized) | `#fff3cd` bg / `#664d03` text | — | `DraftNotice` banner only |
 
@@ -56,11 +56,19 @@ no separate heading font (`--font-heading` is just an alias for `--font-body`).
 |---|---|---|---|---|
 | h1, masthead (`.heading-black`) | **400** (`--weight-heading`) | `clamp(2rem, 1.5rem + 2vw, 3rem)` — homepage hero and every subpage's `PageHero` share this one rule now | 1.2 | normal |
 | h2 | 400 | `clamp(1.5rem, 1.2rem + 1.2vw, 2rem)` | 1.2 | normal |
-| h3 | 400 | `clamp(1.25rem, 1.1rem + 0.6vw, 1.75rem)` | 1.2 | normal |
-| body `p` | 400 | `1rem` (hero copy: `1.125rem`) | 1.6 (hero copy: 1.75) | normal |
-| `.eyebrow` | 700 (`--weight-subheading`) | `0.8rem` | — | `0.08em`, uppercase |
+| h3 | 400 | `clamp(1.5rem, 1.3rem + 1.2vw, 1.75rem)` — 28px from 600px viewport width up | 1.2 | normal |
+| founder heading ("Von innen. Und von Fach.") | 400 | `2.25rem` (36px) — its own size, `.founder h2` in `HomePage.astro`, not the generic h2 scale | 1.2 | normal |
+| blog-teaser title (`BlogTeaserCard.astro`) | 400 | `1.625rem` (26px) | 1.2 | normal |
+| body `p` | 400 | `1.25rem` (20px) (hero copy / `PageHero` intro: also `1.25rem`) | 1.6 (hero copy: 1.75) | normal |
+| `.eyebrow` | **400** | `1.125rem` (18px) | — | `0` (no letter-spacing), uppercase |
 | nav link / dropdown summary | 500 (`--weight-label`) | `1.0625rem` | — | normal |
-| button (`.button-primary`) | 500, italic | `0.95rem` | — | normal, not uppercase |
+| button (`.button-primary`) | 500, upright | `1.0625rem` (17px) | — | normal, not uppercase |
+
+**Updated 2026-09-07 (`RUN-2026-09-07-B1.md` Phase 1.1/1.2/1.3, values from
+`VERGLEICH-2026-09-07.md`, measured live at 1440px):** base body text, h3, the founder
+heading, the blog-teaser title, the eyebrow, and buttons all measured smaller/heavier/more
+letter-spaced than the live site. `--weight-subheading` (700) is now unused by `.eyebrow`
+— kept defined and flagged in `global.css`, not deleted.
 
 **Resolved 2026-09-06 (fuer-marina.md Q2):** `--weight-heading` is **400**, matching the
 live site — the brand book (p.7) specifies H1 at 900/Black (and H2 at 900 too), but the
@@ -101,24 +109,36 @@ h2/h3 stay at 400 regardless, unaffected either way.
 
 ## Buttons
 
-- Base `.button`: `padding: 0.65rem 1.3rem`, `border-radius: var(--radius)`, `font-weight: 500`,
-  `font-size: 0.95rem`, `border: 2px solid transparent`, `min-height: 44px` (touch target),
-  hover lifts `translateY(-1px)`.
-- `.button-primary`: `linear-gradient(135deg, var(--color-cta-from), var(--color-cta-to))`,
-  white text, `padding: 18px 32px`, `min-height: 57px`, italic. This bigger/italic
-  treatment was originally a homepage-hero-only override; it's now baked into the shared
-  class itself (client decision), so every primary CTA site-wide — hero, nav, `CtaBand`,
-  `ContactForm`, the 404 page — shares one look. The nav CTA's old
-  uppercase/small-caps override was removed to match.
-- `.button-outline`: transparent background, `border-color: currentColor`.
-- `ServiceCard`'s `.card-button` is its own inline pseudo-button (not the shared `.button`
-  class) and hardcodes `border-radius: 4px` instead of the `--radius: 6px` token —
-  inconsistency, flagged not fixed.
+**Updated 2026-09-07 (`RUN-2026-09-07-B1.md` Phase 1.3, values from `VERGLEICH-2026-09-07.md`
+A3, measured live):**
+
+- Base `.button`: `padding: 0.65rem 1.3rem`, `border-radius: var(--radius-button)` (4px —
+  its own token, distinct from `--radius`/6px used by cards/dropdowns/photos), `font-weight:
+  500`, `font-size: 1.0625rem` (17px), `border: 2px solid transparent`, `min-height: 44px`
+  (touch target), hover lifts `translateY(-1px)`.
+- `.button-primary`: solid `var(--color-accent-strong)` (terracotta) fill, `var(--color-bg)`
+  text (#fbf8f5, not pure white) — a gradient before this run, which never appeared on the
+  live site. `.button-hero` (the homepage hero CTA only) adds `padding: 18px 32px`,
+  `min-height: 57px` — italic was removed ersatzlos, it doesn't appear anywhere live either.
+  `--color-cta-from`/`--color-cta-to` are now unused by `.button-primary`; kept defined and
+  flagged rather than deleted.
+- `.button-outline` (the site's "secondary" button, e.g. "Erfahre mehr"): solid
+  `var(--color-bg-alt)` fill, `var(--color-accent)` (teal) text, uppercase — not actually a
+  transparent/bordered treatment despite the class name; kept as-is to avoid a wider rename,
+  every call site already means "secondary".
+- Selbsthilfegruppe's "MELDE DICH AN" (`.meeting-cta`, a one-off `.button-primary` variant):
+  13px, uppercase, upright (italic removed, same as above).
+- `ServiceCard`'s `.card-button` now references `var(--radius-button)` too — it had
+  hardcoded the same 4px value before this token existed, previously flagged here as an
+  inconsistency with `--radius`/6px; it turns out to have been the live site's own button
+  radius all along.
 
 ## Images & border radius
 
 - `--radius: 6px` is the standard corner radius — cards, dropdown menus, founder photo,
   footer logo.
+- `--radius-button: 4px` (added Phase 1.3) is the separate radius every `.button` uses —
+  live measures buttons at 4px, distinct from the 6px everything else above uses.
 - Images render through `astro:assets` `<Image>`, mostly `object-fit: cover`; founder
   photo is pinned to `aspect-ratio: 3/4`. Hero image and blog-teaser images have no radius
   of their own (radius comes from an overflow-hidden parent instead).
