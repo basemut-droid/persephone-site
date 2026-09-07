@@ -62,7 +62,12 @@ each commit so the tree stays in a good state if interrupted.
   of the usual overlap; response card is sticky (>=900px) while scrolling
   the statement list.
 
-**Not started yet:** B4–B9, Teil C, Teil D. See
+- B4 (`fc33fdf`): Beratung's 'Gut zu wissen' is now a collapsed accordion
+  (new shared `.accordion-item`/`.icon-circle-sm` pattern in global.css,
+  reusable for FAQs/B8) with a centered eyebrow instead of a dark h2;
+  format cards are equal-height with badges anchored to the bottom.
+
+**Not started yet:** B5–B9, Teil C, Teil D. See
 `docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
 
 **Session note:** `playwright@1.63.0` is installed locally via
