@@ -75,6 +75,10 @@ that matter most:
 
 ## Next step
 
-Nothing is queued. The site is in a consistent, working, committed state — pick up
-whatever `OPEN-QUESTIONS.md` item matters most, or ask for a new pass once the owner
-has answered some of them.
+**Mid-run: `docs/RUN-2026-09-07-B1.md` (Phase 0 + Phase 1), authority `docs/VERGLEICH-2026-09-07.md`.**
+Phase 0.1 done (commit `1fd8cca`): EN/IT dead links fixed, `internal-links-resolve`
+build-check now blocking. Still to do in this same run, in order: Phase 0.2
+(aria-label on image-only links), Phase 0.3 (EN/IT footer legal links), Phase 1.1–1.4
+(typo scale, eyebrow, buttons, hero band). **Stop after Phase 1 — Phase 2
+(`docs/RUN-2026-09-07-B2.md`) is not authorized yet.** Build + commit after each
+sub-task; update this file after each commit.
