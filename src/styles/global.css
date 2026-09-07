@@ -124,10 +124,19 @@ h2 {
 }
 
 h3 {
-  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.75rem);
+  /* Live measures 28px flat at 1440px (VERGLEICH-2026-09-07.md A1) — this
+     clamp reaches its 1.75rem cap by 600px viewport width, so every layout
+     width this site is actually checked at (900px+) renders exactly 28px,
+     with a smaller minimum kept only for narrow phones. */
+  font-size: clamp(1.5rem, 1.3rem + 1.2vw, 1.75rem);
 }
 
 p {
+  /* Base/"Fließtext" size — VERGLEICH-2026-09-07.md A1 measured the live
+     site at 20px against this rebuild's 16px on every page. One token,
+     one place; everything else in the type scale hangs off this file's
+     own explicit sizes, not off this value. */
+  font-size: 1.25rem;
   margin: 0 0 1em;
 }
 
@@ -274,7 +283,8 @@ textarea:focus-visible,
 }
 
 .hero-copy p {
-  font-size: 1.125rem;
+  /* "Intro unter der H1" — VERGLEICH-2026-09-07.md A1: live 20px. */
+  font-size: 1.25rem;
   line-height: 1.75;
   margin-bottom: 24px;
 }

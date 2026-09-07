@@ -78,7 +78,10 @@ const { href, title, category, heroImage, heroImageAlt, readMoreLabel } = Astro.
 
   .blog-teaser-body h3 {
     margin: 0 0 0.75rem;
-    font-size: 1.3rem;
+    /* VERGLEICH-2026-09-07.md A1: live 26px on every blog-teaser title,
+       matching /blog/'s own listing (already correct there via the shared
+       h3 clamp) — this card had its own smaller override. */
+    font-size: 1.625rem;
   }
 
   .blog-teaser-body h3 a {
