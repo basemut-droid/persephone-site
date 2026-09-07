@@ -1,6 +1,17 @@
 ---
 title: "Selbsthilfegruppe"
 sourceUrl: "https://www.persephone.at/selbsthilfegruppe/"
+# The three principle labels — absent from the extraction entirely
+# (FIXES-2026-09-07.md task 2e.2). Read off the owner's screenshot of the
+# live page and confirmed 2026-09-07 against its raw HTML (fa-shield-alt,
+# fa-heart, fa-users). Order matches the three paragraphs below.
+principles:
+  - icon: shield
+    label: "Verschwiegenheit"
+  - icon: heart
+    label: "Respekt"
+  - icon: group
+    label: "Peer-Support"
 ---
 
 Angebote

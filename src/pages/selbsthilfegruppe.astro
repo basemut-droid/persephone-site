@@ -1,7 +1,11 @@
 ---
 import { getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import type { IconName } from '../components/Icon.astro';
+import steiermarkLogo from '../assets/pages/selbsthilfegruppe/selbsthilfe-steiermark-logo.png';
 import { parseMarkdownBlocks, section, paragraphs, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 // No split-hero image on the live page — plain PageHero, same as the other
@@ -27,6 +31,11 @@ const heroIntro = heroIntroBlock.type === 'paragraph' ? heroIntroBlock.text : un
 
 const ueberDieGruppe = paragraphs(tracker.section('Über die Gruppe'));
 const grundprinzipien = paragraphs(tracker.section('Grundprinzipien der Gruppe'));
+const principles = (entry.data.principles ?? []).map((p, i) => ({
+  icon: p.icon as IconName,
+  label: p.label,
+  text: grundprinzipien[i] ?? '',
+}));
 
 // "Nächstes SHG-Treffen" is a second masthead-level (h1) heading mid-page,
 // same live-site pattern as Über uns's "Dein nächster Schritt" — rendered
@@ -38,7 +47,7 @@ if (treffenIdx === -1) throw new Error(`Expected heading "${treffenHeadingText}"
 tracker.at(treffenIdx);
 const treffenSection = tracker.slice(treffenIdx + 1);
 
-// "Aktuelles" (h2) is a parent heading of the "Nächtes SHG-Treffen" (h3)
+// "Aktuelles" (h2) is a parent heading of the "Nächstes SHG-Treffen" (h3)
 // subsection that follows it — section()'s hierarchical semantics
 // correctly treat that h3 and everything under it as part of "Aktuelles"'
 // own scope, which is right for a nested read but wrong for pulling out
@@ -55,82 +64,194 @@ const detailsList = details.find((b) => b.type === 'list');
 const cta = details.find((b) => b.type === 'cta');
 if (!cta || cta.type !== 'cta') throw new Error('Expected the sign-up CTA');
 const closingNote = treffenSection.find((b, i) => b.type === 'paragraph' && i > treffenSection.indexOf(cta));
+if (!closingNote || closingNote.type !== 'paragraph') throw new Error('Expected the closing Selbsthilfe Steiermark note');
 // treffenSection (and everything in it — aktuelles/details/cta/closingNote
 // above) was already marked handled in one shot by the tracker.slice()
 // call that produced it.
 tracker.assertAllHandled('selbsthilfegruppe.astro');
+
+// The meeting details (date/time/address) are already three discrete list
+// items in the source — a data problem this isn't; only the rendering (one
+// bold paragraph joined by <br>) collapsed them. Icons are presentational,
+// paired by position, not stored as content (FIXES-2026-09-07.md task 2e.3).
+const detailIcons: IconName[] = ['calendar', 'clock', 'pin'];
+const detailItems = detailsList?.type === 'list' ? detailsList.items : [];
 ---
 
 <BaseLayout locale="de" path="/selbsthilfegruppe/" title={`${entry.data.title} – Persephone`}>
   <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
+  {
+    /* "Über die Gruppe", "Grundprinzipien der Gruppe" and "Aktuelles"/the
+       meeting card are one continuous section on the live page (confirmed
+       against its raw HTML: a single fusion-fullwidth row spans all three,
+       one background color, not alternating bands) — previously split
+       across .section/.section-alt/.section here, which invented a
+       band-alternation the live design doesn't have (task 2e.5). */
+  }
   <section class="section">
-    <div class="container section-narrow">
-      <h2>Über die Gruppe</h2>
+    <div class="container section-narrow section-centered">
+      <h2 class="eyebrow">Über die Gruppe</h2>
       {ueberDieGruppe.map((p) => <p>{p}</p>)}
     </div>
-  </section>
 
-  <section class="section section-alt">
-    <div class="container section-narrow">
-      <h2>Grundprinzipien der Gruppe</h2>
-      <ul class="principles">
-        {grundprinzipien.map((p) => <li>{p}</li>)}
-      </ul>
+    <div class="container section-narrow section-centered principles-heading">
+      <h2 class="eyebrow">Grundprinzipien der Gruppe</h2>
+    </div>
+    <div class="container principles-grid">
+      {
+        principles.map((p) => (
+          <div class="principle">
+            <div class="icon-circle">
+              <Icon name={p.icon} size={28} />
+            </div>
+            <p class="principle-label">{p.label}</p>
+            <p>{p.text}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="container section-narrow next-meeting">
+      <span class="eyebrow">Aktuelles</span>
+      {aktuelles.map((p) => <p>{p}</p>)}
+
+      <div class="meeting-card">
+        <h3>{treffenHeadingText}</h3>
+        <ul class="icon-list icon-list-check meeting-details">
+          {
+            detailItems.map((item, i) => (
+              <li>
+                <Icon name={detailIcons[i]} size={18} />
+                <span>{item}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <hr />
+        <a href={cta.href} class="button button-primary meeting-cta">{cta.text}</a>
+      </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="container section-narrow next-meeting">
-      <span class="eyebrow">Aktuelles</span>
-      <h2>{treffenHeadingText}</h2>
-      {aktuelles.map((p) => <p>{p}</p>)}
-      {
-        detailsList?.type === 'list' && (
-          <p class="meeting-details">
-            {detailsList.items.map((item) => (
-              <>
-                {item}
-                <br />
-              </>
-            ))}
-          </p>
-        )
-      }
-      <a href={cta.href} class="button button-primary">{cta.text}</a>
-      {closingNote?.type === 'paragraph' && <p class="closing-note">{closingNote.text}</p>}
+  <section class="steiermark-band">
+    <div class="container steiermark-grid">
+      <div class="steiermark-logo">
+        <Image src={steiermarkLogo} alt="Selbsthilfe Steiermark – Jugend am Werk" width={300} height={145} />
+      </div>
+      <p>{closingNote.text}</p>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .principles {
-    margin: 1.5rem 0 0;
-    padding: 0;
-    list-style: none;
-    display: grid;
-    gap: 1.25rem;
+  .principles-heading {
+    margin-top: 3rem;
   }
 
-  .principles li {
-    border-left: 3px solid var(--color-accent-strong);
-    padding-left: 1rem;
+  .principles-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .principle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .principle .icon-circle {
+    margin-bottom: 1rem;
+  }
+
+  .principle-label {
+    font-weight: 700;
+    margin-bottom: 0.35rem;
   }
 
   .next-meeting {
-    background: var(--color-bg-alt);
-    padding: 2rem;
+    margin-top: 3rem;
+  }
+
+  .meeting-card {
+    background: var(--color-surface);
     border-radius: var(--radius);
+    padding: 2rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 16px rgba(24, 26, 43, 0.06);
+  }
+
+  .meeting-card h3 {
+    margin-bottom: 1.25rem;
   }
 
   .meeting-details {
-    font-weight: 700;
-    color: var(--color-text);
+    margin-bottom: 1.5rem;
   }
 
-  .closing-note {
-    margin-top: 1.5rem;
-    font-size: 0.9rem;
-    color: var(--color-text-muted);
+  .meeting-details li {
+    font-weight: 700;
+  }
+
+  .meeting-card hr {
+    border: none;
+    border-top: 1px solid rgba(24, 26, 43, 0.1);
+    margin: 0 0 1.5rem;
+  }
+
+  /* Confirmed against the live page's other buttons (nav-cta is the only
+     other uppercase one, and it isn't italic; the hero CTA is italic but
+     not uppercase) — no button on this site is consistently both, so this
+     is a one-off variant here, not a sitewide token (FIXES-2026-09-07.md
+     task 2e.3). Colour is unchanged, per the DO NOT list. */
+  .meeting-cta {
+    font-size: 0.85rem;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  @media (min-width: 700px) {
+    .principles-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* Selbsthilfe Steiermark partner band (FIXES-2026-09-07.md task 2e.4) —
+     confirmed against the live page's raw HTML: a full-width band at
+     rgba(144,200,192,0.56), which is var(--color-sage) at 56% opacity, not
+     a new color. Two columns: the white partner logo, and the partnership
+     sentence in white. No portrait/tile CTA here — the owner confirmed
+     this page correctly has none (see 2e's intro). */
+  .steiermark-band {
+    background: rgba(144, 200, 192, 0.56);
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .steiermark-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .steiermark-logo :global(img) {
+    max-width: 220px;
+    height: auto;
+  }
+
+  .steiermark-grid p {
+    color: var(--color-surface);
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  @media (min-width: 700px) {
+    .steiermark-grid {
+      grid-template-columns: 1fr 2fr;
+    }
   }
 </style>

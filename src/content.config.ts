@@ -193,6 +193,15 @@ const pages = defineCollection({
           ),
         })
         .optional(),
+      // Selbsthilfegruppe only (RUN-2026-09-07.md Phase D4 / FIXES-2026-09-07.md
+      // task 2e.2): the three principle columns' icon + bold label. The
+      // sentence under each label is real content that already survived
+      // extraction (still in the markdown body, in the same order as this
+      // array); only the label and which icon illustrates it were missing
+      // entirely from the content collection, read directly off the owner's
+      // screenshot of the live page and confirmed against its raw HTML
+      // (fa-shield-alt/fa-heart/fa-users).
+      principles: z.array(z.object({ icon: z.string(), label: z.string() })).optional(),
     }),
 });
 
