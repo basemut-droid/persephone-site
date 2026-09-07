@@ -69,12 +69,25 @@ disagree).
   tile CTA), applied to Angebote/Workshops/Beratung/Über uns — the last two
   confirmed against live raw HTML first, not assumed. Resolves tasks 2b.3/5d.
 
-**Next: Phase D** — the pages themselves (Beratung badges/cards, Workshops eyebrow/
-cards/pills, Angebote's interactive tabs panel + re-extracted statements, and the
-Selbsthilfegruppe rebuild), using B's icon/pill components. Then Phase E (hero
-images — six confirmed, five need a live-HTML check), Phase F (blog listing, EN/IT
-noindex, smaller fixes, build-check widening). Full order and rules in
-`docs/RUN-2026-09-07.md`; findings in `docs/FIXES-2026-09-07.md`.
+**Phase D in progress.** D1 done (`7acb408`): Beratung's badges (re-extracted,
+new `formatBadges` schema field), eyebrows, centered copy, beige no-border cards,
+teal circular check list. Pill.astro's own styling was corrected mid-D1 to match
+live-measured CSS (off-white text, var(--radius) not a full pill, italic) — affects
+Workshops' pills too once D2 wires them in.
+
+Still to do in Phase D: D2 (Workshops — eyebrow, cards, icons, pills), D3 (Angebote
+— the interactive tabs panel + re-extracted ten statements/responses/offers, the
+biggest single piece of this run), D4 (Selbsthilfegruppe — principle labels,
+meeting-details card, Selbsthilfe-Steiermark logo banner + download, full
+top-to-bottom re-check). Then Phase E (hero images — six confirmed, five need a
+live-HTML check), Phase F (blog listing, EN/IT noindex, smaller fixes, build-check
+widening). Full order and rules in `docs/RUN-2026-09-07.md`; findings in
+`docs/FIXES-2026-09-07.md`.
+
+Live raw HTML for Beratung and Über uns is cached in the session scratchpad
+(`beratung-live.html`, `ueber-uns-live.html`) if still needed — otherwise re-curl
+with a real User-Agent header (`curl -A "Mozilla/5.0 ..." <url>`), not a summarizing
+fetch tool, per RUN-2026-09-07.md's verification method.
 
 A playwright Chromium install was fetched via `npx` for verification only (not
 added to `package.json`) — reuse it (`npx --yes playwright@1.63.0`) rather than
