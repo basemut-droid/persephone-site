@@ -115,3 +115,29 @@ const canonicalUrl = getAbsoluteLocaleUrl(locale, normalizedPath);
     <Footer locale={locale} footer={site.footer} />
   </body>
 </html>
+
+<script>
+  // NACHTLAUF-2026-09-08.md A6: scroll-reveal for .reveal elements (first
+  // use: Über uns's qualification band, B2.1). Progressive enhancement —
+  // see global.css's own comment on .reveal for the contract this keeps.
+  // Global here (not per-page) since it's exactly the kind of shared
+  // mechanism Teil A is meant to build once for Teil B to reuse.
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    const targets = document.querySelectorAll<HTMLElement>('.reveal');
+    if (targets.length > 0) {
+      for (const el of targets) el.classList.add('reveal-pending');
+      const observer = new IntersectionObserver(
+        (entries, obs) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.remove('reveal-pending');
+              obs.unobserve(entry.target);
+            }
+          }
+        },
+        { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+      );
+      for (const el of targets) observer.observe(el);
+    }
+  }
+</script>

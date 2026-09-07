@@ -535,6 +535,35 @@ textarea:focus-visible,
   opacity: 0.55;
 }
 
+/* Scroll reveal (NACHTLAUF-2026-09-08.md A6) — progressive enhancement,
+   not a JS-required animation: an element is fully visible by default
+   (this rule). Only BaseLayout.astro's own script ever adds
+   .reveal-pending, and only once it has already confirmed JavaScript ran
+   and prefers-reduced-motion isn't set — so content with no script (or a
+   very old browser with no IntersectionObserver) is never hidden. Kept
+   short and small per the brief ("dezent"). */
+.reveal {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+.reveal.reveal-pending {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.reveal-pending {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
