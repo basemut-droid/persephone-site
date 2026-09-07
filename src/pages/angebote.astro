@@ -1,8 +1,8 @@
 ---
 import { getEntry } from 'astro:content';
-import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import ClosingCta from '../components/ClosingCta.astro';
 import mg7425 from '../assets/pages/angebote/mg-7425.jpg';
 import logoGeborgenheit from '../assets/pages/angebote/logo-geborgenheit.png';
 import { parseMarkdownBlocks, paragraphs, BlockTracker } from '../lib/parseMarkdownBlocks';
@@ -39,12 +39,15 @@ const recognition = tracker.section('Fang einfach dort an, wo Du Dich wiedererke
 const recognitionList = recognition.find((b) => b.type === 'list');
 if (!recognitionList || recognitionList.type !== 'list') throw new Error('Expected the self-recognition list');
 // "Das könnte jetzt passen" is that same quiz's result-card eyebrow on the
-// live page (see above) — real copy, but with no fixed content of its own
-// to follow, since its actual content is chosen per click. Placed here as
-// the eyebrow introducing the next-step block that already exists in the
-// static content, rather than dropped or left to float with nothing under
-// it.
+// live page (see above) — real copy belonging *inside* the interactive
+// panel's offer card, not this closing section (FIXES-2026-09-07.md task
+// 2b.2). Extracted and tracked here so the block-tracker accounting stays
+// correct, but not rendered until the interactive tabs panel (task 2b.1,
+// RUN-2026-09-07.md Phase D3) actually builds that card — rendering it
+// here in the meantime would just be re-committing the same misplacement
+// this task exists to fix.
 const passtEyebrow = paragraphs(recognition)[0];
+void passtEyebrow; // used by Phase D3, not yet
 const nextStepHeading = recognition.find((b) => b.type === 'heading' && b.level === 3);
 if (!nextStepHeading || nextStepHeading.type !== 'heading') throw new Error('Expected the "Wenn sich..." sub-heading');
 const nextStepIntro = paragraphs(recognition)[1];
@@ -73,16 +76,19 @@ tracker.assertAllHandled('angebote.astro');
         {recognitionList.items.map((item) => <li>{item}</li>)}
       </ul>
 
-      {passtEyebrow && <span class="eyebrow">{passtEyebrow}</span>}
-      <h3>{nextStepHeading.text}</h3>
-      {nextStepIntro && <p>{nextStepIntro}</p>}
-      <a href={ctaHref} class="button button-primary">{cta.text}</a>
-      <div class="supporting-image">
-        <Image src={mg7425} alt="" width={300} height={450} />
-      </div>
-      <Image class="badge" src={logoGeborgenheit} alt="" width={90} height={90} />
     </div>
   </section>
+
+  <ClosingCta
+    heading={nextStepHeading.text}
+    paragraphs={nextStepIntro ? [nextStepIntro] : []}
+    ctaLabel={cta.text}
+    ctaHref={ctaHref}
+    portrait={mg7425}
+    portraitAlt=""
+    tile={logoGeborgenheit}
+    tileAlt=""
+  />
 </BaseLayout>
 
 <style>
@@ -99,19 +105,5 @@ tracker.assertAllHandled('angebote.astro');
   .recognition-list li {
     border-left: 3px solid var(--color-accent-strong);
     padding-left: 1rem;
-  }
-
-  .supporting-image {
-    margin-top: 2rem;
-  }
-
-  .supporting-image img {
-    margin-inline: auto;
-    border-radius: var(--radius);
-  }
-
-  .badge {
-    margin-top: 1rem;
-    border-radius: var(--radius);
   }
 </style>

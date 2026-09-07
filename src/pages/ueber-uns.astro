@@ -2,8 +2,9 @@
 import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import CtaBand from '../components/CtaBand.astro';
+import ClosingCta from '../components/ClosingCta.astro';
 import logoKongruenz from '../assets/pages/ueber-uns/logo-kongruenz-und-authentizitaet.png';
+import marinaPortrait from '../assets/shared/marina-von-persephone.jpg';
 import {
   parseMarkdownBlocks,
   paragraphs,
@@ -77,9 +78,11 @@ const closing = tracker.section('Dein nächster Schritt');
 const closingParagraphs = paragraphs(closing);
 const closingCta = closing.find((b) => b.type === 'cta');
 if (!closingCta || closingCta.type !== 'cta') throw new Error('Expected a closing CTA link after "Dein nächster Schritt"');
-// The two images in the closing section are already rendered via
-// statically-imported assets (heroImage frontmatter + CtaBand doesn't use
-// them directly) — accounted for via the .section() call above.
+// The portrait/tile in the closing section (confirmed against the live
+// page's raw HTML: same two-nested-column, transform+z-index composition as
+// Angebote/Workshops/Beratung — RUN-2026-09-07.md Phase C) are
+// statically-imported assets passed to ClosingCta below, not block data —
+// accounted for via the .section() call above.
 tracker.assertAllHandled('ueber-uns.astro');
 ---
 
@@ -164,11 +167,15 @@ tracker.assertAllHandled('ueber-uns.astro');
     </div>
   </section>
 
-  <CtaBand
+  <ClosingCta
     heading="Dein nächster Schritt"
     paragraphs={closingParagraphs}
     ctaLabel={closingCta.text}
     ctaHref={closingCta.href}
+    portrait={marinaPortrait}
+    portraitAlt=""
+    tile={logoKongruenz}
+    tileAlt=""
   />
 </BaseLayout>
 

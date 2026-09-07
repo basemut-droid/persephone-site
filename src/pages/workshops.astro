@@ -1,9 +1,8 @@
 ---
 import { getEntry } from 'astro:content';
-import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
-import CtaBand from '../components/CtaBand.astro';
+import ClosingCta from '../components/ClosingCta.astro';
 import marinaPortrait from '../assets/shared/marina-von-persephone.jpg';
 import logoWissenschaft from '../assets/pages/workshops/logo-wissenschaft.png';
 import { parseMarkdownBlocks, paragraphs, BlockTracker } from '../lib/parseMarkdownBlocks';
@@ -95,31 +94,19 @@ tracker.assertAllHandled('workshops.astro');
     </div>
   </section>
 
-  <section class="section section-alt">
-    <div class="container section-narrow supporting-image">
-      <Image src={marinaPortrait} alt="" width={300} height={350} />
-      <Image class="badge" src={logoWissenschaft} alt="" width={90} height={90} />
-    </div>
-  </section>
-
-  <CtaBand heading={closingHeadingText} paragraphs={closingParagraphs} ctaLabel={cta.text} ctaHref={cta.href} />
+  <ClosingCta
+    heading={closingHeadingText}
+    paragraphs={closingParagraphs}
+    ctaLabel={cta.text}
+    ctaHref={cta.href}
+    portrait={marinaPortrait}
+    portraitAlt=""
+    tile={logoWissenschaft}
+    tileAlt=""
+  />
 </BaseLayout>
 
 <style>
-  .supporting-image {
-    text-align: center;
-  }
-
-  .supporting-image img {
-    display: inline-block;
-    border-radius: var(--radius);
-  }
-
-  .badge {
-    margin-top: 1rem;
-    margin-inline: auto;
-  }
-
   .location-tag {
     font-size: 0.8rem;
     font-weight: var(--weight-subheading);
