@@ -291,11 +291,15 @@ question/answer; summarized here for the record):
 
 `Icon.astro` is one shared inline-SVG icon component — no icon font, no new
 dependency — used by Beratung, Workshops and Selbsthilfegruppe wherever the live site
-shows a functional icon: `book` (Workshops & Trainings card), `document` (Ressourcen
-card), `pin` (badge/pill location), `calendar`/`clock` (meeting-details card),
-`shield`/`heart`/`group` (the three Selbsthilfegruppe principles), `check`
-(Beratung's list items). Every icon is a 24×24 stroke-based glyph on `currentColor`,
-so it inherits size/color from its wrapper the way a font-icon would.
+shows a functional icon: `book` (Workshops & Trainings card and its list markers),
+`scroll` (Ressourcen card and its list markers — renamed from `document`
+2026-09-08, redrawn as a rolled parchment; the earlier folded-corner shape wasn't
+recognizable, per `NACHTLAUF-2026-09-08.md` A2), `pin` (badge/pill location),
+`calendar`/`clock` (meeting-details card), `shield`/`heart`/`group` (the three
+Selbsthilfegruppe principles), `check` (Beratung's list items). Every icon is a
+24×24 stroke-based glyph on `currentColor` (stroke-width 2, check 2.5 — thickened
+2026-09-08, the meeting-detail circles measured too fine to read), so it inherits
+size/color from its wrapper the way a font-icon would.
 
 **These are functional UI glyphs, not brand marks**, so a plain hand-drawn/open
 equivalent stands in for whatever icon font the live Avada theme actually uses —
@@ -307,11 +311,16 @@ Three shared presentation classes in `global.css` consume it:
 
 - `.icon-circle` — the circular terracotta section icon (card top-left, or above a
   principle label).
-- `.icon-list` / `.icon-list-sage` — a list with a small filled sage circle per item
-  (a CSS `::before`, not an `<Icon>` — the live marker has no shape beyond "small
-  sage dot", so no SVG is needed for it).
-- `.icon-list` / `.icon-list-check` — a list with `Icon.astro`'s `check` glyph, in
-  the accent teal, one per `<li>`.
+- `.icon-list` / `.icon-list-sage` — a list whose marker is a small sage-green
+  `<Icon>` matching the section tile above it (`book`/`scroll` on Workshops),
+  16px, uncircled. Was a plain CSS `::before` dot until `NACHTLAUF-2026-09-08.md`
+  A3 found the live marker is actually a small colored version of the section
+  icon, not a bare dot — "Marker = Icon X in Salbe", the same `<Icon>`-per-`<li>`
+  mechanism `.icon-list-check` already used, so the two list variants now share
+  one pattern instead of two.
+- `.icon-list` / `.icon-list-check` — a list with `Icon.astro`'s `check` (or, on
+  Selbsthilfegruppe, `calendar`/`clock`/`pin`) glyph on a small filled
+  `--color-teal` circle, one per `<li>`.
 
 ## Badge/pill (RUN-2026-09-07.md Phase B3)
 

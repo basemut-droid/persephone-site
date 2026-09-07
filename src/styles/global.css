@@ -433,19 +433,17 @@ textarea:focus-visible,
   margin-top: 0.15em;
 }
 
-/* Sage circular marker (Workshops list items) — a plain filled dot rather
-   than one of Icon.astro's glyphs, since the live marker carries no shape
-   of its own beyond "small sage circle". A pseudo-element keeps the markup
-   a bare <ul class="icon-list icon-list-sage"><li> with no extra element
-   needed per item. */
-.icon-list-sage li::before {
-  content: '';
-  flex-shrink: 0;
-  width: 0.6rem;
-  height: 0.6rem;
-  margin-top: 0.5em;
-  border-radius: 50%;
-  background: var(--color-sage);
+/* Sage icon marker (Workshops list items) — NACHTLAUF-2026-09-08.md A3:
+   live's marker is a small sage-green version of the same icon as the
+   section tile above the list (book-reader for Workshops & Trainings,
+   scroll for Ressourcen), not a plain dot. "Marker = Icon X in Salbe": the
+   same mechanism as .icon-list-check below, just an uncircled glyph in
+   --color-sage instead of a filled teal circle, so Beratung and Workshops'
+   lists share one <Icon>-per-<li> pattern rather than two different ones. */
+.icon-list-sage .icon {
+  color: var(--color-sage);
+  width: 1rem;
+  height: 1rem;
 }
 
 /* Teal circular check icon (Beratung list items) — confirmed against the

@@ -84,7 +84,12 @@ tracker.assertAllHandled('workshops.astro');
         {
           workshopsList?.type === 'list' && (
             <ul class="icon-list icon-list-sage">
-              {workshopsList.items.map((item) => <li>{item}</li>)}
+              {workshopsList.items.map((item) => (
+                <li>
+                  <Icon name="book" size={16} />
+                  <span>{item}</span>
+                </li>
+              ))}
             </ul>
           )
         }
@@ -102,7 +107,12 @@ tracker.assertAllHandled('workshops.astro');
         {
           ressourcenList?.type === 'list' && (
             <ul class="icon-list icon-list-sage">
-              {ressourcenList.items.map((item) => <li>{item}</li>)}
+              {ressourcenList.items.map((item) => (
+                <li>
+                  <Icon name="scroll" size={16} />
+                  <span>{item}</span>
+                </li>
+              ))}
             </ul>
           )
         }
