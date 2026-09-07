@@ -27,7 +27,7 @@ const copyright = footer.copyright.replace('{year}', String(year));
   </svg>
 </div>
 <footer class="site-footer">
-  <div class="container footer-grid">
+  <div class:list={['container', 'footer-grid', { 'footer-grid-brand-only': footer.columns.length === 0 }]}>
     <div class="footer-brand">
       <Image src={signet} alt="Persephone" width={72} height={73} class="footer-logo" />
       <p class="footer-tagline">{footer.tagline}</p>
@@ -86,6 +86,14 @@ const copyright = footer.copyright.replace('{year}', String(year));
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
     gap: 2rem;
+  }
+
+  /* EN/IT currently have no footer link columns at all (task 4 — every
+     link they'd otherwise hold points at a page that doesn't exist yet).
+     Without this, the brand column would sit in a 3-column grid with two
+     empty tracks reserved beside it. */
+  .footer-grid-brand-only {
+    grid-template-columns: 1fr;
   }
 
   .footer-logo {

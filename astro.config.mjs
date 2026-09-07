@@ -26,7 +26,17 @@ export default defineConfig({
     // a silent redirect/rewrite to a different URL.
   },
 
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      // FIXES-2026-09-07.md task 4: EN/IT are unreviewed machine
+      // translations (a legal problem for a regulated professional title,
+      // not a cosmetic one — see the task's own reasoning) and must not be
+      // discoverable until the owner has read them line by line. Excluded
+      // from the sitemap entirely; BaseLayout.astro adds `noindex` to every
+      // page under these locales as the second half of the same decision.
+      filter: (page) => !/\/(en|it)\//.test(new URL(page).pathname),
+    }),
+  ],
 
   // NIGHT-RUN.md Phase 3.7 / OPEN-QUESTIONS.md #2: the live site has no
   // real /newsletter/ page — "e-Brief abonnieren" 301-redirects straight

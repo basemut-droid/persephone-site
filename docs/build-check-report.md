@@ -1,6 +1,6 @@
 # Build-check report
 
-Generated 2026-09-07T11:17:49.423Z by `scripts/build-check.mjs`.
+Generated 2026-09-07T11:22:17.698Z by `scripts/build-check.mjs`.
 
 ## Every content page has a route, every route has content — PASS
 
@@ -47,14 +47,6 @@ No violations found.
 
 ## Every internal <a href> resolves to a built page — FAIL (non-blocking)
 
-- /en/: <a href="/en/about/"> does not resolve to a built page
-- /en/: <a href="/en/services/"> does not resolve to a built page
-- /en/: <a href="/en/counseling/"> does not resolve to a built page
-- /en/: <a href="/en/workshops/"> does not resolve to a built page
-- /en/: <a href="/en/support-group/"> does not resolve to a built page
-- /en/: <a href="/en/blog/"> does not resolve to a built page
-- /en/: <a href="/en/contact/"> does not resolve to a built page
-- /en/: <a href="/en/appointments/"> does not resolve to a built page
 - /en/: <a href="/en/newsletter/"> does not resolve to a built page
 - /en/: <a href="/en/counseling/"> does not resolve to a built page
 - /en/: <a href="/en/counseling/"> does not resolve to a built page
@@ -76,18 +68,6 @@ No violations found.
 - /en/: <a href="/en/blog/einsam-im-kinderwunschprozess/"> does not resolve to a built page
 - /en/: <a href="/en/blog/einsam-im-kinderwunschprozess/"> does not resolve to a built page
 - /en/: <a href="/en/newsletter/"> does not resolve to a built page
-- /en/: <a href="/en/disclaimer/"> does not resolve to a built page
-- /en/: <a href="/en/faqs/"> does not resolve to a built page
-- /en/: <a href="/en/privacy/"> does not resolve to a built page
-- /en/: <a href="/en/legal-notice/"> does not resolve to a built page
-- /it/: <a href="/it/chi-siamo/"> does not resolve to a built page
-- /it/: <a href="/it/offerte/"> does not resolve to a built page
-- /it/: <a href="/it/consulenza/"> does not resolve to a built page
-- /it/: <a href="/it/workshop/"> does not resolve to a built page
-- /it/: <a href="/it/gruppo-di-auto-aiuto/"> does not resolve to a built page
-- /it/: <a href="/it/blog/"> does not resolve to a built page
-- /it/: <a href="/it/contatti/"> does not resolve to a built page
-- /it/: <a href="/it/appuntamenti/"> does not resolve to a built page
 - /it/: <a href="/it/newsletter/"> does not resolve to a built page
 - /it/: <a href="/it/consulenza/"> does not resolve to a built page
 - /it/: <a href="/it/consulenza/"> does not resolve to a built page
@@ -109,10 +89,6 @@ No violations found.
 - /it/: <a href="/it/blog/einsam-im-kinderwunschprozess/"> does not resolve to a built page
 - /it/: <a href="/it/blog/einsam-im-kinderwunschprozess/"> does not resolve to a built page
 - /it/: <a href="/it/newsletter/"> does not resolve to a built page
-- /it/: <a href="/it/disclaimer/"> does not resolve to a built page
-- /it/: <a href="/it/faq/"> does not resolve to a built page
-- /it/: <a href="/it/privacy/"> does not resolve to a built page
-- /it/: <a href="/it/note-legali/"> does not resolve to a built page
 
 ## astro.config.mjs "site" is not a placeholder — FAIL (non-blocking)
 

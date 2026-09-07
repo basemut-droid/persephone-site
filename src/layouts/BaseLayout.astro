@@ -48,6 +48,16 @@ const canonicalUrl = getAbsoluteLocaleUrl(locale, path);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     {pageDescription && <meta name="description" content={pageDescription} />}
+    {
+      /* FIXES-2026-09-07.md task 4: EN/IT are unreviewed, machine-translated
+         content — a legal problem, not a cosmetic one, since the English
+         homepage was found to drop the owner's required training-status
+         disclosure entirely. Not indexable until she's read every sentence
+         describing her qualifications. Paired with astro.config.mjs's
+         sitemap `filter`, which excludes these locales from the sitemap
+         too. */
+      locale !== 'de' && <meta name="robots" content="noindex, follow" />
+    }
     <link rel="canonical" href={canonicalUrl} />
 
     {/* hreflang: one tag per language plus x-default, so search engines

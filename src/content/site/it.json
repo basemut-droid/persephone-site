@@ -6,21 +6,10 @@
   },
   "nav": {
     "items": [
-      { "label": "Chi siamo", "href": "/it/chi-siamo/" },
-      {
-        "label": "Offerte",
-        "href": "/it/offerte/",
-        "children": [
-          { "label": "Consulenza & Coaching", "href": "/it/consulenza/" },
-          { "label": "Workshop & Percorsi individuali", "href": "/it/workshop/" },
-          { "label": "Gruppo di auto-aiuto", "href": "/it/gruppo-di-auto-aiuto/" }
-        ]
-      },
-      { "label": "Blog", "href": "/it/blog/" },
-      { "label": "Contatti", "href": "/it/contatti/" }
+      { "label": "Il resto del sito è attualmente disponibile solo in tedesco", "href": "/" }
     ],
     "cta": "Prenota un primo incontro",
-    "ctaHref": "/it/appuntamenti/"
+    "ctaHref": "/termine/"
   },
   "hero": {
     "headline": "Al cuore della crisi",
@@ -123,22 +112,7 @@
     "tagline": "Un aiuto nella tempesta del desiderio di un figlio",
     "newsletterEyebrow": "La e-letter di Persephone",
     "newsletterCta": "Iscriviti",
-    "columns": [
-      {
-        "title": "Informazioni utili",
-        "links": [
-          { "label": "Disclaimer", "href": "/it/disclaimer/" },
-          { "label": "FAQ", "href": "/it/faq/" }
-        ]
-      },
-      {
-        "title": "Note legali",
-        "links": [
-          { "label": "Informativa sulla privacy", "href": "/it/privacy/" },
-          { "label": "Note legali", "href": "/it/note-legali/" }
-        ]
-      }
-    ],
+    "columns": [],
     "copyright": "© {year}. Persephone Forum. Tutti i diritti riservati."
   },
   "common": {

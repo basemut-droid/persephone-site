@@ -6,21 +6,10 @@
   },
   "nav": {
     "items": [
-      { "label": "About", "href": "/en/about/" },
-      {
-        "label": "Services",
-        "href": "/en/services/",
-        "children": [
-          { "label": "Counseling & Coaching", "href": "/en/counseling/" },
-          { "label": "Workshops & Individual Training", "href": "/en/workshops/" },
-          { "label": "Support Group", "href": "/en/support-group/" }
-        ]
-      },
-      { "label": "Blog", "href": "/en/blog/" },
-      { "label": "Contact", "href": "/en/contact/" }
+      { "label": "The rest of this site is currently available in German", "href": "/" }
     ],
     "cta": "Book a Get-to-Know Call",
-    "ctaHref": "/en/appointments/"
+    "ctaHref": "/termine/"
   },
   "hero": {
     "headline": "To the Heart of the Crisis",
@@ -123,22 +112,7 @@
     "tagline": "Finding your way through the storm of involuntary childlessness",
     "newsletterEyebrow": "Persephone's e-letter",
     "newsletterCta": "Sign up",
-    "columns": [
-      {
-        "title": "Useful Info",
-        "links": [
-          { "label": "Disclaimer", "href": "/en/disclaimer/" },
-          { "label": "FAQs", "href": "/en/faqs/" }
-        ]
-      },
-      {
-        "title": "Legal",
-        "links": [
-          { "label": "Privacy Policy", "href": "/en/privacy/" },
-          { "label": "Legal Notice", "href": "/en/legal-notice/" }
-        ]
-      }
-    ],
+    "columns": [],
     "copyright": "© {year}. Persephone Forum. All rights reserved."
   },
   "common": {
