@@ -3,6 +3,16 @@
 Only genuinely open items live here. Resolved decisions moved to `docs/decisions.md`
 (2026-09-07) — see that file if you want the full history of what was decided and why.
 
+## 0. Selbsthilfe Steiermark logo — confirm permission for continued use
+
+Downloaded from the live page and now used in the new partner band at the bottom of
+`/selbsthilfegruppe/` (`docs/RUN-2026-09-07.md` Phase D4, `FIXES-2026-09-07.md` task
+2e.4). It's a partner organization's logo, not an Avada template image and not one
+of the owner's own photographs, so neither existing rule about images covers it —
+the live site already uses it in the context of a stated partnership, so it was
+carried into the rebuild rather than left out, but per the task's own instruction:
+please confirm Selbsthilfe Steiermark is fine with continued use before launch.
+
 ## 1. Ten pages ship no meta description — needs the owner's copy
 
 No `<meta name="description">` exists on the live site for most of these, and a bug
