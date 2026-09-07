@@ -18,7 +18,8 @@ export type IconName =
   | 'shield'
   | 'heart'
   | 'group'
-  | 'check';
+  | 'check'
+  | 'plus';
 
 interface Props {
   name: IconName;
@@ -64,6 +65,9 @@ const paths: Record<IconName, string> = {
   group: 'M8.5 11a2.75 2.75 0 1 0 0-5.5 2.75 2.75 0 0 0 0 5.5Z M15.5 11a2.75 2.75 0 1 0 0-5.5 2.75 2.75 0 0 0 0 5.5Z M3 19c.4-2.8 2.5-4.5 5.5-4.5s5.1 1.7 5.5 4.5 M12 19c.4-2.8 2.5-4.5 5.5-4.5.9 0 1.7.15 2.5.5',
   // Check — Beratung/Selbsthilfegruppe list-item marker.
   check: 'm5 12.5 4.5 4.5L19 7.5',
+  // Plus — accordion toggle (Beratung's "Gut zu wissen", FAQs). Rotates
+  // 45° to read as a close/"x" affordance when its <details> is open.
+  plus: 'M12 5v14 M5 12h14',
 };
 ---
 

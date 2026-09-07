@@ -437,6 +437,69 @@ textarea:focus-visible,
   flex-shrink: 0;
 }
 
+/* Smaller variant + color modifiers for accordion toggles (Beratung's "Gut
+   zu wissen" NACHTLAUF-2026-09-08.md B4, FAQs B8) — same circular shape as
+   above, sized down and reused with each accordion's own measured color. */
+.icon-circle-sm {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.icon-circle-sage {
+  background: var(--color-sage);
+}
+
+/* --color-terracotta-dark was flagged unused in :root's own comment since
+   Phase 1.3 dropped the .button-primary gradient that used to reference
+   it — FAQs' accordion icon (B8, live measures #d83830) is a real use. */
+.icon-circle-terracotta-dark {
+  background: var(--color-terracotta-dark);
+}
+
+/* Accordion (native <details>/<summary>, no JS) — Beratung's "Gut zu
+   wissen" and FAQs share this exact shape: a toggle icon that rotates 45°
+   into an "x" affordance, a heading, and an answer indented to align under
+   the question text rather than the icon. */
+.accordion-item {
+  border-bottom: 1px solid rgba(24, 26, 43, 0.1);
+}
+
+.accordion-item:last-child {
+  border-bottom: none;
+}
+
+.accordion-item > summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 1.25rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.accordion-item > summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion-item > summary h3,
+.accordion-item > summary h4 {
+  margin: 0;
+  flex: 1;
+}
+
+.accordion-icon {
+  transition: transform 0.15s ease;
+}
+
+.accordion-item[open] .accordion-icon {
+  transform: rotate(45deg);
+}
+
+.accordion-item > p {
+  margin: 0 0 1.25rem;
+  padding-left: calc(2.5rem + 1rem);
+}
+
 /* A list whose items carry a small circular sage-green marker instead of a
    default bullet, or a teal check mark — used in place of a bare <ul> so
    the marker is a real icon, not a ::marker hack that can't hold an SVG

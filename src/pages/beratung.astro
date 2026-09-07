@@ -108,14 +108,25 @@ tracker.assertAllHandled('beratung.astro');
   </section>
 
   <section class="section section-alt">
+    <div class="container section-narrow section-centered">
+      <h2 class="eyebrow">Gut zu wissen</h2>
+    </div>
     <div class="container section-narrow">
-      <h2>Gut zu wissen</h2>
       {
+        /* NACHTLAUF-2026-09-08.md B4: live is a collapsed accordion (four
+           questions, one open at a time isn't required — plain independent
+           <details>, matching how every other disclosure on this site
+           already works with no JS), not four permanently-open panels. */
         faqs.map((f) => (
-          <div class="faq-item">
-            <h3>{f.question}</h3>
+          <details class="accordion-item">
+            <summary>
+              <span class="icon-circle icon-circle-sm icon-circle-sage accordion-icon">
+                <Icon name="plus" size={16} />
+              </span>
+              <h4>{f.question}</h4>
+            </summary>
             <p>{f.answer}</p>
-          </div>
+          </details>
         ))
       }
     </div>
@@ -148,6 +159,12 @@ tracker.assertAllHandled('beratung.astro');
     background: var(--color-bg-alt);
     padding: 2rem;
     border-radius: var(--radius);
+    /* NACHTLAUF-2026-09-08.md B4/B5: equal-height cards with the location
+       badge anchored to the bottom, regardless of how many list items
+       precede it (flex column + margin-top: auto on the badge row). */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   .format-card .icon-list {
@@ -158,29 +175,20 @@ tracker.assertAllHandled('beratung.astro');
     display: flex;
     flex-wrap: wrap;
     gap: 1.5rem;
-    margin-top: 1rem;
+    margin-top: auto;
+    padding-top: 1rem;
   }
 
-  .faq-item {
-    border-bottom: 1px solid rgba(24, 26, 43, 0.1);
-    padding-block: 1.5rem;
-  }
-
-  .faq-item:last-child {
-    border-bottom: none;
-  }
-
-  .faq-item h3 {
-    margin-bottom: 0.5rem;
-  }
-
-  .faq-item p {
-    margin: 0;
+  /* NACHTLAUF-2026-09-08.md B4: the question is its own measured 20px, not
+     the browser's inherited default h4 size. */
+  .accordion-item summary h4 {
+    font-size: 1.25rem;
   }
 
   @media (min-width: 900px) {
     .format-grid {
       grid-template-columns: 1fr 1fr;
+      align-items: stretch;
     }
   }
 </style>
