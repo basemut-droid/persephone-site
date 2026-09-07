@@ -39,7 +39,15 @@ const pageTitle = title ?? site.meta.title;
 // now either passes its own real description or ships none; see
 // OPEN-QUESTIONS.md for the list still waiting on the owner to write one.
 const pageDescription = description;
-const canonicalUrl = getAbsoluteLocaleUrl(locale, path);
+// The locale homepages pass path="/en/"/"/it/" (matching their own route),
+// but getAbsoluteLocaleUrl already prepends the locale prefix itself — left
+// alone, that doubled it to "/en/en/"/"/it/it/" (external-review.md finding
+// #12 / FIXES-2026-09-07.md task 5a). Strip any leading locale prefix
+// first, the same way the hreflang tags below and localizedPath()
+// (src/i18n/utils.ts) already do, so there's one normalization rule
+// instead of two that can drift apart.
+const normalizedPath = path.replace(/^\/(en|it)(\/|$)/, '/');
+const canonicalUrl = getAbsoluteLocaleUrl(locale, normalizedPath);
 ---
 
 <html lang={locale}>
