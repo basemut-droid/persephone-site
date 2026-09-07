@@ -23,17 +23,22 @@ const { text, icon } = Astro.props;
 
 <style>
   .pill {
+    /* Measured directly off Beratung's live raw HTML (inline styles on its
+       badge <span>s, RUN-2026-09-07.md Phase D1): sage background, an
+       off-white (not near-black) text color, italic, and var(--radius) —
+       a rounded rectangle, not a full stadium pill despite the common name
+       for this shape. */
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
     background: var(--color-sage);
-    color: var(--color-text);
-    border-radius: 999px;
-    padding: 0.3rem 0.85rem;
+    color: var(--color-bg);
+    border-radius: var(--radius);
+    padding: 0.4rem 0.9rem;
     font-size: 0.75rem;
-    font-weight: var(--weight-subheading);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    font-weight: 600;
+    font-style: italic;
+    letter-spacing: 0.02em;
     line-height: 1.4;
   }
 </style>

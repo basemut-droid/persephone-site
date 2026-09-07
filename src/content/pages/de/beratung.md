@@ -1,6 +1,12 @@
 ---
 title: "Beratung & Coaching"
 sourceUrl: "https://www.persephone.at/beratung/"
+# Duration/location badges — missing from the extraction entirely
+# (external-review.md never found them; FIXES-2026-09-07.md task 2c.1),
+# re-extracted 2026-09-07 from the live page's raw HTML.
+formatBadges:
+  Einzelberatung: ["50 MINUTEN", "WIEN, ONLINE"]
+  Paarberatung: ["90 MINUTEN", "WIEN, ONLINE"]
 ---
 
 Angebote

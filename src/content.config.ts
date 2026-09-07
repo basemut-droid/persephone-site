@@ -153,6 +153,17 @@ const pages = defineCollection({
       sourceUrl: z.string().url(), // the persephone.at URL this was extracted from
       heroImage: image().optional(),
       heroImageAlt: z.string().optional(),
+      // Beratung only (RUN-2026-09-07.md Phase D1 / FIXES-2026-09-07.md
+      // task 2c.1): the duration/location pill badges on each format card,
+      // keyed by the format's own heading ("Einzelberatung"/"Paarberatung")
+      // so beratung.astro's existing per-format derivation can look them up
+      // directly. Real content re-extracted from the live page, not
+      // rendered anywhere in the markdown body — a badge isn't prose, so it
+      // doesn't belong in the flowing markdown the way this collection's
+      // body otherwise deliberately stays unstructured (see the loader
+      // comment above); this is the same kind of targeted, page-specific
+      // typed field heroImage/heroImageAlt already are.
+      formatBadges: z.record(z.string(), z.array(z.string())).optional(),
     }),
 });
 

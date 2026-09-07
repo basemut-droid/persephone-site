@@ -3,6 +3,8 @@ import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import ClosingCta from '../components/ClosingCta.astro';
+import Pill from '../components/Pill.astro';
+import Icon from '../components/Icon.astro';
 import marinaPortrait from '../assets/shared/marina-von-persephone.jpg';
 import logoEmpathie from '../assets/pages/beratung/logo-empathie.png';
 import { parseMarkdownBlocks, paragraphs, parseLinkHeading, BlockTracker } from '../lib/parseMarkdownBlocks';
@@ -31,6 +33,7 @@ const formats = ['Einzelberatung', 'Paarberatung'].map((heading) => {
     heading,
     intro: paragraphs(sec)[0],
     items: sec.find((b) => b.type === 'list'),
+    badges: entry.data.formatBadges?.[heading] ?? [],
   };
 });
 
@@ -67,23 +70,33 @@ tracker.assertAllHandled('beratung.astro');
   <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
   <section class="section">
-    <div class="container section-narrow">
-      <h2>Was ist Beratung?</h2>
+    <div class="container section-narrow section-centered">
+      <h2 class="eyebrow">Was ist Beratung?</h2>
       {wasIstBeratung.map((p) => <p>{p}</p>)}
     </div>
-    <div class="container">
-      <h2 class="section-heading">Formate</h2>
+    <div class="container section-centered">
+      <h2 class="eyebrow section-heading">Formate</h2>
     </div>
     <div class="container format-grid">
       {
         formats.map((f) => (
           <article class="format-card">
-            <h2>{f.heading}</h2>
+            <h2 class="eyebrow">{f.heading}</h2>
             {f.intro && <p>{f.intro}</p>}
             {f.items?.type === 'list' && (
-              <ul>
-                {f.items.items.map((item) => <li>{item}</li>)}
+              <ul class="icon-list icon-list-check">
+                {f.items.items.map((item) => (
+                  <li>
+                    <Icon name="check" size={18} />
+                    <span>{item}</span>
+                  </li>
+                ))}
               </ul>
+            )}
+            {f.badges.length > 0 && (
+              <div class="format-badges">
+                {f.badges.map((b) => <Pill text={b} />)}
+              </div>
             )}
           </article>
         ))
@@ -126,18 +139,23 @@ tracker.assertAllHandled('beratung.astro');
   }
 
   .format-card {
-    background: var(--color-surface);
+    /* Live cards sit on the beige surface with no border (FIXES-2026-09-07.md
+       task 2c.1) — previously white with an implied thin edge against the
+       page's own off-white background. */
+    background: var(--color-bg-alt);
     padding: 2rem;
     border-radius: var(--radius);
   }
 
-  .format-card ul {
-    margin: 0;
-    padding-left: 1.25rem;
+  .format-card .icon-list {
+    margin-top: 1rem;
   }
 
-  .format-card li {
-    margin-bottom: 0.4rem;
+  .format-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 1rem;
   }
 
   .faq-item {
