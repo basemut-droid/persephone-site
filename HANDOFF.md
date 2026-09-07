@@ -57,16 +57,29 @@ that matter most:
 
 Working through `docs/RUN-2026-09-07.md` (order-of-operations for
 `docs/FIXES-2026-09-07.md`, today's authority — supersedes older notes where they
-disagree). **Phase A done and committed** (`c947478`): the Angebote dropdown's dead
-hover gap, missing close delay, and an Escape/`:focus-within` conflict are fixed in
-`Header.astro`, verified with a real Chromium session (pointer path, keyboard,
-touch-emulated 390px — see that commit message for specifics).
+disagree).
 
-**Next: Phase B** — build the shared pieces (eyebrow pattern, icon set, badge/pill
-component) before touching Beratung/Workshops/Selbsthilfegruppe/Angebote, so they're
-built once and reused, not rebuilt three times. Then Phase C (closing-CTA component),
-D (the pages), E (hero images), F (the rest). Full order and rules in
+- **Phase A done** (`c947478`): Angebote dropdown's dead hover gap, missing close
+  delay, Escape/`:focus-within` conflict — fixed in `Header.astro`, verified with a
+  real Chromium session (pointer path, keyboard, touch-emulated 390px).
+- **Phase B done** (`c9675a0`): `Icon.astro` (shared inline-SVG set) and
+  `Pill.astro` (shared sage badge), recorded in `DESIGN-SYSTEM.md`. Not wired into
+  any page yet — that's Phase D.
+- **Phase C done** (`f4df68d`): `ClosingCta.astro` (shared two-column portrait-over-
+  tile CTA), applied to Angebote/Workshops/Beratung/Über uns — the last two
+  confirmed against live raw HTML first, not assumed. Resolves tasks 2b.3/5d.
+
+**Next: Phase D** — the pages themselves (Beratung badges/cards, Workshops eyebrow/
+cards/pills, Angebote's interactive tabs panel + re-extracted statements, and the
+Selbsthilfegruppe rebuild), using B's icon/pill components. Then Phase E (hero
+images — six confirmed, five need a live-HTML check), Phase F (blog listing, EN/IT
+noindex, smaller fixes, build-check widening). Full order and rules in
 `docs/RUN-2026-09-07.md`; findings in `docs/FIXES-2026-09-07.md`.
+
+A playwright Chromium install was fetched via `npx` for verification only (not
+added to `package.json`) — reuse it (`npx --yes playwright@1.63.0`) rather than
+reinstalling if still cut off mid-session; the browser binary is cached under
+`%LOCALAPPDATA%\ms-playwright`.
 
 If cut off mid-run: check `git log` for the last commit's phase/task label, then
 resume at the next uncommitted task in `docs/RUN-2026-09-07.md`'s order. Nothing here
