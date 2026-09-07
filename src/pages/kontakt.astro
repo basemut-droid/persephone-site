@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import ContactForm from '../components/ContactForm.astro';
+import Icon from '../components/Icon.astro';
 import mg7811 from '../assets/pages/kontakt/mg-7811.png';
 import { parseMarkdownBlocks, mdInlineHtml, BlockTracker } from '../lib/parseMarkdownBlocks';
 
@@ -47,9 +48,21 @@ tracker.assertAllHandled('kontakt.astro');
       <div class="contact-info">
         <Image src={mg7811} alt="Porträtfoto von Marina Bletsas, Gründerin von Persephone" width={240} height={360} />
         {introLine.type === 'paragraph' && <p set:html={mdInlineHtml(introLine.text)} />}
-        <h2>Erreichbarkeit</h2>
+        {
+          /* NACHTLAUF-2026-09-08.md B7: both live as an eyebrow with a
+             round terracotta icon in front — the same .icon-circle
+             building block Workshops/Selbsthilfegruppe already use for
+             their section icons, not a dark 32px h2. */
+        }
+        <div class="section-icon-eyebrow">
+          <span class="icon-circle"><Icon name="clock" size={25} /></span>
+          <h2 class="eyebrow">Erreichbarkeit</h2>
+        </div>
         {erreichbarkeit.map((b) => b.type === 'paragraph' && <p set:html={mdInlineHtml(b.text)} />)}
-        <h2>Standorte</h2>
+        <div class="section-icon-eyebrow">
+          <span class="icon-circle"><Icon name="pin" size={25} /></span>
+          <h2 class="eyebrow">Standorte</h2>
+        </div>
         {standorte.map((b) => b.type === 'paragraph' && <p set:html={mdInlineHtml(b.text)} />)}
         {/* NIGHT-RUN.md Phase 4.3: a short pointer to the booking page,
            mirroring the one Termine gives back to this form. Kontakt and
@@ -76,6 +89,25 @@ tracker.assertAllHandled('kontakt.astro');
   .contact-info img {
     border-radius: var(--radius);
     margin-bottom: 1.5rem;
+  }
+
+  .section-icon-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .section-icon-eyebrow .icon-circle {
+    /* Smaller than the 3.5rem default (a card's own top-left section icon)
+       — this one sits inline beside a text label instead of above a block
+       of content. */
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .section-icon-eyebrow .eyebrow {
+    margin-bottom: 0;
   }
 
   .booking-pointer {
