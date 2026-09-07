@@ -3,6 +3,8 @@ import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import ClosingCta from '../components/ClosingCta.astro';
+import Pill from '../components/Pill.astro';
+import Icon from '../components/Icon.astro';
 import marinaPortrait from '../assets/shared/marina-von-persephone.jpg';
 import logoWissenschaft from '../assets/pages/workshops/logo-wissenschaft.png';
 import { parseMarkdownBlocks, paragraphs, BlockTracker } from '../lib/parseMarkdownBlocks';
@@ -66,31 +68,47 @@ tracker.assertAllHandled('workshops.astro');
   <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
   <section class="section">
-    <div class="container section-narrow">
-      <h2>Was ist Psychoedukation?</h2>
+    <div class="container section-narrow section-centered">
+      <h2 class="eyebrow">Was ist Psychoedukation?</h2>
       {psychoedukation.map((p) => <p>{p}</p>)}
+    </div>
 
-      <h2>Workshops &amp; Trainings</h2>
-      {workshopsIntro && <p>{workshopsIntro}</p>}
-      {
-        workshopsList?.type === 'list' && (
-          <ul>
-            {workshopsList.items.map((item) => <li>{item}</li>)}
-          </ul>
-        )
-      }
-      {workshopsLocations && <p class="location-tag">{workshopsLocations}</p>}
+    <div class="container card-grid">
+      <article class="workshop-card">
+        <div class="icon-circle"><Icon name="book" size={28} /></div>
+        <h2 class="eyebrow">Workshops &amp; Trainings</h2>
+        {workshopsIntro && <p>{workshopsIntro}</p>}
+        {
+          workshopsList?.type === 'list' && (
+            <ul class="icon-list icon-list-sage">
+              {workshopsList.items.map((item) => <li>{item}</li>)}
+            </ul>
+          )
+        }
+        {workshopsLocations && (
+          <div class="card-badge">
+            <Pill text={workshopsLocations} icon="pin" />
+          </div>
+        )}
+      </article>
 
-      <h2>Ressourcen</h2>
-      {ressourcenIntro && <p>{ressourcenIntro}</p>}
-      {
-        ressourcenList?.type === 'list' && (
-          <ul>
-            {ressourcenList.items.map((item) => <li>{item}</li>)}
-          </ul>
-        )
-      }
-      {ressourcenLocations && <p class="location-tag">{ressourcenLocations}</p>}
+      <article class="workshop-card">
+        <div class="icon-circle"><Icon name="document" size={28} /></div>
+        <h2 class="eyebrow">Ressourcen</h2>
+        {ressourcenIntro && <p>{ressourcenIntro}</p>}
+        {
+          ressourcenList?.type === 'list' && (
+            <ul class="icon-list icon-list-sage">
+              {ressourcenList.items.map((item) => <li>{item}</li>)}
+            </ul>
+          )
+        }
+        {ressourcenLocations && (
+          <div class="card-badge">
+            <Pill text={ressourcenLocations} icon="pin" />
+          </div>
+        )}
+      </article>
     </div>
   </section>
 
@@ -107,11 +125,38 @@ tracker.assertAllHandled('workshops.astro');
 </BaseLayout>
 
 <style>
-  .location-tag {
-    font-size: 0.8rem;
-    font-weight: var(--weight-subheading);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
+  /* Same card shape as Beratung's format cards (RUN-2026-09-07.md Phase D1):
+     beige surface, no border, var(--radius). Not promoted to global.css yet
+     — see CLAUDE.md's "reuse before you build": revisit if a third page
+     needs this exact shape. */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .workshop-card {
+    background: var(--color-bg-alt);
+    padding: 2rem;
+    border-radius: var(--radius);
+  }
+
+  .workshop-card .icon-circle {
+    margin-bottom: 1rem;
+  }
+
+  .workshop-card .icon-list {
+    margin: 1rem 0;
+  }
+
+  .card-badge {
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 900px) {
+    .card-grid {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 </style>
