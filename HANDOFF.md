@@ -42,7 +42,13 @@ each commit so the tree stays in a good state if interrupted.
   enhancement (visible by default; JS-only, reduced-motion-aware). Built
   for B2.1 to apply to Über uns's qualification band.
 
-**Teil A complete. Not started yet:** all of Teil B, Teil C, Teil D. See
+**Teil A complete.**
+- B1 (`ee82d0b`): homepage — 'abonieren' typo, founder CTA button color,
+  blog-teaser overlapping white card, services lede downgraded to <p>,
+  blog category order. Aria-labels on image-only links were already fixed
+  in a prior run.
+
+**Not started yet:** B2–B9, Teil C, Teil D. See
 `docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
 
 **Session note:** `playwright@1.63.0` is installed locally via
