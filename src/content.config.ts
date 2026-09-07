@@ -164,6 +164,35 @@ const pages = defineCollection({
       // comment above); this is the same kind of targeted, page-specific
       // typed field heroImage/heroImageAlt already are.
       formatBadges: z.record(z.string(), z.array(z.string())).optional(),
+      // Angebote only (RUN-2026-09-07.md Phase D3 / FIXES-2026-09-07.md task
+      // 2b.1): the ten-statement self-recognition selector's real data — a
+      // response paragraph and a recommended-offer link per statement. This
+      // is the page's central interaction; earlier sessions couldn't find it
+      // because it's built by a client-side script whose *data* (not just
+      // its rendered output) lives directly in the live page's raw HTML —
+      // re-extracted from there 2026-09-07, not invented. Structured here
+      // because it's genuinely structured data (ten objects with three
+      // fields each), not prose a markdown body can hold.
+      recognitionPanel: z
+        .object({
+          statements: z.array(
+            z.object({
+              text: z.string(),
+              bridge: z.string(), // the response paragraph
+              offer: z.string(), // key into `offers` below
+            })
+          ),
+          offers: z.record(
+            z.string(),
+            z.object({
+              title: z.string(),
+              description: z.string(),
+              cta: z.string(),
+              href: z.string(),
+            })
+          ),
+        })
+        .optional(),
     }),
 });
 

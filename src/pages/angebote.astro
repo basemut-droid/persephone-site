@@ -5,7 +5,7 @@ import PageHero from '../components/PageHero.astro';
 import ClosingCta from '../components/ClosingCta.astro';
 import mg7425 from '../assets/pages/angebote/mg-7425.jpg';
 import logoGeborgenheit from '../assets/pages/angebote/logo-geborgenheit.png';
-import { parseMarkdownBlocks, paragraphs, BlockTracker } from '../lib/parseMarkdownBlocks';
+import { parseMarkdownBlocks, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 // Live page has no split-hero image (confirmed: its masthead row has no
 // --awb-bg-image, unlike Über uns) — a plain PageHero banner is the right
@@ -18,39 +18,25 @@ const tracker = new BlockTracker(blocks);
 const { eyebrow: heroEyebrow, title: heroTitle, intro: heroIntro } = tracker.heroFields(entry.data.title);
 const introPara2 = tracker.at(3);
 
-// The self-recognition list (external-review.md finding #2) is the whole
-// point of this page and was missing entirely from the content collection
-// — re-extracted from the live page's raw HTML (curled directly, not via a
-// summarizing fetch) on 2026-09-06 and confirmed to match
-// docs/external-review.md's own verified list exactly, item for item.
-//
-// On the live page these ten statements are buttons in a client-side
-// "services selector" quiz: clicking one fills in a recommendation card
-// (title/description/link to one specific offering) via JavaScript with no
-// server-rendered fallback content — the card's fields are empty in the
-// page's static HTML. Reproducing that quiz would mean inventing which
-// offering each of the ten statements maps to, which nothing in the source
-// supports; NIGHT-RUN.md's brief is "restore the lost content," not
-// "rebuild the interactive selector," so this renders the ten statements
-// as a plain list (still the page's real self-recognition device) and logs
-// the interactive quiz itself as an open question rather than guessing at
-// its logic — see OPEN-QUESTIONS.md.
+// The self-recognition selector (external-review.md finding #2 /
+// FIXES-2026-09-07.md task 2b.1) is the whole point of this page. The ten
+// statements themselves survived extraction as a plain list; the response
+// text and offer recommendation per statement did not, because an earlier
+// session assumed the client-side "services selector" script had no
+// server-rendered data to read — wrong: its data literal (all ten
+// statement/response/offer triples, and the three offers' full copy) is
+// directly in the live page's raw HTML, re-extracted 2026-09-07 into
+// entry.data.recognitionPanel (see content.config.ts and angebote.md's own
+// frontmatter comment). The markdown body's old plain list is gone — this
+// structured field is now the single source for the statement text too, so
+// there's nothing left duplicated between the two places.
+const panel = entry.data.recognitionPanel;
+if (!panel) throw new Error('Expected entry.data.recognitionPanel on angebote.md');
+
 const recognition = tracker.section('Fang einfach dort an, wo Du Dich wiedererkennst');
-const recognitionList = recognition.find((b) => b.type === 'list');
-if (!recognitionList || recognitionList.type !== 'list') throw new Error('Expected the self-recognition list');
-// "Das könnte jetzt passen" is that same quiz's result-card eyebrow on the
-// live page (see above) — real copy belonging *inside* the interactive
-// panel's offer card, not this closing section (FIXES-2026-09-07.md task
-// 2b.2). Extracted and tracked here so the block-tracker accounting stays
-// correct, but not rendered until the interactive tabs panel (task 2b.1,
-// RUN-2026-09-07.md Phase D3) actually builds that card — rendering it
-// here in the meantime would just be re-committing the same misplacement
-// this task exists to fix.
-const passtEyebrow = paragraphs(recognition)[0];
-void passtEyebrow; // used by Phase D3, not yet
 const nextStepHeading = recognition.find((b) => b.type === 'heading' && b.level === 3);
 if (!nextStepHeading || nextStepHeading.type !== 'heading') throw new Error('Expected the "Wenn sich..." sub-heading');
-const nextStepIntro = paragraphs(recognition)[1];
+const nextStepIntro = recognition.find((b) => b.type === 'paragraph');
 const cta = recognition.find((b) => b.type === 'cta');
 if (!cta || cta.type !== 'cta') throw new Error('Expected a CTA in the Angebote body');
 
@@ -70,18 +56,74 @@ tracker.assertAllHandled('angebote.astro');
   <section class="section section-centered">
     <div class="container section-narrow">
       {introPara2.type === 'paragraph' && <p>{introPara2.text}</p>}
+    </div>
 
-      <h2>Fang einfach dort an, wo Du Dich wiedererkennst</h2>
-      <ul class="recognition-list">
-        {recognitionList.items.map((item) => <li>{item}</li>)}
-      </ul>
+    <div class="container">
+      <h2 class="eyebrow">Fang einfach dort an, wo Du Dich wiedererkennst</h2>
 
+      {
+        /* Accessible tabs/disclosure pattern (FIXES-2026-09-07.md task
+           2b.1) built entirely on native radio inputs + labels + CSS — no
+           JavaScript at all, so there's no "without JS" fallback case to
+           special-case: it simply always works. Keyboard: a native radio
+           group is Tab-to-enter, arrow-keys-to-choose, no custom key
+           handling needed. Every response panel renders by default
+           (.pf-response { display:block }) so a browser that doesn't
+           support :has() shows all ten responses stacked — "show all
+           responses rather than none" — and only browsers that do support
+           it (evergreen Chrome/Firefox/Safari/Edge) get the single-panel
+           interactive behavior, gated by @supports so the two states never
+           fight each other. */
+      }
+      <div class="pf-selector" id="pf-services-selector">
+        <div class="pf-selector-grid">
+          <div class="pf-recognition-list" role="radiogroup" aria-label="Situationen">
+            {
+              panel.statements.map((s, i) => (
+                <div class="pf-recognition-item">
+                  <input
+                    type="radio"
+                    name="pf-choice"
+                    id={`pf-choice-${i}`}
+                    class="visually-hidden"
+                    checked={i === 0}
+                  />
+                  <label for={`pf-choice-${i}`} class="pf-recognition">
+                    {s.text}
+                  </label>
+                </div>
+              ))
+            }
+          </div>
+
+          <div class="pf-response-home">
+            {
+              panel.statements.map((s, i) => {
+                const offer = panel.offers[s.offer];
+                return (
+                  <div class={`pf-response pf-response-${i}`}>
+                    <p class="pf-bridge">{s.bridge}</p>
+                    <div class="pf-offer-card">
+                      <h3 class="eyebrow pf-offer-eyebrow">Das könnte jetzt passen</h3>
+                      <h4 class="pf-offer-title">{offer.title}</h4>
+                      <p class="pf-offer-description">{offer.description}</p>
+                      <a class="pf-offer-link" href={offer.href}>
+                        {offer.cta}
+                      </a>
+                    </div>
+                  </div>
+                );
+              })
+            }
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <ClosingCta
     heading={nextStepHeading.text}
-    paragraphs={nextStepIntro ? [nextStepIntro] : []}
+    paragraphs={nextStepIntro?.type === 'paragraph' ? [nextStepIntro.text] : []}
     ctaLabel={cta.text}
     ctaHref={ctaHref}
     portrait={mg7425}
@@ -92,18 +134,187 @@ tracker.assertAllHandled('angebote.astro');
 </BaseLayout>
 
 <style>
-  .recognition-list {
+  .pf-selector {
+    background: var(--color-bg-alt);
+    border-radius: 1.125rem;
+    padding: clamp(1.5rem, 5vw, 3rem);
+    margin-top: 2.5rem;
     text-align: left;
-    max-width: 40rem;
-    margin: 2rem auto;
-    padding: 0;
-    list-style: none;
-    display: grid;
-    gap: 0.75rem;
   }
 
-  .recognition-list li {
-    border-left: 3px solid var(--color-accent-strong);
-    padding-left: 1rem;
+  .pf-selector-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .pf-recognition-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pf-recognition-item {
+    position: relative;
+  }
+
+  .pf-recognition {
+    display: block;
+    width: 100%;
+    padding: 0.9rem 0.75rem 0.9rem 1.25rem;
+    color: var(--color-accent-strong);
+    opacity: 0.68;
+    font-size: clamp(1.1rem, 1vw + 0.9rem, 1.3rem);
+    font-style: italic;
+    line-height: 1.45;
+    cursor: pointer;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .pf-recognition::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.9rem;
+    bottom: 0.9rem;
+    width: 3px;
+    background: transparent;
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+  }
+
+  .pf-recognition:hover {
+    opacity: 0.9;
+  }
+
+  /* Active state — driven by :has() (see the frontmatter comment above),
+     one rule per statement since CSS has no way to bind "the Nth radio" to
+     "the Nth label" without repeating the index. */
+  #pf-services-selector:has(#pf-choice-0:checked) label[for='pf-choice-0'],
+  #pf-services-selector:has(#pf-choice-1:checked) label[for='pf-choice-1'],
+  #pf-services-selector:has(#pf-choice-2:checked) label[for='pf-choice-2'],
+  #pf-services-selector:has(#pf-choice-3:checked) label[for='pf-choice-3'],
+  #pf-services-selector:has(#pf-choice-4:checked) label[for='pf-choice-4'],
+  #pf-services-selector:has(#pf-choice-5:checked) label[for='pf-choice-5'],
+  #pf-services-selector:has(#pf-choice-6:checked) label[for='pf-choice-6'],
+  #pf-services-selector:has(#pf-choice-7:checked) label[for='pf-choice-7'],
+  #pf-services-selector:has(#pf-choice-8:checked) label[for='pf-choice-8'],
+  #pf-services-selector:has(#pf-choice-9:checked) label[for='pf-choice-9'] {
+    opacity: 1;
+    font-weight: 600;
+    font-style: normal;
+    transform: translateX(0.3rem);
+  }
+
+  #pf-services-selector:has(#pf-choice-0:checked) label[for='pf-choice-0']::before,
+  #pf-services-selector:has(#pf-choice-1:checked) label[for='pf-choice-1']::before,
+  #pf-services-selector:has(#pf-choice-2:checked) label[for='pf-choice-2']::before,
+  #pf-services-selector:has(#pf-choice-3:checked) label[for='pf-choice-3']::before,
+  #pf-services-selector:has(#pf-choice-4:checked) label[for='pf-choice-4']::before,
+  #pf-services-selector:has(#pf-choice-5:checked) label[for='pf-choice-5']::before,
+  #pf-services-selector:has(#pf-choice-6:checked) label[for='pf-choice-6']::before,
+  #pf-services-selector:has(#pf-choice-7:checked) label[for='pf-choice-7']::before,
+  #pf-services-selector:has(#pf-choice-8:checked) label[for='pf-choice-8']::before,
+  #pf-services-selector:has(#pf-choice-9:checked) label[for='pf-choice-9']::before {
+    background: var(--color-accent-strong);
+  }
+
+  /* Visible focus state for the (visually-hidden) radio input itself —
+     the global focus-visible rule targets `input:focus-visible` already,
+     but a 1px clipped element needs the ring to land on its label instead
+     to actually be seen. */
+  .visually-hidden:focus-visible + .pf-recognition {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .pf-response-home {
+    min-width: 0;
+  }
+
+  /* Fallback: show every response, stacked — the default, unconditional
+     state. Only overridden inside @supports below. */
+  .pf-response {
+    padding-top: 1px; /* avoid margin-collapse making stacked responses touch */
+  }
+
+  .pf-response + .pf-response {
+    margin-top: 2.5rem;
+  }
+
+  .pf-bridge {
+    margin: 0 0 1.5rem;
+    font-size: clamp(1.05rem, 0.4vw + 0.95rem, 1.15rem);
+    font-weight: 500;
+    line-height: 1.55;
+  }
+
+  .pf-offer-card {
+    position: relative;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    background: var(--color-surface);
+    border-radius: 1rem;
+  }
+
+  .pf-offer-eyebrow {
+    margin-bottom: 0.7rem;
+  }
+
+  .pf-offer-title {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.5rem, 1vw + 1.3rem, 1.85rem);
+    font-weight: 600;
+  }
+
+  .pf-offer-description {
+    margin: 0 0 1.25rem;
+    opacity: 0.86;
+  }
+
+  .pf-offer-link {
+    display: inline-block;
+    color: var(--color-accent-strong);
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      color 0.18s ease,
+      transform 0.18s ease;
+  }
+
+  .pf-offer-link:hover {
+    color: var(--color-terracotta-dark);
+    transform: translateX(0.2rem);
+  }
+
+  /* The interactive single-panel behavior: only in browsers that support
+     :has(), so unsupporting browsers keep the "show every response" default
+     above instead of showing nothing. */
+  @supports selector(:has(a)) {
+    .pf-response {
+      display: none;
+    }
+
+    #pf-services-selector:has(#pf-choice-0:checked) .pf-response-0,
+    #pf-services-selector:has(#pf-choice-1:checked) .pf-response-1,
+    #pf-services-selector:has(#pf-choice-2:checked) .pf-response-2,
+    #pf-services-selector:has(#pf-choice-3:checked) .pf-response-3,
+    #pf-services-selector:has(#pf-choice-4:checked) .pf-response-4,
+    #pf-services-selector:has(#pf-choice-5:checked) .pf-response-5,
+    #pf-services-selector:has(#pf-choice-6:checked) .pf-response-6,
+    #pf-services-selector:has(#pf-choice-7:checked) .pf-response-7,
+    #pf-services-selector:has(#pf-choice-8:checked) .pf-response-8,
+    #pf-services-selector:has(#pf-choice-9:checked) .pf-response-9 {
+      display: block;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .pf-selector-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+      gap: clamp(3rem, 6vw, 5.5rem);
+      align-items: start;
+    }
   }
 </style>
