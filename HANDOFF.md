@@ -75,7 +75,11 @@ teal circular check list. Pill.astro's own styling was corrected mid-D1 to match
 live-measured CSS (off-white text, var(--radius) not a full pill, italic) — affects
 Workshops' pills too once D2 wires them in.
 
-Still to do in Phase D: D2 (Workshops — eyebrow, cards, icons, pills), D3 (Angebote
+D2 done (`b68d8eb`): Workshops' eyebrow/centered copy, card treatment (reusing
+Beratung's beige-card shape), circular section icons, sage list markers, location
+pills with a pin icon.
+
+Still to do in Phase D: D3 (Angebote
 — the interactive tabs panel + re-extracted ten statements/responses/offers, the
 biggest single piece of this run), D4 (Selbsthilfegruppe — principle labels,
 meeting-details card, Selbsthilfe-Steiermark logo banner + download, full
