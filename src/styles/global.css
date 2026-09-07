@@ -346,7 +346,14 @@ textarea:focus-visible,
 @media (min-width: 900px) {
   .hero-grid {
     grid-template-columns: 45% 55%;
-    height: 520px;
+    /* min-height, not height: OPEN-QUESTIONS.md #17 / PRUEFUNG-B1.md — a
+       fixed height risked overflow once the type-scale increase (Phase
+       1.1) made hero copy taller; measured zero overflow on any hero page
+       at 1024–1920px (closest: the homepage at 1024px, 18px to spare), but
+       this is the structural fix either way. The band still renders at
+       exactly 520px in every case that exists today; it now grows instead
+       of clipping if copy ever gets longer. */
+    min-height: 520px;
   }
 
   .hero-image {

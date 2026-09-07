@@ -55,8 +55,7 @@ no separate heading font (`--font-heading` is just an alias for `--font-body`).
 | Element | Weight | Font-size | Line-height | Letter-spacing / transform |
 |---|---|---|---|---|
 | h1, masthead (`.heading-black`) | **400** (`--weight-heading`) | `clamp(2rem, 1.5rem + 2vw, 3rem)` — homepage hero and every subpage's `PageHero` share this one rule now | 1.2 | normal |
-| h2 | 400 | `clamp(1.5rem, 1.2rem + 1.2vw, 2rem)` | 1.2 | normal |
-| h3 | 400 | `clamp(1.5rem, 1.3rem + 1.2vw, 1.75rem)` — 28px from 600px viewport width up | 1.2 | normal |
+| h2, h3 | 400 | `clamp(1.5rem, 1.3rem + 1.2vw, 1.75rem)` — 28px from 600px viewport width up, one shared rule (`RUN-2026-09-07-B2.md` Phase 1b.2 — the live site uses one size at this level regardless of heading tag) | 1.2 | normal |
 | founder heading ("Von innen. Und von Fach.") | 400 | `2.25rem` (36px) — its own size, `.founder h2` in `HomePage.astro`, not the generic h2 scale | 1.2 | normal |
 | blog-teaser title (`BlogTeaserCard.astro`) | 400 | `1.625rem` (26px) | 1.2 | normal |
 | body `p` | 400 | `1.25rem` (20px) (hero copy / `PageHero` intro: also `1.25rem`) | 1.6 (hero copy: 1.75) | normal |
