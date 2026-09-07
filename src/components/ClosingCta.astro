@@ -39,8 +39,13 @@ const { heading, paragraphs, ctaLabel, ctaHref, portrait, portraitAlt, tile, til
       <a href={ctaHref} class="button button-primary">{ctaLabel}</a>
     </div>
     <div class="closing-cta-visual">
+      {/* Decorative brand tile — aria-hidden directly on the <img> itself
+         (not just an empty alt, and not just an ancestor wrapper — the
+         build-check's alt-text rule inspects each <img> tag on its own, so
+         this is what it needs to see to tell "deliberately decorative"
+         apart from "alt text someone forgot"). FIXES-2026-09-07.md task 5c. */}
       <div class="closing-cta-tile">
-        <Image src={tile} alt={tileAlt} width={500} height={500} />
+        <Image src={tile} alt={tileAlt} aria-hidden="true" width={500} height={500} />
       </div>
       <div class="closing-cta-portrait">
         <Image src={portrait} alt={portraitAlt} width={400} height={520} />

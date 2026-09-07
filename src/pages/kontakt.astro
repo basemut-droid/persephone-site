@@ -45,7 +45,7 @@ tracker.assertAllHandled('kontakt.astro');
   <section class="section">
     <div class="container contact-grid">
       <div class="contact-info">
-        <Image src={mg7811} alt="" width={240} height={360} />
+        <Image src={mg7811} alt="Porträtfoto von Marina Bletsas, Gründerin von Persephone" width={240} height={360} />
         {introLine.type === 'paragraph' && <p set:html={mdInlineHtml(introLine.text)} />}
         <h2>Erreichbarkeit</h2>
         {erreichbarkeit.map((b) => b.type === 'paragraph' && <p set:html={mdInlineHtml(b.text)} />)}

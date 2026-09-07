@@ -1,6 +1,6 @@
 # Build-check report
 
-Generated 2026-09-07T11:26:27.791Z by `scripts/build-check.mjs`.
+Generated 2026-09-07T11:35:02.565Z by `scripts/build-check.mjs`.
 
 ## Every content page has a route, every route has content — PASS
 
@@ -27,19 +27,9 @@ No violations found.
 - /ueber-uns/ has no meta description (empty or missing)
 - /workshops/ has no meta description (empty or missing)
 
-## Every <img> has a non-empty alt — FAIL (non-blocking)
+## Every <img> has a non-empty alt, or is marked decorative with aria-hidden — PASS
 
-- /angebote/: <img> with empty/missing alt — <img src="/_astro/logo-geborgenheit.RvUyFL1g_1VecpV.webp" alt data-astro-cid-prurgk2d="true" loading
-- /angebote/: <img> with empty/missing alt — <img src="/_astro/mg-7425.Brnlt3gz_Zb7xCz.webp" alt data-astro-cid-prurgk2d="true" loading="lazy" de
-- /beratung/: <img> with empty/missing alt — <img src="/_astro/logo-empathie.7B2cz3WH_Z1KJxRe.webp" alt data-astro-cid-prurgk2d="true" loading="l
-- /beratung/: <img> with empty/missing alt — <img src="/_astro/marina-von-persephone.CJPjYs3R_Z2dTtja.webp" alt data-astro-cid-prurgk2d="true" lo
-- /kontakt/: <img> with empty/missing alt — <img src="/_astro/mg-7811.CL5SUos4_Z1jiEp4.webp" alt data-astro-cid-657w5j3a="true" loading="lazy" d
-- /ueber-uns/: <img> with empty/missing alt — <img src="/_astro/marina-portrait-hero.BK8b9Mtx_Z2qjmIw.webp" alt data-astro-cid-ofnbv76t="true" loa
-- /ueber-uns/: <img> with empty/missing alt — <img src="/_astro/logo-kongruenz-und-authentizitaet.C89wRWA1_GKdpO.webp" alt data-astro-cid-ofnbv76t
-- /ueber-uns/: <img> with empty/missing alt — <img src="/_astro/logo-kongruenz-und-authentizitaet.C89wRWA1_xwayH.webp" alt data-astro-cid-prurgk2d
-- /ueber-uns/: <img> with empty/missing alt — <img src="/_astro/marina-von-persephone.CJPjYs3R_Z2dTtja.webp" alt data-astro-cid-prurgk2d="true" lo
-- /workshops/: <img> with empty/missing alt — <img src="/_astro/logo-wissenschaft.CtFjVvFd_ZRT6Q6.webp" alt data-astro-cid-prurgk2d="true" loading
-- /workshops/: <img> with empty/missing alt — <img src="/_astro/marina-von-persephone.CJPjYs3R_Z2dTtja.webp" alt data-astro-cid-prurgk2d="true" lo
+No violations found.
 
 ## Every locale link the language switcher renders resolves to a built page — PASS
 
@@ -95,5 +85,9 @@ No violations found.
 - astro.config.mjs "site" is "https://persephone.example" — a placeholder, not a real production domain
 
 ## Every heading in a source content file appears in its built page — PASS
+
+No violations found.
+
+## Every collection schema field is rendered or explicitly allow-listed — PASS
 
 No violations found.

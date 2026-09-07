@@ -25,6 +25,15 @@ const dateLabel = post.data.publishDate.toLocaleDateString('de-AT', {
   month: 'long',
   day: 'numeric',
 });
+// updatedDate exists on the schema but no post had set it and nothing
+// rendered it — a real gap the build-check's new unused-schema-field rule
+// (RUN-2026-09-07.md Phase F task 6) would have caught. Closed rather than
+// allow-listed away, since a post that IS later updated should say so.
+const updatedLabel = post.data.updatedDate?.toLocaleDateString('de-AT', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
 ---
 <BaseLayout
   locale="de"
@@ -41,6 +50,11 @@ const dateLabel = post.data.publishDate.toLocaleDateString('de-AT', {
       <time class="post-date" datetime={post.data.publishDate.toISOString().slice(0, 10)}>
         {dateLabel}
       </time>
+      {post.data.updatedDate && (
+        <time class="post-date post-date-updated" datetime={post.data.updatedDate.toISOString().slice(0, 10)}>
+          Aktualisiert am {updatedLabel}
+        </time>
+      )}
     </header>
     {
       post.data.heroImage && (
@@ -69,6 +83,11 @@ const dateLabel = post.data.publishDate.toLocaleDateString('de-AT', {
     display: block;
     color: var(--color-text-muted);
     font-size: 0.9rem;
+  }
+
+  .post-date-updated {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
   }
 
   .post-hero img {

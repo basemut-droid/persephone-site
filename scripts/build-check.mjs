@@ -169,7 +169,13 @@ function addResult(id, title, blocking, violations) {
 }
 
 // ---------------------------------------------------------------------
-// 5. Every <img> has a non-empty alt
+// 5. Every <img> has a non-empty alt, or is deliberately marked decorative.
+//    BLOCKING per RUN-2026-09-07.md Phase F task 6, once task 5c gave every
+//    image on the site a real choice: real alt text, or empty alt +
+//    aria-hidden="true" on the same tag (not just an ancestor — this check
+//    only looks at the <img> tag itself, which is also why ClosingCta.astro
+//    and the other decorative-image call sites put aria-hidden directly on
+//    the <Image> rather than a wrapping element).
 // ---------------------------------------------------------------------
 {
   const violations = [];
@@ -177,12 +183,15 @@ function addResult(id, title, blocking, violations) {
     for (const m of html.matchAll(/<img\s[^>]*>/gi)) {
       const tag = m[0];
       const altMatch = /alt="([^"]*)"/i.exec(tag);
-      if (!altMatch || altMatch[1].trim() === '') {
-        violations.push(`${route}: <img> with empty/missing alt — ${tag.slice(0, 100)}`);
+      const hasEmptyAlt = !altMatch || altMatch[1].trim() === '';
+      if (!hasEmptyAlt) continue;
+      const isMarkedDecorative = /aria-hidden="true"/i.test(tag);
+      if (!isMarkedDecorative) {
+        violations.push(`${route}: <img> with empty/missing alt and no aria-hidden — ${tag.slice(0, 100)}`);
       }
     }
   }
-  addResult('img-alt', 'Every <img> has a non-empty alt', false, violations);
+  addResult('img-alt', 'Every <img> has a non-empty alt, or is marked decorative with aria-hidden', true, violations);
 }
 
 // ---------------------------------------------------------------------
@@ -302,6 +311,72 @@ function addResult(id, title, blocking, violations) {
     }
   }
   addResult('source-headings-render', 'Every heading in a source content file appears in its built page', HEADING_CHECK_BLOCKING, violations);
+}
+
+// ---------------------------------------------------------------------
+// 9. Every field defined in a collection's schema is either rendered
+//    somewhere or explicitly allow-listed as intentionally unused.
+//    BLOCKING per RUN-2026-09-07.md Phase F task 6 — this is the
+//    mechanical version of what findings #2/#3/#4/#8 all turned out to be:
+//    content sitting in a field the template never reads. The heading
+//    check (#8) catches this for headings specifically, from outside,
+//    against built HTML; this one catches it for ANY schema field, from
+//    the template source, before a build even runs — the same principle
+//    BlockTracker (src/lib/parseMarkdownBlocks.ts) applies to markdown
+//    body blocks, extended to typed frontmatter fields.
+//
+//    Deliberately source-level, not content.config.ts-parsing: the field
+//    lists below are the collections' own top-level schema keys, kept by
+//    hand rather than parsed out of the zod schema, because a regex parser
+//    for arbitrary nested zod objects is exactly the kind of "looks
+//    thorough, silently wrong on the next schema edit" mechanism this
+//    project has already been burned by once (see DESIGN-SYSTEM.md's
+//    BlockTracker section). Keep this list in sync with
+//    src/content.config.ts by hand when either changes.
+// ---------------------------------------------------------------------
+{
+  const violations = [];
+  const srcDir = join(root, 'src');
+  const astroFiles = walk(srcDir, ['.astro']);
+  const templateSrc = astroFiles.map((f) => readFileSync(f, 'utf8')).join('\n');
+
+  // Collections with schema fields checked here. `events` is deliberately
+  // excluded, not allow-listed per field: it has zero consuming pages and
+  // zero real content (only .gitkeep placeholders) — a scaffold for a
+  // future feature, not a case of content silently going unrendered.
+  const SCHEMA_FIELDS = {
+    pages: ['title', 'description', 'sourceUrl', 'heroImage', 'heroImageAlt', 'formatBadges', 'recognitionPanel', 'principles'],
+    blog: ['title', 'description', 'publishDate', 'updatedDate', 'heroImage', 'heroImageAlt', 'category', 'draft', 'seoTitle', 'seoDescription'],
+    site: ['reviewStatus', 'meta', 'nav', 'hero', 'painPoints', 'services', 'philosophy', 'founder', 'newsletter', 'footer', 'common'],
+  };
+
+  // Fields confirmed intentionally unrendered, with why — not a silent skip.
+  const ALLOWED_UNUSED = {
+    'pages.sourceUrl': 'provenance only (which live persephone.at URL this was extracted from) — never meant to be shown to a visitor',
+  };
+
+  // Known limitation: this matches the field NAME anywhere in any .astro
+  // file, not "this collection's field, read off this collection's entry"
+  // specifically — so a generic name like "title" or "description" used by
+  // one collection could mask a genuinely-unused same-named field on
+  // another. Acceptable here because the fields that share a name across
+  // collections (title/description/heroImage/heroImageAlt) are already
+  // heavily used everywhere; a field whose name is unique to one collection
+  // (formatBadges, recognitionPanel, principles, updatedDate, category, …)
+  // gets an exact, meaningful check.
+  for (const [collection, fields] of Object.entries(SCHEMA_FIELDS)) {
+    for (const field of fields) {
+      const key = `${collection}.${field}`;
+      if (ALLOWED_UNUSED[key]) continue;
+      // Matches `.field`, `['field']`, or `["field"]` — the three ways
+      // template code reads a frontmatter/JSON property in this codebase.
+      const re = new RegExp(`\\.${field}\\b|\\[['"]${field}['"]\\]`);
+      if (!re.test(templateSrc)) {
+        violations.push(`${collection} collection: field "${field}" (content.config.ts) is never read by any .astro file — add real usage or an ALLOWED_UNUSED entry with a reason`);
+      }
+    }
+  }
+  addResult('schema-fields-used', "Every collection schema field is rendered or explicitly allow-listed", true, violations);
 }
 
 // ---------------------------------------------------------------------

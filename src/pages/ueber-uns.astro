@@ -134,7 +134,10 @@ tracker.assertAllHandled('ueber-uns.astro');
       <div>
         <h2 class="eyebrow">{stripEmphasis('**Sprachen**')}</h2>
         {sprachen.map((p) => <p>{p}</p>)}
-        <Image class="credentials-badge" src={logoKongruenz} alt="" width={90} height={90} />
+        {/* Decorative brand tile, deliberately empty alt + aria-hidden
+           (FIXES-2026-09-07.md task 5c) — confirmed deliberate placement
+           per external-review.md's withdrawn finding #9. */}
+        <Image class="credentials-badge" src={logoKongruenz} alt="" aria-hidden="true" width={90} height={90} />
       </div>
     </div>
   </section>
@@ -158,7 +161,9 @@ tracker.assertAllHandled('ueber-uns.astro');
               <span class="photo-teaser-placeholder-label">Foto folgt</span>
             </div>
             <div class="photo-teaser-card">
-              <a href={t.href} class="photo-teaser-eyebrow">{t.label}</a>
+              <h3 class="eyebrow photo-teaser-eyebrow">
+                <a href={t.href}>{t.label}</a>
+              </h3>
               <p>{t.description}</p>
             </div>
           </article>
@@ -173,7 +178,7 @@ tracker.assertAllHandled('ueber-uns.astro');
     ctaLabel={closingCta.text}
     ctaHref={closingCta.href}
     portrait={marinaPortrait}
-    portraitAlt=""
+    portraitAlt="Porträtfoto von Marina Bletsas, Gründerin von Persephone"
     tile={logoKongruenz}
     tileAlt=""
   />
@@ -281,18 +286,26 @@ tracker.assertAllHandled('ueber-uns.astro');
     max-width: 22rem;
   }
 
+  {
+    /* .eyebrow (global.css) provides the shape (uppercase, letter-spacing,
+       size, weight) — this only overrides its default teal for the
+       terracotta external-review.md confirmed here, and styles the link
+       the heading now wraps (task 5b: swap the element, keep the class;
+       the credentials columns already do this for a plain-text eyebrow —
+       this one wraps a link instead, since the heading itself is the
+       teaser's only click target). */
+  }
   .photo-teaser-eyebrow {
-    display: block;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.8rem;
-    font-weight: var(--weight-subheading);
     color: var(--color-accent-strong);
-    text-decoration: none;
     margin-bottom: 0.5rem;
   }
 
-  .photo-teaser-eyebrow:hover {
+  .photo-teaser-eyebrow a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .photo-teaser-eyebrow a:hover {
     text-decoration: underline;
   }
 
