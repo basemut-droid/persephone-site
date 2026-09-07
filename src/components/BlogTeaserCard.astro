@@ -22,6 +22,11 @@ const { href, title, category, heroImage, heroImageAlt, readMoreLabel } = Astro.
       )
     }
   </a>
+  {/* NACHTLAUF-2026-09-08.md B1: live's white card overlaps the image
+     (a negative margin pulling it left over the image's edge), rather than
+     sitting beside it in its own column — layout only; per Marina's
+     2026-09-07 decision the title stays dark/normal-case and the link
+     stays "Weiterlesen →", not live's terracotta-uppercase treatment. */}
   <div class="blog-teaser-body">
     {category && category.length > 0 && <p class="blog-teaser-category">{category.join(', ')}</p>}
     <h3><a href={href}>{title}</a></h3>
@@ -32,18 +37,18 @@ const { href, title, category, heroImage, heroImageAlt, readMoreLabel } = Astro.
 <style>
   .blog-teaser {
     display: grid;
-    grid-template-columns: minmax(120px, 33%) 1fr;
-    gap: 1.25rem;
-    align-items: stretch;
-    background: var(--color-bg);
-    border-radius: var(--radius);
-    overflow: hidden;
+    grid-template-columns: minmax(140px, 55%) 1fr;
+    align-items: center;
   }
 
   .blog-teaser-image {
     display: block;
+    grid-column: 1;
+    grid-row: 1;
+    aspect-ratio: 4 / 3;
     background: var(--color-sage);
-    min-height: 160px;
+    border-radius: var(--radius);
+    overflow: hidden;
   }
 
   .blog-teaser-image img {
@@ -61,11 +66,20 @@ const { href, title, category, heroImage, heroImageAlt, readMoreLabel } = Astro.
     font-size: 0.8rem;
   }
 
+  /* The overlap: the card sits in its own grid column but is pulled left
+     with a negative margin so it reaches back over the image's edge,
+     matching live's "white card breaks out over the photo" composition
+     (NACHTLAUF-2026-09-08.md B1) instead of sitting beside it. */
   .blog-teaser-body {
-    padding: 1.5rem 1.5rem 1.5rem 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    grid-column: 2;
+    grid-row: 1;
+    position: relative;
+    z-index: 1;
+    margin-left: -2.5rem;
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    box-shadow: 0 12px 32px rgba(24, 26, 43, 0.12);
+    padding: 1.5rem 1.75rem;
   }
 
   .blog-teaser-category {
@@ -100,8 +114,14 @@ const { href, title, category, heroImage, heroImageAlt, readMoreLabel } = Astro.
     .blog-teaser {
       grid-template-columns: 1fr;
     }
+    .blog-teaser-image {
+      grid-row: 1;
+    }
     .blog-teaser-body {
-      padding: 1rem;
+      grid-row: 2;
+      margin-left: 0;
+      margin-top: -2rem;
+      padding: 1.25rem 1.5rem;
     }
   }
 </style>

@@ -72,7 +72,7 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
     <div class="container">
       <div class="section-heading">
         <span class="eyebrow">{s.services.eyebrow}</span>
-        <h2 set:html={s.services.heading} />
+        <p class="services-lede" set:html={s.services.heading} />
       </div>
       <div class="service-grid">
         {
@@ -111,7 +111,7 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
         <span class="eyebrow">{s.founder.eyebrow}</span>
         <h2>{s.founder.heading}</h2>
         {s.founder.paragraphs.map((p) => <p>{p}</p>)}
-        <a href={s.founder.href} class="button button-outline">{s.founder.cta}</a>
+        <a href={s.founder.href} class="button button-primary">{s.founder.cta}</a>
       </div>
       <div class="founder-photo">
         <Image src={founderPhoto} alt={s.founder.imageAlt} width={700} height={933} />
@@ -158,6 +158,13 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
      pattern, so it has to be a real shared class, not scoped here. See
      CLAUDE.md's "reuse before you build" rule and global.css's own comment
      on this block for why. */
+
+  /* VERGLEICH-2026-09-07.md B1: live is a 25px paragraph, not a heading —
+     downgraded from <h2> above; this is its own measured size, not the
+     20px body default (NACHTLAUF-2026-09-08.md B1). */
+  .services-lede {
+    font-size: 1.5625rem;
+  }
 
   .service-grid {
     display: grid;

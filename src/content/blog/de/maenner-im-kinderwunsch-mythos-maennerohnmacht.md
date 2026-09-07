@@ -2,7 +2,7 @@
 title: "Männer im Kinderwunsch: Mythos „Männerohnmacht“"
 description: "Reclaiming: Das Gleichgewicht der Partnerschaft im Kinderwunsch"
 publishDate: 2025-07-16
-category: ["Beziehung & Kinderwunsch", "Männer im Kinderwunsch"]
+category: ["Männer im Kinderwunsch", "Beziehung & Kinderwunsch"]
 heroImage: "../../../assets/blog/nebel-lichtet-sich.png"
 heroImageAlt: "Nebel lichtet sich im Kinderwunsch"
 draft: false
