@@ -95,17 +95,25 @@ Gruppe"/"Grundprinzipien"/"Aktuelles" are one continuous background section on t
 live site, not three alternating cream/beige bands as previously built — fixed.
 Logo-permission question logged in `OPEN-QUESTIONS.md` #0.
 
-**Next: Phase E** (hero images) — six pages confirmed (Angebote, Beratung,
-Workshops, Selbsthilfegruppe, Kontakt use the homepage pomegranate already in the
-repo; Blog needs its own photo downloaded from the live Blog page). Five unknown
-(Termine, FAQs, Impressum, Datenschutz, Disclaimer) — determine each from that
-page's own live raw HTML; only log to OPEN-QUESTIONS.md if raw HTML is genuinely
-unavailable. Also reproduce the ochre curved shape at the hero's lower-left, and
-give PageHero a shared default image + per-page override (homepage/Über uns already
-show this split-hero pattern working — reuse `.hero`/`.hero-grid`/`.hero-image` from
-global.css, don't rebuild it). Then Phase F (blog listing, EN/IT noindex, smaller
-fixes, build-check widening). Full order and rules in `docs/RUN-2026-09-07.md`;
-findings in `docs/FIXES-2026-09-07.md`.
+**Phase E done** (`f3cf4c9`): `PageHero.astro` now supports the shared split-hero
+pattern (`.hero`/`.hero-grid`/`.hero-image`, reused not rebuilt) with a default
+pomegranate image and a per-page override/`image={false}`. Six pages confirmed via
+raw HTML and now show the pomegranate (Angebote, Beratung, Workshops,
+Selbsthilfegruppe, Kontakt) or Blog's own downloaded photo; five confirmed to
+genuinely have none (Termine, FAQs, Impressum, Datenschutz, Disclaimer) — all
+determined from each page's own raw HTML, not guessed. **Not resolved:** the ochre
+curved shape at the hero's lower-left — couldn't find it in any page's markup or
+the source illustration file itself; logged in `OPEN-QUESTIONS.md` #0b rather than
+inventing an unconfirmed shape/color.
+
+**Next: Phase F** — task 3 (blog listing: date badge, description, byline,
+single-column layout, category as a list in `content.config.ts`, `<time datetime>`
+on articles), task 4 (EN/IT: noindex + sitemap exclusion + reduced nav, note in
+OPEN-QUESTIONS.md under the owner's name — do not publish), tasks 5a/5b/5c/5e
+(canonical URL doubling, heading semantics on two pages, alt text, Termine's direct
+embed), task 6 (widen build-check: unused schema fields fail the build, alt-text
+rule becomes blocking). Full order and rules in `docs/RUN-2026-09-07.md`; findings
+in `docs/FIXES-2026-09-07.md`.
 
 Live raw HTML for Beratung/Über uns/Workshops/Angebote is cached in the session
 scratchpad (`*-live.html`) if still needed — otherwise re-curl with a real
