@@ -38,7 +38,11 @@ each commit so the tree stays in a good state if interrupted.
   brushstroke path instead of a regular scallop wave. Gestalterische
   Freiheit genutzt.
 
-**Not started yet:** A6, all of Teil B, Teil C, Teil D. See
+- A6 (`5d54040`): shared `.reveal` scroll-fade mechanism, progressive
+  enhancement (visible by default; JS-only, reduced-motion-aware). Built
+  for B2.1 to apply to Über uns's qualification band.
+
+**Teil A complete. Not started yet:** all of Teil B, Teil C, Teil D. See
 `docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
 
 **Session note:** `playwright@1.63.0` is installed locally via
