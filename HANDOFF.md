@@ -85,11 +85,13 @@ letter-spacing), `ec2966f` (1.3 — buttons solid/17px/4px-radius/upright),
 `038cf74` (1.4 — hero band on `--color-bg-alt`), `d7bdfc9` (DESIGN-SYSTEM.md
 brought back in sync).
 
-**Stop point, per the run's own instruction: Phase 2 (`docs/RUN-2026-09-07-B2.md`)
-is not authorized yet — do not start it without the owner's sign-off on this run.**
+**Mid-run: `docs/RUN-2026-09-07-B2.md` Phase 1b only** (the three follow-ups from
+`docs/PRUEFUNG-B1.md`, measured against the live dev server after B1). **Phase 1c and
+Phase 2 are out of scope for this pass — do not start them.**
 
-**Flagged, not fixed, during Phase 1.1** (see `OPEN-QUESTIONS.md` #17): `.hero-grid`'s
-fixed 520px desktop height, shared by the homepage hero and every subpage's `PageHero`
-image variant, is now close to its ceiling with the intro paragraph at 20px — a
-subpage with a longer intro than the homepage's could overflow it. Not checked in a
-real browser this run (budget) and not changed (out of this run's scope).
+- 1b.1 done (`6cc2f84`): `ServiceCard`'s `.card-button` (stale 12px/italic, missed by
+  the B1 button rework) dissolved into the shared `.button.button-outline`.
+- Still to do: 1b.2 (H2 32px→28px — `VERGLEICH-2026-09-07.md` A1's table only named
+  H3, an omission in the table not the B1 implementation), 1b.3 (`.hero-grid`
+  `height`→`min-height`, closes `OPEN-QUESTIONS.md` #17 — measured zero overflow on
+  any hero page at 1024–1920px per `PRUEFUNG-B1.md`).
