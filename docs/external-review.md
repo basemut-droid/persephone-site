@@ -1,5 +1,21 @@
 # External review — rebuilt site vs. live persephone.at
 
+> ## CORRECTION — 7 September 2026
+>
+> **The "VERIFIED CORRECT" entry below claiming that subpage mastheads correctly have no
+> hero image is WRONG.** The live subpages *do* have hero images: the pomegranate
+> illustration on Angebote, Beratung, Workshops, Selbsthilfegruppe and Kontakt, and a
+> photograph of the owner at her desk on Blog. Eleven pages in the build are missing
+> theirs.
+>
+> How the error happened, because the failure mode matters: the live page was fetched as
+> converted text, the hero image did not survive that conversion, and its absence in the
+> fetch was treated as evidence of its absence on the page. A check with a blind spot,
+> reported as a verified fact — and worse, written up as "do not fix this".
+>
+> The fix is task 2 in `docs/FIXES-2026-09-07.md`. Treat every other "verified" claim in
+> this document as verified against the artefact named in it, and nothing more.
+
 Produced 6 September 2026 by a separate Claude session with read access to the repo,
 working from `dist/` (build of commit as of 2026-09-06 09:21) served locally and
 compared against the live site. Every item below was verified against the built HTML,
@@ -264,10 +280,9 @@ sitemap too. Blocked on the domain/hosting decision below.
 
 ## VERIFIED CORRECT — do not "fix" these
 
-- **Subpage mastheads have no image, and that is right.** The live `/angebote-2/`,
-  `/beratung/`, `/workshops/` and `/selbsthilfegruppe/` pages have no hero image. The
-  text-only `page-hero` band matches the source. Only the homepage and Über uns have
-  split image heroes, and both now do.
+- ~~**Subpage mastheads have no image, and that is right.**~~ **WITHDRAWN — this was
+  wrong.** See the correction at the top of this document and task 2 in
+  `docs/FIXES-2026-09-07.md`. The live subpages do have hero images.
 - **Über uns copy is verbatim-accurate.** Every heading and paragraph was compared
   against the live page word by word: the Marina introduction, the Persephone myth
   paragraph, "Was aus meiner Kinderwunschkrise wuchs", "Persephone als soziales
