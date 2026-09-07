@@ -12,6 +12,16 @@ unattended overnight, per its own rules: no questions, open items go to
 each commit so the tree stays in a good state if interrupted.
 
 **Done:**
+- A0 (`34b2e83`, added to the brief mid-run): fixed `.hero-grid`'s
+  `height`→`min-height` (Phase 1b) leaving the hero image free to inflate the
+  band on a portrait photo (Über uns: 1176px instead of 520px). `.hero-image
+  img` is now taken out of flow (`position: absolute; inset: 0`); the
+  container gets its own `aspect-ratio` below 900px, explicitly unset back to
+  `auto` at ≥900px (aspect-ratio itself turned out to count as "definite" for
+  the grid's auto row-sizing the same way a percentage height had, just
+  uniformly instead of Über-uns-only — caught by re-measuring before
+  committing). Verified at 390px/1440px on every hero page via a local
+  playwright script.
 - A1 (`7444f73`): `.icon-list-check .icon` background #309898→#48b0b0 (teal);
   `--color-text-muted` #32373c→#181a2b (leaked WordPress gray, not a real tone).
 - A2 (`dab71fb`): redrew `book`/`scroll` (was `document`) icons, thickened
