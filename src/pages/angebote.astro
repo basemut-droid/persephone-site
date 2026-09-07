@@ -132,6 +132,7 @@ tracker.assertAllHandled('angebote.astro');
     portraitAlt="Porträtfoto von Marina Bletsas, Gründerin von Persephone"
     tile={logoGeborgenheit}
     tileAlt=""
+    layout="pair"
   />
 </BaseLayout>
 
@@ -317,6 +318,23 @@ tracker.assertAllHandled('angebote.astro');
       grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
       gap: clamp(3rem, 6vw, 5.5rem);
       align-items: start;
+    }
+
+    /* FEEDBACK-2026-09-08.md #6: the response card should follow while
+       scrolling the (potentially longer) statement list, instead of
+       staying put at the top. Only from this breakpoint up — below it the
+       card sits under the list in normal flow (FEEDBACK's own condition:
+       "auf schmalen Viewports, wo sie unter der Liste steht, bleibt sie im
+       normalen Fluss"), where sticky would have nothing meaningful to
+       stick within. Header is `position: sticky; top: 0`, so the offset
+       clears it rather than sticking underneath. */
+    .pf-response-home {
+      position: sticky;
+      /* Clears the sticky site header (DESIGN-SYSTEM.md: "roughly ~117px
+         at desktop widths", no fixed value/CSS var exists for it) plus a
+         little breathing room, so the card settles just below the header
+         instead of running underneath it. */
+      top: 8rem;
     }
   }
 </style>

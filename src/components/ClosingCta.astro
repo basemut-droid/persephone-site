@@ -34,9 +34,25 @@ interface Props {
   // B3 confirms Angebote's own CTA heading is already correct at 28px.
   headingSize?: 'default' | 'large';
   portraitSize?: 'default' | 'large';
+  // NACHTLAUF-2026-09-08.md B3: Angebote's live CTA is two same-size
+  // (398x398) images side by side, not this component's usual portrait-
+  // overlapping-the-tile composition — every other page's CTA keeps the
+  // default 'overlap'.
+  layout?: 'overlap' | 'pair';
 }
-const { heading, paragraphs, ctaLabel, ctaHref, portrait, portraitAlt, tile, tileAlt, headingSize = 'default', portraitSize = 'default' } =
-  Astro.props;
+const {
+  heading,
+  paragraphs,
+  ctaLabel,
+  ctaHref,
+  portrait,
+  portraitAlt,
+  tile,
+  tileAlt,
+  headingSize = 'default',
+  portraitSize = 'default',
+  layout = 'overlap',
+} = Astro.props;
 ---
 
 <section class="section closing-cta">
@@ -46,7 +62,7 @@ const { heading, paragraphs, ctaLabel, ctaHref, portrait, portraitAlt, tile, til
       {paragraphs.map((p) => <p>{p}</p>)}
       <a href={ctaHref} class="button button-primary">{ctaLabel}</a>
     </div>
-    <div class="closing-cta-visual">
+    <div class:list={['closing-cta-visual', { 'closing-cta-visual--pair': layout === 'pair' }]}>
       {/* Decorative brand tile — aria-hidden directly on the <img> itself
          (not just an empty alt, and not just an ancestor wrapper — the
          build-check's alt-text rule inspects each <img> tag on its own, so
@@ -125,6 +141,26 @@ const { heading, paragraphs, ctaLabel, ctaHref, portrait, portraitAlt, tile, til
   .closing-cta-portrait.portrait-lg {
     width: 87.5%;
     aspect-ratio: 336 / 390;
+  }
+
+  /* NACHTLAUF-2026-09-08.md B3: two equal 398x398 squares side by side,
+     not an overlap — sized with flex/aspect-ratio rather than a literal
+     398px so it stays fluid at any viewport instead of only matching at
+     exactly the 1440px width the live page was measured on. */
+  .closing-cta-visual--pair {
+    display: flex;
+    gap: 1.5rem;
+    max-width: 52rem;
+    padding: 0;
+  }
+
+  .closing-cta-visual--pair .closing-cta-tile,
+  .closing-cta-visual--pair .closing-cta-portrait {
+    position: static;
+    flex: 1 1 0;
+    width: auto;
+    aspect-ratio: 1 / 1;
+    box-shadow: none;
   }
 
   @media (min-width: 900px) {
