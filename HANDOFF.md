@@ -75,13 +75,21 @@ that matter most:
 
 ## Next step
 
-**Mid-run: `docs/RUN-2026-09-07-B1.md` (Phase 0 + Phase 1), authority `docs/VERGLEICH-2026-09-07.md`.**
-Phase 0.1 done (`1fd8cca`): EN/IT dead links fixed, `internal-links-resolve`
-build-check now blocking. Phase 0.2 done (`0f46903`): aria-label on blog
-image-only links, new blocking `link-accessible-name` check. Phase 0.3 done
-(`31fde39`): EN/IT footer now links to the German legal pages (Disclaimer,
-FAQs, Datenschutz, Impressum), each labeled "(German)"/"(in tedesco)". Phase
-0 complete. Still to do in this same run: Phase 1.1–1.4 (typo scale, eyebrow,
-buttons, hero band). **Stop after Phase 1 — Phase 2 (`docs/RUN-2026-09-07-B2.md`)
-is not authorized yet.** Build + commit after each sub-task; update this file
-after each commit.
+**`docs/RUN-2026-09-07-B1.md` is complete (Phase 0 + Phase 1).** Authority for every
+value was `docs/VERGLEICH-2026-09-07.md`. Commits, in order: `1fd8cca` (0.1 — EN/IT
+dead links, blocking `internal-links-resolve`), `0f46903` (0.2 — aria-label on blog
+image-only links, blocking `link-accessible-name`), `31fde39` (0.3 — EN/IT footer
+links to German legal pages), `183a68a` (1.1 — type scale: base 20px, h3 28px,
+founder h2 36px, blog-teaser h3 26px), `73ef0ab` (1.2 — eyebrow 18px/400/no
+letter-spacing), `ec2966f` (1.3 — buttons solid/17px/4px-radius/upright),
+`038cf74` (1.4 — hero band on `--color-bg-alt`), `d7bdfc9` (DESIGN-SYSTEM.md
+brought back in sync).
+
+**Stop point, per the run's own instruction: Phase 2 (`docs/RUN-2026-09-07-B2.md`)
+is not authorized yet — do not start it without the owner's sign-off on this run.**
+
+**Flagged, not fixed, during Phase 1.1** (see `OPEN-QUESTIONS.md` #17): `.hero-grid`'s
+fixed 520px desktop height, shared by the homepage hero and every subpage's `PageHero`
+image variant, is now close to its ceiling with the intro paragraph at 20px — a
+subpage with a longer intro than the homepage's could overflow it. Not checked in a
+real browser this run (budget) and not changed (out of this run's scope).

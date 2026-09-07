@@ -412,3 +412,20 @@ beiden Fassungen nebeneinander.
 Matomo einsetzt, beschreibt sie eine Verarbeitung, die nicht stattfindet — das ist derselbe
 Fehler wie eine fehlende Beschreibung, nur andersherum. Zusammen mit dem eingebetteten
 Microsoft-Kalender (Punkt 0c) muss die Seite vor dem Launch ohnehin neu gelesen werden.
+
+## 17. Hero band's fixed 520px desktop height — worth a look after the type-scale increase
+
+Not a question, a flag from `docs/RUN-2026-09-07-B1.md` Phase 1.1: `.hero-grid` in
+`global.css` sets a fixed `height: 520px` at desktop widths (900px+), with
+`align-items: stretch` and no overflow handling on `.hero-copy`. This is shared by the
+homepage hero and every subpage's `PageHero` image variant (Beratung, Workshops, Angebote,
+Kontakt, Selbsthilfegruppe, and more) — nearly every page on the site.
+
+Phase 1.1 raised the hero intro paragraph from 18px to 20px (line-height 1.75) as part of
+the site-wide type-scale fix. A rough tally against the homepage's own (short, two-sentence)
+hero copy comes out close to the 520px ceiling already; a subpage with a longer intro
+paragraph than the homepage's could plausibly overflow it. Not checked in a real browser
+this run (budget — no screenshot series) and not changed, since nothing in
+`VERGLEICH-2026-09-07.md` asked for the hero's height to move and the run's own instruction
+was "die Hero-Fotos nicht anfassen." Worth a look once someone can eyeball it against real
+copy on a few subpages, particularly the ones with the longest intro paragraphs.
