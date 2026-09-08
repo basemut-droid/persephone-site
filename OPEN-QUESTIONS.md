@@ -160,11 +160,10 @@ for this form — the Selbsthilfegruppe's form is a different form for a differe
 purpose, not reusable here. Nothing to fix in code until the owner creates the actual
 Microsoft Form and shares its URL/embed.
 
-**Also still open:** the wording for a fifth Anliegen dropdown option (currently
-Beratung, Workshops & Trainings, Selbsthilfegruppe, Sonstiges) so
-collaboration/interview/press enquiries have a home — the owner suggested "Kooperation
-& Presse", "Zusammenarbeit", or "Anfrage als Medium/Organisation" but hasn't picked
-one. Do not add an option or guess wording.
+**Fünfte Anliegen-Option: ENTSCHIEDEN 8.9.2026 — es gibt keine.** Der Besitzer hat die
+drei Vorschläge verworfen; die Kontaktseite bleibt, wie sie ist, mit vier Optionen
+(Beratung, Workshops & Trainings, Selbsthilfegruppe, Sonstiges) — genau wie die Live-Seite.
+**Nichts ergänzen.**
 
 ## 5. Not a decision — just worth knowing
 
@@ -190,38 +189,23 @@ cutover).
 Datenschutzerklärung's processor disclosure), then set `site` to the real domain in
 one line. `astro.config.mjs` carries a prominent `// TODO` marking exactly where.
 
-## 7. EN/IT homepage's own nav links to subpages that don't exist — RESOLVED 2026-09-07, corrected 2026-09-07 (run B1)
+## 7. EN/IT: tote Links auf den Locale-Startseiten — ERLEDIGT in Run B1, 8.9.2026
 
-`site/en.json` and `site/it.json` used to define a full header-nav config as if
-translated subpages existed (About/Services/Blog/Contact plus a CTA and footer
-links) when only the homepage itself was ever built. First fix (earlier same-day
-run) trimmed `nav.items` to one honest line per language and pointed the header
-CTA at `/termine/` — but left the homepage's own body content untouched, so both
-locale homepages still shipped nine dead internal links each (services cards,
-the founder "Learn more" link, both e-letter buttons, and four blog-teaser
-image/title/read-more links). The closing report of that run called this an
-"honest reduced nav" and `docs/build-check-report.md` from the same run listed
-the 42 remaining dead links as non-blocking — true, but the nav itself was never
-the whole story, and this item was marked RESOLVED before the body content was
-actually fixed. See `docs/RUN-2026-09-07-B1.md` Phase 0.1 for how this was found.
+**Endstand, damit die Geschichte nicht noch einmal kippt:**
 
-**What run B1 actually did:**
-- The three service cards and the founder card's "Learn more" link now point at
-  the locale homepage itself (`/en/`, `/it/`) — the only page that exists in
-  that language, same principle as the nav trim.
-- Both e-letter buttons (hero + newsletter band) now link to `/newsletter/`
-  (no locale prefix) — the real redirect stub to the external Mailerlite
-  subscribe form (see `astro.config.mjs`'s `redirects`), which works from any
-  locale and is exactly what the button promises, rather than a self-link.
-- The four blog-teaser cards use the German fallback posts' *real* URLs
-  (`/blog/<slug>/`, no locale prefix) instead of a fabricated `/en/blog/<slug>/`
-  path — consistent with the fallback notice already telling the visitor these
-  articles are only available in German.
-- `internal-links-resolve` in `scripts/build-check.mjs` is now **blocking** —
-  it was the non-blocking report that caught this in the first place and then
-  got read past; see Phase 0.1's own note on why.
+1. Der ursprüngliche Eintrag stand auf „RESOLVED (EN/IT nav trim)".
+2. Ich habe am 7.9. abends gegen den Build von 11:41 gemessen und **je neun tote interne
+   Links** gefunden — der Eintrag war also verfrüht. Korrektur auf „NICHT ERLEDIGT",
+   Aufgabe nach `RUN-2026-09-07-B1.md` Phase 0.1.
+3. **Run B1 hat es tatsächlich behoben.** Die Links sitzen in
+   `src/content/site/en.json` und `it.json`; der Fix ist per `git diff` belegt. Der Nav-Trim
+   war schon vorher erledigt — offen waren die neun Links in den Services-Karten, dem
+   Gründerinnen-Link, beiden e-Brief-Buttons und vier Blog-Teasern.
+4. **Meine Fassung dieses Eintrags war danach kurzzeitig wieder falsch**, weil ich die Datei
+   als Ganzes mit einem älteren Stand überschrieben habe. Das ist hiermit korrigiert.
 
-Zero dead internal links remain on either locale homepage as of this run.
+`internal-links-resolve` ist seit B1 **blockierend**. Damit kann diese Klasse nicht
+zurückkommen.
 
 ## 7b. EN/IT must stay unpublished until you've read them — needs your sign-off
 
@@ -241,16 +225,17 @@ line — in particular every sentence describing your qualifications — before 
 goes live. Until then they stay noindexed, whether or not anyone remembers to ask
 again.
 
-## 8. Termine's page title — needs the owner's wording
+## 8. Termine's page title — ERLEDIGT 2026-09-08
 
-"Termine" doesn't say what happens on this page (a 20-minute, free, no-obligation
-"Kennenlernen" call). **Suggestion:** "Kennenlernen vereinbaren" — the exact phrase
-already used site-wide for this same call (the header CTA, and Kontakt's cross-link
-to this page), so adopting it as the title keeps the whole site's language for this
-one thing consistent rather than introducing a second name for it. Not implemented —
-the page's `<title>`/`<h1>` (from `src/content/pages/de/termine.md`'s `title` field)
-still say "Termine"; changing it is the owner's call, one line in that file once
-decided.
+Marina chose "Kennenlernen" (fuer-marina.md Frage 17); the owner decided the same day
+that the URL should move with it, not just the visible title (see #24). Both are
+implemented (NACHTLAUF-2026-09-08.md C2): the page is now
+`src/content/pages/de/kennenlernen.md` / `src/pages/kennenlernen.astro`, served at
+`/kennenlernen/`. Every internal reference (header CTA, Kontakt's cross-link,
+Beratung's and Angebote's closing CTAs, the EN/IT header CTA hrefs) was updated to
+match — verified via `npm run build`'s blocking `internal-links-resolve` check, which
+would have failed on a stale link. `docs/START-CHECKLISTE.md` Teil 3 has the redirect
+this needs at launch (`/termine/` → `/kennenlernen/`).
 
 ## 9. PageHero's intro line is narrower than the body content below it
 
@@ -413,19 +398,70 @@ Matomo einsetzt, beschreibt sie eine Verarbeitung, die nicht stattfindet — das
 Fehler wie eine fehlende Beschreibung, nur andersherum. Zusammen mit dem eingebetteten
 Microsoft-Kalender (Punkt 0c) muss die Seite vor dem Launch ohnehin neu gelesen werden.
 
-## 17. Hero band's fixed 520px desktop height — worth a look after the type-scale increase
+---
 
-Not a question, a flag from `docs/RUN-2026-09-07-B1.md` Phase 1.1: `.hero-grid` in
-`global.css` sets a fixed `height: 520px` at desktop widths (900px+), with
-`align-items: stretch` and no overflow handling on `.hero-copy`. This is shared by the
-homepage hero and every subpage's `PageHero` image variant (Beratung, Workshops, Angebote,
-Kontakt, Selbsthilfegruppe, and more) — nearly every page on the site.
+# Marinas Antworten, 8.9.2026
 
-Phase 1.1 raised the hero intro paragraph from 18px to 20px (line-height 1.75) as part of
-the site-wide type-scale fix. A rough tally against the homepage's own (short, two-sentence)
-hero copy comes out close to the 520px ceiling already; a subpage with a longer intro
-paragraph than the homepage's could plausibly overflow it. Not checked in a real browser
-this run (budget — no screenshot series) and not changed, since nothing in
-`VERGLEICH-2026-09-07.md` asked for the hero's height to move and the run's own instruction
-was "die Hero-Fotos nicht anfassen." Worth a look once someone can eyeball it against real
-copy on a few subpages, particularly the ones with the longest intro paragraphs.
+## 17. `.hero-grid` hatte eine feste Höhe von 520 px — ERLEDIGT in Run B1, 8.9.2026
+
+Von Code im B1-Bericht gemeldet: `.hero-grid` stand in `global.css` auf `height: 520px`
+ohne Überlaufbehandlung. Nicht im Browser geprüft, weil das Budget knapp war — richtig so
+gemeldet, statt still geändert.
+
+**Nachgemessen (8.9., alle Seiten mit Hero-Bild, 1024–1920 px): nirgends ein Überlauf.**
+Engste Stelle war die Startseite bei 1024 px mit 18 px Reserve, also etwa einer halben
+Textzeile. Werte in `docs/PRUEFUNG-B1.md`.
+
+**Behoben in Phase 1b:** `height` → `min-height`. Am heutigen Rendering ändert sich nichts,
+aber das Band wächst künftig mit, statt zu überlaufen.
+
+*Dieser Eintrag war zwischenzeitlich ganz aus der Datei verschwunden, weil ich sie als
+Ganzes mit einem älteren Stand überschrieben habe. Hiermit wiederhergestellt.*
+
+## 21. Erledigt durch ihre Antworten
+
+- **Punkt 1 (Meta-Beschreibungen): ERLEDIGT.** Sie hat alle zehn geschrieben; der Wortlaut
+  steht in `docs/fuer-marina.md` Frage 16. Umsetzung: `RUN-2026-09-07-B2.md` Phase 1c.1.
+  Zwei winzige Rückfragen an sie sind dort offen („psychodukativ", „(i.A.u.S)" ohne Punkt) —
+  bis dahin wörtlich übernehmen, nicht korrigieren.
+- **Punkt 0 (Selbsthilfe-Steiermark-Logo): ERLEDIGT.** Die Nutzung ist abgesprochen.
+- **Frage 15 (Startseiten-Titel): bestätigt**, bleibt wie er ist.
+- **Frage 17: die Terminseite heißt künftig „Kennenlernen".** Umsetzung in Phase 1c.2.
+- **Frage 18 (Übersetzung): bestätigt** — neun Seiten in Etappen, Blog bleibt deutsch.
+  `docs/UEBERSETZUNG.md` ist damit freigegeben, sobald B2 durch ist.
+
+## 22. Eine Korrektur an meiner eigenen Darstellung — Cookie-Banner
+
+Ich hatte geschrieben, ein Einwilligungsbanner erscheine „auf jeder Seite, für jede
+Besucherin". **Das war überzogen und Marina hat zu Recht widersprochen.** Ein Banner
+erscheint einmal, beim ersten Besuch, auf der Einstiegsseite; die Entscheidung wird
+gespeichert. Die Korrektur steht in `docs/fuer-marina.md` 13a.
+
+## 23. Was der Bookings-Kalender tatsächlich ablegt — gemessen, aber nicht verlässlich
+
+Marina hat gefragt, ob sich zuverlässig sagen lässt, welche Cookies der eingebettete
+Kalender setzt und was sie tun. Gemessen am 8.9.2026, Buchungsseite als eigene Seite
+aufgerufen, nicht angemeldet:
+
+- **Weiterleitung** `outlook.office.com` → `bookings.cloud.microsoft`. Zwei Domains.
+- **Cookies:** `ClientId`, `msal.cache.encryption`
+- **Lokaler Speicher, 11 Einträge**, darunter `olk-OwaClientId`, `olk-OwaLocale`,
+  `olk-OwaSessionCount`, `olk-isTimeZoneCacheAvailable`, `msal.version` — und
+  **`mats-telemetry-profile-id`**, also eine Kennung zur Nutzungsmessung.
+- **Sitzungsspeicher:** 2 Einträge.
+
+**Warum das keine belastbare Grundlage für einen Rechtstext ist:** gemessen als eigene
+Seite, nicht eingebettet (Browser behandeln eingebettete Speicher unterschiedlich); Namen
+und Zweck können sich jederzeit ändern; Microsoft veröffentlicht dafür keine verbindliche
+Liste; angemeldete Besucher bekommen möglicherweise mehr.
+
+**Folge:** die Empfehlung zu Frage 13 hat sich geändert — **Kalender lädt erst auf Klick.**
+Dann ist keine Cookie-Liste nötig, und die Datenschutzerklärung sagt etwas, das dauerhaft
+wahr bleibt. Entscheidung liegt bei Marina.
+
+## 24. Soll `/termine/` zu `/kennenlernen/` werden? — ENTSCHIEDEN 2026-09-08: ja
+
+Der Besitzer hat sich für den Empfehlung gefolgt und umbenannt: Name **und** Pfad
+wandern beide auf „Kennenlernen" (NACHTLAUF-2026-09-08.md C2). Die Seite lebt jetzt
+unter `/kennenlernen/`; die zusätzliche Weiterleitung `/termine/` → `/kennenlernen/`
+steht in `docs/START-CHECKLISTE.md` Teil 3.

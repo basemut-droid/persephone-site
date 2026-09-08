@@ -5,9 +5,11 @@ import PageHero from '../components/PageHero.astro';
 
 // The live page has no narrative copy in its source at all -- the entire
 // page is one embedded Microsoft Bookings calendar (see
-// src/content/pages/de/termine.md).
-const entry = await getEntry('pages', 'de/termine');
-if (!entry) throw new Error('Content collection entry "pages/de/termine" not found');
+// src/content/pages/de/kennenlernen.md).
+// C2 (fuer-marina.md Frage 17, OPEN-QUESTIONS.md #8/#24, decided
+// 2026-09-08): renamed from "Termine" -- both the name and the URL.
+const entry = await getEntry('pages', 'de/kennenlernen');
+if (!entry) throw new Error('Content collection entry "pages/de/kennenlernen" not found');
 
 const bookingUrl = 'https://outlook.office.com/book/ErstgesprchfrDichallein@persephone.at/?ismsaljsauthenabled';
 
@@ -21,7 +23,7 @@ const bookingUrl = 'https://outlook.office.com/book/ErstgesprchfrDichallein@pers
 const intro = 'Das online Kennenlernen (ca. 20 Min.) ist kostenfrei und dient dem gegenseitigen Beschnuppern und der Klärung Deines Anliegens.';
 ---
 
-<BaseLayout locale="de" path="/termine/" title={`${entry.data.title} – Persephone`}>
+<BaseLayout locale="de" path="/kennenlernen/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
   {/* Confirmed no hero image on the live page (RUN-2026-09-07.md Phase E):
      its raw HTML has no --awb-bg-image anywhere, unlike the six pages that
      do. */}

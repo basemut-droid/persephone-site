@@ -61,7 +61,8 @@ const closing = tracker.section('Möchtest Du ein Erstgespräch?');
 const closingParagraphs = paragraphs(closing);
 const cta = closing.find((b) => b.type === 'cta');
 if (!cta || cta.type !== 'cta') throw new Error('Expected a CTA after "Möchtest Du ein Erstgespräch?"');
-const ctaHref = cta.href.replace(/^https?:\/\/(www\.)?persephone\.at/, '');
+// C2 (OPEN-QUESTIONS.md #8, decided 2026-09-08): /termine/ -> /kennenlernen/.
+const ctaHref = cta.href.replace(/^https?:\/\/(www\.)?persephone\.at/, '').replace('/termine/', '/kennenlernen/');
 // The portrait and badge images in this section are already rendered below
 // via statically-imported assets (astro:assets needs a static import to
 // optimize them, not a path read from content at runtime) — accounted for

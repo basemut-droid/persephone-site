@@ -45,7 +45,8 @@ if (!cta || cta.type !== 'cta') throw new Error('Expected a CTA in the Angebote 
 // Source links to https://www.persephone.at/termine/ (a real, working live
 // page) — rewritten to this site's own local route rather than left as an
 // absolute persephone.at URL, per docs/content-audit.md's carry-forward note.
-const ctaHref = cta.href.replace(/^https?:\/\/(www\.)?persephone\.at/, '');
+// C2 (OPEN-QUESTIONS.md #8, decided 2026-09-08): /termine/ -> /kennenlernen/.
+const ctaHref = cta.href.replace(/^https?:\/\/(www\.)?persephone\.at/, '').replace('/termine/', '/kennenlernen/');
 
 tracker.exclude(tracker.at(10), 'portrait photo, rendered via static import below');
 tracker.exclude(tracker.at(11), 'badge logo, rendered via static import below');

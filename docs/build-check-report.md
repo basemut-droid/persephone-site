@@ -1,6 +1,6 @@
 # Build-check report
 
-Generated 2026-09-08T05:31:15.880Z by `scripts/build-check.mjs`.
+Generated 2026-09-08T05:42:43.297Z by `scripts/build-check.mjs`.
 
 ## Every content page has a route, every route has content — PASS
 
@@ -14,9 +14,9 @@ No violations found.
 
 No violations found.
 
-## Every page has a unique, non-empty meta description — FAIL (non-blocking)
+## Every page has a unique, non-empty meta description — PASS
 
-- /termine/ has no meta description (empty or missing)
+No violations found.
 
 ## Every <img> has a non-empty alt, or is marked decorative with aria-hidden — PASS
 

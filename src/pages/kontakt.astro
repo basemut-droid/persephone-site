@@ -65,11 +65,11 @@ tracker.assertAllHandled('kontakt.astro');
         </div>
         {standorte.map((b) => b.type === 'paragraph' && <p set:html={mdInlineHtml(b.text)} />)}
         {/* NIGHT-RUN.md Phase 4.3: a short pointer to the booking page,
-           mirroring the one Termine gives back to this form. Kontakt and
-           Termine stay two separate pages -- this is a cross-link, not a
-           merge. */}
+           mirroring the one Kennenlernen (renamed from Termine, C2) gives
+           back to this form. Kontakt and Kennenlernen stay two separate
+           pages -- this is a cross-link, not a merge. */}
         <p class="booking-pointer">
-          Direkt <a href="/termine/">Kennenlernen vereinbaren</a> — zwanzig Minuten, online, kostenfrei.
+          Direkt <a href="/kennenlernen/">Kennenlernen vereinbaren</a> — zwanzig Minuten, online, kostenfrei.
         </p>
       </div>
       <div class="contact-form-wrap">
