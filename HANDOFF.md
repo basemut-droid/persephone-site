@@ -77,7 +77,12 @@ each commit so the tree stays in a good state if interrupted.
 - B7 (`0a22bc3`): Kontakt — icon eyebrows (clock/pin, .icon-circle reused)
   for Erreichbarkeit/Standorte, submit button "Senden".
 
-**Not started yet:** B8–B9, Teil C, Teil D. See
+- B8 (`85e6cff`): FAQs grouped into their three live categories (mapping
+  fetched from the live DOM's fusion-faq-post-<id>/category classes, keyed
+  against this repo's existing #collapse-1-<id> anchors), accordion
+  restyled with the shared B4 pieces (red circle, 24px icon/heading).
+
+**Not started yet:** B9, Teil C, Teil D. See
 `docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
 
 **Session note:** `playwright@1.63.0` is installed locally via
