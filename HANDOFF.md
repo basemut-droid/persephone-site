@@ -87,7 +87,16 @@ each commit so the tree stays in a good state if interrupted.
   'Verwandte Beiträge' section derived from shared categories; in-article
   ## subheadings now render uppercase via :global().
 
-**Teil B complete. Not started yet:** Teil C, Teil D. See
+**Teil B complete.**
+- C1 (`8bcab82`): nine meta descriptions added verbatim from
+  fuer-marina.md Frage 16 (two rough edges she flagged herself left
+  un-"corrected" pending her answer).
+- C2 (`f7f3858`): `/termine/` → `/kennenlernen/`, name and URL, every
+  internal reference updated.
+- C1/Teil D (`9694a4d`): meta-description build-check now blocking.
+
+**Not started yet:** rest of Teil D (build-check pass, HANDOFF/OPEN-QUESTIONS
+final update, closing report). See
 `docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
 
 **Session note:** `playwright@1.63.0` is installed locally via
