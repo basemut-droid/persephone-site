@@ -27,6 +27,7 @@ tracker.assertAllHandled('blog/index.astro');
   locale="de"
   path="/blog/"
   title={`${entry.data.title} – Persephone`}
+  description={entry.data.description}
 >
   {
     /* Confirmed against the live page's raw HTML (RUN-2026-09-07.md Phase E /

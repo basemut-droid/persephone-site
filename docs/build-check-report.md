@@ -1,6 +1,6 @@
 # Build-check report
 
-Generated 2026-09-08T05:20:26.005Z by `scripts/build-check.mjs`.
+Generated 2026-09-08T05:31:15.880Z by `scripts/build-check.mjs`.
 
 ## Every content page has a route, every route has content — PASS
 
@@ -16,16 +16,7 @@ No violations found.
 
 ## Every page has a unique, non-empty meta description — FAIL (non-blocking)
 
-- /angebote/ has no meta description (empty or missing)
-- /beratung/ has no meta description (empty or missing)
-- /blog/ has no meta description (empty or missing)
-- /datenschutz/ has no meta description (empty or missing)
-- /disclaimer/ has no meta description (empty or missing)
-- /kontakt/ has no meta description (empty or missing)
-- /selbsthilfegruppe/ has no meta description (empty or missing)
 - /termine/ has no meta description (empty or missing)
-- /ueber-uns/ has no meta description (empty or missing)
-- /workshops/ has no meta description (empty or missing)
 
 ## Every <img> has a non-empty alt, or is marked decorative with aria-hidden — PASS
 

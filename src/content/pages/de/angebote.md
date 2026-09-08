@@ -1,5 +1,7 @@
 ---
 title: "Angebote"
+# Owner's own words, docs/fuer-marina.md Frage 16 -- taken verbatim.
+description: "Beratung, Workshops und Selbsthilfegruppe für Einzelne und Paare im unerfüllten Kinderwunsch: ein orientierender Überblick über die Angebote von Persephone."
 sourceUrl: "https://www.persephone.at/angebote-2/"
 # The self-recognition selector's real data (external-review.md finding #2 /
 # FIXES-2026-09-07.md task 2b.1) — re-extracted 2026-09-07 from

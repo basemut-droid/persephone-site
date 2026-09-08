@@ -52,7 +52,7 @@ tracker.exclude(tracker.at(11), 'badge logo, rendered via static import below');
 tracker.assertAllHandled('angebote.astro');
 ---
 
-<BaseLayout locale="de" path="/angebote/" title={`${entry.data.title} – Persephone`}>
+<BaseLayout locale="de" path="/angebote/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
   <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
   <section class="section section-centered">

@@ -1,5 +1,7 @@
 ---
 title: "Workshops & Einzeltrainings"
+# Owner's own words, docs/fuer-marina.md Frage 16 -- taken verbatim.
+description: "Psychoedukative Workshops zu psychischer Gesundheit, Beziehung und Kommunikation bei unerfülltem Kinderwunsch, für Einzelne und Paare."
 sourceUrl: "https://www.persephone.at/workshops/"
 ---
 

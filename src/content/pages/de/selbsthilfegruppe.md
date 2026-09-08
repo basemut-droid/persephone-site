@@ -1,5 +1,7 @@
 ---
 title: "Selbsthilfegruppe"
+# Owner's own words, docs/fuer-marina.md Frage 16 -- taken verbatim.
+description: "Die Selbsthilfegruppe Persephone bietet Austausch und Verbundenheit für Menschen, die mit unerfülltem Kinderwunsch leben – in Graz und online."
 sourceUrl: "https://www.persephone.at/selbsthilfegruppe/"
 # The three principle labels — absent from the extraction entirely
 # (FIXES-2026-09-07.md task 2e.2). Read off the owner's screenshot of the

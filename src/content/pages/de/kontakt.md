@@ -1,5 +1,7 @@
 ---
 title: "Kontakt"
+# Owner's own words, docs/fuer-marina.md Frage 16 -- taken verbatim.
+description: "Fragen, persönliche Anliegen oder berufliche Anfragen: Hier erreichst Du Marina von Persephone direkt."
 sourceUrl: "https://www.persephone.at/kontakt/"
 ---
 

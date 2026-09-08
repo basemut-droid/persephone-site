@@ -67,7 +67,7 @@ if (!cta || cta.type !== 'cta') throw new Error('Expected a closing CTA');
 tracker.assertAllHandled('workshops.astro');
 ---
 
-<BaseLayout locale="de" path="/workshops/" title={`${entry.data.title} – Persephone`}>
+<BaseLayout locale="de" path="/workshops/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
   <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
   <section class="section">

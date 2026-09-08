@@ -101,7 +101,7 @@ if (!closingCta || closingCta.type !== 'cta') throw new Error('Expected a closin
 tracker.assertAllHandled('ueber-uns.astro');
 ---
 
-<BaseLayout locale="de" path="/ueber-uns/" title={`${entry.data.title} – Persephone`}>
+<BaseLayout locale="de" path="/ueber-uns/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
   <section class="hero">
     <div class="hero-grid">
       <div class="hero-copy">

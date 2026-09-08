@@ -3,7 +3,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 ---
 
-<BaseLayout locale="de" path="/datenschutz/" title="Datenschutzerklärung – Persephone">
+<BaseLayout
+  locale="de"
+  path="/datenschutz/"
+  title="Datenschutzerklärung – Persephone"
+  description="Informationen darüber, wie Persephone mit Deinen Daten umgeht."
+>
   {/* Confirmed no hero image on the live page (RUN-2026-09-07.md Phase E):
      its raw HTML has no --awb-bg-image anywhere. */}
   <PageHero title="Datenschutzerklärung" image={false} />

@@ -1,5 +1,7 @@
 ---
 title: "Datenschutzerklärung"
+# Owner's own words, docs/fuer-marina.md Frage 16 -- taken verbatim.
+description: "Informationen darüber, wie Persephone mit Deinen Daten umgeht."
 sourceUrl: "https://www.persephone.at/datenschutzerklaerung/"
 ---
 

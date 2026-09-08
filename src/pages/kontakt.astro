@@ -40,7 +40,7 @@ const standorte = tracker.section('Standorte');
 tracker.assertAllHandled('kontakt.astro');
 ---
 
-<BaseLayout locale="de" path="/kontakt/" title={`${entry.data.title} – Persephone`}>
+<BaseLayout locale="de" path="/kontakt/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
   <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
   <section class="section">

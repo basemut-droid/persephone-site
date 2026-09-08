@@ -1,5 +1,8 @@
 ---
 title: "Beratung & Coaching"
+# Owner's own words, docs/fuer-marina.md Frage 16 -- taken verbatim,
+# including "(Beratung i.A.u.S)" without a trailing period.
+description: "Psychosoziale Begleitung (Beratung i.A.u.S) für Einzelne und Paare, die sich in der Kinderwunschkrise Orientierung, Entlastung und eine gemeinsame Sprache wünschen."
 sourceUrl: "https://www.persephone.at/beratung/"
 # Duration/location badges — missing from the extraction entirely
 # (external-review.md never found them; FIXES-2026-09-07.md task 2c.1),

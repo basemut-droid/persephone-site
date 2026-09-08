@@ -19,7 +19,7 @@ const body = paragraphs(tracker.slice(1)).map((p) => rewriteLocalLinks(p));
 tracker.assertAllHandled('disclaimer.astro');
 ---
 
-<BaseLayout locale="de" path="/disclaimer/" title={`${entry.data.title} – Persephone`}>
+<BaseLayout locale="de" path="/disclaimer/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
   {/* Confirmed no hero image on the live page (RUN-2026-09-07.md Phase E):
      its raw HTML has no --awb-bg-image anywhere. */}
   <PageHero title={heroTitle} image={false} />

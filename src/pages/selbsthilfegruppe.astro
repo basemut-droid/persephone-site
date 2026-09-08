@@ -81,7 +81,7 @@ const detailIcons: IconName[] = ['calendar', 'clock', 'pin'];
 const detailItems = detailsList?.type === 'list' ? detailsList.items : [];
 ---
 
-<BaseLayout locale="de" path="/selbsthilfegruppe/" title={`${entry.data.title} – Persephone`}>
+<BaseLayout locale="de" path="/selbsthilfegruppe/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
   <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
   {

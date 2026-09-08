@@ -1,5 +1,11 @@
 ---
 title: "Über uns"
+# Owner's own words, docs/fuer-marina.md Frage 16 -- taken verbatim,
+# including "psychodukativ" and "(i.A.u.S)" without a trailing period.
+# Two follow-up questions are open there (probably "psychoedukativ", and
+# whether to match the site's usual "i.A.u.S." with a period); until she
+# answers, this stays exactly as she wrote it -- not silently corrected.
+description: "Dr.in Marina Bletsas, Gründerin von Persephone, begleitet Einzelne und Paare durch die Kinderwunschkrise – psychodukativ und beratend (i.A.u.S)."
 sourceUrl: "https://www.persephone.at/ueber-uns/"
 heroImage: "../../../assets/pages/ueber-uns/marina-portrait-hero.png"
 heroImageAlt: "Porträtfoto von Marina Bletsas, Gründerin von Persephone"

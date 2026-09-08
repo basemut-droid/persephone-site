@@ -69,7 +69,7 @@ const ctaHref = cta.href.replace(/^https?:\/\/(www\.)?persephone\.at/, '');
 tracker.assertAllHandled('beratung.astro');
 ---
 
-<BaseLayout locale="de" path="/beratung/" title={`${entry.data.title} – Persephone`}>
+<BaseLayout locale="de" path="/beratung/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
   <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
   <section class="section">

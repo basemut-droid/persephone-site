@@ -1,5 +1,7 @@
 ---
 title: "Disclaimer"
+# Owner's own words, docs/fuer-marina.md Frage 16 -- taken verbatim.
+description: "Persephone bietet keine Psychotherapie und versteht sich nicht als Ersatz für eine psychotherapeutische Behandlung bei krankheitswertigem psychischen Leiden."
 sourceUrl: "https://www.persephone.at/disclaimer/"
 ---
 

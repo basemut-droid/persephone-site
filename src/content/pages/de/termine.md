@@ -1,5 +1,8 @@
 ---
 title: "Termine"
+# Owner's own words, docs/fuer-marina.md Frage 16, given under the page's
+# future name "Kennenlernen" (see C2/OPEN-QUESTIONS.md #8) -- taken verbatim.
+description: "Vereinbare unkompliziert ein kostenloses, unverbindliches Kennenlernen mit Marina von Persephone."
 sourceUrl: "https://www.persephone.at/termine/"
 ---
 
