@@ -2,6 +2,7 @@
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
 import { parseMarkdownBlocks, parseLinkHeading, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 const entry = await getEntry('pages', 'de/faqs');
@@ -12,24 +13,59 @@ const tracker = new BlockTracker(blocks);
 const titleBlock = tracker.at(0);
 const heroTitle = titleBlock.type === 'heading' ? titleBlock.text : entry.data.title;
 
+// NACHTLAUF-2026-09-08.md B8: the question -> category mapping isn't in
+// this repo's markdown at all (it lives only in the live page's filter-tab
+// markup), so it can't come from parsing the content collection the way
+// everything else on this page does. Fetched directly from the live DOM
+// (persephone.at/faqs/, rendered markup, not a text conversion, per this
+// run's own "read rendered markup" rule) rather than guessed from the
+// question text: each accordion post there carries a
+// "fusion-faq-post-<id>" class plus one of three category classes
+// (.zu-persephone / .zu-coaching-und-beratung / .zur-selbsthilfe) — the
+// same numeric id already present in this file's own "#collapse-1-<id>"
+// anchors. Order matches the live page's own tab order.
+const categoryById: Record<string, string> = {
+  '1895': 'Zu Persephone',
+  '1891': 'Zu Coaching und Beratung',
+  '1898': 'Zu Persephone',
+  '1902': 'Zu Persephone',
+  '1907': 'Zur Selbsthilfe',
+  '1910': 'Zu Persephone',
+  '1912': 'Zur Selbsthilfe',
+  '1914': 'Zur Selbsthilfe',
+  '1916': 'Zu Persephone',
+  '1919': 'Zu Coaching und Beratung',
+  '1921': 'Zu Persephone',
+  '1923': 'Zu Persephone',
+  '1927': 'Zu Coaching und Beratung',
+};
+const categoryOrder = ['Zu Persephone', 'Zu Coaching und Beratung', 'Zur Selbsthilfe'];
+
 // blocks[1] is a category-jump nav whose links are all literally "#" on the
 // live site (non-functional even there) — skipped rather than rendered as
 // dead links. Everything after it is 13 Q&A pairs (h3 question, paragraph
 // answer).
 tracker.exclude(tracker.at(1), 'category-jump nav, links are literally "#" even on the live site');
-const faqs: { question: string; answer: string }[] = [];
+const faqs: { question: string; answer: string; category: string }[] = [];
 for (let i = 2; i < blocks.length; i++) {
   const b = blocks[i];
   if (b.type === 'heading' && b.level === 3) {
     const next = blocks[i + 1];
     tracker.use(b, next);
+    const link = parseLinkHeading(b.text);
+    const id = link?.href.match(/(\d+)$/)?.[1];
+    const category = (id && categoryById[id]) || null;
+    if (!category) throw new Error(`No live category mapping for FAQ anchor "${link?.href}" — categoryById needs updating`);
     faqs.push({
-      question: parseLinkHeading(b.text)?.label ?? b.text,
+      question: link?.label ?? b.text,
       answer: next?.type === 'paragraph' ? next.text : '',
+      category,
     });
   }
 }
 tracker.assertAllHandled('faqs.astro');
+
+const categories = categoryOrder.map((name) => ({ name, faqs: faqs.filter((f) => f.category === name) }));
 ---
 
 <BaseLayout locale="de" path="/faqs/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
@@ -40,11 +76,21 @@ tracker.assertAllHandled('faqs.astro');
   <section class="section">
     <div class="container section-narrow">
       {
-        faqs.map((item) => (
-          <details class="faq-item">
-            <summary>{item.question}</summary>
-            <p>{item.answer}</p>
-          </details>
+        categories.map((cat) => (
+          <div class="faq-category">
+            <h2 class="eyebrow">{cat.name}</h2>
+            {cat.faqs.map((item) => (
+              <details class="accordion-item">
+                <summary>
+                  <span class="icon-circle icon-circle-sm icon-circle-terracotta-dark">
+                    <Icon name="plus" size={24} />
+                  </span>
+                  <h3>{item.question}</h3>
+                </summary>
+                <p>{item.answer}</p>
+              </details>
+            ))}
+          </div>
         ))
       }
     </div>
@@ -52,26 +98,17 @@ tracker.assertAllHandled('faqs.astro');
 </BaseLayout>
 
 <style>
-  .faq-item {
-    border-bottom: 1px solid rgba(24, 26, 43, 0.12);
-    padding-block: 1.25rem;
+  .faq-category + .faq-category {
+    margin-top: 3rem;
   }
 
-  .faq-item summary {
-    cursor: pointer;
-    font-weight: 700;
-    color: var(--color-text);
-    min-height: 44px;
-    display: flex;
-    align-items: center;
+  .faq-category .eyebrow {
+    margin-bottom: 1rem;
   }
 
-  .faq-item[open] summary {
-    color: var(--color-accent-strong);
-  }
-
-  .faq-item p {
-    margin: 1rem 0 0;
-    color: var(--color-text-muted);
+  /* NACHTLAUF-2026-09-08.md B8: the question is its own measured 24px, not
+     the shared 28px h2/h3 scale. */
+  .accordion-item summary h3 {
+    font-size: 1.5rem;
   }
 </style>
