@@ -640,3 +640,104 @@ wrong conclusions came from exactly that shortcut).
 **Open questions this run added**, all in `OPEN-QUESTIONS.md`: #0 (Selbsthilfe
 Steiermark logo permission), #0b (the ochre hero shape), #0c (Termine's consent-
 banner trade-off), #7b (EN/IT need the owner's line-by-line read before publishing).
+
+## Nachtlauf 2026-09-08 (`docs/NACHTLAUF-2026-09-08.md`) — done and committed, unattended
+
+Run overnight per the brief's own rules: no questions, open items to `OPEN-QUESTIONS.md`,
+build + commit per task, `HANDOFF.md` updated after each commit. Authority for every value
+was `docs/FEEDBACK-2026-09-08.md` and `docs/VERGLEICH-2026-09-07.md`; four spots had
+explicit gestalterische Freiheit (A4, A5, A6, B2.1). Mid-run, an addendum (Teil A0) was
+added to the brief and handled first, before continuing Teil A.
+
+- **A0** (`34b2e83`) — Phase 1b's `.hero-grid` `height`→`min-height` left the hero image
+  free to inflate the band on a portrait photo (Über uns: 1176px instead of 520px, since a
+  percentage height on the image doesn't count as "definite" during the grid's auto row-
+  sizing pass). Fixed by taking `.hero-image img` out of flow entirely
+  (`position: absolute; inset: 0`); the container gets its own `aspect-ratio` below 900px,
+  explicitly unset back to `auto` at ≥900px — aspect-ratio turned out to have the exact same
+  "counts as definite" problem, just uniformly instead of Über-uns-only, caught by
+  re-measuring before committing.
+- **A1** (`7444f73`) — two color fixes, each already centralized behind one token/class:
+  `.icon-list-check .icon` background #309898→#48b0b0; `--color-text-muted`
+  #32373c→#181a2b (a leaked WordPress gray, not a real second tone).
+- **A2** (`dab71fb`) — `Icon.astro`'s `book`/`scroll` (renamed from `document`) glyphs
+  redrawn for recognizability; every glyph's stroke thickened, the check/meeting-detail
+  circle enlarged to match.
+- **A3** (`dce80b6`) — Workshops' list markers became small sage `<Icon>`s (matching the
+  section tile above), not plain dots — same `<Icon>`-per-`<li>` mechanism
+  `.icon-list-check` already used.
+- **A4** (`456ede2`, gestalterische Freiheit) — new shared `ImagePlaceholder.astro`: the
+  fruit-icon signet muted to a monochrome watermark on a sage panel + "Foto folgt",
+  replacing grey diagonal stripes.
+- **A5** (`bc5597e`, gestalterische Freiheit) — footer wave redrawn as an irregular,
+  tapering brushstroke path instead of a regular scallop wave.
+- **A6** (`5d54040`) — shared `.reveal` scroll-fade mechanism: progressive enhancement,
+  visible by default, JS-only and reduced-motion-aware.
+- **B1** (`ee82d0b`) — homepage: 'abonieren'→'abonnieren' typo, founder CTA button color
+  (was the secondary beige/teal style meant only for the service cards), blog-teaser's
+  white card now overlaps its photo instead of sitting beside it, services lede downgraded
+  from `<h2>` to `<p>`, blog category order fixed on two posts.
+- **B2** — Über uns, the largest single page:
+  - B2.1 (`395e7f7`): qualification block rebuilt from scratch (live's panel is an Avada
+    asset) as three full-bleed alternating `#309898` bands + the granatapfel illustration,
+    with A6's `.reveal` fade-in; removed a duplicate 90x90 badge.
+  - B2.2 (`751642b`): closing teasers rebuilt from FEEDBACK #1's 1440px measurements as
+    generative rules (420fr/680fr columns, per-photo aspect ratios, card = 75%/77% of
+    photo width anchored via `bottom: -130px` so it overhangs by exactly that much
+    regardless of the card's own text-driven height) rather than copied absolute pixels —
+    checked by arithmetic that the measured "150px lower" second card position falls out
+    of the other four rules instead of needing a fifth, independent one.
+  - B2.3 (`939be74`): `ClosingCta.astro` gained opt-in `headingSize`/`portraitSize="large"`
+    props for Über uns's own measured 48px heading / 336x390 portrait, defaulting to the
+    28px/230x307 every other page already had right.
+- **B3** (`97c1122`) — Angebote: `ClosingCta` gained `layout="pair"` (two equal same-size
+  images side by side, live's actual composition there) instead of the usual overlap; the
+  self-recognition selector's response card is now `position: sticky` (≥900px) while
+  scrolling the statement list.
+- **B4** (`fc33fdf`) — Beratung's "Gut zu wissen" became a collapsed `<details>` accordion
+  (new shared `.accordion-item`/`.icon-circle-sm`/-`sage`/-`terracotta-dark` pieces in
+  `global.css`, reused by B8) with a centered eyebrow instead of a dark h2; format cards
+  are equal-height with their badges anchored to the bottom.
+- **B5** (`534db28`) — Workshops cards: same equal-height/bottom-anchored-pill mechanism
+  as B4 (icons were already fixed in Teil A).
+- **B6** (`360edbb`) — Selbsthilfegruppe: added the missing 40px "Nächstes SHG-Treffen"
+  heading above "AKTUELLES" (live has it twice — the small `<h3>` inside the meeting card
+  was already there and stays); Steiermark logo to 368x177 right-aligned, companion text
+  to 20px.
+- **B7** (`0a22bc3`) — Kontakt: "Erreichbarkeit"/"Standorte" became icon eyebrows (reusing
+  `.icon-circle`, clock/pin), submit button text "Senden".
+- **B8** (`85e6cff`) — FAQs grouped into their three live categories. The question→category
+  mapping isn't in this repo's markdown at all, so it was fetched from the live DOM
+  (persephone.at/faqs/, rendered markup — each accordion post there carries a
+  `fusion-faq-post-<id>` class plus a category class, keyed against this repo's own
+  `#collapse-1-<id>` anchors) rather than guessed from question text, per this run's own
+  rule after three prior wrong findings came from a text conversion instead. Accordion
+  restyled with B4's shared pieces (red circle, 24px icon/heading, both live-measured).
+- **B9** (`7c13739`) — blog articles: the missing author/newsletter block (text fetched
+  from a live article page's own rendered DOM) and a "Verwandte Beiträge" section derived
+  from shared categories (not copied from live's WordPress plugin picks, per the brief's
+  own "aus den Kategorien abgeleitet"); in-article `##` subheadings render uppercase via
+  `:global()` since they come from the markdown renderer, not this page's own template.
+- **C1** (`8bcab82`) — nine meta descriptions added verbatim from `fuer-marina.md` Frage
+  16, including two rough edges she flagged herself and hasn't answered yet
+  ("psychodukativ", "(i.A.u.S)" without a period) — not silently corrected.
+- **C2** (`f7f3858`) — `/termine/`→`/kennenlernen/`, name and url: Marina named it, the
+  owner decided the path moves too. Every internal reference updated (nav CTA in all three
+  locales, Kontakt's cross-link, Beratung's/Angebote's closing-CTA hrefs), verified by the
+  blocking `internal-links-resolve` check. `docs/START-CHECKLISTE.md` Teil 3 got the
+  additional launch-time redirect this needs.
+- **Teil D** (`9694a4d`, `565850f`) — meta-description check flipped to BLOCKING now that
+  all ten exist; `DESIGN-SYSTEM.md` brought back in sync (new components, tokens, sizes).
+
+**Verification method throughout:** a local Playwright install (`npm install --no-save
+playwright@1.63.0`, not in `package.json`/lock, reusing the chromium binary already cached
+under `%LOCALAPPDATA%\ms-playwright`) took screenshots and measurements against the running
+dev server for every visual change, and fetched the *rendered* live DOM (not a text/markdown
+conversion) for the two places this run needed real live-site facts (FAQs' category mapping,
+blog's author-block copy) — per the brief's own explicit warning that three prior wrong
+findings in this project came from exactly that shortcut.
+
+**Open questions this run resolved**, all in `OPEN-QUESTIONS.md`: #8/#24 (Termine's rename,
+now done both ways). No new open questions were added — everything not explicitly covered by
+FEEDBACK/VERGLEICH or gestalterische Freiheit either had a literal answer to follow or wasn't
+touched.
