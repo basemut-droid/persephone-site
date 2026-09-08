@@ -165,7 +165,12 @@ function addResult(id, title, blocking, violations) {
       violations.push(`Shared description across ${routeList.join(', ')}: "${desc.slice(0, 80)}${desc.length > 80 ? '…' : ''}"`);
     }
   }
-  addResult('meta-descriptions', 'Every page has a unique, non-empty meta description', false, violations);
+  // BLOCKING as of NACHTLAUF-2026-09-08.md Teil D: non-blocking while the
+  // owner's ten sentences (fuer-marina.md Frage 16) didn't exist yet (C1)
+  // and Kennenlernen's route rename was still pending (C2) — now that both
+  // are done and every route has a real description, a future page
+  // shipping with none should fail the build instead of quietly passing.
+  addResult('meta-descriptions', 'Every page has a unique, non-empty meta description', true, violations);
 }
 
 // ---------------------------------------------------------------------
