@@ -33,13 +33,13 @@ by the file's own comments against `docs/brand/Brandbook.pdf`. Components consum
 | `--color-bg-alt` | `#f3ece6` | Warmes Elfenbein | alternating section background (`.section-alt`), hero band (`.hero`/`.hero-image`, since `RUN-2026-09-07-B1.md` Phase 1.4 — was `--color-bg` before), `.button-outline` fill |
 | `--color-surface` | `#ffffff` | — | dropdown menus, skip-link |
 | `--color-text` | `#181a2b` | Tinte | body text |
-| `--color-text-muted` | `#32373c` | — | blog fallback notice only |
+| `--color-text-muted` | `#181a2b` (since NACHTLAUF-2026-09-08.md A1; was `#32373c`) | — | FAQ answers, blog listing byline, Termine/Kennenlernen's fallback notice, PageHero's hero-intro, homepage's blog-fallback notice. The old value was a WordPress default gray that had leaked in, not a deliberate second text tone — now identical to `--color-text`, kept as a separate token in case a real muted tone is wanted later |
 | `--color-text-on-accent` | `#f3ece6` | — | text on colored fills (service cards, CTA band) |
-| `--color-sage` | `#90c8c0` | Salbei (Geborgenheit) | service-card "sage" tone, blog-teaser image placeholder bg |
-| `--color-teal` | `#48b0b0` | Türkis (Empathie) | service-card "teal" tone; `--color-band-bg` (newsletter strip) |
-| `--color-teal-dark` | `#309898` | Tiefes Türkis | `--color-accent` → eyebrows, hover states, focus ring, card-button text |
-| `--color-terracotta` | `#b33a3b` | Granatapfelrot (primary) | `--color-accent-strong` → H1, nav links, footer border/copyright, `.button-primary` fill |
-| `--color-terracotta-dark` | `#d83830` | Leuchtrot | `--color-cta-to` — unused since Phase 1.3 made `.button-primary` a solid fill instead of a gradient; kept defined, not deleted |
+| `--color-sage` | `#90c8c0` | Salbei (Geborgenheit) | service-card "sage" tone, blog-teaser image placeholder bg, `ImagePlaceholder.astro`'s panel, Workshops' sage list-marker icons, `.icon-circle-sage` (Beratung's accordion toggle) |
+| `--color-teal` | `#48b0b0` | Türkis (Empathie) | service-card "teal" tone; `--color-band-bg` (newsletter strip); `.icon-list-check .icon` (checkmark/meeting-detail circles, since NACHTLAUF-2026-09-08.md A1 — was `--color-teal-dark`) |
+| `--color-teal-dark` | `#309898` | Tiefes Türkis | `--color-accent` → eyebrows, hover states, focus ring, card-button text; Über uns's qualification-band panels (B2.1) |
+| `--color-terracotta` | `#b33a3b` | Granatapfelrot (primary) | `--color-accent-strong` → H1, nav links, footer border/copyright, `.button-primary` fill, `.icon-circle` (section icons, Kontakt's eyebrow icons) |
+| `--color-terracotta-dark` | `#d83830` | Leuchtrot | `--color-cta-to` — unused by `.button-primary` since Phase 1.3 made it a solid fill instead of a gradient; a real use since NACHTLAUF-2026-09-08.md B8: `.icon-circle-terracotta-dark` (FAQs' accordion toggle, live-measured) |
 | — (literal, untokenized) | `#e9dccd` | — | footer background + footer-wave SVG fill |
 | — (literal, untokenized) | `#fff3cd` bg / `#664d03` text | — | `DraftNotice` banner only |
 
@@ -58,6 +58,12 @@ no separate heading font (`--font-heading` is just an alias for `--font-body`).
 | h2, h3 | 400 | `clamp(1.5rem, 1.3rem + 1.2vw, 1.75rem)` — 28px from 600px viewport width up, one shared rule (`RUN-2026-09-07-B2.md` Phase 1b.2 — the live site uses one size at this level regardless of heading tag) | 1.2 | normal |
 | founder heading ("Von innen. Und von Fach.") | 400 | `2.25rem` (36px) — its own size, `.founder h2` in `HomePage.astro`, not the generic h2 scale | 1.2 | normal |
 | blog-teaser title (`BlogTeaserCard.astro`) | 400 | `1.625rem` (26px) | 1.2 | normal |
+| homepage services lede ("Wähle, was gerade zu Dir passt…") | 400 | `1.5625rem` (25px) — its own measured size, a `<p>` (NACHTLAUF-2026-09-08.md B1: was a `<h2>` at 32px) | 1.6 (inherited) | normal |
+| Selbsthilfegruppe's "Nächstes SHG-Treffen" (mid-page, B6) | 400 | `2.5rem` (40px) — its own size, same "second masthead-level heading" pattern as Über uns's CTA heading below | 1.2 | normal |
+| `ClosingCta`'s heading, `headingSize="large"` (Über uns only, B2.3) | 400 | `3rem` (48px) — every other page's `ClosingCta` stays the generic h2/h3 28px | 1.2 | normal |
+| Beratung's accordion question (B4) | 400 | `1.25rem` (20px), `<h4>` | 1.2 | normal |
+| FAQs' accordion question (B8) | 400 | `1.5rem` (24px), `<h3>` | 1.2 | normal |
+| Über uns's qualification-band language lines (B2.1) | 400 | `2.125rem` (34px) | 1.2 | normal |
 | body `p` | 400 | `1.25rem` (20px) (hero copy / `PageHero` intro: also `1.25rem`) | 1.6 (hero copy: 1.75) | normal |
 | `.eyebrow` | **400** | `1.125rem` (18px) | — | `0` (no letter-spacing), uppercase |
 | nav link / dropdown summary | 500 (`--weight-label`) | `1.0625rem` | — | normal |
@@ -332,6 +338,38 @@ ONLINE", "ONLINE") — see `FIXES-2026-09-07.md` tasks 2c.1/2d.3 for why those t
 the same visual shape despite one being a missing-content problem and the other a
 missing-styling one.
 
+## Accordion (NACHTLAUF-2026-09-08.md B4/B8)
+
+`.accordion-item` in `global.css` is the shared shape for every collapsed-by-default
+Q&A on the site — built for Beratung's "Gut zu wissen" (B4) and reused as-is by FAQs
+(B8). Plain native `<details>`/`<summary>` (no JS, same philosophy as the nav dropdown
+and language switcher), a toggle icon that rotates 45° into an "x" affordance on open
+(`.accordion-icon`, applied to the icon's circular wrapper rather than the `<Icon>`
+itself, so no extra `class` prop was needed on `Icon.astro`), and the answer indented
+to sit under the question text rather than the icon. Each caller supplies its own
+question heading level/size and toggle color via the icon-circle modifiers below —
+the accordion mechanism itself doesn't hardcode either:
+
+- Beratung: `<h4>` at its own measured 20px, `.icon-circle-sm.icon-circle-sage` (sage,
+  live-measured — the FAQ termine card's own detail-icon color, #48b0b0/`--color-teal`,
+  is a different, unrelated fix from the same NACHTLAUF pass, A1).
+- FAQs: `<h3>` at its own measured 24px, `.icon-circle-sm.icon-circle-terracotta-dark`
+  (`#d83830`, live-measured).
+
+`.icon-circle-sm` (2.5rem) and the two color modifiers are themselves small variants
+of the existing `.icon-circle` (3.5rem, terracotta) documented under "Icon set" above.
+
+## Scroll reveal (NACHTLAUF-2026-09-08.md A6)
+
+`.reveal` in `global.css` plus a small script in `BaseLayout.astro` — a fade-in-on-
+scroll effect built as progressive enhancement, not a JS-required animation. An
+element with this class is **fully visible by default**; only the layout's own script
+(and only once it has confirmed JavaScript actually ran, `prefers-reduced-motion`
+isn't set, and `IntersectionObserver` exists) adds `.reveal-pending`, which is what
+actually hides it before fading it back in on scroll. A page with JavaScript disabled,
+or a very old browser, never has invisible content. First (and currently only) use:
+Über uns's three qualification bands (B2.1).
+
 ## Component inventory
 
 Every component in `src/components/`, what it's for, its interface, and what currently
@@ -349,6 +387,8 @@ uses it — this is the build-from-this list for Phase 3.
 | `QuoteStack.astro` | Staggered "descending" pull-quote layout (a deliberate echo of the Persephone-descent motif — see its own code comment) | `quotes: string[]` | `HomePage` pain-points section only |
 | `BlogTeaserCard.astro` | Horizontal image+text card for one blog post teaser, with an image-pending placeholder state | `href`, `title`, `category?`, `heroImage?`, `heroImageAlt?`, `readMoreLabel` | `HomePage` blog-teasers section; `blog/index.astro` |
 | `CtaBand.astro` | Full-bleed colored strip: eyebrow/heading/paragraphs/button — **the** shared closing-CTA pattern, built explicitly so every page's CTA stays pixel-identical | `eyebrow?`, `heading?`, `paragraphs`, `ctaLabel`, `ctaHref` | `HomePage` (newsletter section); `angebote`, `workshops`, `beratung`, `ueber-uns` |
+| `ClosingCta.astro` | The other closing-CTA pattern (distinct from `CtaBand` above): heading/paragraphs/button beside a portrait photo overlapping a decorative tile. `headingSize`/`portraitSize: 'default'\|'large'` opt one instance into Über uns's own measured 48px heading / 336x390 portrait (NACHTLAUF-2026-09-08.md B2.3) without changing every other page's default (28px / 230x307). `layout: 'overlap'\|'pair'` switches the whole visual from the portrait-over-tile overlap to two equal same-size images side by side — Angebote's own live composition (B3) | `heading`, `paragraphs`, `ctaLabel`, `ctaHref`, `portrait`, `portraitAlt`, `tile`, `tileAlt`, `headingSize?`, `portraitSize?`, `layout?` | `angebote`, `workshops`, `beratung`, `ueber-uns` |
+| `ImagePlaceholder.astro` | "Photo pending" stand-in (NACHTLAUF-2026-09-08.md A4): a flat brand-palette panel with the fruit-icon signet muted to a soft monochrome watermark and a "Foto folgt" label — replaces an earlier grey diagonal-stripe pattern | `tone?: 'sage'\|'beige'`, `label?` | `ueber-uns.astro`'s closing teasers |
 | `DraftNotice.astro` | Top-of-page warning banner for unreviewed AI-translated locales | `text` | `BaseLayout`, conditionally (`en`/`it` currently) |
 | `ContactForm.astro` | The Kontakt page's form: name/phone/email/topic/message/consent + honeypot. Not wired to a backend yet (see its TODO); copy is inline German literals, not props — will need i18n work before EN/IT contact pages exist | — (no props) | `kontakt.astro` only |
 
@@ -380,7 +420,11 @@ uses it — this is the build-from-this list for Phase 3.
   footer proper, a 3-column grid (`2fr 1fr 1fr`: brand column wider than the two link
   columns) → a full-width copyright line below the grid.
 - **Wave divider:** one hand-drawn `<path>` filled with `var(--color-footer-bg)`, `40px`
-  tall, `preserveAspectRatio="none"` so it stretches full-width without distortion clamps.
+  tall (viewBox `50px` since NACHTLAUF-2026-09-08.md A5, for more room in the curve),
+  `preserveAspectRatio="none"` so it stretches full-width without distortion clamps.
+  Redrawn A5 with an irregular, non-repeating amplitude that tapers toward both ends
+  (a brushstroke, not a regular scallop wave) — own path, the live separator is an
+  Avada asset.
 - **700px collapse:** `.footer-grid` drops from `2fr 1fr 1fr` to a single column; the brand
   block, then each link column, stack vertically.
 - **Link styling:** footer nav links are plain text at `opacity: 0.85`, going to
