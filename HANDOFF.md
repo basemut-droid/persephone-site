@@ -82,7 +82,12 @@ each commit so the tree stays in a good state if interrupted.
   against this repo's existing #collapse-1-<id> anchors), accordion
   restyled with the shared B4 pieces (red circle, 24px icon/heading).
 
-**Not started yet:** B9, Teil C, Teil D. See
+- B9 (`7c13739`): blog articles gained the missing author/newsletter block
+  (text fetched from a live article page's own rendered DOM) and a
+  'Verwandte Beiträge' section derived from shared categories; in-article
+  ## subheadings now render uppercase via :global().
+
+**Teil B complete. Not started yet:** Teil C, Teil D. See
 `docs/NACHTLAUF-2026-09-08.md` for the full task list and target values.
 
 **Session note:** `playwright@1.63.0` is installed locally via
