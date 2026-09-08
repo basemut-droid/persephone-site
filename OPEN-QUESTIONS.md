@@ -85,23 +85,19 @@ reverted, or a plain link out to Microsoft (what the live site does today) —
 both keep the site banner-free. No consent banner has been added on this run's
 own initiative either way; that decision, and its wording if wanted, is yours.
 
-## 1. Ten pages ship no meta description — needs the owner's copy
+## 1. Ten pages ship no meta description — ERLEDIGT 2026-09-08
 
-No `<meta name="description">` exists on the live site for most of these, and a bug
-that made them silently inherit the *homepage's* description instead (worse for
-search engines than having none) is now fixed — `BaseLayout.astro` no longer falls
-back to a site-wide default; a page either passes its own real description or ships
-none.
+Marina wrote all ten (fuer-marina.md Frage 16); added verbatim to every page listed
+here (Über uns, Angebote, Beratung, Workshops, Selbsthilfegruppe, Kontakt,
+Kennenlernen, Disclaimer, Datenschutz, Blog index) in `NACHTLAUF-2026-09-08.md`
+C1, and the build-check's meta-description rule is now **blocking** (Teil D) so a
+future page shipping with none fails the build instead of quietly passing.
 
-**Currently shipping no description at all — needs real copy from the owner, one
-sentence each, whenever there's time (not blocking launch):**
-Über uns, Angebote, Beratung, Workshops, Selbsthilfegruppe, Kontakt, Termine, Disclaimer,
-Datenschutz, Blog index. (FAQs and Impressum already have their own; every blog post has
-its own via frontmatter.)
-
-**Recommendation:** ship empty until the owner writes these — inventing SEO copy isn't
-this run's call to make. Not urgent (search engines synthesize a snippet from page text
-in the meantime); worth doing before launch, not overnight.
+Two of her ten sentences carry a wording question she hasn't answered yet
+("psychodukativ" on Über uns, probably "psychoedukativ"; "(i.A.u.S)" without the
+trailing period the site uses everywhere else, on both Über uns and Beratung) —
+taken exactly as she wrote them, not silently corrected. See her own note at
+Frage 16 in `fuer-marina.md` for the two open sub-questions.
 
 ## 2. The live site ships duplicate/conflicting meta description tags — FYI, not a rebuild task
 
@@ -344,7 +340,7 @@ Einziger Nachtrag: der Startseiten-Titel ist das, was in den Suchergebnissen ste
 freigegeben, aber Marina soll ihn einmal gelesen haben — als Eintrag in `fuer-marina.md`,
 nicht als Blocker.
 
-## 13. Über uns, Qualifikationsblock — ENTSCHIEDEN 7.9.2026: Teal-Band wiederherstellen
+## 13. Über uns, Qualifikationsblock — ERLEDIGT 2026-09-08 (entschieden 7.9.2026)
 
 Live ist das ein **volles Band in Teal (#309898)** mit weißer Schrift, zentrierten
 Überschriften und den Sprachen in 34 px — ein deutlicher Farbakzent mitten auf der Seite.
@@ -357,14 +353,19 @@ den Rhythmus der ganzen Seite.
 zentrierte Überschriften, Sprachen in 34 px, wie live. Der Block trägt die Qualifikationen;
 genau das soll bei einer Beraterin in Ausbildung sichtbar sein.
 
-## 14. FAQs: die drei Kategorien fehlen
+**Umgesetzt** (NACHTLAUF-2026-09-08.md B2.1): drei ganzflächige, abwechselnde Bänder in
+#309898, nachgebaut statt kopiert (das Live-Panel ist `info-bg-3.svg`, ein Avada-Asset).
 
-Live sind die dreizehn Fragen in drei Reitern gruppiert: „Zu Persephone", „Zu Coaching und
-Beratung", „Zur Selbsthilfe". Der Rebuild zeigt eine flache Liste. Die Zuordnung Frage →
-Kategorie ist im Repo nicht vorhanden und muss von der Live-Seite geholt werden.
+## 14. FAQs: die drei Kategorien fehlen — ERLEDIGT 2026-09-08
 
-**Keine Frage an Marina, sondern eine Aufgabe** — hier steht nur, dass es kein
-Darstellungsproblem ist, sondern fehlende Daten.
+Die Zuordnung Frage → Kategorie wurde von der Live-Seite geholt (gerendertes Markup,
+nicht Text: jeder Akkordeon-Post trägt dort eine `fusion-faq-post-<id>`-Klasse plus
+eine Kategorie-Klasse, `<id>` deckt sich mit den `#collapse-1-<id>`-Ankern, die schon
+im Repo standen) und in `faqs.astro` als strukturierte Daten hinterlegt
+(NACHTLAUF-2026-09-08.md B8). Alle dreizehn Fragen sind jetzt unter „Zu Persephone",
+„Zu Coaching und Beratung" und „Zur Selbsthilfe" gruppiert, als drei statische
+Abschnitte statt der Live-Seite eigener JS-Filter-Reiter — passend zum Rest der
+Seite, die interaktive Gruppierungen durchgehend ohne Pflicht-JavaScript baut.
 
 ## 15. 301-Weiterleitungen — blockiert durch die Hosting-Entscheidung
 
@@ -421,14 +422,16 @@ Ganzes mit einem älteren Stand überschrieben habe. Hiermit wiederhergestellt.*
 ## 21. Erledigt durch ihre Antworten
 
 - **Punkt 1 (Meta-Beschreibungen): ERLEDIGT.** Sie hat alle zehn geschrieben; der Wortlaut
-  steht in `docs/fuer-marina.md` Frage 16. Umsetzung: `RUN-2026-09-07-B2.md` Phase 1c.1.
-  Zwei winzige Rückfragen an sie sind dort offen („psychodukativ", „(i.A.u.S)" ohne Punkt) —
-  bis dahin wörtlich übernehmen, nicht korrigieren.
+  steht in `docs/fuer-marina.md` Frage 16. Umgesetzt in `NACHTLAUF-2026-09-08.md` C1
+  (siehe Punkt 1 oben). Zwei winzige Rückfragen an sie sind dort offen („psychodukativ",
+  „(i.A.u.S)" ohne Punkt) — bis dahin wörtlich übernommen, nicht korrigiert.
 - **Punkt 0 (Selbsthilfe-Steiermark-Logo): ERLEDIGT.** Die Nutzung ist abgesprochen.
 - **Frage 15 (Startseiten-Titel): bestätigt**, bleibt wie er ist.
-- **Frage 17: die Terminseite heißt künftig „Kennenlernen".** Umsetzung in Phase 1c.2.
+- **Frage 17: die Terminseite heißt künftig „Kennenlernen".** Umgesetzt, Name **und** URL
+  (`NACHTLAUF-2026-09-08.md` C2, siehe Punkt 8/24 oben) — `/kennenlernen/`.
 - **Frage 18 (Übersetzung): bestätigt** — neun Seiten in Etappen, Blog bleibt deutsch.
-  `docs/UEBERSETZUNG.md` ist damit freigegeben, sobald B2 durch ist.
+  `docs/UEBERSETZUNG.md` ist damit freigegeben: der Nachtlauf (der B2 ersetzt hat) ist
+  durch.
 
 ## 22. Eine Korrektur an meiner eigenen Darstellung — Cookie-Banner
 
