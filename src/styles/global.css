@@ -635,3 +635,15 @@ textarea:focus-visible,
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/* ServiceCard grid — moved here from HomePage.astro's own scoped <style>
+   (NACHTLAUF-2026-09-09.md E3) so a second page (Über uns's Beratung/
+   Workshops teasers) can reuse it. Astro scopes a component's <style>
+   block to that file alone; a shared class living there looks global but
+   silently matches nowhere else — see CLAUDE.md's warning on exactly this
+   mistake with .section. */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}

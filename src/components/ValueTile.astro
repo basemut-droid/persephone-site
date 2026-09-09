@@ -12,8 +12,12 @@ const { title, description } = Astro.props;
 </div>
 
 <style>
+  /* NACHTLAUF-2026-09-09.md E5: padding trimmed slightly (was 1.25rem) as
+     part of closing the philosophy-grid's two-column height gap — see
+     HomePage.astro's .philosophy-copy p comment for the other half of
+     this fix. */
   .value-tile {
-    padding-block: 1.25rem;
+    padding-block: 1rem;
     border-bottom: 1px solid rgba(24, 26, 43, 0.1);
   }
 

@@ -3,7 +3,7 @@ import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ClosingCta from '../components/ClosingCta.astro';
-import ImagePlaceholder from '../components/ImagePlaceholder.astro';
+import ServiceCard from '../components/ServiceCard.astro';
 import logoKongruenz from '../assets/pages/ueber-uns/logo-kongruenz-und-authentizitaet.png';
 import marinaPortrait from '../assets/shared/marina-von-persephone.jpg';
 import granatapfel from '../assets/hero/granatapfel-fruchtbarkeit.png';
@@ -124,7 +124,10 @@ tracker.assertAllHandled('ueber-uns.astro');
       {
         bioSections.map(({ heading, paragraphs: paras }) => (
           <>
-            <h2>{heading}</h2>
+            {/* NACHTLAUF-2026-09-09.md E1: live measures both headings at
+               18px/400/uppercase/teal — the .eyebrow treatment, not a
+               plain h2 (28px/dark/normal-case, what this rendered before). */}
+            <h2 class="eyebrow">{heading}</h2>
             {paras.map((p) => <p set:html={mdInlineHtml(p)} />)}
           </>
         ))
@@ -132,61 +135,127 @@ tracker.assertAllHandled('ueber-uns.astro');
     </div>
   </section>
 
-  {
-    qualBands.map((band) => (
-      <section class={`reveal quals-band quals-band--${band.side}`}>
-        <div class="quals-grid">
-          <div class="quals-panel">
-            <h2 class="quals-heading">{band.heading}</h2>
-            {band.kind === 'list' ? (
-              <ul class="quals-list">
-                {band.items.map((item) => (
-                  <li set:html={mdInlineHtml(item)} />
-                ))}
-              </ul>
-            ) : (
-              <div class="quals-list quals-lines">
-                {band.items.map((line) => (
-                  <p>{line}</p>
-                ))}
-              </div>
-            )}
+  {/* NACHTLAUF-2026-09-09.md E2: Claudio asked for the three qualification
+     bands to read as one continuous "Faden" — scroll-linked crossfade
+     between cards/images instead of three independently-scrolling rows.
+     data-quals-scroller/data-quals-band are enhancement hooks only; the
+     wrapper adds no layout of its own until the script below opts a
+     capable, motion-OK, ≥900px viewport into it, so a plain render (no
+     JS, old browser, prefers-reduced-motion, or narrow viewport) is
+     pixel-identical to the previous three-independent-bands markup. */}
+  <div class="quals-scroller" data-quals-scroller>
+    {
+      qualBands.map((band) => (
+        <section class={`reveal quals-band quals-band--${band.side}`} data-quals-band>
+          <div class="quals-grid">
+            <div class="quals-panel">
+              <h2 class="quals-heading">{band.heading}</h2>
+              {band.kind === 'list' ? (
+                <ul class="quals-list">
+                  {band.items.map((item) => (
+                    <li set:html={mdInlineHtml(item)} />
+                  ))}
+                </ul>
+              ) : (
+                <div class="quals-list quals-lines">
+                  {band.items.map((line) => (
+                    <p>{line}</p>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div class="quals-image">
+              <Image src={granatapfel} alt="" aria-hidden="true" width={1000} height={800} />
+            </div>
           </div>
-          <div class="quals-image">
-            <Image src={granatapfel} alt="" aria-hidden="true" width={1000} height={800} />
-          </div>
-        </div>
-      </section>
-    ))
-  }
+        </section>
+      ))
+    }
+  </div>
 
+  <script>
+    // NACHTLAUF-2026-09-09.md E2 — scroll-linked crossfade, progressive
+    // enhancement in the same spirit as global.css's .reveal (A6): opt in
+    // only once IntersectionObserver exists, prefers-reduced-motion isn't
+    // set, and the viewport is wide enough for the alternating two-column
+    // band layout this crossfade is built for (matches the existing
+    // 900px breakpoint the bands themselves already use). Everyone else
+    // keeps the plain stacked-bands render with its own existing .reveal
+    // fade-in untouched.
+    const scroller = document.querySelector<HTMLElement>('[data-quals-scroller]');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (scroller && !prefersReducedMotion && 'IntersectionObserver' in window && window.matchMedia('(min-width: 900px)').matches) {
+      const bands = [...scroller.querySelectorAll<HTMLElement>('[data-quals-band]')];
+      scroller.classList.add('quals-scroller--enhanced');
+      // Hand full control of these bands' opacity to the observer below —
+      // otherwise BaseLayout's own generic .reveal-pending toggle and this
+      // one would both be driving the same property.
+      bands.forEach((b) => b.classList.remove('reveal', 'reveal-pending'));
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) entry.target.classList.toggle('is-quals-active', entry.isIntersecting);
+        },
+        { threshold: 0 },
+      );
+      bands.forEach((b) => io.observe(b));
+    }
+  </script>
+
+  {/* NACHTLAUF-2026-09-09.md E3: Claudio's call — the photo+overlapping-
+     card layout below (NIGHT-RUN.md Phase 4.2 / external-review.md #4b)
+     stays out of the render for now in favor of the same teal
+     ServiceCard/"ERFAHRE MEHR" gradient cards the homepage already uses
+     for Beratung & Coaching / Workshops & Einzeltrainings (screenshot
+     07 in docs/screenshots/2026-09-09-feedback/) — same content
+     (title/description/href from `teasers`), reusing ServiceCard/
+     .service-grid rather than building a second version of that shape
+     (CLAUDE.md "reuse before you build"). The photo-teaser markup/style
+     it replaces is commented out just below rather than deleted: it's
+     the calibrated real-photo layout (FEEDBACK-2026-09-08.md #1's
+     measurements, confirmed same size as the live photos in screenshot
+     06) for whenever real photos exist and Marina edits this in the
+     CMS. */}
   <section class="section section-alt">
-    <div class="container photo-teaser-grid">
-      {
-        teasers.map((t, i) => (
-          <article class={`photo-teaser photo-teaser--${i === 0 ? 'a' : 'b'}`}>
-            {/* NIGHT-RUN.md Phase 4.2 / external-review.md finding #4b: the
-               live design is a black-and-white photo with a cream text card
-               overlapping it. The two real photos are Avada template demo
-               images and are not ours to use (owner-confirmed licence
-               issue) — ImagePlaceholder.astro (NACHTLAUF-2026-09-08.md A4)
-               stands in instead, so a real photo drops into this same slot
-               later with zero markup changes beyond swapping the
-               component out for an <Image>. */}
-            <div class="photo-teaser-image" aria-hidden="true">
-              <ImagePlaceholder />
-            </div>
-            <div class="photo-teaser-card">
-              <h3 class="eyebrow photo-teaser-eyebrow">
-                <a href={t.href}>{t.label}</a>
-              </h3>
-              <p>{t.description}</p>
-            </div>
-          </article>
-        ))
-      }
+    <div class="container">
+      <div class="service-grid">
+        {
+          teasers.map((t, i) => (
+            <ServiceCard
+              title={t.label}
+              description={t.description}
+              href={t.href}
+              cta="Erfahre mehr"
+              tone={i === 0 ? 'teal-dark' : 'teal'}
+            />
+          ))
+        }
+      </div>
     </div>
   </section>
+
+  {/* --- Photo-teaser backup, NACHTLAUF-2026-09-09.md E3 ---
+  <section class="section section-alt">
+    <div class="container photo-teaser-grid">
+      {teasers.map((t, i) => (
+        <article class={`photo-teaser photo-teaser--${i === 0 ? 'a' : 'b'}`}>
+          <div class="photo-teaser-image" aria-hidden="true">
+            <ImagePlaceholder />
+          </div>
+          <div class="photo-teaser-card">
+            <h3 class="eyebrow photo-teaser-eyebrow">
+              <a href={t.href}>{t.label}</a>
+            </h3>
+            <p>{t.description}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+  Reactivate by uncommenting this block, re-adding
+  `import ImagePlaceholder from '../components/ImagePlaceholder.astro';`,
+  and removing the ServiceCard section above (or the .photo-teaser-grid
+  CSS below, which is likewise left in place, unused, for the same reason).
+  --- */}
 
   <ClosingCta
     heading="Dein nächster Schritt"
@@ -242,6 +311,17 @@ tracker.assertAllHandled('ueber-uns.astro');
     gap: 0.75rem;
   }
 
+  /* NACHTLAUF-2026-09-09.md E2: live's Ausbildung/Felderfahrung items are
+     real left-aligned bullet lists (list-style: disc, text-align: start) —
+     not centered marker-less lines. Scoped to the <ul> variant only, so
+     the Sprachen band (a <div class="quals-list quals-lines">, no bullets
+     there) keeps its own centered treatment from .quals-panel. */
+  ul.quals-list {
+    list-style: disc;
+    padding-left: 1.25rem;
+    text-align: left;
+  }
+
   /* Language lines: NACHTLAUF-2026-09-08.md B2.1 measures these at 34px on
      the live page — its own size, not the 20px body default. */
   .quals-lines p {
@@ -285,16 +365,44 @@ tracker.assertAllHandled('ueber-uns.astro');
     .quals-band--right .quals-panel {
       order: 2;
     }
+
+    /* NACHTLAUF-2026-09-09.md E2 crossfade, enhanced state only (see the
+       script above): each band becomes a full-viewport sticky slide that
+       pins at the top and fades in as it starts covering the previous one
+       — the classic "later sibling paints over earlier, opacity animates
+       the handoff" scroll-stack technique, needing no scroll-position math
+       or extra spacer height, since the bands' own stacked block height
+       already provides the scroll distance. */
+    .quals-scroller--enhanced .quals-band {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      opacity: 0;
+      overflow: hidden;
+      transition: opacity 0.6s ease;
+    }
+
+    .quals-scroller--enhanced .quals-band.is-quals-active {
+      opacity: 1;
+    }
+
+    .quals-scroller--enhanced .quals-grid {
+      height: 100%;
+    }
   }
 
   /* Photo + overlapping text-card teasers (external-review.md finding
-     #4b). Page-scoped, not global.css: this exact photo/card-overlap
-     shape doesn't exist anywhere else on the site yet — see CLAUDE.md's
-     "reuse before you build" rule, which cuts both ways: it also means
-     not promoting a one-off to global.css speculatively. The old
-     .teaser-grid/.teaser-card generic cards this replaced (no image, no
-     overlap) were themselves a placeholder for this real design and are
-     removed from global.css now that nothing needs them. */
+     #4b). Currently unused — NACHTLAUF-2026-09-09.md E3 swapped the
+     teasers themselves for ServiceCard/.service-grid above, but this CSS
+     stays as part of the commented-out backup markup's documentation
+     (uncomment both together). Page-scoped, not global.css: this exact
+     photo/card-overlap shape doesn't exist anywhere else on the site yet
+     — see CLAUDE.md's "reuse before you build" rule, which cuts both
+     ways: it also means not promoting a one-off to global.css
+     speculatively. The old .teaser-grid/.teaser-card generic cards this
+     replaced (no image, no overlap) were themselves a placeholder for
+     this real design and are removed from global.css now that nothing
+     needs them. */
   .photo-teaser-grid {
     display: grid;
     grid-template-columns: 1fr;

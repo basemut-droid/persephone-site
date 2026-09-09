@@ -93,7 +93,7 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
   <!-- Philosophy -->
   <section class="section section-alt">
     <div class="container philosophy-grid narrow">
-      <div>
+      <div class="philosophy-copy">
         <span class="eyebrow">{s.philosophy.eyebrow}</span>
         <h2>{s.philosophy.heading}</h2>
         {s.philosophy.paragraphs.map((p) => <p>{p}</p>)}
@@ -166,11 +166,8 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
     font-size: 1.5625rem;
   }
 
-  .service-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.5rem;
-  }
+  /* .service-grid now lives in global.css (NACHTLAUF-2026-09-09.md E3) —
+     Über uns's Beratung/Workshops teasers reuse it too. */
 
   .philosophy-grid,
   .founder-grid {
@@ -183,6 +180,22 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
   .narrow {
     max-width: 62rem;
     margin-inline: auto;
+  }
+
+  /* NACHTLAUF-2026-09-09.md E5: live's two philosophy-grid columns end on
+     the same height; this rebuild's left column ran ~180px short at
+     1440px under the body copy's default line-height/spacing. Text,
+     order and paragraph count are unchanged, per Claudio's own
+     condition — only the breathing room around them grows: slightly
+     looser line-height plus more space between paragraphs (tried alone
+     first; a line-height-only version read as oddly airy within each
+     paragraph, so most of the extra height comes from the between-
+     paragraph gap instead). ValueTile's own padding trim takes the rest
+     of the gap — see ValueTile.astro. Re-measure both columns
+     (getBoundingClientRect) if this copy's length ever changes. */
+  .philosophy-copy p {
+    line-height: 1.85;
+    margin-bottom: 2.15em;
   }
 
   /* "Gründerinnen-Überschrift" — VERGLEICH-2026-09-07.md A1: live 36px,
