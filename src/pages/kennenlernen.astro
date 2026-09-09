@@ -24,15 +24,17 @@ const intro = 'Das online Kennenlernen (ca. 20 Min.) ist kostenfrei und dient de
 ---
 
 <BaseLayout locale="de" path="/kennenlernen/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
-  {/* Confirmed no hero image on the live page (RUN-2026-09-07.md Phase E):
-     its raw HTML has no --awb-bg-image anywhere, unlike the six pages that
-     do. */}
-  <PageHero title={entry.data.title} image={false} />
+  {/* NACHTLAUF-2026-09-09.md E9: Claudio's own deliberate design call, not
+     a live-site correction -- the earlier image={false} choice just below
+     was itself a confirmed, correct read of the live page at the time
+     (RUN-2026-09-07.md Phase E: no --awb-bg-image in its raw HTML). This
+     supersedes it: split-hero with the default pomegranate image, like
+     every other subpage, plus the intro sentence moved up into the hero
+     (out of .booking-wrap below) instead of sitting under the calendar. */}
+  <PageHero title="Kennenlernen vereinbaren" intro={intro} />
 
   <section class="section">
-    <div class="container booking-wrap">
-      <p>{intro}</p>
-
+    <div class="container">
       {/* FIXES-2026-09-07.md task 5e — decision by the owner's husband,
          2026-09-07: go back to the calendar embedded directly, without the
          click-to-load step this session had built as the consent-safer
@@ -69,10 +71,12 @@ const intro = 'Das online Kennenlernen (ca. 20 Min.) ist kostenfrei und dient de
 </BaseLayout>
 
 <style>
-  .booking-wrap {
-    max-width: 56rem;
-    margin-inline: auto;
-  }
+  /* NACHTLAUF-2026-09-09.md E10: measured iframe (816px) vs .booking-wrap
+     (896px) vs .container (1248px) confirmed cause (b) -- this 56rem
+     reading-width cap was narrower than "das Element, in dem er
+     eingebaut ist" (Claudio's phrasing), not a Microsoft Bookings
+     self-centering limit. Section now uses the regular .container width
+     like every other section on the site. */
 
   .booking-iframe {
     border-radius: var(--radius);
