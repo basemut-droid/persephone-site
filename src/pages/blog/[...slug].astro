@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogTeaserCard from '../../components/BlogTeaserCard.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ id, data }) => id.startsWith('de/') && !data.draft);
@@ -98,19 +99,23 @@ const updatedLabel = post.data.updatedDate?.toLocaleDateString('de-AT', {
 
     {
       related.length > 0 && (
-        <div class="post-related container section-narrow">
+        <div class="post-related container">
           <h2 class="section-heading">Verwandte Beiträge</h2>
+          {/* NACHTLAUF-2026-09-09.md E7: reuses the homepage's own
+             BlogTeaserCard (image + eyebrow + title + "Weiterlesen") so
+             related posts look the same as the front-page blog grid,
+             instead of the text-only .post-related-item cards this used
+             to be (no image at all). */}
           <div class="post-related-grid">
             {related.map((r) => (
-              <article class="post-related-item">
-                {r.data.category && r.data.category.length > 0 && <p class="eyebrow post-related-category">{r.data.category.join(', ')}</p>}
-                <h3>
-                  <a href={`/blog/${r.id.split('/').slice(1).join('/')}/`}>{r.data.title}</a>
-                </h3>
-                <a href={`/blog/${r.id.split('/').slice(1).join('/')}/`} class="post-related-link">
-                  Weiterlesen →
-                </a>
-              </article>
+              <BlogTeaserCard
+                href={`/blog/${r.id.split('/').slice(1).join('/')}/`}
+                title={r.data.title}
+                category={r.data.category}
+                heroImage={r.data.heroImage}
+                heroImageAlt={r.data.heroImageAlt}
+                readMoreLabel="Weiterlesen"
+              />
             ))}
           </div>
         </div>
@@ -157,8 +162,12 @@ const updatedLabel = post.data.updatedDate?.toLocaleDateString('de-AT', {
      caps. The article body comes from the markdown renderer, not this
      component's own template, so it never carries this file's scoping
      attribute -- :global() is required for the rule to reach it at all. */
+  /* NACHTLAUF-2026-09-09.md E6: live measures these teal (--color-accent,
+     #309898) — the same color as .eyebrow — not the inherited dark
+     --color-text this only had uppercase for. */
   :global(.post-body h2) {
     text-transform: uppercase;
+    color: var(--color-accent);
   }
 
   .post-author {
@@ -178,40 +187,19 @@ const updatedLabel = post.data.updatedDate?.toLocaleDateString('de-AT', {
   }
 
   .post-related {
-    /* Wider than .post-body/.post-author's 42rem article-prose measure —
-       .section-narrow's existing 56rem token gives the 3-column grid room
-       to breathe, reusing a value already established sitewide rather
-       than inventing a new one. */
     padding-block: 1rem 4rem;
   }
 
+  /* NACHTLAUF-2026-09-09.md E7: three BlogTeaserCards instead of the old
+     text-only .post-related-item cards (their card/category/link styling
+     lived here and is gone now that BlogTeaserCard supplies its own). */
   .post-related-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
   }
 
-  .post-related-category {
-    margin-bottom: 0.4rem;
-  }
-
-  .post-related-item h3 {
-    margin: 0 0 0.5rem;
-  }
-
-  .post-related-item h3 a {
-    text-decoration: none;
-    color: var(--color-text);
-  }
-
-  .post-related-link {
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-decoration: none;
-    color: var(--color-accent-strong);
-  }
-
-  @media (min-width: 700px) {
+  @media (min-width: 900px) {
     .post-related-grid {
       grid-template-columns: repeat(3, 1fr);
     }
