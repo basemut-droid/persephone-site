@@ -83,10 +83,10 @@ tracker.assertAllHandled('workshops.astro');
         {workshopsIntro && <p>{workshopsIntro}</p>}
         {
           workshopsList?.type === 'list' && (
-            <ul class="icon-list icon-list-sage">
+            <ul class="icon-list icon-list-check">
               {workshopsList.items.map((item) => (
                 <li>
-                  <Icon name="book" size={16} />
+                  <Icon name="check" size={16} />
                   <span>{item}</span>
                 </li>
               ))}
@@ -106,10 +106,10 @@ tracker.assertAllHandled('workshops.astro');
         {ressourcenIntro && <p>{ressourcenIntro}</p>}
         {
           ressourcenList?.type === 'list' && (
-            <ul class="icon-list icon-list-sage">
+            <ul class="icon-list icon-list-check">
               {ressourcenList.items.map((item) => (
                 <li>
-                  <Icon name="scroll" size={16} />
+                  <Icon name="check" size={16} />
                   <span>{item}</span>
                 </li>
               ))}
