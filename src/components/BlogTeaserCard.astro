@@ -28,17 +28,27 @@ const { href, title, category, heroImage, heroImageAlt, readMoreLabel } = Astro.
      2026-09-07 decision the title stays dark/normal-case and the link
      stays "Weiterlesen →", not live's terracotta-uppercase treatment. */}
   <div class="blog-teaser-body">
-    {category && category.length > 0 && <p class="blog-teaser-category">{category.join(', ')}</p>}
+    {category && category.length > 0 && <p class="eyebrow blog-teaser-category">{category.join(', ')}</p>}
     <h3><a href={href}>{title}</a></h3>
     <a href={href} class="blog-teaser-link">{readMoreLabel} →</a>
   </div>
 </article>
 
 <style>
+  /* NACHTLAUF-2026-09-09.md E4: equal-height cards within a .blog-grid
+     row, same idea as .format-card/.workshop-card's flex-column +
+     height: 100% — a 4-line title (e.g. "Männer im Kinderwunsch: Mythos
+     'stille Stärke'") used to leave its row's shorter 2-line-title card
+     visibly smaller. height: 100% fills the stretched grid cell
+     .blog-grid's default align-items: stretch already gives this article;
+     grid-template-rows: 1fr then lets image + body actually reach that
+     full height instead of only their own content's natural size. */
   .blog-teaser {
     display: grid;
     grid-template-columns: minmax(140px, 55%) 1fr;
-    align-items: center;
+    grid-template-rows: 1fr;
+    align-items: stretch;
+    height: 100%;
   }
 
   .blog-teaser-image {
@@ -80,14 +90,18 @@ const { href, title, category, heroImage, heroImageAlt, readMoreLabel } = Astro.
     border-radius: var(--radius);
     box-shadow: 0 12px 32px rgba(24, 26, 43, 0.12);
     padding: 1.5rem 1.75rem;
+    /* Same equal-height fix as .blog-teaser above: the link stays
+       anchored to the bottom regardless of how many lines the title
+       above it wraps to. */
+    display: flex;
+    flex-direction: column;
   }
 
+  /* NACHTLAUF-2026-09-09.md E4: live measures this at 18px/uppercase/teal,
+     i.e. exactly .eyebrow's own shape (global.css) — this card now uses
+     that class directly; only the tighter card spacing stays local. */
   .blog-teaser-category {
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    color: var(--color-accent);
-    margin: 0 0 0.5rem;
+    margin-bottom: 0.5rem;
   }
 
   .blog-teaser-body h3 {
@@ -103,11 +117,15 @@ const { href, title, category, heroImage, heroImageAlt, readMoreLabel } = Astro.
     color: var(--color-text);
   }
 
+  /* NACHTLAUF-2026-09-09.md E4: live's "Weiterlesen"-equivalent link
+     measures teal (--color-accent), 15px — this was terracotta
+     (--color-accent-strong) at 13.6px. */
   .blog-teaser-link {
-    font-size: 0.85rem;
+    font-size: 0.9375rem;
     font-weight: 600;
     text-decoration: none;
-    color: var(--color-accent-strong);
+    color: var(--color-accent);
+    margin-top: auto;
   }
 
   @media (max-width: 600px) {
