@@ -741,3 +741,96 @@ findings in this project came from exactly that shortcut.
 now done both ways). No new open questions were added — everything not explicitly covered by
 FEEDBACK/VERGLEICH or gestalterische Freiheit either had a literal answer to follow or wasn't
 touched.
+
+## Nachtlauf 2026-09-09 (`docs/NACHTLAUF-2026-09-09.md`) — done and committed
+
+Ten screenshot-driven feedback items from Claudio's own comparison (Original vs. Vorschau,
+`docs/screenshots/2026-09-09-feedback/`, 16 phone/browser photos — not pixel measurements).
+Per the brief's own Regel 1 (`docs/UEBERGABE-CHAT.md`): every "vermutlich Original/Rebuild"
+guess in the brief was re-checked against rendered markup and computed styles before acting,
+not taken on the screenshot's word alone — a local Playwright script (`playwright@1.63.0`,
+already installed per the 2026-09-08 session note) drove both `persephone.at` and
+`localhost:4321` at a 1440px viewport for this.
+
+- **E1** (`22db34a`) — Über uns's three bio headings ("Wer Dir hier begegnet" / "Was aus
+  meiner Kinderwunschkrise wuchs" / "Persephone als soziales Unternehmen") were plain `<h2>`
+  (28px/dark/normal-case); live measures all three at 18px/400/uppercase/teal — exactly
+  `.eyebrow`. Switched to `class="eyebrow"`. The brief's own screenshot-based guess here was
+  correct (screenshot 02 = live).
+- **E2** (`22db34a`) — two findings:
+  - **Bullet-style correction to the brief's own speculation.** The brief guessed screenshot
+    03 (no markers, centered text) was "vermutlich Original" and screenshot 04 (left-aligned
+    disc bullets) was the rebuild getting it wrong. Live-measuring the actual
+    Ausbildung/Felderfahrung `<li>`s showed the opposite: live really does use plain
+    left-aligned disc bullets (`list-style-type: disc`, `text-align: start`) — screenshot 04
+    was the accurate one. Fixed by giving the `<ul>` variant of `.quals-list` real bullets and
+    left alignment (the `<div>` Sprachen variant keeps its centered treatment, unaffected).
+    **Lesson for next session:** a screenshot's own "vermutlich Original/Rebuild" label in a
+    brief is still a guess, not a measurement — this is the second time in this project a
+    labeled guess turned out backwards (see `docs/UEBERGABE-CHAT.md` Regel 1's own three
+    prior examples); always re-derive it from the live DOM before trusting the label.
+  - **Ochre curve:** not present anywhere in the current build (0 matches for `#eda444`/its
+    rgb form) — screenshot 04 was stale relative to the current code, not a live regression
+    of the `docs/UEBERGABE-CHAT.md` "entails ersatzlos" decision. Nothing to fix.
+  - **Crossfade ("Faden") feature**, Claudio's own new request: the three qualification bands
+    now scroll-crossfade into each other on capable, motion-OK, ≥900px viewports (progressive
+    enhancement — IntersectionObserver + `position: sticky`, no scroll-position math, no
+    library); everyone else (no JS, `prefers-reduced-motion: reduce`, <900px) gets the
+    unchanged plain stacked-bands render, including the existing `.reveal` fade-in. Verified
+    all three fallback paths plus the active-band handoff via Playwright before committing —
+    stayed inside the brief's own one-to-two-hour box, so no mid-run checkpoint was needed.
+- **E3** (`22db34a`) — Über uns's Beratung/Workshops teasers swapped from the photo+overlap
+  placeholder layout to `ServiceCard`/`.service-grid` (Claudio's decision: screenshot 07's
+  teal gradient cards, same shape the homepage already uses for these two services).
+  `.service-grid` moved out of `HomePage.astro`'s scoped `<style>` into `global.css` first —
+  it was trapped there exactly the way `CLAUDE.md` warns about for `.section`. The old
+  photo-teaser markup/CSS stays in the file as a clearly labeled, commented-out block
+  (Claudio's own preferred option: kept as a findable backup for whenever real photos exist
+  and Marina edits this in the CMS, rather than only recoverable from git history).
+- **E5** (`22db34a`) — "Der Persephone-Ansatz"'s two columns (text left, four `ValueTile`s
+  right) ended ~180px apart at 1440px on both original and rebuild alike (not a
+  live-vs-rebuild difference — Claudio flagged it as an existing problem in both). Live's own
+  row genuinely renders both columns equal-height (confirmed via `fusion-builder-row`'s two
+  children both measuring 994px). Closed the gap (now 3px) with slightly looser
+  paragraph line-height/spacing on the left column plus a small `ValueTile` padding trim on
+  the right — text, order and paragraph count all unchanged, per Claudio's own condition. A
+  line-height-only version was tried first and looked oddly airy within each paragraph; most
+  of the extra height comes from between-paragraph spacing instead.
+- **E4** (`45e18aa`) — homepage blog-grid cards: category eyebrow was a bespoke 12px/
+  letter-spaced rule where live measures 18px/uppercase/teal (i.e. plain `.eyebrow`); the
+  "Weiterlesen" link was terracotta at 13.6px where live is teal at 15px. Cards within a row
+  are now equal-height regardless of title line count (the 4-line "Männer im Kinderwunsch:
+  Mythos 'stille Stärke'" card no longer leaves 2-line siblings visibly shorter) via the same
+  flex-column + `height: 100%` pattern `.format-card`/`.workshop-card` already established.
+  Title color/size (dark, 26px, normal-case) already matched — one of `UEBERGABE-CHAT.md`'s
+  four documented deliberate deviations from live, left alone.
+- **E6** (`5781d5f`) — blog article in-body `<h2>` subheadings measured teal
+  (`--color-accent`) on live; the rebuild had uppercase but no color, inheriting dark
+  `--color-text`. One-line fix on `:global(.post-body h2)`.
+- **E7** (`5781d5f`) — "Verwandte Beiträge" now reuses `BlogTeaserCard` (image + eyebrow +
+  title + "Weiterlesen"), matching the homepage's blog grid, instead of the old
+  image-less `.post-related-item` text cards. Grid widened to 3 columns at ≥900px (was 3 at
+  ≥700px on the narrower old cards).
+- **E8** (`ebadd1a`) — Workshops' two lists switched from `icon-list-sage` (bare book/scroll
+  glyph per item) to `icon-list-check` (filled teal circle + check glyph), matching
+  Beratung's format cards exactly, per Claudio's explicit instruction. Not independently
+  re-verified against live — reused Beratung's own already-live-verified pattern
+  (`NACHTLAUF-2026-09-08.md` B4) rather than re-measuring a value that's already on record.
+- **E9** (`6c88bd8`) — Kennenlernen's masthead: Claudio's own deliberate design decision, not
+  a live-site correction (the prior text-only hero was itself a confirmed-correct read of the
+  live page at the time). Title → "Kennenlernen vereinbaren"; hero now the same split-hero
+  with the default pomegranate image every other subpage has; intro sentence moved from
+  under the calendar into the hero.
+- **E10** (`6c88bd8`) — the booking calendar not using the full section width was
+  `.booking-wrap`'s own 56rem reading-width cap (896px), narrower than the regular
+  `.container` (1248px) — confirmed by measuring `getBoundingClientRect()` on the iframe vs.
+  both wrapping elements, not Microsoft Bookings self-centering (the brief's other
+  hypothesis). Cap removed; iframe now measures 1168px (container minus padding).
+
+**Open questions this run added:** none — every item had either a literal live measurement
+to follow or an explicit decision from Claudio to implement. **Teil F** (repo hygiene / stray
+uncommitted files) was explicitly out of scope for this run, per the brief itself.
+
+Build (`npm run build`) and `npx astro check` both clean after every commit above; only the
+pre-existing non-blocking `astro.config.mjs` placeholder-domain warning remains (blocked on
+the hosting decision, see `OPEN-QUESTIONS.md` #6).

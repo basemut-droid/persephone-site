@@ -14,27 +14,42 @@ copy; `docs/source-archive/` is a frozen, never-touched verbatim record of the
 original extraction.
 
 The runs recorded in `docs/RUN-2026-09-07.md`/`docs/FIXES-2026-09-07.md`,
-`docs/RUN-2026-09-07-B1.md`, `docs/RUN-2026-09-07-B2.md` Phase 1b, and
-`docs/NACHTLAUF-2026-09-08.md` are all **complete** — see `docs/decisions.md`'s
-dated entries for the phase-by-phase record with commit hashes. As of the
-2026-09-08 Nachtlauf: the type scale, eyebrows, buttons and hero band all match
-live's measured values; Über uns has its full teal qualification-band treatment,
-live-proportioned closing teasers, and a 48px/336x390 CTA; Angebote's CTA shows two
-same-size images side by side and its response card is sticky; Beratung's "Gut zu
-wissen" and every FAQ are real accordions (FAQs grouped into their three live
-categories); Workshops/Beratung's cards are equal-height with bottom-anchored
-badges; Kontakt has icon eyebrows; Selbsthilfegruppe has its missing 40px heading
-and a correctly-sized partner logo; blog articles have an author/newsletter block
-and derived "Verwandte Beiträge"; all ten pages have a real meta description
-(the owner's own words); `/termine/` is now `/kennenlernen/` everywhere; and the
-build blocks on missing alt text, unrendered schema fields, broken internal links,
-unlabeled links, and (new) missing meta descriptions.
+`docs/RUN-2026-09-07-B1.md`, `docs/RUN-2026-09-07-B2.md` Phase 1b,
+`docs/NACHTLAUF-2026-09-08.md` and `docs/NACHTLAUF-2026-09-09.md` are all
+**complete** — see `docs/decisions.md`'s dated entries for the phase-by-phase
+record with commit hashes. As of the 2026-09-08 Nachtlauf: the type scale,
+eyebrows, buttons and hero band all match live's measured values; Über uns has
+its full teal qualification-band treatment, live-proportioned closing teasers,
+and a 48px/336x390 CTA; Angebote's CTA shows two same-size images side by side
+and its response card is sticky; Beratung's "Gut zu wissen" and every FAQ are
+real accordions (FAQs grouped into their three live categories);
+Workshops/Beratung's cards are equal-height with bottom-anchored badges;
+Kontakt has icon eyebrows; Selbsthilfegruppe has its missing 40px heading and a
+correctly-sized partner logo; blog articles have an author/newsletter block and
+derived "Verwandte Beiträge"; all ten pages have a real meta description (the
+owner's own words); `/termine/` is now `/kennenlernen/` everywhere; and the
+build blocks on missing alt text, unrendered schema fields, broken internal
+links, unlabeled links, and (new) missing meta descriptions.
 
-Four places got deliberate design decisions rather than a literal live value: the
-photo placeholder (`ImagePlaceholder.astro`, a branded panel with a muted signet),
-the footer's brushstroke divider, the `.reveal` scroll-fade mechanism, and Über
-uns's rebuilt (not copied — the live one is an Avada asset) qualification band.
-See `docs/decisions.md`'s Nachtlauf entry for the reasoning on each.
+As of the 2026-09-09 Nachtlauf (Claudio's own screenshot feedback, ten items —
+see `docs/decisions.md`'s matching entry for the live-measurement corrections,
+including one place a brief's own screenshot guess turned out backwards): Über
+uns's bio headings are `.eyebrow`, its qualification lists have real bullets,
+its Beratung/Workshops teasers are `ServiceCard`s, and its three qualification
+bands crossfade into each other on scroll (progressive enhancement, ≥900px,
+motion-OK); the homepage's philosophy-grid columns end at the same height and
+its blog cards are equal-height with corrected eyebrow/link color; blog
+articles' in-body `<h2>`s are teal and "Verwandte Beiträge" reuses
+`BlogTeaserCard`; Workshops' lists use the same check-circle markers as
+Beratung; Kennenlernen has a split-hero (title now "Kennenlernen vereinbaren")
+and its calendar uses the full container width.
+
+Five places now carry deliberate design decisions rather than a literal live
+value: the photo placeholder (`ImagePlaceholder.astro`, a branded panel with a
+muted signet), the footer's brushstroke divider, the `.reveal` scroll-fade
+mechanism, Über uns's rebuilt (not copied — the live one is an Avada asset)
+qualification band, and (new) that same band's scroll-crossfade interaction.
+See `docs/decisions.md`'s Nachtlauf entries for the reasoning on each.
 
 ## Verified working
 
@@ -89,7 +104,12 @@ that matter most:
 
 ## Next step
 
-Nothing queued. `docs/NACHTLAUF-2026-09-08.md` is fully worked through (see
-`docs/decisions.md`'s matching entry for the phase-by-phase record). Pick up from
-`OPEN-QUESTIONS.md` for what's still waiting on the owner, or from a fresh
-screenshot comparison against live if more polish is wanted.
+Nothing queued. `docs/NACHTLAUF-2026-09-08.md` and `docs/NACHTLAUF-2026-09-09.md`
+are both fully worked through (see `docs/decisions.md`'s matching entries for the
+phase-by-phase record). `docs/NACHTLAUF-2026-09-09.md`'s Teil F (repo hygiene —
+stray uncommitted files Claudio noticed in VS Code) was explicitly out of scope
+for that run and is still open, waiting on a decision about what to do with
+`Claude outputs/` and the other untracked docs sitting in the working tree.
+Otherwise pick up from `OPEN-QUESTIONS.md` for what's still waiting on the
+owner, or from a fresh screenshot comparison against live if more polish is
+wanted.
