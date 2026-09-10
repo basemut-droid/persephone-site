@@ -111,6 +111,21 @@ confirmed sitewide defect. Lesson for next time, recorded in `HANDOFF.md`: reach
 Playwright first, not a bare headless-browser CLI invocation, for exactly this kind
 of narrow-viewport check.
 
+**Two live corrections, mid-review, after the report above was first written:**
+(1) Kontakt's two cards weren't equal height, and clicking "Schreib mir" grew only
+that one card instead of unfolding the form below the whole row — the message panel
+had been nested inside the `<details>`, so only its own card's box grew. Fixed by
+moving the panel to a sibling of `.kontakt-cards` and revealing it via
+`.kontakt-cards:has(.kontakt-card-write[open]) + .kontakt-message-panel` (same
+`:has()` technique as Angebote's B8, still zero JavaScript — reconfirmed with
+Playwright, JS disabled) with `align-items: stretch` making both cards match height
+regardless of open state. (2) Disclaimer's B3 hyperlinks — the LAUF doc's own
+literal reading of "unterlegen" (a background chip, the only option that cleared
+4.5:1 contrast) wasn't what was wanted; corrected to plain `--color-accent` text,
+underlined, no background, per a screenshot given directly in this session. Contrast
+is 3.27:1, under the 4.5:1 body-text threshold — a known trade-off of this explicit
+direction, not an oversight.
+
 ---
 
 # Night run — 2026-09-06/07 (Phases 1-6, complete)

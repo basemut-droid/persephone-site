@@ -39,13 +39,19 @@ duplicate heading removed and its Aktuelles block sits in a darker box; blog
 articles now use the shared split-hero (with a subtitle) instead of a plain banner.
 
 **Teil C:** Kontakt rebuilt from scratch against
-`docs/mockups/kontakt-prototype.dc.html` (Version A) — split hero, two cards
-("Schreib mir" is a native `<details>`, no JavaScript needed at all; "Termin buchen"
-links to `/kennenlernen/`), a toggleable message panel with Marina's photo/
-Standorte/Terminverfügbarkeit and the contact form. Verified end-to-end with
-Playwright (installed locally, not in package.json — see "Session note" below) at
-1440px and 390px, JavaScript on and off. Three things intentionally left for
-Marina/Claudio, not decided here: the form's real submission endpoint, three vs.
+`docs/mockups/kontakt-prototype.dc.html` (Version A) — split hero, two equal-height
+cards ("Schreib mir" is a native `<details>`, no JavaScript needed at all; "Termin
+buchen" links to `/kennenlernen/`), and a message panel (Marina's photo/Standorte/
+Terminverfügbarkeit plus the contact form) that unfolds full-width *below* the card
+row rather than growing the "Schreib mir" card itself — the panel is a sibling of
+the card row, shown via `.kontakt-cards:has(.kontakt-card-write[open]) +
+.kontakt-message-panel`, the same `:has()`-only technique as Angebote's B8, so it's
+still zero JavaScript (a first version nested the panel inside the `<details>`
+instead, which only grew that one card — corrected live from a screenshot mid-
+session). Verified end-to-end with Playwright (installed locally, not in
+package.json — see "Session note" below) at 1440px and 390px, JavaScript on and
+off. Three things intentionally left for Marina/Claudio, not decided here: the
+form's real submission endpoint, three vs.
 four Anliegen options, and whether "Termin buchen" should become an overlay.
 
 ## What's built

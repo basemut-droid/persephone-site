@@ -44,16 +44,21 @@ tracker.assertAllHandled('disclaimer.astro');
     font-size: clamp(1.35rem, 4.2vw, 3rem);
   }
 
-  /* B3 point 3: hyperlinks in the flowing body text get a mint-green
-     highlight behind them ("unterlegen", literally — the link text itself
-     stays --color-text, not recolored) rather than the site's usual plain
-     underline. :global() is required — the links are inside set:html
-     content from mdInlineHtml(), so they never carry this file's own
-     scoping attribute. */
+  /* B3 point 3, corrected live via screenshot after the first pass: the
+     LAUF doc's own reading of "unterlegen" (a mint background behind
+     dark text — measured as the only variant clearing 4.5:1 contrast)
+     turned out not to be what was wanted. Claudio's screenshot during
+     this session shows plain green text instead, no background box — the
+     text color itself carries the emphasis. --color-accent (#309898),
+     the site's standard teal link/eyebrow tone; underline stays so the
+     link is still distinguishable by more than color alone. Contrast is
+     3.27:1 on this page's background — under 4.5:1 for body text — a
+     known trade-off of this explicit direction, not an oversight; noted
+     in the handoff. :global() is required — the links are inside
+     set:html content from mdInlineHtml(), so they never carry this
+     file's own scoping attribute. */
   .disclaimer-body :global(a) {
-    background: var(--color-sage);
-    padding: 0.05em 0.3em;
-    border-radius: 3px;
+    color: var(--color-accent);
     text-decoration: underline;
   }
 </style>

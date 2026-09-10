@@ -52,7 +52,19 @@ if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not fou
              irgendwo auf die Karte (der ganze <summary>) klappt das
              Formular auf, komplett tastaturbedienbar und ohne JavaScript
              erreichbar, aus dem Stand. Der Pfeil-Text tauscht per reinem
-             CSS (details[open] unten), ohne eigenen Zustand. */
+             CSS (details[open] unten), ohne eigenen Zustand.
+
+             Korrektur nach erstem Feedback: das Klapp-Panel lag vorher
+             ALS KIND dieses <details> — dadurch wuchs nur diese eine Karte
+             beim Öffnen in die Höhe, während "Kennenlernen" daneben ihre
+             ursprüngliche Größe behielt. Das Panel ist jetzt ein
+             GESCHWISTER-Element von .kontakt-cards (siehe unten, nach
+             diesem Grid), sichtbar gemacht über
+             :has(.kontakt-card-write[open]) — dieselbe reine-CSS-Technik
+             wie Angebotes Wiedererkennungs-Auswahl (B8), wieder ganz ohne
+             JavaScript. So bleiben beide Karten in der Reihe gleich groß,
+             und das Formular klappt unterhalb der ganzen Reihe auf, wie
+             im Prototyp. */
         }
         <details class="kontakt-card kontakt-card-write">
           <summary>
@@ -70,45 +82,6 @@ if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not fou
               <span class="label-open">Formular ausblenden ←</span>
             </span>
           </summary>
-
-          <div class="kontakt-message-panel">
-            <div class="kontakt-person-col">
-              <div class="kontakt-person">
-                <Image src={marinaAvatar} alt="" aria-hidden="true" width={104} height={104} class="kontakt-avatar" />
-                <div>
-                  <p class="kontakt-person-name">Dr.Phil. Marina Bletsas</p>
-                  <p class="kontakt-person-alias">aka Marina von Persephone</p>
-                </div>
-              </div>
-
-              <div class="kontakt-detail-row">
-                <span class="icon-circle icon-circle-sm kontakt-icon-terracotta">
-                  <Icon name="pin" size={15} />
-                </span>
-                <div>
-                  <span class="eyebrow kontakt-detail-eyebrow">Standorte</span>
-                  <p class="kontakt-detail-strong">Wien</p>
-                  <p>Praxisraum im 3. Bezirk (Rochusmarkt) · Walk &amp; Talk im 2. Bezirk (Prater)</p>
-                  <p class="kontakt-detail-strong">Online</p>
-                  <p>Über Teams</p>
-                </div>
-              </div>
-
-              <div class="kontakt-detail-row">
-                <span class="icon-circle icon-circle-sm kontakt-icon-terracotta">
-                  <Icon name="clock" size={15} />
-                </span>
-                <div>
-                  <span class="eyebrow kontakt-detail-eyebrow">Terminverfügbarkeit</span>
-                  <p>Mi–Fr, 10–14 Uhr; in besonderen Fällen Abend- und Wochenendtermine gegen Aufpreis möglich.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="kontakt-form-col">
-              <ContactForm />
-            </div>
-          </div>
         </details>
 
         {
@@ -125,6 +98,45 @@ if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not fou
           <p>Kostenlos und unverbindlich, online über Teams. Du wählst Deinen Termin direkt im Kalender.</p>
           <span class="kontakt-card-cta kontakt-card-cta-red">Termin buchen →</span>
         </a>
+      </div>
+
+      <div class="kontakt-message-panel">
+        <div class="kontakt-person-col">
+          <div class="kontakt-person">
+            <Image src={marinaAvatar} alt="" aria-hidden="true" width={104} height={104} class="kontakt-avatar" />
+            <div>
+              <p class="kontakt-person-name">Dr.Phil. Marina Bletsas</p>
+              <p class="kontakt-person-alias">aka Marina von Persephone</p>
+            </div>
+          </div>
+
+          <div class="kontakt-detail-row">
+            <span class="icon-circle icon-circle-sm kontakt-icon-terracotta">
+              <Icon name="pin" size={15} />
+            </span>
+            <div>
+              <span class="eyebrow kontakt-detail-eyebrow">Standorte</span>
+              <p class="kontakt-detail-strong">Wien</p>
+              <p>Praxisraum im 3. Bezirk (Rochusmarkt) · Walk &amp; Talk im 2. Bezirk (Prater)</p>
+              <p class="kontakt-detail-strong">Online</p>
+              <p>Über Teams</p>
+            </div>
+          </div>
+
+          <div class="kontakt-detail-row">
+            <span class="icon-circle icon-circle-sm kontakt-icon-terracotta">
+              <Icon name="clock" size={15} />
+            </span>
+            <div>
+              <span class="eyebrow kontakt-detail-eyebrow">Terminverfügbarkeit</span>
+              <p>Mi–Fr, 10–14 Uhr; in besonderen Fällen Abend- und Wochenendtermine gegen Aufpreis möglich.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="kontakt-form-col">
+          <ContactForm />
+        </div>
       </div>
     </div>
   </section>
@@ -162,16 +174,31 @@ if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not fou
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.75rem;
-    align-items: start;
+    /* Zweites Feedback: "beide Boxen sollen gleich groß sein" — war
+       align-items:start, wodurch jede Karte nur ihre eigene Inhaltshöhe
+       hatte. stretch (der Grid-Default, hier explizit) plus .kontakt-card
+       selbst auf height:100% lässt beide Karten die Höhe der jeweils
+       größeren annehmen, unabhängig vom Öffnen-Zustand. */
+    align-items: stretch;
   }
 
   .kontakt-card {
-    display: block;
+    height: 100%;
     text-decoration: none;
     color: inherit;
     border-radius: 0.75rem;
-    padding: 2rem;
     cursor: pointer;
+  }
+
+  /* .kontakt-card-book (an <a>) holds its visible content directly, so
+     the flex column + bottom-pinned CTA lives on the card itself.
+     .kontakt-card-write (a <details>) holds it inside its <summary>
+     instead — see the rule further down — so this only covers the "a"
+     card's own padding/layout, not both. */
+  .kontakt-card-book {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
   }
 
   .kontakt-card h2 {
@@ -195,7 +222,11 @@ if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not fou
 
   .kontakt-card-cta {
     display: block;
-    margin-top: 1rem;
+    /* auto statt fest 1rem: schiebt die CTA-Zeile in der kürzeren Karte
+       nach unten, sodass beide Karten trotz unterschiedlich langer Texte
+       bündig mit der CTA abschließen. */
+    margin-top: auto;
+    padding-top: 1rem;
     font-weight: 700;
   }
 
@@ -232,6 +263,14 @@ if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not fou
   }
 
   .kontakt-card-write > summary {
+    /* <details>'s only visible child when closed — the flex column +
+       bottom-pinned CTA (.kontakt-card-cta's margin-top:auto) has to sit
+       here, not on .kontakt-card-write itself, since that's the element
+       actually holding the icon/eyebrow/h2/p/cta as direct children. */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 2rem;
     list-style: none;
   }
 
@@ -269,16 +308,20 @@ if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not fou
     box-shadow: 0 4px 16px rgba(179, 58, 59, 0.16);
   }
 
+  /* Reines CSS, kein Script: .kontakt-message-panel ist jetzt ein
+     Geschwister-Element von .kontakt-cards (siehe Markup-Kommentar oben),
+     standardmäßig ausgeblendet und nur sichtbar, wenn die "Schreib
+     mir"-Karte offen ist — :has() liest den [open]-Zustand des <details>
+     irgendwo in .kontakt-cards, derselbe Ansatz wie Angebotes B8-Auswahl. */
   .kontakt-message-panel {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1.5px solid rgba(24, 26, 43, 0.1);
+    display: none;
+  }
+
+  .kontakt-cards:has(.kontakt-card-write[open]) + .kontakt-message-panel {
     display: grid;
+    margin-top: 2.5rem;
     grid-template-columns: 1fr;
     gap: 2rem;
-    /* Cancels the <summary>'s own cursor/click styling for the panel
-       beneath it — this part isn't the toggle. */
-    cursor: auto;
   }
 
   .kontakt-person-col {
