@@ -282,10 +282,11 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
     transform: rotate(180deg);
   }
 
-  .nav-dropdown.is-open .nav-dropdown-trigger > a,
-  .nav-dropdown.is-open .nav-dropdown-toggle {
-    color: var(--color-accent);
-  }
+  /* Live-Korrektur: "Angebote" soll seine Farbe behalten, auch wenn das
+     Untermenü offen ist — vorher wechselte der Link samt Caret hier auf
+     --color-accent (Türkis), abweichend von jedem anderen Nav-Punkt. Der
+     Caret dreht sich beim Öffnen trotzdem weiterhin (siehe Regel oben),
+     nur die Farbe bleibt jetzt --color-accent-strong wie im Ruhezustand. */
 
   .nav-dropdown-menu {
     position: absolute;

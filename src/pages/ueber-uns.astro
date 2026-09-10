@@ -158,25 +158,27 @@ tracker.assertAllHandled('ueber-uns.astro');
     {
       qualBands.map((band) => (
         <section class={`reveal quals-band quals-band--${band.side}`} data-quals-band>
-          <div class="quals-grid">
-            <div class="quals-panel">
-              <h2 class="quals-heading">{band.heading}</h2>
-              {band.kind === 'list' ? (
-                <ul class="quals-list">
-                  {band.items.map((item) => (
-                    <li set:html={mdInlineHtml(item)} />
-                  ))}
-                </ul>
-              ) : (
-                <div class="quals-list quals-lines">
-                  {band.items.map((line) => (
-                    <p>{line}</p>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div class="quals-image">
-              <Image src={granatapfel} alt="" aria-hidden="true" width={1000} height={800} />
+          <div class="container quals-container">
+            <div class="quals-grid">
+              <div class="quals-panel">
+                <h2 class="quals-heading">{band.heading}</h2>
+                {band.kind === 'list' ? (
+                  <ul class="quals-list">
+                    {band.items.map((item) => (
+                      <li set:html={mdInlineHtml(item)} />
+                    ))}
+                  </ul>
+                ) : (
+                  <div class="quals-list quals-lines">
+                    {band.items.map((line) => (
+                      <p>{line}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div class="quals-image">
+                <Image src={granatapfel} alt="" aria-hidden="true" width={1000} height={800} />
+              </div>
             </div>
           </div>
         </section>
@@ -322,28 +324,87 @@ tracker.assertAllHandled('ueber-uns.astro');
      else on the site yet — see CLAUDE.md's "reuse before you build" rule,
      which cuts both ways: not promoting a one-off speculatively either.
      Revisit if a future page needs the same alternating-band shape. */
+  /* Live-Korrektur: die Bänder liefen vorher randlos volle Breite; der
+     Referenz-Screenshot zeigt zwei eigenständige, abgerundete Kästchen
+     mit Zwischenraum und seitlichem Container-Rand, kein Vollbild-Band. */
+  .quals-band {
+    background: var(--color-bg-alt);
+    padding-block: clamp(2rem, 5vw, 4rem);
+  }
+
+  .quals-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
   .quals-grid {
     display: grid;
     grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
   }
 
   .quals-panel {
-    /* LAUF-2026-09-10.md B7 Punkt 17: Marina asked for a lighter green with
-       more contrast — those two goals conflict at face value (a lighter
-       fill against the same light text loses contrast, not gains it), so
-       the fix flips the text to dark instead of just swapping the fill:
-       --color-sage (lighter, what she asked for) behind --color-text
-       (dark) measures 9.18:1, versus 2.96:1 for the old
-       teal-dark/light-text pairing — lighter fill AND better contrast,
-       both true at once. */
-    background: var(--color-sage);
-    color: var(--color-text);
+    /* Live-Korrektur, mit gemessenem Screenshot verglichen: die hellere,
+       kontrastreiche Fläche aus B7 Punkt 17 (--color-sage + dunkler Text,
+       9.18:1) war nicht das gewünschte Bild — Referenz-Screenshot zeigt
+       eine dunklere, satte Fläche (gemessen: fast exakt #309898,
+       --color-teal-dark) mit hellem Text, wie ursprünglich vor Punkt 17.
+       Kontrast damit wieder 2.96:1 statt 9.18:1 — niedriger als der
+       4,5:1-Standard für Fließtext, ein bewusster Trade-off dieser
+       expliziten Vorgabe (siehe OPEN-QUESTIONS.md). Die Fläche bekommt
+       außerdem eine dezente grafische Textur (::before/::after unten),
+       eine Annäherung an die Illustration im Referenz-Screenshot, keine
+       exakte Nachbildung — dafür fehlt ein Werkzeug zur Bildgenerierung. */
+    position: relative;
+    background: var(--color-teal-dark);
+    color: var(--color-bg);
     padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 5vw, 3rem);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
+    overflow: hidden;
+    border-radius: 1rem;
+  }
+
+  /* Dezente Wellenlinien, heller Türkiston, niedrige Deckkraft — steht
+     hinter dem Text (z-index), reine Annäherung an die Grafik im
+     Referenz-Screenshot. */
+  .quals-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      115deg,
+      rgba(251, 248, 245, 0.07) 0px,
+      rgba(251, 248, 245, 0.07) 2px,
+      transparent 2px,
+      transparent 34px
+    );
+    pointer-events: none;
+  }
+
+  /* Abgerundete Akzentform unten links, in der im Screenshot gemessenen
+     Rostorange-Farbe, mit einer dünnen helleren Linie darüber. */
+  .quals-panel::after {
+    content: '';
+    position: absolute;
+    left: -15%;
+    bottom: -25%;
+    width: 70%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #c26d32;
+    box-shadow: 0 -3px 0 rgba(251, 248, 245, 0.35);
+    pointer-events: none;
+  }
+
+  .quals-heading,
+  .quals-list {
+    position: relative;
   }
 
   .quals-heading {
@@ -389,6 +450,7 @@ tracker.assertAllHandled('ueber-uns.astro');
     position: relative;
     aspect-ratio: 4 / 3;
     overflow: hidden;
+    border-radius: 1rem;
   }
 
   .quals-image img {
@@ -425,27 +487,28 @@ tracker.assertAllHandled('ueber-uns.astro');
        needing no scroll-position math or extra spacer height, since the
        bands' own stacked block height already provides the scroll
        distance. */
+    /* LAUF-2026-09-10.md B7 Punkt 18 moved this fade from the whole band
+       onto .quals-image alone, to stop the incoming band's own text from
+       going semi-transparent mid-fade. A later live correction asked for
+       "ein Fade" where "der zweite Teil ersetzt den ersten" — a clean,
+       atomic crossfade of each complete band, not a partial one — so the
+       fade is back on the whole band. Bleed during the brief mid-transition
+       moment (one band's opaque content showing faintly through the
+       other's) is the nature of an actual crossfade, not fully eliminable
+       without dropping the fade itself; flagged in OPEN-QUESTIONS.md for a
+       look at the real scroll interaction, which this session couldn't
+       verify (Playwright drives scroll position, not a human's felt sense
+       of the transition). */
     .quals-scroller--enhanced .quals-band {
       position: sticky;
       top: 0;
       height: 100vh;
       overflow: hidden;
-    }
-
-    /* LAUF-2026-09-10.md B7 Punkt 18: the fade used to sit on the whole
-       band (.quals-band, panel and image together) — while it animated in,
-       the incoming band's own TEXT was semi-transparent, so the previous
-       band's pomegranate image showed straight through it. Marina liked
-       the overlap, not the see-through text. Moved to .quals-image alone:
-       the picture side still crossfades (the "Kante" she says can stay
-       transparent), the text panel is opaque and instant, on solid ground,
-       the moment its band is stacked into place. */
-    .quals-scroller--enhanced .quals-image {
       opacity: 0;
       transition: opacity 0.6s ease;
     }
 
-    .quals-scroller--enhanced .quals-band.is-quals-active .quals-image {
+    .quals-scroller--enhanced .quals-band.is-quals-active {
       opacity: 1;
     }
 

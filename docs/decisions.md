@@ -147,6 +147,29 @@ owned in exactly one place again. And `ContactForm`'s submit button was stretchi
 to the form's full width — Grid's own default `justify-items: stretch`, not
 anything about `.button`'s own sizing — `justify-self: start` opts it back out.
 
+**Two more still, same session:** (5) The header dropdown's "Angebote" link and
+caret used to switch to `--color-accent` (teal) while the submenu was open,
+unlike every other nav item — a live screenshot asked for it to keep its resting
+color, so that rule is gone; the caret still rotates open, just no longer
+recolors. (6) Über uns's qualification bands (Ausbildung/Felderfahrung/Sprachen) —
+B7 Punkt 17's fix (lighter `--color-sage` fill + dark text, chosen specifically to
+clear 4.5:1 contrast) turned out not to match what was wanted: a live screenshot
+showed a darker, richer fill with light text and a decorative wave-pattern +
+rounded rust-orange accent shape in the corner, both colors pixel-measured
+(`#309898` — already `--color-teal-dark`, no new token needed; `#c26d32`, new).
+Contrast is back down to 2.96:1, a known regression versus B7 Punkt 17's own fix,
+flagged in `OPEN-QUESTIONS.md` #31 rather than silently reversed without a note.
+The bands themselves also moved from full-bleed strips to contained, rounded-
+corner cards with a gap (a `.container` wrapper added inside each band), matching
+the screenshot's proportions. The scroll-crossfade's opacity target moved back
+from `.quals-image` alone (B7 Punkt 18's fix for the "text through the pomegranate"
+complaint) to the whole `.quals-band`, because the newest instruction described a
+clean atomic replace ("der zweite Teil ersetzt den ersten") rather than a partial
+one — some brief mid-transition blending is an inherent property of any real
+crossfade and couldn't be fully designed away without dropping the fade itself;
+`OPEN-QUESTIONS.md` #33 asks for a real-browser look at the actual scroll feel,
+which isn't something this session's tools could judge.
+
 ---
 
 # Night run — 2026-09-06/07 (Phases 1-6, complete)

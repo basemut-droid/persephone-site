@@ -528,3 +528,34 @@ aber nicht zu dem, was `global.css`s geteiltes `.accordion-item` tatsächlich re
 Möglich, dass der Screenshot ein Browser-/Inspektor-Overlay statt der echten Seite
 zeigt. Keine Änderung vorgenommen, weil sich in der aktuellen Codebase keine
 abweichende Darstellung finden ließ — bitte nach diesem Lauf direkt nachprüfen.
+
+# Neu aus den Live-Korrekturen nach dem Abschlussbericht (10./11.9.2026)
+
+## 31. Über uns, Qualifikationsbänder: Kontrast wieder gesenkt — Ihr Auge gefragt
+
+Auf einen Live-Screenshot hin ist die Fläche wieder auf `--color-teal-dark`
+(`#309898`) mit hellem Text zurückgestellt, nachdem B7 Punkt 17 sie extra auf
+`--color-sage` mit dunklem Text gestellt hatte, um den WCAG-Standard zu erfüllen
+(9,18:1 statt 2,96:1 Kontrast). Der neue Wert unterschreitet 4,5:1 wieder — ein
+bewusster Trade-off dieser expliziten Vorgabe. Bitte bestätigen, dass das so
+gewollt ist, gerade weil hier schon einmal in die andere Richtung korrigiert wurde.
+
+## 32. Über uns, Qualifikationsbänder: dekorative Fläche ist eine Annäherung, keine Kopie
+
+Die Wellentextur und der abgerundete Rostorange-Akzent in der Panel-Fläche wurden
+von Hand nach einem Referenz-Screenshot nachgebaut (Farben pixelgenau gemessen:
+Fläche `#309898`, Akzentform `#c26d32`), nicht mit einem Bildgenerator exakt
+nachgezeichnet — dafür fehlt mir ein Werkzeug. Bitte ansehen und sagen, ob die
+Annäherung genügt oder ob die Original-Illustration eingebunden werden soll (dann
+bräuchte es die Bilddatei selbst, nicht nur einen Screenshot davon).
+
+## 33. Über uns, Qualifikationsbänder: Übergang beim Scrollen nicht mit Werkzeug prüfbar
+
+Der Crossfade (jetzt wieder auf dem ganzen Band statt nur auf dem Bild, siehe
+Code-Kommentar in `ueber-uns.astro`) kann während des kurzen Überblendmoments
+Inhalte der vorherigen Karte durchscheinen lassen — das liegt in der Natur eines
+echten Fades und lässt sich nicht ohne den Fade selbst ganz vermeiden. Ich konnte
+das eigentliche Scroll-Gefühl in diesem Lauf nicht mit einem Werkzeug prüfen
+(Playwright kann die Scroll-Position setzen, aber nicht beurteilen, ob sich der
+Übergang für einen Menschen richtig anfühlt) — bitte im echten Browser
+gegenprüfen, ob das jetzt so passt oder der Übergang noch angepasst werden muss.

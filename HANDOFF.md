@@ -4,7 +4,17 @@ Read this first at the start of every session. History and past decisions moved 
 `docs/decisions.md` (2026-09-07) so this file stays short enough to actually read —
 see `external-review.md`'s "PROCESS NOTE" for why that matters.
 
-## Most recent run: LAUF-2026-09-10 (`docs/LAUF-2026-09-10.md`)
+## Most recent run: LAUF-2026-09-10 (`docs/LAUF-2026-09-10.md`) + live follow-ups
+
+Several rounds of live screenshot corrections followed the written run below —
+Kontakt's card heights/panel columns, `.button-primary`'s color, Kontakt's hero,
+the header dropdown's open-state color, and Über uns's qualification-band
+color/shape/decoration. See `docs/decisions.md`'s entries and `OPEN-QUESTIONS.md`
+#31–33 for the newest ones (the qualification-band contrast trade-off, the
+hand-approximated decorative background, and the crossfade transition needing a
+real-browser look this session couldn't give it).
+
+## Original run: LAUF-2026-09-10 (`docs/LAUF-2026-09-10.md`)
 
 Marina's 34-point feedback list plus a brand-new Kontaktseite from her own Claude
 Design prototype. All four parts done; see `docs/decisions.md`'s matching entry for
