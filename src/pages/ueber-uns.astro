@@ -301,6 +301,20 @@ tracker.assertAllHandled('ueber-uns.astro');
     }
   }
 
+  /* B7 Punkt 15, continued: the shared .hero-copy's fixed 500px (≥900px,
+     global.css) is too narrow for "Persephone ist die Frucht" to hold one
+     line at this H1's 48px size — it wrapped a second time on its own
+     before reaching the forced break above, landing on three lines
+     instead of two. Screenshot-verified against the running dev server.
+     Widened for this page only, not changed globally (A2 keeps the H1
+     size itself "identisch" to live, so the fix is the column, not the
+     type). */
+  @media (min-width: 900px) {
+    .hero-copy {
+      width: 640px;
+    }
+  }
+
   /* Qualification bands (NACHTLAUF-2026-09-08.md B2.1) — three full-bleed
      two-column rows, alternating sides. Page-scoped, not global.css: this
      shape (a solid-color column stretching the full row height, paired

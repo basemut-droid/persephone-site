@@ -19,7 +19,8 @@ export type IconName =
   | 'heart'
   | 'group'
   | 'check'
-  | 'plus';
+  | 'plus'
+  | 'mail';
 
 interface Props {
   name: IconName;
@@ -73,6 +74,9 @@ const paths: Record<IconName, string> = {
   // Plus — accordion toggle (Beratung's "Gut zu wissen", FAQs). Rotates
   // 45° to read as a close/"x" affordance when its <details> is open.
   plus: 'M12 5v14 M5 12h14',
+  // Mail — Kontakt page's "Schreib mir" card (LAUF-2026-09-10.md Teil C).
+  // An envelope: outline plus the open-flap chevron.
+  mail: 'M4 6.5h16v12H4v-12Z M4 7l8 6 8-6',
 };
 ---
 

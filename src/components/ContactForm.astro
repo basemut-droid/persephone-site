@@ -1,22 +1,25 @@
 ---
-// Not yet wired to a real backend — see TODO below. Honeypot field is in
-// place regardless, so the field itself is ready once a real endpoint is.
+// LAUF-2026-09-10.md Teil C / C3 point 1: fields rebuilt to match
+// docs/mockups/kontakt-prototype.dc.html (Version A) — Name, E-Mail,
+// Anliegen, Nachricht. The phone field this used to have isn't in the
+// prototype and isn't asked for anywhere else on record, so it's dropped
+// rather than kept as an unexplained extra. Still not wired to a real
+// backend — see TODO below; honeypot and the consent checkbox stay
+// regardless of the mockup not showing them, since they're independent
+// legal/anti-spam needs, not a visual design choice.
 ---
 
 <!--
-  TODO(contact form backend): action="#" is a placeholder. Point this at
-  whatever ends up handling submissions (a serverless function, Formspree-
-  style service, or a simple mailto fallback) once that's decided.
+  TODO(contact form backend): action="#" is a placeholder. C3 point 1 —
+  a Microsoft Form is the decided destination, but its URL doesn't exist
+  yet; this needs to be connected once it does (either swap this <form>'s
+  action, or replace it with an embedded Microsoft Form entirely — that
+  choice isn't made either).
 -->
 <form class="contact-form" method="post" action="#" novalidate>
   <div class="field">
-    <label for="contact-name">Name *</label>
+    <label for="contact-name">Dein Name *</label>
     <input id="contact-name" name="name" type="text" required autocomplete="name" />
-  </div>
-
-  <div class="field">
-    <label for="contact-phone">Telefonnummer *</label>
-    <input id="contact-phone" name="phone" type="tel" required autocomplete="tel" />
   </div>
 
   <div class="field">
@@ -24,18 +27,24 @@
     <input id="contact-email" name="email" type="email" required autocomplete="email" />
   </div>
 
-  <div class="field">
-    <label for="contact-topic">Anliegen</label>
-    <select id="contact-topic" name="topic">
-      <option value="beratung">Beratung</option>
-      <option value="workshops">Workshops & Trainings</option>
-      <option value="selbsthilfegruppe">Selbsthilfegruppe</option>
+  {/* C3 point 2: the prototype offers three options ("Frage zu
+     Persephone" / "Kooperation & Presse" / "Sonstiges"); the brief
+     elsewhere calls for four and explicitly no fifth — a real
+     contradiction between the two records. These three are kept because
+     the prototype is the newer decision, per C3's own instruction; see
+     the handoff report for the discrepancy. */}
+  <div class="field field-wide">
+    <label for="contact-topic">Anliegen *</label>
+    <select id="contact-topic" name="topic" required>
+      <option value="">Bitte wählen…</option>
+      <option value="frage">Frage zu Persephone</option>
+      <option value="kooperation">Kooperation & Presse</option>
       <option value="sonstiges">Sonstiges</option>
     </select>
   </div>
 
   <div class="field field-wide">
-    <label for="contact-message">Nachricht</label>
+    <label for="contact-message">Deine Nachricht</label>
     <textarea id="contact-message" name="message" rows="5"></textarea>
   </div>
 

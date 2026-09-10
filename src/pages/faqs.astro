@@ -204,11 +204,29 @@ const categories = categoryOrder.map((name) => ({ name, faqs: faqs.filter((f) =>
     font-size: 1.5rem;
   }
 
+  /* LAUF-2026-09-10.md B4: "auf schmalen Bildschirmen darf die
+     Reiterleiste nicht überlaufen: entweder umbrechen oder waagrecht
+     scrollbar." Horizontal scroll instead of flex-wrap — it can't overflow
+     the page by construction regardless of how long a category label
+     gets, which flex-wrap alone can't fully guarantee (three unevenly-
+     sized labels, one considerably longer than the other two). A 390px
+     screenshot during this run appeared to show flex-wrap overflowing,
+     but that read turned out to trace back to this session's own
+     screenshot setup rather than the page (see the handoff report) — this
+     choice stands on the scroll approach's own merits either way, not on
+     that reading. */
   .faq-tablist {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 0.5rem;
     margin-bottom: 2.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.25rem;
+  }
+
+  .faq-tab {
+    flex: none;
   }
 
   .faq-tab {

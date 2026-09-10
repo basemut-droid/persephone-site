@@ -325,7 +325,19 @@ textarea:focus-visible,
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  /* minmax(0, 1fr), not bare 1fr: a bare `1fr` track carries an implicit
+     minmax(auto, 1fr), meaning it won't shrink below its content's own
+     max-content width — defensive against exactly the kind of narrow-
+     viewport overflow this component's text columns are prone to.
+     LAUF-2026-09-10.md Teil D's mobile check found what first looked
+     like an overflow at 390px here; that turned out to be an artifact of
+     this session's own headless-screenshot setup (reproduced with plain
+     system fonts and zero site CSS at narrow --window-size values, and
+     absent once display DPI and window width were both ruled out as the
+     variable — see the handoff report), not a real rendering bug. This
+     line stays anyway: it's correct defensive practice independent of
+     that dead end. */
+  grid-template-columns: minmax(0, 1fr);
   align-items: stretch;
 }
 
@@ -334,7 +346,13 @@ textarea:focus-visible,
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: stretch;
+}
+
+.hero-copy .button {
+  /* The only child that should hug its own content rather than stretch
+     full-width. */
+  align-self: flex-start;
 }
 
 .hero-headline {

@@ -282,6 +282,17 @@ function addResult(id, title, blocking, violations) {
       // entfernt").
       'Your Journey to a Fulfilling Life',
     ],
+    'kontakt.md': [
+      // LAUF-2026-09-10.md Teil C: the Kontakt page was rebuilt from
+      // scratch against Marina's own Claude Design prototype
+      // (docs/mockups/kontakt-prototype.dc.html), a different shape from
+      // what this content-collection entry (the old page's extraction)
+      // describes — kontakt.astro no longer reads this file's body at
+      // all, only its title/description. Both headings below are from
+      // that superseded old body.
+      'Lass uns ins Gespräch kommen.',
+      'Erreichbarkeit',
+    ],
   };
 
   for (const file of readdirSync(contentPagesDir).filter((f) => f.endsWith('.md'))) {

@@ -61,7 +61,20 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
                     aria-controls={`nav-submenu-${i}`}
                   >
                     <span class="visually-hidden">{item.label} – Untermenü öffnen</span>
-                    <span class="caret" aria-hidden="true">▾</span>
+                    {/* LAUF-2026-09-10.md B1, corrected: the "▾" text glyph
+                       (kept here until now) was the real cause of "kein
+                       Trennpunkt zwischen Angebote und Blog" — at this
+                       size DM Sans renders it as a barely-there dot, not a
+                       chevron, reading exactly like stray punctuation
+                       between the two words. Screenshot-verified against
+                       the running dev server. An inline SVG chevron always
+                       renders as an actual triangle, in any font. The
+                       earlier flex-start/margin adjustment (still below)
+                       stays too — tucking the now-visible chevron against
+                       "Angebote" rather than centering it in its hit area. */}
+                    <svg class="caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
                   </button>
                 </div>
                 <ul id={`nav-submenu-${i}`} class="nav-dropdown-menu" hidden>
@@ -261,7 +274,7 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
   }
 
   .nav-dropdown-toggle .caret {
-    font-size: 0.7em;
+    flex: none;
     transition: transform 0.15s ease;
   }
 

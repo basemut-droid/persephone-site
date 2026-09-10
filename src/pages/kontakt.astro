@@ -1,124 +1,350 @@
 ---
+// LAUF-2026-09-10.md Teil C — Kontaktseite neu, Version A ("Router") aus
+// docs/mockups/kontakt-prototype.dc.html, Marina's eigener Entwurf in
+// Claude Design. Aufbau, Maße, Texte und Verhalten kommen von dort (siehe
+// C1); Schrift/Tokens/keine externen Ladevorgänge kommen vom Projekt
+// (C2) — der Prototyp lädt Google Fonts und schreibt Hexwerte direkt,
+// beides bleibt hier draußen. Die alte, block-getrackte Extraktion aus
+// src/content/pages/de/kontakt.md passt nicht mehr: die Seite hat eine
+// komplett andere Form (zwei Karten, ein Klapp-Formular) als das alte alte
+// Fließtext-Layout, das dieser Content-Eintrag ursprünglich beschrieb.
+// title/description bleiben aus dem Content-Eintrag (echte, gepflegte
+// Meta-Werte); die sichtbare Seiten-Kopie unten ist Marinas eigener
+// Text aus dem Prototyp, direkt übernommen statt neu erfunden.
 import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHero from '../components/PageHero.astro';
 import ContactForm from '../components/ContactForm.astro';
 import Icon from '../components/Icon.astro';
-import mg7811 from '../assets/pages/kontakt/mg-7811.png';
-import { parseMarkdownBlocks, mdInlineHtml, BlockTracker } from '../lib/parseMarkdownBlocks';
+import marinaHero from '../assets/pages/kontakt/mg-7811.png';
+import marinaAvatar from '../assets/shared/marina-von-persephone.jpg';
 
-// Corrected 2026-09-07 (RUN Phase E): the live masthead DOES have a split
-// hero image (--awb-bg-image: persephone-granatapfel-fruchtbarkeit.jpg —
-// the same file the homepage itself uses). An earlier comment here
-// claiming otherwise was wrong; see docs/external-review.md's correction
-// and FIXES-2026-09-07.md task 2. PageHero now defaults to that image.
 const entry = await getEntry('pages', 'de/kontakt');
 if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not found');
-const blocks = parseMarkdownBlocks(entry.body ?? '');
-const tracker = new BlockTracker(blocks);
-
-const { eyebrow: heroEyebrow, title: heroTitle, intro: heroIntro } = tracker.heroFields(entry.data.title);
-
-// blocks[3] is a second, duplicate h1 (desktop/mobile responsive pair,
-// identical text minus a trailing period — same pattern as elsewhere on
-// this site) — not re-rendered as its own heading, since PageHero already
-// shows the first occurrence.
-tracker.exclude(tracker.at(3), 'duplicate responsive h1, PageHero already renders the first occurrence');
-// blocks[4] is the portrait image, rendered below via a statically
-// imported asset rather than read from block data.
-tracker.exclude(tracker.at(4), 'portrait image, rendered via static import below');
-
-const introLine = tracker.at(5);
-// "Erreichbarkeit" and "Standorte" previously had only their paragraphs
-// extracted (a blanket .filter(b => b.type === 'paragraph') over
-// everything from here on, which silently dropped both heading blocks) —
-// exactly external-review.md finding #8. Both now render their own
-// heading text via named sections.
-const erreichbarkeit = tracker.section('Erreichbarkeit');
-const standorte = tracker.section('Standorte');
-tracker.assertAllHandled('kontakt.astro');
 ---
 
 <BaseLayout locale="de" path="/kontakt/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
-  <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
-
-  <section class="section">
-    <div class="container contact-grid">
-      <div class="contact-info">
-        <Image src={mg7811} alt="Porträtfoto von Marina Bletsas, Gründerin von Persephone" width={240} height={360} />
-        {introLine.type === 'paragraph' && <p set:html={mdInlineHtml(introLine.text)} />}
-        {
-          /* NACHTLAUF-2026-09-08.md B7: both live as an eyebrow with a
-             round terracotta icon in front — the same .icon-circle
-             building block Workshops/Selbsthilfegruppe already use for
-             their section icons, not a dark 32px h2. */
-        }
-        <div class="section-icon-eyebrow">
-          <span class="icon-circle"><Icon name="clock" size={25} /></span>
-          <h2 class="eyebrow">Erreichbarkeit</h2>
-        </div>
-        {erreichbarkeit.map((b) => b.type === 'paragraph' && <p set:html={mdInlineHtml(b.text)} />)}
-        <div class="section-icon-eyebrow">
-          <span class="icon-circle"><Icon name="pin" size={25} /></span>
-          <h2 class="eyebrow">Standorte</h2>
-        </div>
-        {standorte.map((b) => b.type === 'paragraph' && <p set:html={mdInlineHtml(b.text)} />)}
-        {/* NIGHT-RUN.md Phase 4.3: a short pointer to the booking page,
-           mirroring the one Kennenlernen (renamed from Termine, C2) gives
-           back to this form. Kontakt and Kennenlernen stay two separate
-           pages -- this is a cross-link, not a merge. */}
-        <p class="booking-pointer">
-          Direkt <a href="/kennenlernen/">Kennenlernen vereinbaren</a> — zwanzig Minuten, online, kostenfrei.
+  <section class="hero kontakt-hero">
+    <div class="hero-grid kontakt-hero-grid">
+      <div class="hero-copy kontakt-hero-copy reveal reveal-left">
+        <span class="eyebrow">Einladung</span>
+        {/* Prototyp-Korrektur schon eingearbeitet (C1): rot, nicht fett,
+           und der Satz endet auf "...vereinbare direkt ein Gespräch." —
+           nicht die ältere Fassung mit "Möchtest Du Marina persönlich
+           kennenlernen". */}
+        <h1 class="kontakt-title">Lass uns ins Gespräch kommen</h1>
+        <p>
+          Schreib mir, wenn Du eine Frage hast oder mit mir zusammenarbeiten möchtest. Bist Du bereit für ein
+          Kennenlernen, vereinbare direkt ein Gespräch.
         </p>
       </div>
-      <div class="contact-form-wrap">
-        <ContactForm />
+      <div class="hero-image reveal reveal-right">
+        <Image src={marinaHero} alt="Porträtfoto von Marina Bletsas, Gründerin von Persephone" width={900} height={750} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container kontakt-container">
+      <div class="kontakt-cards">
+        {
+          /* "Schreib mir": ein natives <details>, kein Script — ein Klick
+             irgendwo auf die Karte (der ganze <summary>) klappt das
+             Formular auf, komplett tastaturbedienbar und ohne JavaScript
+             erreichbar, aus dem Stand. Der Pfeil-Text tauscht per reinem
+             CSS (details[open] unten), ohne eigenen Zustand. */
+        }
+        <details class="kontakt-card kontakt-card-write">
+          <summary>
+            <span class="icon-circle kontakt-icon-teal">
+              <Icon name="mail" size={20} />
+            </span>
+            <span class="eyebrow kontakt-card-eyebrow">Frage oder Zusammenarbeit</span>
+            <h2>Schreib mir</h2>
+            <p>
+              Für Fragen zu Persephone, Kooperationsideen oder Presseanfragen. Ich antworte i.d.R. innerhalb von 48
+              Std.
+            </p>
+            <span class="kontakt-card-cta">
+              <span class="label-closed">Nachricht schreiben →</span>
+              <span class="label-open">Formular ausblenden ←</span>
+            </span>
+          </summary>
+
+          <div class="kontakt-message-panel">
+            <div class="kontakt-person-col">
+              <div class="kontakt-person">
+                <Image src={marinaAvatar} alt="" aria-hidden="true" width={104} height={104} class="kontakt-avatar" />
+                <div>
+                  <p class="kontakt-person-name">Dr.Phil. Marina Bletsas</p>
+                  <p class="kontakt-person-alias">aka Marina von Persephone</p>
+                </div>
+              </div>
+
+              <div class="kontakt-detail-row">
+                <span class="icon-circle icon-circle-sm kontakt-icon-terracotta">
+                  <Icon name="pin" size={15} />
+                </span>
+                <div>
+                  <span class="eyebrow kontakt-detail-eyebrow">Standorte</span>
+                  <p class="kontakt-detail-strong">Wien</p>
+                  <p>Praxisraum im 3. Bezirk (Rochusmarkt) · Walk &amp; Talk im 2. Bezirk (Prater)</p>
+                  <p class="kontakt-detail-strong">Online</p>
+                  <p>Über Teams</p>
+                </div>
+              </div>
+
+              <div class="kontakt-detail-row">
+                <span class="icon-circle icon-circle-sm kontakt-icon-terracotta">
+                  <Icon name="clock" size={15} />
+                </span>
+                <div>
+                  <span class="eyebrow kontakt-detail-eyebrow">Terminverfügbarkeit</span>
+                  <p>Mi–Fr, 10–14 Uhr; in besonderen Fällen Abend- und Wochenendtermine gegen Aufpreis möglich.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="kontakt-form-col">
+              <ContactForm />
+            </div>
+          </div>
+        </details>
+
+        {
+          /* "Termin buchen": LAUF-2026-09-10.md C3 point 3 — verlinkt
+             vorerst auf /kennenlernen/, nicht auf ein Overlay (offene
+             Frage, siehe Abschlussbericht). */
+        }
+        <a href="/kennenlernen/" class="kontakt-card kontakt-card-book">
+          <span class="icon-circle kontakt-icon-terracotta-solid">
+            <Icon name="calendar" size={20} />
+          </span>
+          <span class="eyebrow kontakt-card-eyebrow-red">Kennenlernen</span>
+          <h2>Vereinbare ein Kennenlerngespräch</h2>
+          <p>Kostenlos und unverbindlich, online über Teams. Du wählst Deinen Termin direkt im Kalender.</p>
+          <span class="kontakt-card-cta kontakt-card-cta-red">Termin buchen →</span>
+        </a>
       </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .contact-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-
-  .contact-info img {
-    border-radius: var(--radius);
-    margin-bottom: 1.5rem;
-  }
-
-  .section-icon-eyebrow {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-
-  .section-icon-eyebrow .icon-circle {
-    /* Smaller than the 3.5rem default (a card's own top-left section icon)
-       — this one sits inline beside a text label instead of above a block
-       of content. */
-    width: 2.75rem;
-    height: 2.75rem;
-  }
-
-  .section-icon-eyebrow .eyebrow {
-    margin-bottom: 0;
-  }
-
-  .booking-pointer {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(24, 26, 43, 0.1);
+  /* .hero/.hero-grid/.hero-copy/.hero-image are shared (global.css); only
+     this page's own deviations from their defaults are overridden below —
+     the prototype's hero uses an equal 1fr/1fr split (not the shared
+     45%/55%) and a differently-colored, non-bold title. */
+  .kontakt-hero {
+    background: var(--color-bg-alt);
   }
 
   @media (min-width: 900px) {
-    .contact-grid {
-      grid-template-columns: 1fr 1.6fr;
+    .kontakt-hero-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Prototype: font 400 36px, color #D83830 (--color-terracotta-dark) —
+     deliberately not this site's usual hero title treatment
+     (--color-accent-strong/.heading-black), per Marina's own correction
+     already baked into the prototype (C1). */
+  .kontakt-title {
+    color: var(--color-terracotta-dark);
+    font-weight: 400;
+  }
+
+  .kontakt-container {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .kontakt-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  .kontakt-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    cursor: pointer;
+  }
+
+  .kontakt-card h2 {
+    margin: 0.5rem 0 0;
+    font-size: 1.375rem;
+  }
+
+  .kontakt-card p {
+    margin: 0.75rem 0 0;
+  }
+
+  .kontakt-card-eyebrow,
+  .kontakt-card-eyebrow-red {
+    display: block;
+    margin: 1rem 0 0;
+  }
+
+  .kontakt-card-eyebrow-red {
+    color: var(--color-terracotta-dark);
+  }
+
+  .kontakt-card-cta {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 700;
+  }
+
+  .kontakt-card-cta-red {
+    color: var(--color-accent-strong);
+  }
+
+  .kontakt-icon-teal,
+  .kontakt-icon-terracotta-solid {
+    color: var(--color-bg);
+  }
+
+  .kontakt-icon-teal {
+    background: var(--color-teal);
+  }
+
+  .kontakt-icon-terracotta-solid {
+    background: var(--color-terracotta);
+  }
+
+  .kontakt-icon-terracotta {
+    background: var(--color-terracotta);
+    color: var(--color-bg);
+  }
+
+  /* "Schreib mir" — neutral border, teal on hover/focus; the whole card
+     is the <summary>'s native click target. */
+  .kontakt-card-write {
+    background: var(--color-surface);
+    border: 1.5px solid rgba(24, 26, 43, 0.14);
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .kontakt-card-write > summary {
+    list-style: none;
+  }
+
+  .kontakt-card-write > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .kontakt-card-write:hover,
+  .kontakt-card-write:focus-within {
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 16px rgba(48, 152, 152, 0.12);
+  }
+
+  .label-open {
+    display: none;
+  }
+
+  .kontakt-card-write[open] .label-closed {
+    display: none;
+  }
+
+  .kontakt-card-write[open] .label-open {
+    display: inline;
+  }
+
+  /* "Vereinbare ein Kennenlerngespräch" — red border, cream fill. */
+  .kontakt-card-book {
+    background: var(--color-bg);
+    border: 1.5px solid var(--color-terracotta);
+    transition: box-shadow 0.15s ease;
+  }
+
+  .kontakt-card-book:hover,
+  .kontakt-card-book:focus-visible {
+    box-shadow: 0 4px 16px rgba(179, 58, 59, 0.16);
+  }
+
+  .kontakt-message-panel {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1.5px solid rgba(24, 26, 43, 0.1);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    /* Cancels the <summary>'s own cursor/click styling for the panel
+       beneath it — this part isn't the toggle. */
+    cursor: auto;
+  }
+
+  .kontakt-person-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .kontakt-person {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .kontakt-avatar {
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: none;
+  }
+
+  .kontakt-person-name {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
+  .kontakt-person-alias {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+
+  .kontakt-detail-row {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .kontakt-detail-row .icon-circle {
+    flex: none;
+  }
+
+  .kontakt-detail-row p {
+    margin: 0 0 0.25rem;
+    font-size: 0.9rem;
+  }
+
+  .kontakt-detail-strong {
+    font-weight: 700;
+  }
+
+  .kontakt-detail-eyebrow {
+    margin-bottom: 0.35rem;
+    font-size: 1rem;
+  }
+
+  @media (min-width: 700px) {
+    .kontakt-cards {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .kontakt-message-panel {
+      grid-template-columns: 15rem 1fr;
     }
   }
 </style>
