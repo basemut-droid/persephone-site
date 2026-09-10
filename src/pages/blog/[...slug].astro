@@ -126,7 +126,11 @@ const updatedLabel = post.data.updatedDate?.toLocaleDateString('de-AT', {
 
 <style>
   .post-header {
-    max-width: 42rem;
+    /* LAUF-2026-09-10.md A1: was max-width:42rem (672px), well under the
+       ~1200px live measure for blog text ("keine schmale Kolumne im
+       weißen Meer"). Dropped so .container's own max-width (1248px, ~1168px
+       usable) governs instead — this scoped rule's higher specificity was
+       overriding it below the container's own width. */
     padding-block: clamp(3rem, 6vw, 4rem) 2rem;
   }
 
@@ -153,7 +157,8 @@ const updatedLabel = post.data.updatedDate?.toLocaleDateString('de-AT', {
   }
 
   .post-body {
-    max-width: 42rem;
+    /* LAUF-2026-09-10.md A1 — see .post-header above for why the 42rem cap
+       is gone rather than raised. */
     padding-block: 3rem;
     line-height: 1.75;
   }
@@ -171,7 +176,7 @@ const updatedLabel = post.data.updatedDate?.toLocaleDateString('de-AT', {
   }
 
   .post-author {
-    max-width: 42rem;
+    /* LAUF-2026-09-10.md A1 — see .post-header above. */
     padding-block: 2.5rem;
     border-top: 1px solid rgba(24, 26, 43, 0.12);
     text-align: center;

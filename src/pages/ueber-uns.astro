@@ -104,14 +104,14 @@ tracker.assertAllHandled('ueber-uns.astro');
 <BaseLayout locale="de" path="/ueber-uns/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
   <section class="hero">
     <div class="hero-grid">
-      <div class="hero-copy">
+      <div class="hero-copy reveal reveal-left">
         {heroEyebrow && <span class="eyebrow">{heroEyebrow}</span>}
         <h1 class="hero-headline heading-black">{heroTitle}</h1>
         {heroIntro && <p>{heroIntro}</p>}
       </div>
       {
         entry.data.heroImage && (
-          <div class="hero-image">
+          <div class="hero-image reveal reveal-right">
             <Image src={entry.data.heroImage} alt={entry.data.heroImageAlt ?? ''} width={1000} height={1500} />
           </div>
         )

@@ -30,6 +30,13 @@
   --color-teal: #48b0b0;
   /* Tiefes Türkis — contrast color for darker fills/gradients */
   --color-teal-dark: #309898;
+  /* Not one of the brand book's tones — proposed LAUF-2026-09-10.md A5, a
+     fourth, darkest step of the same teal family. Marina asked for green
+     footer text ("+ Schrift grün"); no existing teal is readable as body
+     text on the footer's beige (--color-bg-alt): sage 1.60:1, teal 2.21:1,
+     teal-dark 2.96:1, all well under WCAG's 4.5:1. This one measures
+     5.09:1. Owner sign-off still pending — see OPEN-QUESTIONS.md. */
+  --color-teal-darker: #226e6e;
   /* Granatapfelrot — the primary brand color */
   --color-terracotta: #b33a3b;
   /* Leuchtrot — accent color, reserved for the wordmark and CTAs */
@@ -41,12 +48,6 @@
   --color-cta-from: var(--color-terracotta);
   --color-cta-to: var(--color-terracotta-dark);
   --color-band-bg: var(--color-teal);
-  /* Not one of the 8 brand-book colors — an extra literal the earlier
-     parsing session picked to match the live site's footer. Tokenized
-     here so it isn't hardcoded twice, but flagged: confirm with the
-     client whether it should instead be one of the official tones
-     (e.g. a tint of Warmes Elfenbein) before it spreads to more pages. */
-  --color-footer-bg: #e9dccd;
 
   /* Typography — DM Sans only (per brand book: it "carries all body text,
      all UI elements, all form labels"; there is no second heading font).
@@ -190,7 +191,18 @@ a {
 }
 
 .section-narrow {
-  max-width: 56rem;
+  /* LAUF-2026-09-10.md A1: live's Fließtext columns run ~1200px wide; this
+     used to cap at 56rem (896px), well under that, on nearly every subpage
+     (Datenschutz, Disclaimer, FAQs, Blog-Index, Über uns, Angebote,
+     Beratung, Kennenlernen, Workshops, Selbsthilfegruppe, Impressum, the
+     homepage's pain-points section). 1200px is wider than .container's own
+     usable content width at any real viewport (1248px max-width minus
+     2×40px padding = 1168px), so this class no longer binds in practice —
+     the container's own width governs instead, which is what A1 calls
+     "nah an 1200px" and treats as the fix. Kept as a named class (not
+     deleted) so a future section can still opt into it meaning something,
+     but it's a no-op at present. */
+  max-width: 1200px;
   margin-inline: auto;
 }
 
@@ -247,13 +259,22 @@ a {
 }
 
 .button-primary {
-  /* VERGLEICH-2026-09-07.md A3: live fill is a solid terracotta, not a
-     gradient, and the text is --color-bg (#fbf8f5), not pure white.
-     --color-cta-from/--color-cta-to are now unused by this rule — kept
-     defined (CtaBand/ClosingCta don't reference them either) and flagged
-     rather than deleted, in case a gradient treatment returns elsewhere. */
-  background: var(--color-accent-strong);
+  /* LAUF-2026-09-10.md A3 reverses VERGLEICH-2026-09-07.md A3's earlier
+     call: that run found the live button a solid fill and dropped the
+     gradient. Marina asked for it back explicitly ("sollten einen
+     Farbverlauf haben zwischen den zwei Rottönen"), and a fresh live
+     measurement confirms the gradient is actually there and exact —
+     --color-cta-from → --color-cta-to are back in use. Text stays
+     --color-bg (#fbf8f5), unchanged either way. */
+  background: linear-gradient(var(--color-cta-from) 0%, var(--color-cta-to) 100%);
   color: var(--color-bg);
+}
+
+.button-primary:hover {
+  /* Reversed gradient direction, not a third color — same two brand
+     tones, distinguishable from the resting state without introducing a
+     value nobody measured. */
+  background: linear-gradient(var(--color-cta-to) 0%, var(--color-cta-from) 100%);
 }
 
 /* The homepage hero's CTA only — bigger than the compact .button-primary
@@ -319,7 +340,10 @@ textarea:focus-visible,
 .hero-headline {
   color: var(--color-accent-strong);
   line-height: 1.2;
-  margin-bottom: 55px;
+  /* LAUF-2026-09-10.md A2: live measures 25px between the H1's bottom edge
+     and the intro paragraph's top edge, on every hero — this was 55px,
+     more than double. */
+  margin-bottom: 25px;
 }
 
 .hero-copy p {
@@ -608,14 +632,30 @@ textarea:focus-visible,
 .reveal {
   opacity: 1;
   transform: none;
+  /* LAUF-2026-09-10.md A9: live's own hero animations (Avada defaults,
+     read out of the original markup) run 0.6-0.9s; 0.7s sits in that
+     range for every direction below rather than tuning each separately. */
   transition:
-    opacity 0.5s ease,
-    transform 0.5s ease;
+    opacity 0.7s ease,
+    transform 0.7s ease;
 }
 
 .reveal.reveal-pending {
   opacity: 0;
   transform: translateY(16px);
+}
+
+/* A9: two directions, added for the hero split (text column from the
+   left, image column from the right — Avada's fadeInLeft/fadeInRight),
+   reusing this same .reveal/.reveal-pending contract rather than a
+   second mechanism. Declared after the plain .reveal.reveal-pending rule
+   above so they win on source order at equal specificity. */
+.reveal-left.reveal-pending {
+  transform: translateX(-24px);
+}
+
+.reveal-right.reveal-pending {
+  transform: translateX(24px);
 }
 
 @media (prefers-reduced-motion: reduce) {

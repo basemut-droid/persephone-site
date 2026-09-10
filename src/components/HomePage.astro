@@ -40,12 +40,12 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
        gutter, matching the original's full-width hero row. -->
   <section class="hero">
     <div class="hero-grid">
-      <div class="hero-copy">
+      <div class="hero-copy reveal reveal-left">
         <h1 class="hero-headline heading-black">{s.hero.headline}</h1>
         {s.hero.paragraphs.map((p) => <p>{p}</p>)}
         <a href={s.hero.ctaHref} class="button button-primary button-hero">{s.hero.cta}</a>
       </div>
-      <div class="hero-image">
+      <div class="hero-image reveal reveal-right">
         <Image
           src={heroImage}
           alt="Aufgeschnittener Granatapfel — Symbol des Persephone-Mythos"
@@ -56,8 +56,13 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
     </div>
   </section>
 
-  <!-- Pain points -->
-  <section class="section section-alt section-centered">
+  <!-- Pain points — LAUF-2026-09-10.md A4: live alternates section
+       backgrounds dunkel(#f3ece6)/hell(#fbf8f5)/dunkel/hell/dunkel, starting
+       right after the Kopfleiste+Hero band (itself already dunkel). This
+       was section-alt (dunkel) here, making two dunkel sections in a row
+       with the hero above it — dropped so it falls back to the page's own
+       hell background instead, matching "1" in the measured table. -->
+  <section class="section section-centered">
     <div class="container section-narrow">
       <span class="eyebrow">{s.painPoints.eyebrow}</span>
       <h2 set:html={s.painPoints.heading} />
@@ -67,8 +72,8 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
     </div>
   </section>
 
-  <!-- Services -->
-  <section class="section">
+  <!-- Services — A4: "2" in the alternation, dunkel. -->
+  <section class="section section-alt">
     <div class="container">
       <div class="section-heading">
         <span class="eyebrow">{s.services.eyebrow}</span>
@@ -90,13 +95,15 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
     </div>
   </section>
 
-  <!-- Philosophy -->
-  <section class="section section-alt">
+  <!-- Philosophy — A4: "3" in the alternation, hell. -->
+  <section class="section">
     <div class="container philosophy-grid narrow">
       <div class="philosophy-copy">
         <span class="eyebrow">{s.philosophy.eyebrow}</span>
         <h2>{s.philosophy.heading}</h2>
-        {s.philosophy.paragraphs.map((p) => <p>{p}</p>)}
+        <div class="philosophy-paragraphs">
+          {s.philosophy.paragraphs.map((p) => <p>{p}</p>)}
+        </div>
       </div>
       <div class="value-list">
         {s.philosophy.values.map((v) => <ValueTile title={v.title} description={v.description} />)}
@@ -104,8 +111,12 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
     </div>
   </section>
 
-  <!-- Founder -->
-  <section class="section founder">
+  <!-- Founder — A4: "4" in the alternation, dunkel. Blog teasers below
+       keeps its plain "section" (hell), continuing the alternation — it
+       isn't in the live table (not present on the live page in this
+       exact form) but keeping it in step avoids landing back-to-back with
+       Founder's dunkel. -->
+  <section class="section section-alt founder">
     <div class="container founder-grid">
       <div>
         <span class="eyebrow">{s.founder.eyebrow}</span>
@@ -177,25 +188,46 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
     align-items: center;
   }
 
+  /* LAUF-2026-09-10.md A1/Punkt 3: "diese Absätze auf der Home sollen auf
+     der gleichen Ebene enden" — the philosophy copy column and the
+     value-list column must end at the same height, not just share a row.
+     align-items:center (above) only centers the shorter column within the
+     row, so its bottom edge floats above the taller one's; stretch makes
+     both columns the full row height, and the copy column's own
+     space-between (below, ≥900px only — see .philosophy-copy) spreads its
+     paragraphs to fill that height so its last line lands level with the
+     value-list's last line, not just its box. Grid-based, not a measured
+     pixel value, so it keeps holding if the copy length changes. Scoped to
+     .philosophy-grid only — .founder-grid (photo + text) still wants its
+     content vertically centered, not stretched. */
+  .philosophy-grid {
+    align-items: stretch;
+  }
+
   .narrow {
-    max-width: 62rem;
+    /* LAUF-2026-09-10.md A1: was 62rem (992px) — narrower than the ~1200px
+       live measure, and the direct cause of point 3's mismatched column
+       heights below (a narrower box wraps the copy column onto more
+       lines than the live page, throwing off the height match against
+       .value-list). Raised past .container's own usable width (1168px at
+       desktop) so that governs instead, same fix as .section-narrow in
+       global.css. */
+    max-width: 1200px;
     margin-inline: auto;
   }
 
-  /* NACHTLAUF-2026-09-09.md E5: live's two philosophy-grid columns end on
-     the same height; this rebuild's left column ran ~180px short at
-     1440px under the body copy's default line-height/spacing. Text,
-     order and paragraph count are unchanged, per Claudio's own
-     condition — only the breathing room around them grows: slightly
-     looser line-height plus more space between paragraphs (tried alone
-     first; a line-height-only version read as oddly airy within each
-     paragraph, so most of the extra height comes from the between-
-     paragraph gap instead). ValueTile's own padding trim takes the rest
-     of the gap — see ValueTile.astro. Re-measure both columns
-     (getBoundingClientRect) if this copy's length ever changes. */
+  /* NACHTLAUF-2026-09-09.md E5's original fix for this (extra fixed
+     margin-bottom, hand-tuned to the old 992px-wide column) is superseded
+     by LAUF-2026-09-10.md A1/Punkt 3's flex-based version above: raising
+     .narrow to 1200px reflows this copy onto fewer, longer lines, which
+     would have thrown E5's fixed value off again. The looser line-height
+     stays (its own readability merit); the fixed margin-bottom is gone —
+     .philosophy-paragraphs' space-between (in the ≥900px block below) now
+     owns the between-paragraph gap, self-adjusting to whatever height
+     .value-list ends up at instead of a re-measured constant. */
   .philosophy-copy p {
     line-height: 1.85;
-    margin-bottom: 2.15em;
+    margin-bottom: 1.5em;
   }
 
   /* "Gründerinnen-Überschrift" — VERGLEICH-2026-09-07.md A1: live 36px,
@@ -227,6 +259,34 @@ const serviceTones = ['teal-dark', 'teal', 'sage'] as const;
     .philosophy-grid,
     .founder-grid {
       grid-template-columns: 1fr 1fr;
+    }
+
+    /* Only at this breakpoint does .philosophy-copy actually sit beside
+       .value-list as a column with its own row-height to fill — below it,
+       the two stack and there's nothing to distribute space-between.
+       Flexing .philosophy-copy itself lets .philosophy-paragraphs grow to
+       fill the leftover height below the eyebrow+heading; flexing THAT
+       (not .philosophy-copy) with space-between is what actually spreads
+       just the three paragraphs — eyebrow and heading stay put at the
+       top, unaffected. */
+    .philosophy-copy {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .philosophy-paragraphs {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* space-between owns the gap here — a fixed margin-bottom on top of
+       it would just add to it and risk overshooting .value-list's
+       height. */
+    .philosophy-paragraphs p {
+      margin-bottom: 0;
     }
 
     .blog-grid {

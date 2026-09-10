@@ -3,7 +3,7 @@ import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
-import { parseMarkdownBlocks, parseLinkHeading, BlockTracker } from '../lib/parseMarkdownBlocks';
+import { parseMarkdownBlocks, parseLinkHeading, mdInlineHtml, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 const entry = await getEntry('pages', 'de/faqs');
 if (!entry) throw new Error('Content collection entry "pages/de/faqs" not found');
@@ -87,7 +87,13 @@ const categories = categoryOrder.map((name) => ({ name, faqs: faqs.filter((f) =>
                   </span>
                   <h3>{item.question}</h3>
                 </summary>
-                <p>{item.answer}</p>
+                {/* LAUF-2026-09-10.md A8 (Punkte 9, 12): was plain {item.answer} —
+                   Astro auto-escapes that, so the source's *Persephone*
+                   markdown-emphasis rendered as literal asterisks instead of
+                   <em>. Same mdInlineHtml()+set:html pattern already used by
+                   disclaimer.astro/ueber-uns.astro for the same content
+                   convention. */}
+                <p set:html={mdInlineHtml(item.answer)} />
               </details>
             ))}
           </div>

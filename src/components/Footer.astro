@@ -18,21 +18,11 @@ const year = new Date().getFullYear();
 const copyright = footer.copyright.replace('{year}', String(year));
 ---
 
-<div class="footer-wave" aria-hidden="true">
-  <!-- NACHTLAUF-2026-09-08.md A5: a hand-drawn brushstroke edge, not the
-       smooth regular wave this replaces. Irregular amplitude and spacing
-       (no repeating period, unlike a sine-wave path) so it doesn't read as
-       geometric, and the amplitude tapers down toward both ends (a real
-       brush thins out as it lifts off the canvas) instead of the pattern
-       running unchanged into the viewport edge. Gestalterische Freiheit
-       ausdrücklich erteilt — own path, not the live Avada separator. -->
-  <svg viewBox="0 0 1440 50" preserveAspectRatio="none">
-    <path
-      class="footer-wave-path"
-      d="M0,32 C25,26 45,36 75,29 C115,20 140,34 180,24 C225,13 255,31 300,21 C345,10 375,29 420,17 C470,6 500,27 550,19 C600,9 630,30 680,22 C730,12 760,33 810,25 C855,14 885,32 930,20 C975,8 1005,26 1050,16 C1090,7 1120,24 1160,18 C1200,11 1225,28 1265,23 C1300,17 1325,30 1360,26 C1390,22 1410,29 1440,27 L1440,50 L0,50 Z"
-    />
-  </svg>
-</div>
+<!-- LAUF-2026-09-10.md A6: the wavy brushstroke separator above (NACHTLAUF-
+     2026-09-08.md A5) reads as "komisch" to Marina. The live original's own
+     separator graphic is an Avada asset (BILDRECHTE) and stays off-limits,
+     so Claudio decided this becomes a plain, restrained line instead — not
+     a brushstroke redraw. See .footer-divider below. -->
 <footer class="site-footer">
   <div class:list={['container', 'footer-grid', { 'footer-grid-brand-only': footer.columns.length === 0 }]}>
     <div class="footer-brand">
@@ -63,30 +53,19 @@ const copyright = footer.copyright.replace('{year}', String(year));
 </footer>
 
 <style>
-  .footer-wave {
-    /* Transparent: the newsletter band above shows through naturally right
-       up to the painted edge, instead of this wrapper adding its own
-       second flat-color strip on top of the SVG. Gap goes above the
-       wave (between it and the teal band), not below it. */
-    margin-top: 6rem;
-  }
-
-  .footer-wave svg {
-    display: block;
-    width: 100%;
-    height: 40px;
-  }
-
-  .footer-wave-path {
-    fill: var(--color-footer-bg);
-  }
-
   .site-footer {
-    /* Same token as the separator's fill above, so the painted edge and
-       the footer read as one continuous surface. */
-    background: var(--color-footer-bg);
+    /* LAUF-2026-09-10.md A5: live measures the footer background at
+       #f3ece6 (--color-bg-alt) — this was the untokenized #e9dccd literal
+       (never present on the live site), now removed from the project
+       rather than just overridden here. */
+    background: var(--color-bg-alt);
     color: var(--color-text);
     padding-block: 3rem 1.5rem;
+    /* A6: replaces the wavy brushstroke separator that used to sit above
+       this element — a restrained hairline in the footer's own tone
+       instead, not a redrawn brushstroke. */
+    border-top: 1px solid rgba(24, 26, 43, 0.15);
+    margin-top: 6rem;
   }
 
   .footer-grid {
@@ -120,6 +99,11 @@ const copyright = footer.copyright.replace('{year}', String(year));
 
   .footer-nl-eyebrow {
     color: var(--color-accent-strong);
+    /* LAUF-2026-09-10.md A7: this eyebrow's own text is "Persephones
+       e-Brief" — .eyebrow's uppercase transform (global.css) would turn
+       that into "PERSEPHONES E-BRIEF", losing the required lowercase e.
+       Versalien-Auszeichnung entfällt hier, statt das kleine e zu opfern. */
+    text-transform: none;
   }
 
   .footer-nl-link {
@@ -144,16 +128,19 @@ const copyright = footer.copyright.replace('{year}', String(year));
   }
 
   .footer-column a {
+    /* LAUF-2026-09-10.md A5 "+ Schrift grün" — Marina's own recommendation
+       is --color-teal-darker (see :root's comment for the contrast math);
+       flagged in the handoff as proposed, pending her sign-off. Full
+       opacity now that the color itself carries the contrast, rather than
+       dimming a dark neutral as the old --color-text/opacity:0.85 did. */
     text-decoration: none;
-    color: var(--color-text);
-    opacity: 0.85;
+    color: var(--color-teal-darker);
     display: inline-flex;
     min-height: 44px;
     align-items: center;
   }
 
   .footer-column a:hover {
-    opacity: 1;
     text-decoration: underline;
   }
 
