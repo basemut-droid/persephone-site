@@ -61,27 +61,48 @@ const updatedLabel = post.data.updatedDate?.toLocaleDateString('de-AT', {
   description={post.data.seoDescription ?? post.data.description}
 >
   <article class="post">
-    <header class="post-header container">
-      {post.data.category && post.data.category.length > 0 && (
-        <span class="eyebrow">{post.data.category.join(', ')}</span>
-      )}
-      <h1 class="heading-black">{post.data.title}</h1>
-      <time class="post-date" datetime={post.data.publishDate.toISOString().slice(0, 10)}>
-        {dateLabel}
-      </time>
-      {post.data.updatedDate && (
-        <time class="post-date post-date-updated" datetime={post.data.updatedDate.toISOString().slice(0, 10)}>
-          Aktualisiert am {updatedLabel}
-        </time>
-      )}
-    </header>
     {
-      post.data.heroImage && (
-        <div class="post-hero">
-          <Image src={post.data.heroImage} alt={post.data.heroImageAlt ?? ''} width={1200} height={675} />
-        </div>
-      )
+      /* LAUF-2026-09-10.md B13 Punkt 36: "Soll so ausschauen, wie die
+         anderen Heroes auch (minus des gelben Hintergrundbildes)." Reuses
+         the shared .hero/.hero-grid/.hero-copy/.hero-image split (same as
+         PageHero, CLAUDE.md's "reuse before you build") instead of the
+         plain full-width banner + separately-stacked image this was —
+         the Avada yellow background graphic itself stays out either way
+         (BILDRECHTE). Also adds the missing subtitle: reuses the post's
+         own `description` (already real per-post editorial copy, used
+         elsewhere as the meta description) rather than inventing new
+         text for it. */
     }
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy reveal reveal-left">
+          {post.data.category && post.data.category.length > 0 && (
+            <span class="eyebrow">{post.data.category.join(', ')}</span>
+          )}
+          {/* NICHT ANFASSEN (B13): the blog title stays dark, not the
+             shared hero's terracotta — one of the four deliberate,
+             recorded deviations from the live original. .hero-headline's
+             own color is overridden back below for this page only. */}
+          <h1 class="hero-headline heading-black post-title">{post.data.title}</h1>
+          <p>{post.data.description}</p>
+          <time class="post-date" datetime={post.data.publishDate.toISOString().slice(0, 10)}>
+            {dateLabel}
+          </time>
+          {post.data.updatedDate && (
+            <time class="post-date post-date-updated" datetime={post.data.updatedDate.toISOString().slice(0, 10)}>
+              Aktualisiert am {updatedLabel}
+            </time>
+          )}
+        </div>
+        {
+          post.data.heroImage && (
+            <div class="hero-image reveal reveal-right">
+              <Image src={post.data.heroImage} alt={post.data.heroImageAlt ?? ''} width={1600} height={882} />
+            </div>
+          )
+        }
+      </div>
+    </section>
     <div class="post-body container">
       <Content />
     </div>
@@ -125,35 +146,24 @@ const updatedLabel = post.data.updatedDate?.toLocaleDateString('de-AT', {
 </BaseLayout>
 
 <style>
-  .post-header {
-    /* LAUF-2026-09-10.md A1: was max-width:42rem (672px), well under the
-       ~1200px live measure for blog text ("keine schmale Kolumne im
-       weißen Meer"). Dropped so .container's own max-width (1248px, ~1168px
-       usable) governs instead — this scoped rule's higher specificity was
-       overriding it below the container's own width. */
-    padding-block: clamp(3rem, 6vw, 4rem) 2rem;
-  }
-
-  .post-header h1 {
-    color: var(--color-accent-strong);
+  /* B13: NICHT ANFASSEN — the recorded dark-title deviation (see the
+     markup comment above). .hero-headline's shared color (global.css:
+     --color-accent-strong) is overridden back to --color-text for this
+     page only. */
+  .post-title {
+    color: var(--color-text);
   }
 
   .post-date {
     display: block;
     color: var(--color-text-muted);
     font-size: 0.9rem;
+    margin-top: 0.5rem;
   }
 
   .post-date-updated {
     margin-top: 0.25rem;
     font-size: 0.8rem;
-  }
-
-  .post-hero img {
-    width: 100%;
-    max-height: 480px;
-    object-fit: cover;
-    display: block;
   }
 
   .post-body {

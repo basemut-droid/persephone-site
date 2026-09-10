@@ -134,6 +134,7 @@ tracker.assertAllHandled('workshops.astro');
     portraitAlt="Porträtfoto von Marina Bletsas, Gründerin von Persephone"
     tile={logoWissenschaft}
     tileAlt=""
+    layout="pair"
   />
 </BaseLayout>
 
@@ -176,10 +177,8 @@ tracker.assertAllHandled('workshops.astro');
     padding-top: 1rem;
   }
 
-  @media (min-width: 900px) {
-    .card-grid {
-      grid-template-columns: 1fr 1fr;
-      align-items: stretch;
-    }
-  }
+  /* LAUF-2026-09-10.md B11 Punkt 31: "Diese zwei Kästchen sollen
+     übereinander stehen" — was a 2-column grid from 900px up (Beratung's
+     own format-card grid, reused here); this page's two cards stay
+     single-column/stacked at every width instead. */
 </style>

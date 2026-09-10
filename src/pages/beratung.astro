@@ -87,6 +87,14 @@ tracker.assertAllHandled('beratung.astro');
           <article class="format-card">
             <h2 class="eyebrow">{f.heading}</h2>
             {f.intro && <p>{f.intro}</p>}
+            {/* LAUF-2026-09-10.md B10 Punkt 27: Dauer/Ort move above the
+               list, not below it — was margin-top:auto pinning them to the
+               card's bottom. */}
+            {f.badges.length > 0 && (
+              <div class="format-badges">
+                {f.badges.map((b) => <Pill text={b} />)}
+              </div>
+            )}
             {f.items?.type === 'list' && (
               <ul class="icon-list icon-list-check">
                 {f.items.items.map((item) => (
@@ -96,11 +104,6 @@ tracker.assertAllHandled('beratung.astro');
                   </li>
                 ))}
               </ul>
-            )}
-            {f.badges.length > 0 && (
-              <div class="format-badges">
-                {f.badges.map((b) => <Pill text={b} />)}
-              </div>
             )}
           </article>
         ))
@@ -142,6 +145,7 @@ tracker.assertAllHandled('beratung.astro');
     portraitAlt="Porträtfoto von Marina Bletsas, Gründerin von Persephone"
     tile={logoEmpathie}
     tileAlt=""
+    layout="pair"
   />
 </BaseLayout>
 
@@ -176,8 +180,10 @@ tracker.assertAllHandled('beratung.astro');
     display: flex;
     flex-wrap: wrap;
     gap: 1.5rem;
-    margin-top: auto;
-    padding-top: 1rem;
+    /* B10 Punkt 27 "Genug breathing Raum lassen" — room above (clears the
+       intro paragraph) and below (before the list starts), now that this
+       sits between them instead of pinned to the card's bottom edge. */
+    margin: 1.5rem 0;
   }
 
   /* NACHTLAUF-2026-09-08.md B4: the question is its own measured 20px, not

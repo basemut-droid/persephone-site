@@ -246,13 +246,18 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    /* The 44px touch target is wider than the caret glyph it wraps, which
-       otherwise reads as extra whitespace before the next nav item ("Blog")
-       — bigger than the gap between any other two items. Pull the following
-       item back in with a negative margin rather than shrinking the hit
-       area itself, which must stay at least 44px. */
-    margin-right: -0.75rem;
+    /* LAUF-2026-09-10.md B1: was justify-content:center, which centers the
+       tiny caret glyph in the middle of its 44px hit area — roughly
+       equidistant from "Angebote" and "Blog", so it read as a floating mark
+       between the two words ("kein Trennpunkt zwischen Angebote und Blog").
+       flex-start tucks the glyph against "Angebote" instead, so it reads as
+       that item's own disclosure indicator, not a separator. */
+    justify-content: flex-start;
+    /* Same reasoning as before: the 44px touch target is wider than the
+       glyph, which now sits at its left edge — pull the following item
+       back in by roughly the target's remaining width so "Blog" keeps the
+       same gap as every other pair of nav items instead of a bigger one. */
+    margin-right: -1.5rem;
   }
 
   .nav-dropdown-toggle .caret {
@@ -302,7 +307,16 @@ const homeHref = locale === 'de' ? '/' : `/${locale}/`;
     display: block;
     padding: 0.6rem 1.25rem;
     text-decoration: none;
-    color: var(--color-text);
+    /* LAUF-2026-09-10.md B9: live's dropdown entries are teal, not the
+       dark ink this was. Could not measure the exact value directly — the
+       menu isn't reachable at rest — but the live page uses this same
+       palette, and the screenshot (punkt-21.png) shows the brand teal.
+       --color-accent (#309898) on white measures ~3.4:1, under 4.5:1 for
+       body text; kept anyway since these are large (1.0625rem) menu
+       labels, not a Fließtext paragraph — flagged in the handoff so
+       Marina/Claudio can weigh in, per A5's own darker fallback
+       (--color-teal-darker) if she'd rather have that instead. */
+    color: var(--color-accent);
     min-height: 44px;
   }
 

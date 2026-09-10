@@ -25,8 +25,35 @@ tracker.assertAllHandled('disclaimer.astro');
   <PageHero title={heroTitle} image={false} />
 
   <section class="section">
-    <div class="container section-narrow">
+    <div class="container section-narrow disclaimer-body">
       {body.map((p) => <p set:html={mdInlineHtml(p)} />)}
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  /* LAUF-2026-09-10.md B3 point 1: "Titel soll auf einer Seite" — Claudio's
+     reading is "auf einer Zeile" (one line), given the surrounding
+     complaint about the page feeling cramped. Scoped to this page's own
+     heading rather than PageHero's shared .page-hero h1 (used by
+     Datenschutz/FAQs/Impressum too, none of them flagged) — nowrap alone
+     would overflow a long title on a narrow phone, so the font shrinks
+     enough first to still fit. */
+  :global(.page-hero h1) {
+    white-space: nowrap;
+    font-size: clamp(1.35rem, 4.2vw, 3rem);
+  }
+
+  /* B3 point 3: hyperlinks in the flowing body text get a mint-green
+     highlight behind them ("unterlegen", literally — the link text itself
+     stays --color-text, not recolored) rather than the site's usual plain
+     underline. :global() is required — the links are inside set:html
+     content from mdInlineHtml(), so they never carry this file's own
+     scoping attribute. */
+  .disclaimer-body :global(a) {
+    background: var(--color-sage);
+    padding: 0.05em 0.3em;
+    border-radius: 3px;
+    text-decoration: underline;
+  }
+</style>

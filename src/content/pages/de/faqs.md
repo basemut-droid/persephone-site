@@ -48,7 +48,7 @@ Wenn Du Teil der Persephone-Community sein willst, [melde Dich für unseren News
 
 ### [Wie unterscheidet sich psychosoziale Beratung von Psychotherapie?](#collapse-1-1919)
 
-Psychosoziale Beratung (Beratung/Coaching) setzt an Deiner aktuellen Lebenssituation an: an dem, was gerade schwer ist, orientierungslos macht oder gemeinsam durchdacht werden will. Sie ist ressourcen- und lösungsorientiert und ist sinnvoll und nützlich, sofern keine krankheitswertige psychische Störung besteh. Bei einer psychischen Erkrankung kommt Psychotherapie ins Spiel. Wenn ich merke, dass Du oder Ihr mehr braucht, als ich in diesem Rahmen geben kann, sage ich das offen und begleite Dich bzw. Euch gerne bei der Suche nach der passenden Anlaufstelle.
+Psychosoziale Beratung (Beratung/Coaching) setzt an Deiner aktuellen Lebenssituation an: an dem, was gerade schwer ist, orientierungslos macht oder gemeinsam durchdacht werden will. Sie ist ressourcen- und lösungsorientiert und ist sinnvoll und nützlich, sofern keine krankheitswertige psychische Störung besteht. Bei einer psychischen Erkrankung kommt Psychotherapie ins Spiel. Wenn ich merke, dass Du oder Ihr mehr braucht, als ich in diesem Rahmen geben kann, sage ich das offen und begleite Dich bzw. Euch gerne bei der Suche nach der passenden Anlaufstelle.
 
 ### [Bleibt das, was ich erzähle, vertraulich?](#collapse-1-1921)
 

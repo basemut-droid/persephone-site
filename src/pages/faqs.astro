@@ -74,10 +74,37 @@ const categories = categoryOrder.map((name) => ({ name, faqs: faqs.filter((f) =>
   <PageHero title={heroTitle} image={false} />
 
   <section class="section">
-    <div class="container section-narrow">
+    <div class="container section-narrow" data-faq-tabs>
+      {/* LAUF-2026-09-10.md B4 Punkt 8: clickable tabs above the questions,
+         not the vertical stack of category headings this used to be.
+         Server-rendered [role=tablist] stays `hidden` — the native
+         attribute, present in the shipped HTML, not toggled by CSS — until
+         the script below removes it, so a page with no JS (or JS that
+         fails) never shows inert-looking tab buttons; it falls straight
+         back to today's stacked accordion sections with their own heading
+         per category, all reachable, nothing hidden. Same progressive-
+         enhancement contract as .reveal (global.css) and Über uns's
+         quals-scroller: enhance only once JS is confirmed running. */}
+      {/* No role="tablist"/"tab" here in the server-rendered markup on
+         purpose: those ARIA roles imply a working tab interface, which
+         only exists once the script below actually runs. Left plain, the
+         no-JS fallback is indistinguishable from a page that never had
+         tabs at all — a row of plain buttons that do nothing useful would
+         be worse than not rendering them, so they're `hidden` too. The
+         script adds both the roles and the hidden/visible wiring together,
+         in the same pass. */}
+      <div class="faq-tablist" aria-label="FAQ-Kategorien" hidden>
+        {
+          categories.map((cat, i) => (
+            <button type="button" id={`faq-tab-${i}`} data-controls={`faq-panel-${i}`} class="faq-tab">
+              {cat.name}
+            </button>
+          ))
+        }
+      </div>
       {
-        categories.map((cat) => (
-          <div class="faq-category">
+        categories.map((cat, i) => (
+          <div class="faq-category" id={`faq-panel-${i}`}>
             <h2 class="eyebrow">{cat.name}</h2>
             {cat.faqs.map((item) => (
               <details class="accordion-item">
@@ -103,6 +130,65 @@ const categories = categoryOrder.map((name) => ({ name, faqs: faqs.filter((f) =>
   </section>
 </BaseLayout>
 
+<script>
+  // LAUF-2026-09-10.md B4 Punkt 8 — standard ARIA tabs pattern (automatic
+  // activation): arrow keys move focus AND select, Home/End jump to the
+  // first/last tab, click selects directly. Visible focus comes for free
+  // from global.css's button:focus-visible rule (these are real <button>s).
+  const wrapper = document.querySelector<HTMLElement>('[data-faq-tabs]');
+  const tablist = wrapper?.querySelector<HTMLElement>('.faq-tablist');
+  if (wrapper && tablist) {
+    const tabs = [...tablist.querySelectorAll<HTMLButtonElement>('.faq-tab')];
+    const panels = tabs.map((tab) => wrapper.querySelector<HTMLElement>(`#${tab.dataset.controls}`));
+
+    function activate(index: number, { focus = true } = {}) {
+      tabs.forEach((tab, i) => {
+        const selected = i === index;
+        tab.setAttribute('aria-selected', String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        panels[i]?.toggleAttribute('hidden', !selected);
+      });
+      if (focus) tabs[index].focus();
+    }
+
+    // ARIA roles added here, together with the interactive wiring, rather
+    // than server-rendered — see the markup's own comment on why.
+    tablist.setAttribute('role', 'tablist');
+    tabs.forEach((tab, i) => {
+      tab.setAttribute('role', 'tab');
+      tab.setAttribute('aria-controls', tab.dataset.controls!);
+      tab.setAttribute('aria-selected', String(i === 0));
+      tab.tabIndex = i === 0 ? 0 : -1;
+    });
+    panels.forEach((panel, i) => {
+      panel?.setAttribute('role', 'tabpanel');
+      panel?.setAttribute('aria-labelledby', tabs[i].id);
+      panel?.toggleAttribute('hidden', i !== 0);
+    });
+    tablist.hidden = false;
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => activate(i, { focus: false }));
+      tab.addEventListener('keydown', (e) => {
+        const last = tabs.length - 1;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          activate(i === last ? 0 : i + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          activate(i === 0 ? last : i - 1);
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          activate(0);
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          activate(last);
+        }
+      });
+    });
+  }
+</script>
+
 <style>
   .faq-category + .faq-category {
     margin-top: 3rem;
@@ -116,5 +202,36 @@ const categories = categoryOrder.map((name) => ({ name, faqs: faqs.filter((f) =>
      the shared 28px h2/h3 scale. */
   .accordion-item summary h3 {
     font-size: 1.5rem;
+  }
+
+  .faq-tablist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .faq-tab {
+    background: var(--color-bg-alt);
+    border: 2px solid transparent;
+    border-radius: var(--radius-button);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 1.0625rem;
+    font-weight: 500;
+    padding: 0.65rem 1.25rem;
+    min-height: 44px;
+    cursor: pointer;
+  }
+
+  /* "Deutlich als aktiv erkennbar (nicht allein über Farbe)": the active
+     tab gets both a color fill AND a bolder weight plus its own border —
+     two independent signals, so it still reads as selected for someone
+     who can't distinguish the color difference alone. */
+  .faq-tab[aria-selected='true'] {
+    background: var(--color-accent-strong);
+    border-color: var(--color-accent-strong);
+    color: var(--color-bg);
+    font-weight: 700;
   }
 </style>

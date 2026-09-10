@@ -18,7 +18,11 @@ const blocks = parseMarkdownBlocks(entry.body ?? '');
 const tracker = new BlockTracker(blocks);
 
 const { eyebrow: heroEyebrow, title: heroTitle, intro: heroIntro } = tracker.heroFields(entry.data.title);
-const introPara2 = tracker.at(3);
+// LAUF-2026-09-10.md B8 Punkt 24: this paragraph used to render right
+// above the "Fang einfach dort an..." H2 — Marina asked for it gone,
+// matching the live original. Still claimed via .at() (not silently
+// dropped from the tracker's accounting), just not rendered.
+tracker.exclude(tracker.at(3), 'B8 Punkt 24: intro paragraph before the H2, removed per Marina + live original');
 
 // The self-recognition selector (external-review.md finding #2 /
 // FIXES-2026-09-07.md task 2b.1) is the whole point of this page. The ten
@@ -56,11 +60,38 @@ tracker.assertAllHandled('angebote.astro');
 <BaseLayout locale="de" path="/angebote/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
   <PageHero eyebrow={heroEyebrow} title={heroTitle} intro={heroIntro} />
 
-  <section class="section section-centered">
-    <div class="container section-narrow">
-      {introPara2.type === 'paragraph' && <p>{introPara2.text}</p>}
+  {/* LAUF-2026-09-10.md B8 Punkt 19: "Button-Kästchen nach dem Prinzip des
+     Originals" — colored background tiles (not the live original's
+     photos) with an oversized text card overlapping them, the same
+     superimposition idea ClosingCta already uses for the photo/logo pair
+     further down (reused in spirit, not the component itself: this is a
+     repeating small-card grid, a different shape from ClosingCta's one
+     big section — CLAUDE.md's "reuse before you build" cuts both ways).
+     Reuses panel.offers' existing Beratung/Workshops copy rather than
+     inventing new text for these two boxes. */}
+  <section class="section">
+    <div class="container">
+      <div class="offer-tiles">
+        {
+          (['beratung', 'workshops'] as const).map((key, i) => {
+            const offer = panel.offers[key];
+            return (
+              <a href={offer.href} class="offer-tile">
+                <div class={`offer-tile-bg offer-tile-bg--${i === 0 ? 'teal-dark' : 'teal'}`} aria-hidden="true" />
+                <div class="offer-tile-card">
+                  <h3 class="offer-tile-title">{offer.title}</h3>
+                  <p>{offer.description}</p>
+                  <span class="offer-tile-cta">{offer.cta}</span>
+                </div>
+              </a>
+            );
+          })
+        }
+      </div>
     </div>
+  </section>
 
+  <section class="section section-centered">
     <div class="container">
       <h2 class="eyebrow">Fang einfach dort an, wo Du Dich wiedererkennst</h2>
 
@@ -76,7 +107,15 @@ tracker.assertAllHandled('angebote.astro');
            responses rather than none" — and only browsers that do support
            it (evergreen Chrome/Firefox/Safari/Edge) get the single-panel
            interactive behavior, gated by @supports so the two states never
-           fight each other. */
+           fight each other.
+
+           LAUF-2026-09-10.md B8 Punkt 23: none of the ten radios starts
+           checked (was checked={i === 0}) — the initial view is meant to
+           show only the statements, full width, no recommendation at all.
+           :has(#pf-choice-N:checked) simply matches nothing until a
+           statement is clicked, which already gets that for free; the
+           small script further down only handles Punkt 25's precise
+           vertical alignment, not the show/hide itself. */
       }
       <div class="pf-selector" id="pf-services-selector">
         <div class="pf-selector-grid">
@@ -84,13 +123,7 @@ tracker.assertAllHandled('angebote.astro');
             {
               panel.statements.map((s, i) => (
                 <div class="pf-recognition-item">
-                  <input
-                    type="radio"
-                    name="pf-choice"
-                    id={`pf-choice-${i}`}
-                    class="visually-hidden"
-                    checked={i === 0}
-                  />
+                  <input type="radio" name="pf-choice" id={`pf-choice-${i}`} class="visually-hidden" />
                   <label for={`pf-choice-${i}`} class="pf-recognition">
                     {s.text}
                   </label>
@@ -124,6 +157,50 @@ tracker.assertAllHandled('angebote.astro');
     </div>
   </section>
 
+  <script>
+    // LAUF-2026-09-10.md B8 Punkt 25: "Die Empfehlung rechts sollte
+    // möglichst auf der Ebene des angeklickten Satzes aufgehen... wenn der
+    // Satz zu weit unten ist, so, dass der einrahmende Kasten nicht
+    // vergrößert werden muss." Pure enhancement on top of the CSS-only
+    // radio/:has() mechanism above, which already shows/hides the right
+    // response and works without this script — this only fine-tunes WHERE
+    // the response card sits: top-aligned with the clicked statement by
+    // default, shifted up just far enough that its bottom never passes the
+    // last statement's bottom (never taller than the list itself).
+    const selector = document.getElementById('pf-services-selector');
+    const list = selector?.querySelector<HTMLElement>('.pf-recognition-list');
+    const responseHome = selector?.querySelector<HTMLElement>('.pf-response-home');
+    if (selector && list && responseHome) {
+      const inputs = [...selector.querySelectorAll<HTMLInputElement>('input[name="pf-choice"]')];
+
+      function positionCard() {
+        const checked = inputs.find((i) => i.checked);
+        const lastItem = list!.lastElementChild as HTMLElement | null;
+        if (!checked || !lastItem || !window.matchMedia('(min-width: 900px)').matches) {
+          responseHome!.style.marginTop = '';
+          return;
+        }
+        const item = checked.closest<HTMLElement>('.pf-recognition-item');
+        if (!item) return;
+        const listTop = list!.getBoundingClientRect().top;
+        const desiredTop = item.getBoundingClientRect().top - listTop;
+        const maxBottom = lastItem.getBoundingClientRect().bottom - listTop;
+        const cardHeight = responseHome!.offsetHeight;
+        const top = Math.max(0, Math.min(desiredTop, maxBottom - cardHeight));
+        responseHome!.style.marginTop = `${top}px`;
+      }
+
+      inputs.forEach((input) => input.addEventListener('change', () => positionCard()));
+      window.addEventListener('resize', positionCard);
+      positionCard();
+    }
+  </script>
+
+  {/* LAUF-2026-09-10.md B8 Punkt 30: layout="pair" (equal squares, no
+     overlap) is removed — Marina's fresh screenshot shows the live page's
+     photo and logo overlapping, reversing NACHTLAUF-2026-09-08.md B3's
+     earlier "confirmed non-overlap" finding for this specific page.
+     Defaults back to the component's own "overlap" layout. */}
   <ClosingCta
     heading={nextStepHeading.text}
     paragraphs={nextStepIntro?.type === 'paragraph' ? [nextStepIntro.text] : []}
@@ -133,11 +210,79 @@ tracker.assertAllHandled('angebote.astro');
     portraitAlt="Porträtfoto von Marina Bletsas, Gründerin von Persephone"
     tile={logoGeborgenheit}
     tileAlt=""
-    layout="pair"
   />
 </BaseLayout>
 
 <style>
+  /* B8 Punkt 19 — see the markup comment above for the reasoning. Same
+     overlap idea as ClosingCta's tile/portrait (a smaller colored square
+     behind, a bigger card offset over its top-left corner), sized for a
+     small repeating grid instead of one large section. */
+  .offer-tiles {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .offer-tile {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    color: var(--color-text);
+    padding: 1.5rem 0 2.5rem 1.5rem;
+  }
+
+  .offer-tile-bg {
+    border-radius: var(--radius);
+    aspect-ratio: 4 / 3;
+    margin-left: 1.5rem;
+  }
+
+  .offer-tile-bg--teal-dark {
+    background: var(--color-teal-dark);
+  }
+
+  .offer-tile-bg--teal {
+    background: var(--color-teal);
+  }
+
+  .offer-tile-card {
+    position: absolute;
+    left: 0;
+    top: 1.5rem;
+    bottom: -1.5rem;
+    width: 82%;
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    box-shadow: 0 12px 32px rgba(24, 26, 43, 0.12);
+    padding: 1.5rem 1.75rem;
+    transition: transform 0.18s ease;
+  }
+
+  .offer-tile:hover .offer-tile-card {
+    transform: translateY(-2px);
+  }
+
+  .offer-tile-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+  }
+
+  .offer-tile-card p {
+    margin: 0 0 1rem;
+  }
+
+  .offer-tile-cta {
+    font-weight: 600;
+    color: var(--color-accent-strong);
+  }
+
+  @media (min-width: 700px) {
+    .offer-tiles {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
   .pf-selector {
     background: var(--color-bg-alt);
     border-radius: 1.125rem;
@@ -314,28 +459,31 @@ tracker.assertAllHandled('angebote.astro');
     }
   }
 
+  /* LAUF-2026-09-10.md B8 Punkt 23: "Die erste Ansicht sollte die
+     Wiedererkennungssätze nur anzeigen, und sie sollen die ganze Breite
+     des Kastens einnehmen. Erst wenn ich auf einen klicke, soll das
+     empfohlene Angebot aufgehen und die Sätze in eine Spalte links
+     einrücken." Two columns only once something is actually selected —
+     :has() again, same technique the response panels themselves already
+     use, so there's no separate JS path for this either. Below this
+     selector's own condition, the plain single-column .pf-selector-grid
+     rule above still applies (full-width statements, response tucked
+     underneath once chosen) — matches "auf schmalen Bildschirmen: eine
+     Spalte plus untergeschobene Empfehlung". */
   @media (min-width: 900px) {
-    .pf-selector-grid {
+    #pf-services-selector:has(input:checked) .pf-selector-grid {
       grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
       gap: clamp(3rem, 6vw, 5.5rem);
       align-items: start;
     }
 
-    /* FEEDBACK-2026-09-08.md #6: the response card should follow while
-       scrolling the (potentially longer) statement list, instead of
-       staying put at the top. Only from this breakpoint up — below it the
-       card sits under the list in normal flow (FEEDBACK's own condition:
-       "auf schmalen Viewports, wo sie unter der Liste steht, bleibt sie im
-       normalen Fluss"), where sticky would have nothing meaningful to
-       stick within. Header is `position: sticky; top: 0`, so the offset
-       clears it rather than sticking underneath. */
+    /* Punkt 25: no more scroll-following ("kein Mitwandern beim
+       Scrollen mehr") — position comes from the script's own margin-top
+       instead of position:sticky. align-self:start so that margin-top
+       actually moves the card down from the top of its grid cell, rather
+       than being overridden by grid's default stretch. */
     .pf-response-home {
-      position: sticky;
-      /* Clears the sticky site header (DESIGN-SYSTEM.md: "roughly ~117px
-         at desktop widths", no fixed value/CSS var exists for it) plus a
-         little breathing room, so the card settles just below the header
-         instead of running underneath it. */
-      top: 8rem;
+      align-self: start;
     }
   }
 </style>

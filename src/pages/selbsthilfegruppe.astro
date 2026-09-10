@@ -117,31 +117,32 @@ const detailItems = detailsList?.type === 'list' ? detailsList.items : [];
 
     <div class="container section-narrow next-meeting">
       {
-        /* NACHTLAUF-2026-09-08.md B6: live has this heading a second time,
-           big, above the "Aktuelles" eyebrow — not a duplicate to remove,
-           the small <h3> inside the card below is also real on the live
-           page. Same "second masthead-level heading mid-page" pattern as
-           Über uns's "Dein nächster Schritt"; not .heading-black, per the
-           design system's "one heading-black per page" rule. */
+        /* LAUF-2026-09-10.md B12 Punkt 34: the standalone "Nächstes
+           SHG-Treffen" heading that used to sit here, above "Aktuelles",
+           is gone — Marina asked for it removed outright, superseding
+           NACHTLAUF-2026-09-08.md B6's "not a duplicate, both are real"
+           call. The <h3> of the same name inside .meeting-card below
+           stays; that one she didn't flag. */
       }
-      <h2 class="shg-treffen-heading">{treffenHeadingText}</h2>
-      <span class="eyebrow">Aktuelles</span>
-      {aktuelles.map((p) => <p>{p}</p>)}
+      <div class="aktuelles-box">
+        <span class="eyebrow">Aktuelles</span>
+        {aktuelles.map((p) => <p>{p}</p>)}
 
-      <div class="meeting-card">
-        <h3>{treffenHeadingText}</h3>
-        <ul class="icon-list icon-list-check meeting-details">
-          {
-            detailItems.map((item, i) => (
-              <li>
-                <Icon name={detailIcons[i]} size={16} />
-                <span>{item}</span>
-              </li>
-            ))
-          }
-        </ul>
-        <hr />
-        <a href={cta.href} class="button button-primary meeting-cta">{cta.text}</a>
+        <div class="meeting-card">
+          <h3>{treffenHeadingText}</h3>
+          <ul class="icon-list icon-list-check meeting-details">
+            {
+              detailItems.map((item, i) => (
+                <li>
+                  <Icon name={detailIcons[i]} size={16} />
+                  <span>{item}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <hr />
+          <a href={cta.href} class="button button-primary meeting-cta">{cta.text}</a>
+        </div>
       </div>
     </div>
   </section>
@@ -157,8 +158,10 @@ const detailItems = detailsList?.type === 'list' ? detailsList.items : [];
 </BaseLayout>
 
 <style>
+  /* LAUF-2026-09-10.md B12 Punkt 33: "Mehr Raum zwischen Hauptabsatz und
+     Prinzipien-Titel" — was 3rem. */
   .principles-heading {
-    margin-top: 3rem;
+    margin-top: 5.5rem;
   }
 
   .principles-grid {
@@ -188,13 +191,15 @@ const detailItems = detailsList?.type === 'list' ? detailsList.items : [];
     margin-top: 3rem;
   }
 
-  /* NACHTLAUF-2026-09-08.md B6: live measures this at 40px — its own
-     size, not the shared 28px h2/h3 scale (same pattern as the founder
-     heading and Über uns's CTA heading: a one-off size for one specific
-     heading, not a scale change). */
-  .shg-treffen-heading {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+  /* B12 Punkt 34: "Aktuelles soll insgesamt in einem dunkleren Kästchen
+     sein" — --color-bg-alt, the same "dunkel" tone A4's section
+     alternation uses, so eyebrow/paragraph text needs no color rework of
+     its own to stay readable on it. .meeting-card (below) stays the
+     lighter inner surface the instruction calls "die hellere Box". */
+  .aktuelles-box {
+    background: var(--color-bg-alt);
+    border-radius: var(--radius);
+    padding: clamp(1.75rem, 4vw, 2.75rem);
   }
 
   .meeting-card {
@@ -213,9 +218,8 @@ const detailItems = detailsList?.type === 'list' ? detailsList.items : [];
     margin-bottom: 1.5rem;
   }
 
-  .meeting-details li {
-    font-weight: 700;
-  }
+  /* B12 Punkt 34: "Daten in der helleren Box nicht fettmarkiert" — was
+     font-weight: 700. */
 
   .meeting-card hr {
     border: none;

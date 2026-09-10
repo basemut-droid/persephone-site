@@ -35,6 +35,17 @@ const tracker = new BlockTracker(blocks);
 // reuses that shared pattern directly. See CLAUDE.md.
 const { eyebrow: heroEyebrow, title: heroTitle, intro: heroIntro } = tracker.heroFields(entry.data.title);
 
+// LAUF-2026-09-10.md B7 Punkt 15: Marina asked for a specific two-line
+// split — "Persephone ist die Frucht" / "der eigenen Krise" — not
+// whatever the browser's own wrap happens to produce (which could strand
+// "Krise" alone on its own line). A forced <br> guarantees the split;
+// .hero-title-break (below, in this page's own <style>) keeps it off
+// below a width where the first line wouldn't fit on its own, so a
+// narrow phone still gets a natural, unforced wrap instead of a third
+// line. heroTitle is this page's own known content, not user input —
+// same trust boundary as parseMarkdownBlocks' other set:html call sites.
+const heroTitleHtml = heroTitle.replace('Frucht der eigenen Krise', 'Frucht<br class="hero-title-break" />der eigenen Krise');
+
 // "Wer Dir hier begegnet" / "Was aus meiner Kinderwunschkrise wuchs" /
 // "Persephone als soziales Unternehmen" are one single centered section on
 // the live page (no image) — reuses the existing .section-centered +
@@ -106,7 +117,7 @@ tracker.assertAllHandled('ueber-uns.astro');
     <div class="hero-grid">
       <div class="hero-copy reveal reveal-left">
         {heroEyebrow && <span class="eyebrow">{heroEyebrow}</span>}
-        <h1 class="hero-headline heading-black">{heroTitle}</h1>
+        <h1 class="hero-headline heading-black" set:html={heroTitleHtml} />
         {heroIntro && <p>{heroIntro}</p>}
       </div>
       {
@@ -275,6 +286,21 @@ tracker.assertAllHandled('ueber-uns.astro');
   /* .hero/.hero-grid/.hero-copy/.hero-headline/.hero-image are shared
      (global.css) — nothing page-specific to add for the masthead. */
 
+  /* B7 Punkt 15: suppressed by default so a narrow phone gets the
+     browser's own natural wrap instead of a forced break stacking a third
+     line under it; 480px is comfortably past where "Persephone ist die
+     Frucht" alone needs to wrap at this H1's own clamp()'d size. Not
+     live-measured against an actual phone — see the handoff report. */
+  .hero-title-break {
+    display: none;
+  }
+
+  @media (min-width: 480px) {
+    .hero-title-break {
+      display: block;
+    }
+  }
+
   /* Qualification bands (NACHTLAUF-2026-09-08.md B2.1) — three full-bleed
      two-column rows, alternating sides. Page-scoped, not global.css: this
      shape (a solid-color column stretching the full row height, paired
@@ -288,8 +314,16 @@ tracker.assertAllHandled('ueber-uns.astro');
   }
 
   .quals-panel {
-    background: var(--color-teal-dark);
-    color: var(--color-bg);
+    /* LAUF-2026-09-10.md B7 Punkt 17: Marina asked for a lighter green with
+       more contrast — those two goals conflict at face value (a lighter
+       fill against the same light text loses contrast, not gains it), so
+       the fix flips the text to dark instead of just swapping the fill:
+       --color-sage (lighter, what she asked for) behind --color-text
+       (dark) measures 9.18:1, versus 2.96:1 for the old
+       teal-dark/light-text pairing — lighter fill AND better contrast,
+       both true at once. */
+    background: var(--color-sage);
+    color: var(--color-text);
     padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 5vw, 3rem);
     display: flex;
     flex-direction: column;
@@ -309,6 +343,10 @@ tracker.assertAllHandled('ueber-uns.astro');
     padding: 0;
     display: grid;
     gap: 0.75rem;
+    /* B7 Punkt 17 "Textfont größer": was the browser's unset default
+       (~16px, smaller than the rest of the page) — now matches the site's
+       own Fließtext size, not smaller, as asked. */
+    font-size: 1.25rem;
   }
 
   /* NACHTLAUF-2026-09-09.md E2: live's Ausbildung/Felderfahrung items are
@@ -368,21 +406,32 @@ tracker.assertAllHandled('ueber-uns.astro');
 
     /* NACHTLAUF-2026-09-09.md E2 crossfade, enhanced state only (see the
        script above): each band becomes a full-viewport sticky slide that
-       pins at the top and fades in as it starts covering the previous one
-       — the classic "later sibling paints over earlier, opacity animates
-       the handoff" scroll-stack technique, needing no scroll-position math
-       or extra spacer height, since the bands' own stacked block height
-       already provides the scroll distance. */
+       pins at the top and covers the previous one as it comes in — the
+       classic "later sibling paints over earlier" scroll-stack technique,
+       needing no scroll-position math or extra spacer height, since the
+       bands' own stacked block height already provides the scroll
+       distance. */
     .quals-scroller--enhanced .quals-band {
       position: sticky;
       top: 0;
       height: 100vh;
-      opacity: 0;
       overflow: hidden;
+    }
+
+    /* LAUF-2026-09-10.md B7 Punkt 18: the fade used to sit on the whole
+       band (.quals-band, panel and image together) — while it animated in,
+       the incoming band's own TEXT was semi-transparent, so the previous
+       band's pomegranate image showed straight through it. Marina liked
+       the overlap, not the see-through text. Moved to .quals-image alone:
+       the picture side still crossfades (the "Kante" she says can stay
+       transparent), the text panel is opaque and instant, on solid ground,
+       the moment its band is stacked into place. */
+    .quals-scroller--enhanced .quals-image {
+      opacity: 0;
       transition: opacity 0.6s ease;
     }
 
-    .quals-scroller--enhanced .quals-band.is-quals-active {
+    .quals-scroller--enhanced .quals-band.is-quals-active .quals-image {
       opacity: 1;
     }
 
