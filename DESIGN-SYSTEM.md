@@ -39,13 +39,17 @@ by the file's own comments against `docs/brand/Brandbook.pdf`. Components consum
 | `--color-teal` | `#48b0b0` | Türkis (Empathie) | service-card "teal" tone; `--color-band-bg` (newsletter strip); `.icon-list-check .icon` (checkmark/meeting-detail circles, since NACHTLAUF-2026-09-08.md A1 — was `--color-teal-dark`) |
 | `--color-teal-dark` | `#309898` | Tiefes Türkis | `--color-accent` → eyebrows, hover states, focus ring, card-button text; Über uns's qualification-band panels (B2.1) |
 | `--color-terracotta` | `#b33a3b` | Granatapfelrot (primary) | `--color-accent-strong` → H1, nav links, footer border/copyright, `.button-primary` fill, `.icon-circle` (section icons, Kontakt's eyebrow icons) |
-| `--color-terracotta-dark` | `#d83830` | Leuchtrot | `--color-cta-to` — unused by `.button-primary` since Phase 1.3 made it a solid fill instead of a gradient; a real use since NACHTLAUF-2026-09-08.md B8: `.icon-circle-terracotta-dark` (FAQs' accordion toggle, live-measured) |
-| — (literal, untokenized) | `#e9dccd` | — | footer background + footer-wave SVG fill |
+| `--color-terracotta-dark` | `#d83830` | Leuchtrot | `--color-cta-to` — **back in use as of LAUF-2026-09-10.md A3**: `.button-primary` is a gradient again (`terracotta` → `terracotta-dark`), reversing Phase 1.3's move to a solid fill — a fresh live measurement confirmed the gradient really is there. Also `.icon-circle-terracotta-dark` (FAQs' accordion toggle) |
+| `--color-teal-darker` | `#226e6e` | — (not a brand-book tone) | **New, LAUF-2026-09-10.md A5.** A fourth, darkest step of the teal family, proposed for the footer link color Marina asked to be green — every existing teal measures under 4.5:1 as text on the footer's beige background; this one measures 5.09:1. Flagged as a proposal awaiting her sign-off, not a confirmed brand color — see `OPEN-QUESTIONS.md`. |
 | — (literal, untokenized) | `#fff3cd` bg / `#664d03` text | — | `DraftNotice` banner only |
+
+`#e9dccd` (the footer's old untokenized background/wave-fill literal) is gone as of
+LAUF-2026-09-10.md A5 — it never matched the live site (measured `--color-bg-alt`
+instead) and has been removed from the project, not just overridden.
 
 Semantic aliases layered on top of the raw palette: `--color-accent` (teal-dark),
 `--color-accent-strong` (terracotta), `--color-cta-from`/`--color-cta-to` (terracotta →
-terracotta-dark), `--color-band-bg` (teal).
+terracotta-dark, back in active use as of A3 above), `--color-band-bg` (teal).
 
 ## Typography
 
@@ -100,17 +104,23 @@ h2/h3 stay at 400 regardless, unaffected either way.
 - Breakpoints actually used in the codebase: **900px** (nav collapses to burger; hero,
   philosophy/founder, and blog grids go single→multi column), **700px** (footer grid
   collapses; quote-stack stagger changes), **600px** (blog-teaser card stacks to one column)
-- **Two different "narrow" measures, not one.** `.section-narrow` (every body content
-  column, homepage's pain-points section included) is `56rem` (896px). `PageHero.astro`'s
-  own intro paragraph is separately `48rem` (768px) — narrower, and not built from the
-  `.section-narrow` token. NIGHT-RUN.md Phase 5 traced this back to
-  `external-review.md` finding #11 ("homepage inner container 896px, every subpage
-  768px"): both values are still live in the code today, just not on the elements that
-  finding implied — every subpage's *body* content is 896px, same as the homepage;
-  only the *hero intro line* at the top of each subpage is 768px. Flagged, not changed —
-  this may be intentional (a narrower measure for a short lede is common typographic
-  practice), but it isn't recorded anywhere as a decision, so it currently reads as
-  drift rather than a choice. See `OPEN-QUESTIONS.md` #17.
+- **`.section-narrow` no longer narrows anything, as of LAUF-2026-09-10.md A1.** Live
+  measures body-text columns at ~1200px, well past `.container`'s own usable width
+  (1248px max-width − 2×40px padding = 1168px) — so `.section-narrow`'s `max-width` was
+  raised from `56rem` (896px) to `1200px`, which never actually binds at any real
+  viewport width; `.container`'s own ~1168px governs instead, matching the live measure
+  closely enough that the doc treats them as equivalent. Affects every body content
+  column that used this class: Datenschutz, Disclaimer, FAQs, Blog-Index, Über uns,
+  Angebote, Beratung, Kennenlernen, Workshops, Selbsthilfegruppe, Impressum, and the
+  homepage's pain-points section. The homepage's `.narrow` (philosophy-grid) got the
+  same treatment, up from `62rem` (992px). Blog articles' own separate `42rem` (672px)
+  cap (`.post-header`/`.post-body`/`.post-author`) was removed outright rather than
+  raised, for the same reason — the surrounding `.container` already gives the right
+  width once nothing overrides it.
+- **`PageHero.astro`'s own intro paragraph stays at `48rem` (768px)**, untouched by A1 —
+  that's the plain-banner hero variant's short lede line, not a body-text column, and
+  nothing in Marina's 2026-09-10 feedback named it. `OPEN-QUESTIONS.md` #17's older note
+  about this being unrecorded drift (rather than a deliberate choice) still stands.
 
 ## Buttons
 
@@ -121,12 +131,15 @@ A3, measured live):**
   its own token, distinct from `--radius`/6px used by cards/dropdowns/photos), `font-weight:
   500`, `font-size: 1.0625rem` (17px), `border: 2px solid transparent`, `min-height: 44px`
   (touch target), hover lifts `translateY(-1px)`.
-- `.button-primary`: solid `var(--color-accent-strong)` (terracotta) fill, `var(--color-bg)`
-  text (#fbf8f5, not pure white) — a gradient before this run, which never appeared on the
-  live site. `.button-hero` (the homepage hero CTA only) adds `padding: 18px 32px`,
-  `min-height: 57px` — italic was removed ersatzlos, it doesn't appear anywhere live either.
-  `--color-cta-from`/`--color-cta-to` are now unused by `.button-primary`; kept defined and
-  flagged rather than deleted.
+- `.button-primary`: **gradient again as of LAUF-2026-09-10.md A3**
+  (`linear-gradient(--color-cta-from 0%, --color-cta-to 100%)`, i.e. terracotta →
+  terracotta-dark), `var(--color-bg)` text (#fbf8f5, not pure white). This reverses
+  `RUN-2026-09-07-B1.md` Phase 1.3's move to a solid fill — that call was based on an
+  earlier live read that turned out wrong; a fresh measurement confirmed the gradient is
+  genuinely on the live site and Marina asked for it back explicitly. Hover reverses the
+  gradient's direction (same two tones, not a third color). `.button-hero` (the homepage
+  hero CTA only) adds `padding: 18px 32px`, `min-height: 57px` — italic was removed
+  ersatzlos, it doesn't appear anywhere live either.
 - `.button-outline` (the site's "secondary" button, e.g. "Erfahre mehr"): solid
   `var(--color-bg-alt)` fill, `var(--color-accent)` (teal) text, uppercase — not actually a
   transparent/bordered treatment despite the class name; kept as-is to avoid a wider rename,
@@ -151,7 +164,8 @@ A3, measured live):**
 
 ## Are these centralized?
 
-**Yes.** All of the above (aside from the two flagged literals/inconsistencies) lives as
+**Yes.** All of the above (aside from the one remaining flagged literal, `DraftNotice`'s
+banner colors) lives as
 CSS custom properties in `src/styles/global.css` and is consumed via `var()` in every
 component's scoped `<style>` block. There is no hardcoded duplicate palette or type scale
 anywhere else in the codebase that was found while reading the front page's full component
@@ -296,16 +310,22 @@ question/answer; summarized here for the record):
 ## Icon set (RUN-2026-09-07.md Phase B2)
 
 `Icon.astro` is one shared inline-SVG icon component — no icon font, no new
-dependency — used by Beratung, Workshops and Selbsthilfegruppe wherever the live site
-shows a functional icon: `book` (Workshops & Trainings card and its list markers),
-`scroll` (Ressourcen card and its list markers — renamed from `document`
-2026-09-08, redrawn as a rolled parchment; the earlier folded-corner shape wasn't
-recognizable, per `NACHTLAUF-2026-09-08.md` A2), `pin` (badge/pill location),
-`calendar`/`clock` (meeting-details card), `shield`/`heart`/`group` (the three
-Selbsthilfegruppe principles), `check` (Beratung's list items). Every icon is a
-24×24 stroke-based glyph on `currentColor` (stroke-width 2, check 2.5 — thickened
-2026-09-08, the meeting-detail circles measured too fine to read), so it inherits
-size/color from its wrapper the way a font-icon would.
+dependency — used by Beratung, Workshops, Selbsthilfegruppe and (since
+LAUF-2026-09-10.md Teil C) Kontakt wherever the live site shows a functional icon:
+`book` (Workshops & Trainings card and its list markers), `scroll` (Ressourcen card
+and its list markers — **redrawn a second time, LAUF-2026-09-10.md B11 Punkt 31**:
+the 2026-09-08 "rolled parchment" redraw was a vertical standing tube with a
+text-line front face, which Marina again reported as an unidentifiable object; now a
+horizontal roll — two tall end-cap ellipses, the convention a rolled rug/paper-towel
+icon uses, joined top/bottom with two short text-lines between), `pin` (badge/pill
+location, Kontakt's Standorte), `calendar`/`clock` (meeting-details card, Kontakt's
+Kennenlernen card and Terminverfügbarkeit), `shield`/`heart`/`group` (the three
+Selbsthilfegruppe principles), `check` (Beratung's list items), `mail` (**new,
+LAUF-2026-09-10.md Teil C**: Kontakt's "Schreib mir" card — an envelope outline plus
+the open-flap chevron). Every icon is a 24×24 stroke-based glyph on `currentColor`
+(stroke-width 2, check 2.5 — thickened 2026-09-08, the meeting-detail circles
+measured too fine to read), so it inherits size/color from its wrapper the way a
+font-icon would.
 
 **These are functional UI glyphs, not brand marks**, so a plain hand-drawn/open
 equivalent stands in for whatever icon font the live Avada theme actually uses —
@@ -367,8 +387,20 @@ element with this class is **fully visible by default**; only the layout's own s
 (and only once it has confirmed JavaScript actually ran, `prefers-reduced-motion`
 isn't set, and `IntersectionObserver` exists) adds `.reveal-pending`, which is what
 actually hides it before fading it back in on scroll. A page with JavaScript disabled,
-or a very old browser, never has invisible content. First (and currently only) use:
-Über uns's three qualification bands (B2.1).
+or a very old browser, never has invisible content. First use: Über uns's three
+qualification bands (B2.1).
+
+**Two directions added, LAUF-2026-09-10.md A9.** `.reveal-left`/`.reveal-right`
+modifiers (combined with `.reveal`, e.g. `class="reveal reveal-left"`) slide in from
+that side (`translateX(∓24px)`) instead of the plain variant's `translateY(16px)`,
+matching the live site's own `fadeInLeft`/`fadeInRight` hero animations (read out of
+the original Avada markup). Applied to every hero's text column (`reveal-left`) and
+image column (`reveal-right`) — `HomePage.astro`, `PageHero.astro`, Über uns's own
+hero, the blog-article hero, and Kontakt's hero. Transition duration is `0.7s` for
+every `.reveal` variant (was `0.5s` — live measures 0.6–0.9s across its several hero
+animations; one shared value rather than tuning each separately). Same safety
+contract as the plain variant: no-JS/old-browser/reduced-motion all render fully
+visible immediately, nothing is ever permanently hidden.
 
 ## Component inventory
 
@@ -416,20 +448,26 @@ uses it — this is the build-from-this list for Phase 3.
 
 ## Footer spec
 
-- **Structure:** a decorative wave divider (inline SVG, `margin-top: 6rem` above it) →
-  footer proper, a 3-column grid (`2fr 1fr 1fr`: brand column wider than the two link
-  columns) → a full-width copyright line below the grid.
-- **Wave divider:** one hand-drawn `<path>` filled with `var(--color-footer-bg)`, `40px`
-  tall (viewBox `50px` since NACHTLAUF-2026-09-08.md A5, for more room in the curve),
-  `preserveAspectRatio="none"` so it stretches full-width without distortion clamps.
-  Redrawn A5 with an irregular, non-repeating amplitude that tapers toward both ends
-  (a brushstroke, not a regular scallop wave) — own path, the live separator is an
-  Avada asset.
+- **Structure:** footer proper (background `var(--color-bg-alt)`, `border-top: 1px solid
+  rgba(24,26,43,.15)`, `margin-top: 6rem` above it) → a 3-column grid (`2fr 1fr 1fr`: brand
+  column wider than the two link columns) → a full-width copyright line below the grid.
+- **No more wave divider, as of LAUF-2026-09-10.md A6.** The A5-era hand-drawn brushstroke
+  `<path>` (filled with the untokenized `#e9dccd`, now removed from the project) is gone
+  ersatzlos — Marina called it "komisch" and the live separator itself is an Avada asset
+  (off-limits), so this became a plain hairline border instead of a redrawn brushstroke.
+- **Footer background, as of A5:** `var(--color-bg-alt)` (`#f3ece6`) — a fresh live
+  measurement, replacing the untokenized `#e9dccd` literal that never matched the live
+  site (that value has been deleted from `global.css`'s `:root`, not just overridden here).
 - **700px collapse:** `.footer-grid` drops from `2fr 1fr 1fr` to a single column; the brand
   block, then each link column, stack vertically.
-- **Link styling:** footer nav links are plain text at `opacity: 0.85`, going to
-  `opacity: 1` + underline on hover — deliberately quieter than the header's nav links
-  (which use a color change instead). Column titles are bold, no uppercase.
+- **Link styling, as of A5:** footer nav links are `var(--color-teal-darker)` (proposed new
+  token, full opacity) — Marina asked for green text; every existing teal fails 4.5:1
+  contrast against the footer's beige, this one measures 5.09:1. Flagged pending her
+  sign-off (see `OPEN-QUESTIONS.md`). Was `var(--color-text)` at `opacity: 0.85`. Column
+  titles are bold, no uppercase.
+- **Newsletter eyebrow, as of A7:** `text-transform: none` — its own text is "Persephones
+  e-Brief"; the shared `.eyebrow` uppercase transform would turn that into "E-BRIEF" (the
+  wrong case), so uppercase is dropped here rather than the lowercase e.
 - **Brand column:** signet image (72×73, `var(--radius)` corners) → tagline (accent-colored,
   bold, with a left accent-strong border like a pull-quote) → newsletter eyebrow + an
   underlined text link (not a button) to `/newsletter/`.

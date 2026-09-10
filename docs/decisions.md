@@ -6,6 +6,113 @@ can stay a "current state only" document (`external-review.md`'s "PROCESS NOTE" 
 
 ---
 
+# Lauf — 2026-09-10 (`docs/LAUF-2026-09-10.md`, complete)
+
+Marina's 34-point feedback list (`docs/feedback-2026-09-10/`) plus a new Kontaktseite
+built from her own Claude Design prototype (`docs/mockups/kontakt-prototype.dc.html`).
+Four commits, one per Teil (A/B/C, D folded into C's commit plus this record).
+
+**Teil A — site-wide.** A1: Fließtext columns to ~1200px — the fix was almost always
+removing/raising a narrower class (`.section-narrow`, blog's own `42rem`, homepage's
+`.narrow`) rather than touching `.container`, whose own ~1168px already matches;
+Punkt 3's "two columns end at the same height" done via CSS `align-items:stretch` +
+a `justify-content:space-between` paragraph wrapper, not a re-measured pixel constant
+(self-adjusts if the copy length ever changes, unlike the previous run's fix for the
+same complaint). A2: hero title→text gap to 25px (was 55px). A3: `.button-primary`
+gradient restored — Marina asked for it explicitly; a fresh live measurement
+confirmed it's genuinely there, reversing `RUN-2026-09-07-B1.md` Phase 1.3's
+"solid fill" call, which was based on an earlier, apparently mistaken read. A4:
+homepage sections actually alternate dunkel/hell now (previously two dunkel
+sections could sit back-to-back). A5: footer background fixed to `--color-bg-alt`,
+its untokenized `#e9dccd` literal deleted from the project; footer links get a new
+proposed token `--color-teal-darker` (green, pending Marina's sign-off — contrast
+math in the token's own `global.css` comment). A6: wavy footer divider replaced with
+a hairline (Avada original stays off-limits). A7: "e-Brief" lowercased everywhere,
+including a `.eyebrow` uppercase-transform trap in the footer that would have
+silently produced "E-BRIEF". A8: FAQ answers were rendering literal `*asterisks*`
+instead of italics — `faqs.astro` was interpolating `{item.answer}` directly instead
+of through `mdInlineHtml()`, the same bug every other markdown-sourced page had
+already been fixed against. A9: heroes gained direction-aware reveal animations
+(`.reveal-left`/`.reveal-right`, new modifiers on the existing `.reveal` mechanism —
+matches the live site's own Avada `fadeInLeft`/`fadeInRight`), same no-JS/reduced-
+motion safety contract as before.
+
+**Teil B — page by page.** B1: the header's "Trennpunkt zwischen Angebote und Blog"
+was the dropdown's "▾" text glyph rendering as a barely-visible dot at this size in
+DM Sans — replaced with an inline SVG chevron (screenshot-verified against the
+running dev server; a first attempt just repositioning the old glyph didn't fix it,
+because the glyph itself was the problem). B2: newsletter fragment sentence
+removed. B3: Disclaimer's title forced to one line, hyperlinks get a sage-green
+highlight behind them (not recolored text — the only WCAG-passing option of the
+ones measured). B4: FAQs got real clickable category tabs — the tablist itself needs its
+enhancement script (ARIA roles, keyboard nav, show/hide), so it ships `hidden`
+until JS confirms it's running; verified with Playwright, JavaScript fully
+disabled, that all 13 questions across all three categories stay reachable exactly
+as before (the plain stacked-sections fallback), and separately that the *other*
+tab-like mechanism this run built (Angebote's B8 selector, pure CSS `:has()`) needs
+no JavaScript at all for its interaction to work. B5/B6: already correct, no change needed. B7: Über uns's
+hero title forced onto Marina's requested two lines (needed both a forced `<br>` and
+widening the hero-copy column — the shared 500px column was too narrow for line one
+alone); qualification bands switched to sage/dark-text (lighter *and* higher-
+contrast, not a straight swap — the literal ask didn't work as stated, described in
+the code); band-overlap transparency fixed by moving the crossfade's opacity from
+the whole band onto just the image, so text is never see-through. B8: Angebote's
+selector now starts with no statement selected and full-width statements (`checked`
+default removed); clicking one aligns the response card to it via a small
+enhancement script (no more scroll-following `position:sticky`); the whole mechanism
+still works with JavaScript off, confirmed with Playwright (native radio inputs +
+`:has()`); new colored "button-Kästchen" teasers reusing the existing
+recognition-panel offer data; intro paragraph before the H2 removed; Angebote's
+photo/logo now overlap (`layout="pair"` removed, reversing a prior session's
+"confirmed non-overlap" finding for this specific page — Marina's fresh screenshot
+disagreed). B9: Angebote-dropdown entries recolored to teal (live-plausible, not
+directly measurable — flagged). B10: Beratung's Dauer/Ort badges moved above their
+lists; Beratung/Workshops' photo+logo switched *to* `layout="pair"` (opposite
+direction from Angebote — each page needed the correction the other one didn't).
+B11: Workshops' two cards stack now; the Ressourcen icon was redrawn a *second*
+time — the first redraw (2026-09-08) was a vertical tube that Marina again couldn't
+identify, so this one uses a horizontal-roll convention instead (rendered and
+visually checked via `sharp`-rasterized SVG before committing to the final path).
+B12: Selbsthilfegruppe's duplicate heading removed, Aktuelles sits in a
+`--color-bg-alt` box, its data no longer bold, more space before the principles
+heading. B13: blog articles now use the shared split-hero component (with a new
+subtitle, reusing the post's existing `description` field) instead of a plain
+banner + separately-stacked image.
+
+**Teil C — Kontaktseite neu.** Rebuilt from scratch against Version A of
+`docs/mockups/kontakt-prototype.dc.html`, not incrementally patched — the old page's
+content-collection extraction (`kontakt.md`'s body) no longer matches the new shape
+at all; only its `title`/`description` are still read. `ContactForm.astro`'s fields
+changed to match the prototype (dropped phone, changed Anliegen to the prototype's
+three options). New `mail` icon added to `Icon.astro`. The "Schreib mir" disclosure
+is a native `<details>`, not a scripted toggle — works with zero JavaScript by
+construction, verified with Playwright. Three things the brief explicitly said not
+to decide are marked in the code and listed in `OPEN-QUESTIONS.md` #25–27: the
+form's real submission endpoint, the three-vs-four Anliegen-option conflict, and
+overlay-vs-link for "Termin buchen".
+
+**Teil D — closing.** `npm run build` (which runs `build-check.mjs`) is clean.
+Visual/interaction verification used Playwright (`npm install --no-save`, already
+present from an earlier session — see `HANDOFF.md`'s Session note) at 1440px and
+390px, JavaScript on and off, on the pages this run changed most: Über uns, Angebote,
+Kontakt, FAQs. An initial attempt at the same checks via a raw `msedge.exe
+--headless --screenshot` CLI invocation produced what looked like a real 390px
+horizontal-overflow bug on every hero (`.hero-copy`'s text overflowing past the
+viewport) — extensively chased with several CSS fixes before isolating it to the
+screenshot tool itself: reproduced with plain system fonts and zero site CSS at
+narrow `--window-size` values on this machine, absent at the same widths under
+Playwright. The two defensive CSS changes made while chasing it
+(`grid-template-columns: minmax(0, 1fr)` instead of bare `1fr` on `.hero-grid`;
+`.hero-copy`'s `align-items: stretch` instead of `flex-start`, with the CTA button
+opted back out via `align-self`) were kept — both are correct practice on their own
+terms even though they weren't fixing a bug that turned out not to exist — but their
+`global.css` comments were corrected afterward to not overstate that dead end as a
+confirmed sitewide defect. Lesson for next time, recorded in `HANDOFF.md`: reach for
+Playwright first, not a bare headless-browser CLI invocation, for exactly this kind
+of narrow-viewport check.
+
+---
+
 # Night run — 2026-09-06/07 (Phases 1-6, complete)
 
 Executed `docs/NIGHT-RUN.md` unattended, per `docs/external-review.md` (authority for

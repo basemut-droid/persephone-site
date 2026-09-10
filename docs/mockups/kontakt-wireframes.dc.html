@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#e9e6e0;font-family:'DM Sans',system-ui,sans-serif}
+.dv-turn{padding:40px 44px 60px;scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 24px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#181A2B;color:#fff;border-radius:4px;text-decoration:none}
+.dv-tname{font:700 14px/1.2 'DM Sans',sans-serif;color:#181A2B}
+.dv-opts{display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(24,26,43,.08);color:#181A2B;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font:500 12px/1.3 'DM Sans',sans-serif;color:rgba(24,26,43,.6)}
+.dv-card{max-width:100%;background:#FBF8F5;border:1px solid rgba(24,26,43,.12);border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}
+.dv-opt:target .dv-oid{background:#D83830;color:#fff}
+.dv-next{margin:26px 0 0;font:12px/1.6 'DM Sans',sans-serif;color:rgba(24,26,43,.55);max-width:900px}
+.note{position:relative;border:1.5px dashed #D83830;border-radius:5px;padding:8px 10px;font:500 11px/1.4 'DM Sans',sans-serif;color:#B33A3B;background:#FBF8F5}
+.wf-box{border:1.5px dashed rgba(24,26,43,.35);border-radius:4px;display:flex;align-items:center;justify-content:center;color:rgba(24,26,43,.4);font:500 11px 'DM Sans',sans-serif;text-align:center}
+.kicker{font:700 11px 'DM Sans',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#D83830;margin:0 0 6px}
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;background:#B33A3B;color:#FBF8F5;font:700 14px 'DM Sans',sans-serif;padding:13px 22px;border-radius:5px;border:none;cursor:pointer}
+.btn-secondary{display:inline-flex;align-items:center;justify-content:center;background:transparent;color:#181A2B;font:700 14px 'DM Sans',sans-serif;padding:12px 20px;border-radius:5px;border:1.5px solid #181A2B;cursor:pointer}
+label{font:500 12px 'DM Sans',sans-serif;color:#181A2B;display:block;margin-bottom:6px}
+input,select,textarea{font:400 13px 'DM Sans',sans-serif;border:1.5px solid #D83830;border-radius:4px;padding:9px 10px;color:#181A2B;background:#fff;width:100%;box-sizing:border-box}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t1">
+  <div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Kontaktseite — Router vs. gleichwertige Buchung</span></div>
+  <div class="dv-opts">
+
+    <div class="dv-opt" id="1a" style="width:1000px">
+      <div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Reiner Router — Formular erscheint erst nach Wahl</div>
+      <div class="dv-card">
+        <div style="padding:36px 40px 44px;display:flex;flex-direction:column;gap:36px">
+          <div>
+            <div class="kicker">KONTAKT</div>
+            <h1 style="margin:0 0 8px;font:900 32px/1.15 'DM Sans',sans-serif;color:#181A2B">Wonach suchst Du?</h1>
+            <p style="margin:0;font:400 15px/1.5 'DM Sans',sans-serif;color:#181A2B;max-width:560px">Wähle den Weg, der zu Deinem Anliegen passt — beide führen direkt weiter, ohne Umwege.</p>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+            <div style="border:1.5px solid rgba(24,26,43,.15);border-radius:8px;padding:28px;display:flex;flex-direction:column;gap:14px;background:#fff">
+              <div class="kicker" style="color:#309898">FRAGE ODER ZUSAMMENARBEIT</div>
+              <h2 style="margin:0;font:700 20px/1.3 'DM Sans',sans-serif;color:#181A2B">Schreib mir</h2>
+              <p style="margin:0;font:400 14px/1.5 'DM Sans',sans-serif;color:#181A2B;flex:1">Für Fragen zu Persephone, Presseanfragen oder Kooperationsideen — ich antworte i.d.R. innerhalb von 48 Std.</p>
+              <a href="#1a-form" class="btn-secondary" style="align-self:flex-start;text-decoration:none">Nachricht schreiben ↓</a>
+            </div>
+            <div style="border:1.5px solid #B33A3B;border-radius:8px;padding:28px;display:flex;flex-direction:column;gap:14px;background:#FBF8F5">
+              <div class="kicker">KENNENLERNEN</div>
+              <h2 style="margin:0;font:700 20px/1.3 'DM Sans',sans-serif;color:#181A2B">Vereinbare ein Kennenlerngespräch</h2>
+              <p style="margin:0;font:400 14px/1.5 'DM Sans',sans-serif;color:#181A2B;flex:1">Ein kostenloses, unverbindliches Gespräch — online über Teams oder in Wien. Du wählst Deinen Termin direkt im Kalender.</p>
+              <button class="btn-primary" style="align-self:flex-start">Termin buchen</button>
+            </div>
+          </div>
+
+          <div class="note">Direkter Link zur bestehenden MS-Bookings-Seite — Kalenderabgleich läuft automatisch, kein Nachsehen im Postfach nötig, um zu wissen, ob jemand buchen will.</div>
+
+          <div id="1a-form" style="border-top:1.5px dashed rgba(24,26,43,.25);padding-top:28px;display:grid;grid-template-columns:220px 1fr;gap:28px">
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div class="wf-box" style="width:100%;aspect-ratio:1;">Foto Marina</div>
+              <div>
+                <div class="kicker" style="font-size:10px">ERREICHBARKEIT</div>
+                <p style="margin:0;font:400 13px/1.5 'DM Sans',sans-serif;color:#181A2B">Antwort i.d.R. innerhalb von 48 Std., Mo–Fr.</p>
+              </div>
+            </div>
+            <div>
+              <div class="kicker" style="font-size:10px">ERSCHEINT NACH KLICK AUF „SCHREIBEN"</div>
+              <h3 style="margin:0 0 16px;font:700 18px/1.3 'DM Sans',sans-serif;color:#181A2B">Deine Nachricht</h3>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+                <div><label>Dein Name *</label><input></div>
+                <div><label>E-Mail *</label><input></div>
+              </div>
+              <div style="margin-bottom:14px">
+                <label>Anliegen *</label>
+                <select><option>Bitte wählen…</option><option>Frage zu Persephone</option><option>Kooperation &amp; Presse</option><option>Sonstiges</option></select>
+              </div>
+              <div class="note" style="display:inline-block;margin-bottom:14px">Alte Optionen „Beratung / Psychoedukation / SHG" entfernt — sie suggerierten, man könne diese Angebote hier buchen.</div>
+              <div style="margin-bottom:18px"><label>Deine Nachricht</label><textarea style="height:70px"></textarea></div>
+              <button class="btn-primary">Senden</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="1b" style="width:1000px">
+      <div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Formular bleibt sichtbar, Buchung gleichwertig oben</div>
+      <div class="dv-card">
+        <div style="padding:36px 40px 44px;display:flex;flex-direction:column;gap:28px">
+          <div>
+            <div class="kicker">EINLADUNG</div>
+            <h1 style="margin:0 0 8px;font:900 30px/1.15 'DM Sans',sans-serif;color:#181A2B">Lass uns ins Gespräch kommen.</h1>
+            <p style="margin:0;font:400 15px/1.5 'DM Sans',sans-serif;color:#181A2B;max-width:600px">Schreib mir, wenn Du eine Frage hast oder mit mir zusammenarbeiten möchtest. Möchtest Du Marina persönlich kennenlernen, vereinbare direkt ein Gespräch.</p>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;border:1.5px solid rgba(24,26,43,.12);border-radius:8px;padding:20px;background:#fff">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div class="kicker" style="color:#309898;margin-bottom:2px">SCHREIBEN</div>
+              <div style="font:700 15px 'DM Sans',sans-serif;color:#181A2B">Frage oder Kooperation</div>
+              <a href="#1b-form" style="font:700 13px 'DM Sans',sans-serif;color:#181A2B;text-decoration:none">Zum Formular ↓</a>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;border-left:1.5px dashed rgba(24,26,43,.2);padding-left:20px">
+              <div class="kicker" style="margin-bottom:2px">KENNENLERNEN</div>
+              <div style="font:700 15px 'DM Sans',sans-serif;color:#181A2B">Kennenlerngespräch, kostenlos &amp; unverbindlich</div>
+              <button class="btn-primary" style="align-self:flex-start;margin-top:4px">Termin buchen</button>
+            </div>
+          </div>
+          <div class="note">Gleiche Funktion wie der Header-Button „Kennenlernen vereinbaren" — hier zusätzlich direkt im Blickfeld, damit niemand erst das Formular ausfüllt, der eigentlich buchen wollte.</div>
+
+          <div id="1b-form" style="display:grid;grid-template-columns:220px 1fr;gap:28px;border-top:1.5px dashed rgba(24,26,43,.25);padding-top:24px">
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div class="wf-box" style="width:100%;aspect-ratio:1;">Foto Marina</div>
+              <div>
+                <div class="kicker" style="font-size:10px">STANDORTE</div>
+                <p style="margin:0;font:700 13px/1.6 'DM Sans',sans-serif;color:#181A2B">Wien</p>
+                <p style="margin:0 0 8px;font:400 13px/1.5 'DM Sans',sans-serif;color:#181A2B">Praxisraum 3. Bezirk · Walk &amp; Talk 2. Bezirk</p>
+                <p style="margin:0;font:700 13px/1.6 'DM Sans',sans-serif;color:#181A2B">Online</p>
+                <p style="margin:0;font:400 13px/1.5 'DM Sans',sans-serif;color:#181A2B">Über Teams</p>
+              </div>
+            </div>
+            <div>
+              <div class="kicker" style="font-size:10px">FORMULAR — FÜR FRAGEN &amp; KOOPERATIONEN</div>
+              <h3 style="margin:0 0 16px;font:700 18px/1.3 'DM Sans',sans-serif;color:#181A2B">Deine Nachricht</h3>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+                <div><label>Dein Name *</label><input></div>
+                <div><label>E-Mail *</label><input></div>
+              </div>
+              <div style="margin-bottom:14px">
+                <label>Anliegen *</label>
+                <select><option>Bitte wählen…</option><option>Frage zu Persephone</option><option>Kooperation &amp; Presse</option><option>Sonstiges</option></select>
+              </div>
+              <div style="margin-bottom:18px"><label>Deine Nachricht</label><textarea style="height:70px"></textarea></div>
+              <button class="btn-primary">Senden</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <p class="dv-next">Weiter denkbar: „<a class="dv-oid" href="#1a">1a</a> aber Buchungskarte optisch dominanter" · „<a class="dv-oid" href="#1b">1b</a> mit Foto/Illustration statt Formular-Platzhalter" · „beide auf Mobile zeigen"</p>
+</section>
+
+</x-dc>
+</body>
+</html>

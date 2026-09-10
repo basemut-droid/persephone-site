@@ -468,3 +468,63 @@ Der Besitzer hat sich für den Empfehlung gefolgt und umbenannt: Name **und** Pf
 wandern beide auf „Kennenlernen" (NACHTLAUF-2026-09-08.md C2). Die Seite lebt jetzt
 unter `/kennenlernen/`; die zusätzliche Weiterleitung `/termine/` → `/kennenlernen/`
 steht in `docs/START-CHECKLISTE.md` Teil 3.
+
+# Neu aus LAUF-2026-09-10.md
+
+## 25. Kontakt-Formular: kein Absendeweg — DECIDED, BLOCKED ON EINER URL
+
+Beschlossen ist ein Microsoft-Formular; die Formular-URL fehlt aber bis heute. Die
+neue Kontaktseite (Teil C) hat die Felder aus Marinas Prototyp gebaut
+(`ContactForm.astro`: Name, E-Mail, Anliegen, Nachricht), aber `<form action="#">`
+ist ein sichtbarer Platzhalter — siehe den `TODO`-Kommentar direkt im Component. Sobald
+die Formular-URL existiert: entweder `action` darauf umbiegen, oder das `<form>` ganz
+durch ein eingebettetes Microsoft-Formular ersetzen (diese Wahl ist selbst offen, siehe
+Punkt 27 unten).
+
+## 26. Kontakt: drei oder vier Anliegen-Optionen? — WIDERSPRUCH, NICHT AUFGELÖST
+
+Der Prototyp (`docs/mockups/kontakt-prototype.dc.html`) bietet drei Optionen: „Frage zu
+Persephone", „Kooperation & Presse", „Sonstiges". Beschlossen waren an anderer Stelle
+**vier** Anliegen-Optionen, ausdrücklich ohne fünfte (siehe Punkt "Kontakt's Anliegen
+dropdown" in `HANDOFF.md`, Entscheidung 2026-09-08). Dieser Lauf hat sich für die drei
+aus dem Prototyp entschieden, weil er der jüngere Stand ist (LAUF-2026-09-10.md C3.2) —
+aber das löst den Widerspruch nicht auf, es wählt nur eine Seite davon. Marina/Claudio:
+bitte entscheiden, ob die vierte Option zurückkommt oder die frühere Vier-Optionen-
+Entscheidung selbst überholt ist.
+
+## 27. Kontakt: „Termin buchen" — Overlay oder eigene Seite?
+
+Der Prototyp öffnet für „Termin buchen" ein Overlay mit Platzhaltertext ("Hier
+erscheint die bestehende Buchungsseite"). Es gibt aber bereits `/kennenlernen/` als
+eigene Seite, und beschlossen war, dass Kontakt- und Terminseite getrennt bleiben. Der
+Link geht deshalb vorerst auf `/kennenlernen/` — die Variante, die keine Entscheidung
+vorwegnimmt. Zu klären: soll das stattdessen ein Overlay mit eingebettetem Kalender
+werden (wie im Prototyp), oder bleibt die einfache Verlinkung?
+
+## 28. Zwei Farbvorschläge brauchen Marinas Auge
+
+Beide sind umgesetzt, weil das Dokument es so verlangte, aber beide sind *mein*
+Vorschlag, nicht ihre Bestätigung:
+
+- **`--color-teal-darker` (`#226e6e`)** für die grüne Footer-Schrift (A5) — keine der
+  bestehenden Türkistöne erfüllt 4,5:1 Kontrast auf dem Footer-Beige, dieser schon
+  (5,09:1). Ist das noch „grün" in ihrem Sinn?
+- **Angebote-Dropdown-Farbe (B9)**: `--color-accent` (`#309898`) auf Weiß liegt bei
+  ~3,4:1 — unter dem Fließtext-Standard, aber die Menüeinträge sind groß genug gesetzt,
+  dass das vertretbar sein könnte. Alternative: der dunklere `--color-teal-darker`.
+
+## 29. Punkt 35 fehlt in Marinas Liste
+
+Ihre Liste springt von 34 auf 36 (siehe `docs/LAUF-2026-09-10.md`). Nichts in diesem
+Lauf deutete darauf hin, worum es gegangen sein könnte — bitte nachreichen, falls es
+noch relevant ist.
+
+## 30. B10 Punkt 28 („Gut zu wissen"-Gestaltung) — konnte nicht bestätigt werden
+
+Marinas Screenshot-Vergleich (`docs/feedback-2026-09-10/punkt-28.png`) zeigt im Rebuild
+eine boxig wirkende Akkordeon-Darstellung mit eckigen statt runden Icons — das passt
+aber nicht zu dem, was `global.css`s geteiltes `.accordion-item` tatsächlich rendert
+(schlichte Zeilen mit Trennlinie, runde Icons), das schon dem Original entspricht.
+Möglich, dass der Screenshot ein Browser-/Inspektor-Overlay statt der echten Seite
+zeigt. Keine Änderung vorgenommen, weil sich in der aktuellen Codebase keine
+abweichende Darstellung finden ließ — bitte nach diesem Lauf direkt nachprüfen.

@@ -4,6 +4,50 @@ Read this first at the start of every session. History and past decisions moved 
 `docs/decisions.md` (2026-09-07) so this file stays short enough to actually read —
 see `external-review.md`'s "PROCESS NOTE" for why that matters.
 
+## Most recent run: LAUF-2026-09-10 (`docs/LAUF-2026-09-10.md`)
+
+Marina's 34-point feedback list plus a brand-new Kontaktseite from her own Claude
+Design prototype. All four parts done; see `docs/decisions.md`'s matching entry for
+the full record and `OPEN-QUESTIONS.md` #25–30 for what's still waiting on her/Claudio.
+
+**Teil A (site-wide):** Fließtext columns widened to ~1200px everywhere
+(`.section-narrow` no longer binds below `.container`'s own width); hero title→text
+gap corrected to 25px; `.button-primary` is a gradient again (Marina's explicit ask,
+reversing an earlier session's "solid fill" call); homepage sections now genuinely
+alternate dunkel/hell; footer background fixed to `--color-bg-alt` and its old
+untokenized `#e9dccd` literal removed from the project; footer's wavy divider replaced
+with a hairline; footer links use a new `--color-teal-darker` token (green, pending
+Marina's sign-off); "e-Brief" lowercased everywhere including a `.eyebrow` uppercase
+trap in the footer; FAQ answers now render `*Persephone*` as real italics (were
+literal asterisks — `mdInlineHtml()` wasn't being called); heroes gained left/right
+slide-in reveal animations (existing `.reveal` mechanism, two new direction
+modifiers).
+
+**Teil B (page by page):** header dropdown's "▾" text glyph — the actual cause of
+"Trennpunkt zwischen Angebote und Blog" — replaced with an inline SVG chevron;
+Disclaimer's title/mint-link-highlight/width; FAQs got real clickable tabs (pure CSS
+`:has()`, works with JavaScript disabled); Über uns's hero title forces onto two
+lines, its three qualification bands are lighter/higher-contrast and no longer let
+text show through the pomegranate image; Angebote's recognition-panel behavior
+inverted (starts statement-only, response card aligns to the clicked statement via a
+small script, no more scroll-following) plus new colored "button-Kästchen"
+teasers; Workshops' two cards stack instead of sitting side by side and its
+Ressourcen icon was redrawn a second time (a horizontal paper roll, not a vertical
+tube); Beratung/Workshops/Angebote's photo+logo layout corrected per page (some
+needed `layout="pair"`, Angebote needed the opposite); Selbsthilfegruppe's
+duplicate heading removed and its Aktuelles block sits in a darker box; blog
+articles now use the shared split-hero (with a subtitle) instead of a plain banner.
+
+**Teil C:** Kontakt rebuilt from scratch against
+`docs/mockups/kontakt-prototype.dc.html` (Version A) — split hero, two cards
+("Schreib mir" is a native `<details>`, no JavaScript needed at all; "Termin buchen"
+links to `/kennenlernen/`), a toggleable message panel with Marina's photo/
+Standorte/Terminverfügbarkeit and the contact form. Verified end-to-end with
+Playwright (installed locally, not in package.json — see "Session note" below) at
+1440px and 390px, JavaScript on and off. Three things intentionally left for
+Marina/Claudio, not decided here: the form's real submission endpoint, three vs.
+four Anliegen options, and whether "Termin buchen" should become an overlay.
+
 ## What's built
 
 All 14 pages (homepage + 12 standalone pages + blog) render from their real content
@@ -68,10 +112,14 @@ See `docs/decisions.md`'s Nachtlauf entries for the reasoning on each.
 **Session note:** `playwright@1.63.0` is installed locally via `npm install
 --no-save` for visual QA (screenshots, live-DOM checks) — not in
 `package.json`/lock, reuses the chromium binary cached under
-`%LOCALAPPDATA%\ms-playwright`. Safe to reinstall next session if
-`node_modules/playwright` is gone; a throwaway `scratch-*.mjs` pattern
-(git-ignored via `.git/info/exclude`) is the convention for one-off screenshot/
-measurement scripts — see recent commit messages for examples.
+`%LOCALAPPDATA%\ms-playwright`. Still present and reused as of LAUF-2026-09-10 (worth
+knowing sooner next time than this run found out — a plain `msedge.exe --headless
+--screenshot` CLI invocation was tried first and gave unreliable results at narrow
+window widths on this machine, specifically; Playwright's own `page.screenshot()`
+did not have that problem and is the one to reach for first). Safe to reinstall if
+`node_modules/playwright` is gone; a throwaway `scratch-*.mjs` pattern (git-ignored
+via `.git/info/exclude`) is the convention for one-off screenshot/measurement
+scripts — see recent commit messages for examples.
 
 ## Known gaps — not fixed, not this run's call
 
@@ -89,27 +137,41 @@ that matter most:
 - **The ochre/amber hero decoration** (#0b) and **Selbsthilfe Steiermark logo
   permission** (#0) — both since resolved/decided; see `OPEN-QUESTIONS.md` for
   the record.
-- **Kontakt's form has no submission endpoint yet** (#4) — Microsoft Forms is the
-  decided approach, but no actual form exists yet to point it at.
+- **Kontakt's form has no submission endpoint yet** (#4, #25) — Microsoft Forms is
+  the decided approach, but no actual form exists yet to point it at. The new
+  Kontakt page's fields now match Marina's own Claude Design prototype rather than
+  the earlier ad-hoc set.
+- **Kontakt's Anliegen options: three or four?** (#26) — the earlier "no fifth
+  option, four total" decision and the new prototype's three options actually
+  conflict; this run kept the prototype's three (it's the newer record) but did not
+  resolve the conflict itself.
+- **Kontakt's "Termin buchen"** (#27) links to `/kennenlernen/` for now rather than
+  the prototype's overlay — the safer default, not a final call.
 - **`astro.config.mjs`'s domain is a placeholder** (#6) — blocked on the hosting
   decision.
-- **Mobile rendering** has been spot-checked repeatedly (390px contexts on the nav,
-  Angebote's selector, hero bands, Über uns's bands/teasers, FAQs) but not
-  exhaustively across every page — worth a pass on a real device before launch.
+- **Two proposed color values need Marina's sign-off, not just correctness**
+  (#28) — `--color-teal-darker` for the footer's green text, and whether the
+  Angebote-dropdown teal (B9) is legible enough as-is.
+- **Mobile rendering (390px)** was checked this run with Playwright (not the ad-hoc
+  CLI screenshot approach — see the Session note above) across Über uns, Angebote,
+  Kontakt, and FAQs, JavaScript on and off; no overflow or broken layout found. Not
+  exhaustively re-checked on every page this run touched, though nothing about the
+  changes themselves is width-dependent in a new way — worth a pass on a real
+  device before launch regardless.
 - Two of the ten meta descriptions carry a wording question back to the owner
-  ("psychodukativ", "(i.A.u.S)" without a period — fuer-marina.md Frage 16);
-  Kontakt's Anliegen dropdown stays as-is (owner decided 2026-09-08, no fifth
-  option); 301 redirects for the domain switch are blocked on hosting (#15) but
-  now include `/termine/`→`/kennenlernen/` (`docs/START-CHECKLISTE.md` Teil 3).
+  ("psychodukativ", "(i.A.u.S)" without a period — fuer-marina.md Frage 16); 301
+  redirects for the domain switch are blocked on hosting (#15) but now include
+  `/termine/`→`/kennenlernen/` (`docs/START-CHECKLISTE.md` Teil 3).
+- **B10 Punkt 28 ("Gut zu wissen" styling) could not be confirmed** (#30) — the
+  screenshot Marina attached doesn't match what the current shared accordion CSS
+  actually renders; left unchanged rather than guessed at.
 
 ## Next step
 
-Nothing queued. `docs/NACHTLAUF-2026-09-08.md` and `docs/NACHTLAUF-2026-09-09.md`
-are both fully worked through (see `docs/decisions.md`'s matching entries for the
-phase-by-phase record). `docs/NACHTLAUF-2026-09-09.md`'s Teil F (repo hygiene —
-stray uncommitted files Claudio noticed in VS Code) was explicitly out of scope
-for that run and is still open, waiting on a decision about what to do with
-`Claude outputs/` and the other untracked docs sitting in the working tree.
-Otherwise pick up from `OPEN-QUESTIONS.md` for what's still waiting on the
-owner, or from a fresh screenshot comparison against live if more polish is
-wanted.
+`docs/LAUF-2026-09-10.md` is fully worked through — Teile A, B, C, D all done (see
+`docs/decisions.md`'s matching entry). Pick up from `OPEN-QUESTIONS.md` #25–30 for
+what's waiting on Marina/Claudio from this run specifically, or the rest of that
+file for everything still open from earlier runs. `docs/NACHTLAUF-2026-09-09.md`'s
+Teil F (repo hygiene — stray uncommitted files Claudio noticed in VS Code) is still
+open too, waiting on a decision about `Claude outputs/` and the other untracked docs
+sitting in the working tree.
