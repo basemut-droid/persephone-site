@@ -48,7 +48,15 @@ the card row, shown via `.kontakt-cards:has(.kontakt-card-write[open]) +
 .kontakt-message-panel`, the same `:has()`-only technique as Angebote's B8, so it's
 still zero JavaScript (a first version nested the panel inside the `<details>`
 instead, which only grew that one card — corrected live from a screenshot mid-
-session). Verified end-to-end with Playwright (installed locally, not in
+session). Two more live-screenshot corrections, same session: Kontakt's hero now
+uses the shared `.hero-grid`/`.hero-headline` unmodified (was its own 1fr/1fr split
+and #D83830 title, both dropped after comparing against every other page's hero —
+the h1 had also been missing the `.hero-headline` class outright, so it never had
+the shared 25px title-gap either, fixed the same pass); and `.button-primary`
+(global, not Kontakt-specific) turned out to be flat solid fills with no gradient
+at rest or on hover, once actually pixel-sampled from a screenshot rather than
+assumed from A3's written "Farbverlauf" ask — see `--color-terracotta-hover` in
+`global.css`. Verified end-to-end with Playwright (installed locally, not in
 package.json — see "Session note" below) at 1440px and 390px, JavaScript on and
 off. Three things intentionally left for Marina/Claudio, not decided here: the
 form's real submission endpoint, three vs.

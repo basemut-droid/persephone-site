@@ -39,7 +39,8 @@ by the file's own comments against `docs/brand/Brandbook.pdf`. Components consum
 | `--color-teal` | `#48b0b0` | Türkis (Empathie) | service-card "teal" tone; `--color-band-bg` (newsletter strip); `.icon-list-check .icon` (checkmark/meeting-detail circles, since NACHTLAUF-2026-09-08.md A1 — was `--color-teal-dark`) |
 | `--color-teal-dark` | `#309898` | Tiefes Türkis | `--color-accent` → eyebrows, hover states, focus ring, card-button text; Über uns's qualification-band panels (B2.1) |
 | `--color-terracotta` | `#b33a3b` | Granatapfelrot (primary) | `--color-accent-strong` → H1, nav links, footer border/copyright, `.button-primary` fill, `.icon-circle` (section icons, Kontakt's eyebrow icons) |
-| `--color-terracotta-dark` | `#d83830` | Leuchtrot | `--color-cta-to` — **back in use as of LAUF-2026-09-10.md A3**: `.button-primary` is a gradient again (`terracotta` → `terracotta-dark`), reversing Phase 1.3's move to a solid fill — a fresh live measurement confirmed the gradient really is there. Also `.icon-circle-terracotta-dark` (FAQs' accordion toggle) |
+| `--color-terracotta-dark` | `#d83830` | Leuchtrot | `.icon-circle-terracotta-dark` (FAQs' accordion toggle). Briefly back in `.button-primary` mid-session as a gradient partner (LAUF-2026-09-10.md A3) — corrected again the same session once actual screenshots of the button were pixel-sampled: both states are flat solid fills, no gradient. `--color-cta-from`/`--color-cta-to` are unused again. |
+| `--color-terracotta-hover` | `#863232` | — (not a brand-book tone) | **New, LAUF-2026-09-10.md's Kontakt follow-up.** `.button-primary`'s hover fill, pixel-measured from a screenshot — not derivable from an existing token by a simple darken(). |
 | `--color-teal-darker` | `#226e6e` | — (not a brand-book tone) | **New, LAUF-2026-09-10.md A5.** A fourth, darkest step of the teal family, proposed for the footer link color Marina asked to be green — every existing teal measures under 4.5:1 as text on the footer's beige background; this one measures 5.09:1. Flagged as a proposal awaiting her sign-off, not a confirmed brand color — see `OPEN-QUESTIONS.md`. |
 | — (literal, untokenized) | `#fff3cd` bg / `#664d03` text | — | `DraftNotice` banner only |
 
@@ -131,13 +132,16 @@ A3, measured live):**
   its own token, distinct from `--radius`/6px used by cards/dropdowns/photos), `font-weight:
   500`, `font-size: 1.0625rem` (17px), `border: 2px solid transparent`, `min-height: 44px`
   (touch target), hover lifts `translateY(-1px)`.
-- `.button-primary`: **gradient again as of LAUF-2026-09-10.md A3**
-  (`linear-gradient(--color-cta-from 0%, --color-cta-to 100%)`, i.e. terracotta →
-  terracotta-dark), `var(--color-bg)` text (#fbf8f5, not pure white). This reverses
-  `RUN-2026-09-07-B1.md` Phase 1.3's move to a solid fill — that call was based on an
-  earlier live read that turned out wrong; a fresh measurement confirmed the gradient is
-  genuinely on the live site and Marina asked for it back explicitly. Hover reverses the
-  gradient's direction (same two tones, not a third color). `.button-hero` (the homepage
+- `.button-primary`: **flat solid fills, settled twice in one session
+  (LAUF-2026-09-10.md).** A3 first asked for a gradient back
+  (`--color-cta-from` → `--color-cta-to`), reversing `RUN-2026-09-07-B1.md`
+  Phase 1.3's move to a solid fill. Later the same session, pixel-sampling an
+  actual screenshot of the button at rest and on hover showed **no gradient
+  at either state** — rest is flat `var(--color-accent-strong)` (`#b33a3b`),
+  hover is flat `var(--color-terracotta-hover)` (`#863232`, a new token, not
+  derivable from an existing one by a simple darken()). `var(--color-bg)`
+  text (#fbf8f5, not pure white) throughout. `--color-cta-from`/
+  `--color-cta-to` are unused again. `.button-hero` (the homepage
   hero CTA only) adds `padding: 18px 32px`, `min-height: 57px` — italic was removed
   ersatzlos, it doesn't appear anywhere live either.
 - `.button-outline` (the site's "secondary" button, e.g. "Erfahre mehr"): solid

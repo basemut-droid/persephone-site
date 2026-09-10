@@ -126,6 +126,27 @@ underlined, no background, per a screenshot given directly in this session. Cont
 is 3.27:1, under the 4.5:1 body-text threshold — a known trade-off of this explicit
 direction, not an oversight.
 
+**Two more, same session, same pattern (live screenshot > written brief when they
+conflict):** (3) `.button-primary` — A3 had it as a gradient again; pixel-sampling
+actual screenshots of the button at rest and on hover (not eyeballing) showed both
+states are flat solid fills with zero variation, so the gradient came back out —
+rest `--color-accent-strong` (#b33a3b), hover a new token `--color-terracotta-hover`
+(#863232, measured, not a formulaic darken of an existing token). (4) Kontakt's
+hero — screenshot-compared against every other page's hero, its prototype-inherited
+1fr/1fr column split and #D83830 title color were both dropped in favor of the
+shared `.hero-grid`'s 45%/55% and `.hero-headline`'s `--color-accent-strong`, so the
+page no longer carries its own hero deviation at all. Caught in passing: the h1 had
+been missing the `.hero-headline` class entirely (only the now-removed
+`.kontakt-title` override), so it was never getting the shared 25px title→text gap
+either — fixed as part of the same edit. Also from this round: the message panel's
+own 15rem/1fr desktop column split had been silently stuck at its 1fr mobile value
+at every width, because the `:has()` visibility rule's higher specificity was
+setting `grid-template-columns` too and always winning over the `min-width:900px`
+rule meant to override it — split into a `display`-only rule so the column width is
+owned in exactly one place again. And `ContactForm`'s submit button was stretching
+to the form's full width — Grid's own default `justify-items: stretch`, not
+anything about `.button`'s own sizing — `justify-self: start` opts it back out.
+
 ---
 
 # Night run — 2026-09-06/07 (Phases 1-6, complete)

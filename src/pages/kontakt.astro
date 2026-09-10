@@ -24,15 +24,19 @@ if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not fou
 ---
 
 <BaseLayout locale="de" path="/kontakt/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
-  <section class="hero kontakt-hero">
-    <div class="hero-grid kontakt-hero-grid">
-      <div class="hero-copy kontakt-hero-copy reveal reveal-left">
+  {/* Live-Korrektur, mit den anderen Heros verglichen: nutzt jetzt exakt
+     dieselben geteilten .hero/.hero-grid/.hero-copy/.hero-headline-Klassen
+     wie jede andere Seite — kein eigener Split, keine eigene Titelfarbe
+     mehr (siehe Style-Block unten). */}
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-copy reveal reveal-left">
         <span class="eyebrow">Einladung</span>
         {/* Prototyp-Korrektur schon eingearbeitet (C1): rot, nicht fett,
            und der Satz endet auf "...vereinbare direkt ein Gespräch." —
            nicht die ältere Fassung mit "Möchtest Du Marina persönlich
            kennenlernen". */}
-        <h1 class="kontakt-title">Lass uns ins Gespräch kommen</h1>
+        <h1 class="hero-headline">Lass uns ins Gespräch kommen</h1>
         <p>
           Schreib mir, wenn Du eine Frage hast oder mit mir zusammenarbeiten möchtest. Bist Du bereit für ein
           Kennenlernen, vereinbare direkt ein Gespräch.
@@ -143,28 +147,16 @@ if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not fou
 </BaseLayout>
 
 <style>
-  /* .hero/.hero-grid/.hero-copy/.hero-image are shared (global.css); only
-     this page's own deviations from their defaults are overridden below —
-     the prototype's hero uses an equal 1fr/1fr split (not the shared
-     45%/55%) and a differently-colored, non-bold title. */
-  .kontakt-hero {
-    background: var(--color-bg-alt);
-  }
-
-  @media (min-width: 900px) {
-    .kontakt-hero-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  /* Prototype: font 400 36px, color #D83830 (--color-terracotta-dark) —
-     deliberately not this site's usual hero title treatment
-     (--color-accent-strong/.heading-black), per Marina's own correction
-     already baked into the prototype (C1). */
-  .kontakt-title {
-    color: var(--color-terracotta-dark);
-    font-weight: 400;
-  }
+  /* .hero/.hero-grid/.hero-copy/.hero-headline/.hero-image are shared
+     (global.css) — nothing page-specific to add for the masthead
+     anymore. Live correction, screenshot-compared against the other heroes: the
+     prototype's own equal 1fr/1fr split and its brighter #D83830 title
+     color read as inconsistent with every other page's hero, which is
+     what the feedback actually wanted matched — so both are gone
+     rather than kept as this page's own deviation. .hero-grid's shared
+     45%/55% split and .hero-headline's shared --color-accent-strong
+     apply unmodified now (no .kontakt-hero-grid/.kontakt-title override
+     needed for either). */
 
   .kontakt-container {
     padding-block: clamp(2.5rem, 5vw, 4rem);
@@ -315,12 +307,19 @@ if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not fou
      irgendwo in .kontakt-cards, derselbe Ansatz wie Angebotes B8-Auswahl. */
   .kontakt-message-panel {
     display: none;
+    grid-template-columns: 1fr;
   }
 
   .kontakt-cards:has(.kontakt-card-write[open]) + .kontakt-message-panel {
+    /* Only `display` here, deliberately — this selector's specificity
+       (two classes + :has()) beats the plain .kontakt-message-panel rule
+       AND the ≥900px media query below, so grid-template-columns used to
+       live here too and silently won at every width, permanently stuck
+       at the mobile 1fr value (screenshot-verified: the two-column
+       desktop layout never actually applied). Column width stays owned
+       by the plain rule + its own media query instead. */
     display: grid;
     margin-top: 2.5rem;
-    grid-template-columns: 1fr;
     gap: 2rem;
   }
 

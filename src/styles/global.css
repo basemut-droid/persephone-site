@@ -41,6 +41,12 @@
   --color-terracotta: #b33a3b;
   /* Leuchtrot — accent color, reserved for the wordmark and CTAs */
   --color-terracotta-dark: #d83830;
+  /* .button-primary's hover fill — measured directly from a screenshot
+     during LAUF-2026-09-10's follow-up correction (see that rule's own
+     comment). Not a brand-book tone, not derived from an existing token
+     by a simple formula (checked: not a uniform darken() of terracotta),
+     so it's its own literal, named like the session's other new tokens. */
+  --color-terracotta-hover: #863232;
 
   /* Semantic roles */
   --color-accent: var(--color-teal-dark);
@@ -259,22 +265,21 @@ a {
 }
 
 .button-primary {
-  /* LAUF-2026-09-10.md A3 reverses VERGLEICH-2026-09-07.md A3's earlier
-     call: that run found the live button a solid fill and dropped the
-     gradient. Marina asked for it back explicitly ("sollten einen
-     Farbverlauf haben zwischen den zwei Rottönen"), and a fresh live
-     measurement confirms the gradient is actually there and exact —
-     --color-cta-from → --color-cta-to are back in use. Text stays
-     --color-bg (#fbf8f5), unchanged either way. */
-  background: linear-gradient(var(--color-cta-from) 0%, var(--color-cta-to) 100%);
+  /* LAUF-2026-09-10.md A3 originally asked for a gradient back (Marina:
+     "sollten einen Farbverlauf haben zwischen den zwei Rottönen"), which
+     this rule had for a few commits. Corrected again, live, from actual
+     screenshots of the button at rest and on hover, pixel-sampled rather
+     than eyeballed: both states are flat solid fills, no gradient at
+     all — rest is exactly --color-accent-strong (#b33a3b), hover is
+     --color-terracotta-hover (#863232, measured, not derivable from an
+     existing token by a simple darken()). Text stays --color-bg
+     (#fbf8f5) throughout. */
+  background: var(--color-accent-strong);
   color: var(--color-bg);
 }
 
 .button-primary:hover {
-  /* Reversed gradient direction, not a third color — same two brand
-     tones, distinguishable from the resting state without introducing a
-     value nobody measured. */
-  background: linear-gradient(var(--color-cta-to) 0%, var(--color-cta-from) 100%);
+  background: var(--color-terracotta-hover);
 }
 
 /* The homepage hero's CTA only — bigger than the compact .button-primary

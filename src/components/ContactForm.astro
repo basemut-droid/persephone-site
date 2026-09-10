@@ -64,7 +64,7 @@
   </div>
 
   {/* NACHTLAUF-2026-09-08.md B7: live says "Senden", not "Nachricht senden". */}
-  <button type="submit" class="button button-primary field-wide">Senden</button>
+  <button type="submit" class="button button-primary field-wide submit-button">Senden</button>
 </form>
 
 <style>
@@ -123,6 +123,14 @@
   .consent input {
     margin-top: 0.2rem;
     min-height: auto;
+  }
+
+  /* Grid's own default (justify-items: stretch) was filling the button's
+     whole grid cell — full form width — since .button's own inline-flex
+     sizing only controls its content, not the outer grid-item box.
+     "button wrap um text" (screenshot feedback): hug its own label. */
+  .submit-button {
+    justify-self: start;
   }
 
   @media (min-width: 700px) {
