@@ -326,7 +326,9 @@ if (!entry) throw new Error('Content collection entry "pages/de/kontakt" not fou
   .kontakt-person-col {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    /* Live correction, 2026-09-11: more room between the name/photo row
+       and "Standorte" right below it — was 1.25rem, felt cramped. */
+    gap: 2rem;
   }
 
   .kontakt-person {

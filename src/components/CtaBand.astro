@@ -43,7 +43,10 @@ const { eyebrow, heading, paragraphs, ctaLabel, ctaHref } = Astro.props;
      exactly on --space-2, so it's left alone; only the two gaps that
      were compressed get an explicit token. */
   .cta-inner h2 {
-    margin-bottom: var(--space-6); /* matches .section-heading's rhythm */
+    /* Live correction, 2026-09-11: the --space-6 (2.5rem/40px) gap here
+       read as too much air between heading and the paragraph right below
+       it — removed on direct request. */
+    margin-bottom: 0;
   }
 
   .cta-inner p:last-of-type {

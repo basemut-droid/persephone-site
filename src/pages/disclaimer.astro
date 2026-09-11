@@ -44,6 +44,26 @@ tracker.assertAllHandled('disclaimer.astro');
     font-size: clamp(1.35rem, 4.2vw, 3rem);
   }
 
+  /* Live correction, 2026-09-11: the shared PageHero's own 48rem (768px)
+     max-width on .page-hero-inner made the title's centered-but-narrower
+     box start 216px to the right of .disclaimer-body's 1200px-wide text
+     below it (A1) — with a short one-line title, that reads as "the
+     heading is centered / shifted right", not left-aligned with the rest
+     of the page. Widened to match .section-narrow's own 1200px here so
+     both sit on the same left edge. Scoped to this page (not PageHero
+     itself, which FAQs/Datenschutz/Impressum also use and haven't been
+     flagged for this). The doubled class (not just
+     `:global(.page-hero-inner)`) is needed for specificity: Astro
+     compiles PageHero's own scoped rule to
+     `.page-hero-inner[data-astro-cid-xxx]`, one class + one attribute
+     selector — exactly matching a plain `:global()` single-class
+     override's specificity, so source order (not intent) would
+     otherwise decide the winner; a first attempt at this fix silently
+     lost that tie. */
+  :global(.page-hero-inner.page-hero-inner) {
+    max-width: 1200px;
+  }
+
   /* B3 point 3, corrected live via screenshot after the first pass: the
      LAUF doc's own reading of "unterlegen" (a mint background behind
      dark text — measured as the only variant clearing 4.5:1 contrast)

@@ -636,12 +636,99 @@ Bitte bestätigen, dass die eine gemeinsame Form für alle vier Seiten so gewoll
 insbesondere, dass Workshops/Beratung jetzt auch überlappen sollen, obwohl der
 ursprüngliche Auftrag dort ausdrücklich "ohne Überlappung" verlangt hatte.
 
-## 37. Über uns, "Beratung & Coaching"/"Workshops & trainings"-Kacheln — Größenverhältnis zweimal live nachjustiert
+## 37. Über uns, "Beratung & Coaching"/"Workshops & trainings"-Kacheln — Größenverhältnis dreimal live nachjustiert, jetzt per CSS Grid gekoppelt
 
-Nach dem Umzug der Kacheln von Angebote nach Über uns (N1) kam zweimal Live-Feedback zum
+Nach dem Umzug der Kacheln von Angebote nach Über uns (N1) kam dreimal Live-Feedback zum
 Größenverhältnis von farbiger Fläche und weißer Textkarte: erst war die Karte zu groß (fast
-deckungsgleich mit der Fläche), dann — nachdem die Karte verkleinert war — die Fläche zu
-groß im Vergleich zur (jetzt kleineren) Karte. Aktueller Stand: Fläche 78 % Breite
-(rechtsbündig), Karte 70 % Breite (unten-links versetzt, Inhaltshöhe). Kein exaktes
-Referenzmaß aus einem Original-Screenshot verfügbar — nach Augenmaß im Gespräch
-angeglichen. Bitte im echten Browser gegenprüfen.
+deckungsgleich mit der Fläche), dann — nachdem beide auf ein erzwungenes Quadrat gleicher
+Größe gestellt wurden — blieb unter dem Text viel leerer Weißraum übrig, weil das Quadrat
+höher war als der Inhalt brauchte. **Gelöst, nicht nur nachjustiert:** Fläche und Karte
+liegen jetzt in derselben CSS-Grid-Zelle übereinander; die Kartenhöhe ergibt sich aus dem
+Text (kein `aspect-ratio` mehr), und die Fläche übernimmt per Grid-`stretch` automatisch
+genau diese Höhe — beide sind dadurch dauerhaft gleich groß, auch wenn sich der Text später
+ändert, ohne dass hier erneut von Hand nachgemessen werden muss. Bitte trotzdem im echten
+Browser gegenprüfen, ob der Versatz (aktuell 1,5rem links / 3rem unten) so passt.
+
+## 38. Rote Buttons: Verlauf im Ruhezustand zurück, Hover unverändert
+
+Eine frühere Nachkorrektur hatte `.button-primary` anhand pixelgesampelter Screenshots auf
+flache Flächen umgestellt (Ruhe **und** Hover, kein Verlauf). Live-Feedback zum aktuell
+gerenderten Button (Screenshot) zeigte ausdrücklich einen Verlauf im Ruhezustand — jetzt
+wieder `linear-gradient(--color-cta-from, --color-cta-to)`, also A3s ursprüngliche zwei
+Rottöne. Der Hover-Zustand blieb bewusst unangetastet (flache `--color-terracotta-hover`-
+Fläche) — nur der Ruhezustand wurde zurückgefordert. Gilt sitenweit, da `.button-primary`
+die geteilte globale Regel ist. Bitte gegenprüfen, ob Ruhe UND Hover jetzt so stimmen, da
+hier bereits zweimal in unterschiedliche Richtungen korrigiert wurde.
+
+## 39. Homepage: orangefarbene Punkte auf den Service-Karten entfernt
+
+`ServiceCard`s dekorative Ecktextur (`/textures/seed-texture.svg`, verstreute orangefarbene
+"Kerne" unten rechts, sichtbar auf der Startseite und überall sonst, wo `ServiceCard`
+verwendet wird) ist auf direkten Wunsch ersatzlos entfernt. Betraf nur die Startseite zum
+Zeitpunkt der Entfernung (`ServiceCard` wird seit N1 nirgendwo sonst mehr live gerendert,
+Über uns nutzt jetzt `.offer-tiles`). Kein schriftlicher Auftrag dazu vorhanden — reine
+Live-Korrektur, zum Vermerk hier.
+
+## 40. Startseite, Newsletter-Band: Abstand zwischen Überschrift und Text entfernt
+
+`CtaBand`s h2→p-Abstand (`--space-6`, 2,5rem/40px) auf 0 gesetzt, auf direkten Wunsch
+("Abstand entfernen" — wörtlich genommen, nicht auf einen kleineren Zwischenwert reduziert).
+Betrifft `CtaBand`, also auch jede Unterseiten-Schluss-CTA, die diese Komponente nutzt.
+
+## 41. Disclaimer: Titel jetzt linksbündig statt optisch zentriert
+
+Die geteilte `PageHero`-Komponente setzt `.page-hero-inner` auf `max-width: 48rem` (768px);
+zusammen mit dem darunterliegenden, durch A1 bereits auf 1200px verbreiterten Fließtext
+ergab das zwei unterschiedlich breite, unterschiedlich weit eingerückte Boxen — der kurze,
+einzeilige Titel sah dadurch zentriert/nach rechts verschoben aus, obwohl `text-align` die
+ganze Zeit `start` (links) war. Für diese Seite auf 1200px verbreitert (Seiten-eigener
+`:global()`-Override, nicht an der gemeinsamen `PageHero`-Komponente geändert, die
+FAQs/Datenschutz/Impressum ebenfalls nutzen und die dafür nicht gemeldet wurden). **Dabei
+gefunden, nicht durch diese Änderung verursacht** (per Playwright isoliert bestätigt — das
+Zurücksetzen dieser Änderung ändert nichts daran): die Disclaimer-Seite hat bei 390px einen
+horizontalen `scrollWidth` von 419px statt 390px. Kein sichtbares Element überschreitet die
+390px-Grenze (einzeln geprüft); die Ursache ist nicht gefunden. Nicht Teil dieses Laufs,
+für einen künftigen Durchgang vorgemerkt.
+
+## 42. Datenschutzerklärung: kein separates Hero-Banner mehr, nur ein kleines Eyebrow-Label
+
+Ein Vergleich mit einem Original-Screenshot zeigte: die Live-Seite hat für "Datenschutz-
+erklärung" gar kein eigenes `PageHero`-Banner mit großem rotem Titel — nur ein kleines,
+großgeschriebenes türkises Label direkt über "Marina Bletsas | Stand: ...", auf demselben
+hellen Hintergrund wie der restliche Text, keine eigene beige Bandfläche. Angepasst:
+`<PageHero>` entfernt, stattdessen ein `<h1 class="eyebrow">` direkt im Textblock (weiterhin
+ein echtes, einziges H1 für Semantik/SEO, nur optisch wie die anderen Eyebrow-Labels der
+Seite gestylt). Rechtstext selbst nicht verändert.
+
+## 43. Kontakt: mehr Abstand zwischen Namenszeile und "Standorte"
+
+`.kontakt-person-col`s Zeilenabstand (Name/Foto → Standorte → Terminverfügbarkeit) von
+1,25rem auf 2rem erhöht, auf direkten Wunsch. Gilt einheitlich für beide Abstände in dieser
+Spalte (nicht nur den ersten), da beide vom selben Grid-`gap` gesteuert werden.
+
+## 44. Über uns, Qualifikationsbänder: helleres Grün, Spalten-Bug bei Band 2 behoben, Schrift vergrößert, Alternation korrigiert
+
+Vier weitere Live-Korrekturen an denselben drei Bändern:
+
+- **Farbe:** von `--color-teal-dark` (#309898) auf `--color-teal` (#48b0b0, "Empathie", die
+  zweite Markenfarbe laut Brandbook) aufgehellt, auf ausdrücklichen Wunsch ("orientiere Dich
+  am Brandbook"). Senkt den ohnehin schon unter 4,5:1 liegenden Kontrast des hellen Texts
+  weiter — derselbe bewusste Trade-off wie in #31, jetzt noch einmal verschärft.
+- **Echter Bug gefunden und behoben, nicht nur nachjustiert:** Band 2 (Felderfahrung)
+  hatte eine sichtbar schmalere Textspalte als Band 1 und 3 — verursacht durch die alte
+  `order: 2`-Technik zum Seitenwechsel, die nicht nur die Malreihenfolge, sondern auch die
+  Grid-Spaltenzuordnung vertauscht hatte (das Panel landete in der schmalen 1fr-Spur statt
+  der breiten 2fr-Spur). Jetzt über `grid-template-areas` gelöst: das Panel bleibt auf
+  beiden Seiten in der 2fr-Spur, nur die Anordnung der Spuren selbst wechselt.
+- **Schrift:** die Aufzählungslisten (Ausbildung/Felderfahrung) von 1,25rem auf 1,5rem
+  vergrößert, orientiert an (nicht exakt übernommen von) der Sprachen-Zeilen-Größe
+  (2,125rem/34px) — 34px wörtlich hätte bei den längeren, umbrechenden Listenzeilen anders
+  gewirkt als bei Sprachens kurzen freistehenden Zeilen.
+- **Alternation:** Über uns hatte drei `section-alt` (beige) Sektionen in Folge nach einem
+  bereits beigen Hero (Bio-Text, Qualifikationsbänder, Angebotskacheln) — nie einmal die
+  helle `--color-bg`, anders als jede andere Seite. Bio-Sektion und Angebotskacheln-Sektion
+  von `section-alt` auf `section` (hell) umgestellt; die Bänder selbst waren mit ihrem
+  eigenen fest codierten Beige bereits korrekt und blieben unverändert.
+
+Bitte alle vier im echten Browser gegenprüfen, besonders den jetzt noch niedrigeren Kontrast
+aus dem ersten Punkt.

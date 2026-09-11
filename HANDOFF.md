@@ -29,7 +29,22 @@ current code is the final word:
   review — stop it (`astro dev stop`) once done; it's this machine's own dev server, not a
   deployment, and the IP is only reachable on this WLAN.
 
-Full record: `docs/decisions.md`'s "Nachtrag 2026-09-11" entry.
+**The live-correction cascade kept going after that** — `OPEN-QUESTIONS.md` #38–44, full
+record in `docs/decisions.md`'s second entry for this session ("Live-correction cascade").
+Short version: `.button-primary`'s gradient is back at rest (hover untouched);
+`ServiceCard`'s orange seed-texture decoration is gone; `CtaBand`'s heading→text gap is 0;
+Disclaimer's title is genuinely left-aligned now (was optically centered — `PageHero`'s
+shared 768px inner cap vs. the body's A1-widened 1200px); Datenschutz's big red
+`PageHero` banner is gone, replaced with a small eyebrow label matching the live page (no
+`PageHero` at all there); Kontakt's name→"Standorte" gap is wider; and the qualification
+bands got a lighter fill, a **real bug fix** (Felderfahrung's text column was narrower than
+the other two — `order: 2` was swapping grid tracks, not just paint order; now
+`grid-template-areas`), bigger list text, and Über uns's section-background alternation
+actually alternates now (three beige sections had been stacked in a row). A pre-existing,
+unrelated 390px overflow on Disclaimer was found (not caused) while checking this — see
+`OPEN-QUESTIONS.md` #41, unfixed, logged for later.
+
+Full record: `docs/decisions.md`'s two "2026-09-11" entries.
 
 ## Previous run: LAUF-2026-09-10 (`docs/LAUF-2026-09-10.md`) + live follow-ups
 

@@ -1083,3 +1083,58 @@ change.
 `http://192.168.178.44:4321/`) — this is this machine's own dev server reachable over WLAN,
 not a deployment; stop it (`astro dev stop`) once the review session is done, and remember
 the IP is only valid on this network / while this machine is on.
+
+## Live-correction cascade, same session, continuing after the LAN review started
+
+With the dev server reachable on his phone, Claudio kept sending screenshots and one-line
+corrections in real time. Each is small on its own; recorded together here since none of
+them trace to a written brief. See `OPEN-QUESTIONS.md` #38–44 for the sign-off asks.
+
+- **`.button-primary` gradient restored at rest** (#38) — a prior pixel-sampled correction
+  had flattened both rest and hover to solid fills. A fresh screenshot of the button as
+  rendered asked for the gradient back specifically at rest; hover was left exactly as the
+  pixel-sampled correction set it. Global rule in `global.css`, so it's sitewide by
+  construction — checked all nine other files referencing `.button-primary` for a local
+  override and found none.
+- **`ServiceCard`'s orange seed-texture corner decoration removed** (#39) — no written brief
+  behind this either, a direct "take the orange dots out" on a homepage screenshot.
+- **`CtaBand` heading→paragraph gap set to 0** (#40) — was `--space-6` (2.5rem); "Abstand
+  entfernen" taken literally rather than reduced to some intermediate value.
+- **Disclaimer's title made genuinely left-aligned** (#41) — traced to `PageHero`'s own
+  `.page-hero-inner` capping at 768px while A1 had already widened the body text under it to
+  1200px; a short single-line title in the narrower, still-centered box read as shifted
+  right even though `text-align` was `start` throughout. Fixed by widening `.page-hero-inner`
+  to 1200px for this page only (Astro's scoped-style specificity needed a doubled class
+  selector on the override — a first attempt with a plain `:global()` single class silently
+  lost the specificity tie and changed nothing, caught by re-measuring rather than trusting
+  the diff). A pre-existing, unrelated 390px horizontal-scroll discrepancy on this same page
+  was found while checking mobile — confirmed via isolation (reverting each of today's two
+  changes independently, neither changes the scrollWidth) not to be something this session
+  introduced; left unfixed and logged for a future run.
+- **Datenschutzerklärung's masthead rebuilt to match the live page** (#42) — a side-by-side
+  against a live screenshot showed no `PageHero` banner at all on the original, just a small
+  eyebrow-style label directly above the byline on the page's normal light background.
+  Replaced the `<PageHero title="Datenschutzerklärung" />` call with a plain
+  `<h1 class="eyebrow">` inline in the existing text section — still the page's one real H1,
+  just styled like the site's other small section labels instead of a hero title. Legal text
+  itself untouched.
+- **Kontakt's name→"Standorte" gap widened** (#43) — `.kontakt-person-col`'s gap from
+  1.25rem to 2rem; applies to both gaps in that column (shared flex `gap`), not just the
+  first.
+- **Qualification bands, four more corrections** (#44): lighter fill
+  (`--color-teal-dark` → `--color-teal`, the brand book's own second color, "orientiere Dich
+  am Brandbook"); a **real bug** in the alternating-sides logic found and fixed (`order: 2`
+  was swapping which grid TRACK each element sat in, not just which side it painted on, so
+  Felderfahrung's text column was visibly narrower than Ausbildung/Sprachen's — replaced
+  with `grid-template-areas` so the panel stays in the 2fr track on both sides); bullet-list
+  font-size raised 1.25rem → 1.5rem, taking cues from (not copying outright) the Sprachen
+  band's own 2.125rem lines; and Über uns's section background alternation fixed — three
+  `section-alt` (beige) sections had been stacked in a row after an already-beige hero,
+  never once showing the page's plain light background, unlike every other page. Two of
+  those (`section-alt` on the bio section and on the offer-tiles section) dropped back to
+  plain `.section`; the quals bands' own hardcoded beige was already correct and untouched.
+
+**Verified:** `npm run build` clean after every change (only the pre-existing non-blocking
+placeholder-domain warning). 390px horizontal-overflow re-checked across all touched pages
+after this whole cascade — clean except the pre-existing, pre-dating-this-session Disclaimer
+discrepancy noted above and in `OPEN-QUESTIONS.md` #41.

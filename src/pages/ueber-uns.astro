@@ -129,7 +129,16 @@ tracker.assertAllHandled('ueber-uns.astro');
     </div>
   </section>
 
-  <section class="section section-alt section-centered">
+  {/* Live correction, 2026-09-11: A1/A4 asked for dunkel-hell-dunkel-hell
+     alternation site-wide, but Über uns had three section-alt (beige)
+     sections in a row (this one, the quals bands, and the offer-tiles
+     below) right after an already-beige hero — never once using the
+     page's plain light --color-bg. Dropped section-alt here so the hero
+     (beige) is followed by a light section, matching every other page's
+     rhythm; the quals bands after it are already correctly beige
+     (.quals-band's own hardcoded background), so the alternation now
+     actually alternates. */}
+  <section class="section section-centered">
     <div class="container section-narrow">
       {
         bioSections.map(({ heading, paragraphs: paras }) => (
@@ -295,7 +304,7 @@ tracker.assertAllHandled('ueber-uns.astro');
      before — NACHTLAUF-2026-09-09.md E3 — the calibrated real-photo
      layout (FEEDBACK-2026-09-08.md #1's measurements) for whenever real
      photos exist. */}
-  <section class="section section-alt">
+  <section class="section">
     <div class="container">
       <div class="offer-tiles">
         {
@@ -402,26 +411,31 @@ tracker.assertAllHandled('ueber-uns.astro');
     gap: 3rem;
   }
 
+  /* Live correction, 2026-09-11, third pass: forcing the card to a
+     square (previous pass) left a lot of empty white space below its
+     actual text — asked to size the card to its content instead, then
+     match the background tile to THAT size rather than a fixed square.
+     CSS Grid stacking replaces the old absolute-positioning approach:
+     .offer-tile-bg and .offer-tile-card share one grid cell
+     (grid-area: 1 / 1), so the row's auto height comes from whichever
+     of the two is naturally taller — the card (it has the text; the
+     empty bg contributes ~0 on its own) — and the bg then stretches
+     (grid's own default align-self: stretch) to match that height
+     exactly, no JS needed to keep them in sync if the copy changes. The
+     visual offset/overlap is a `transform`, which doesn't feed back into
+     that height calculation. */
   .offer-tile {
     position: relative;
-    display: block;
+    display: grid;
     text-decoration: none;
     color: var(--color-text);
     padding: 0 0 3rem 1.5rem;
   }
 
-  /* Live correction, 2026-09-11: the square background tile was still
-     the tile's full column width (100%) while the card above it had
-     already been shrunk to 68% — leaving the background noticeably
-     bigger than the card sitting on it, the opposite of a matched pair.
-     Shrunk to a size close to the card's own (78%, right-aligned) so the
-     two read as similarly-sized offset elements, the same relationship
-     ClosingCta's tile/portrait pair now has. */
   .offer-tile-bg {
-    width: 78%;
-    margin-left: auto;
+    grid-area: 1 / 1;
+    width: 100%;
     border-radius: var(--radius);
-    aspect-ratio: 1 / 1;
   }
 
   .offer-tile-bg--teal-dark {
@@ -433,10 +447,16 @@ tracker.assertAllHandled('ueber-uns.astro');
   }
 
   .offer-tile-card {
-    position: absolute;
-    left: 0;
-    bottom: -1.5rem;
-    width: 70%;
+    grid-area: 1 / 1;
+    align-self: start;
+    justify-self: start;
+    /* Matches .offer-tile-bg's rendered width exactly: the card's own
+       grid cell is measured against .offer-tile's full padding box,
+       while the background tile is measured against the cell's content
+       area minus the tile's own left padding (1.5rem) — a bare 100%
+       here would be 1.5rem wider than the tile instead of equal. */
+    width: calc(100% - 1.5rem);
+    transform: translate(-1.5rem, 3rem);
     background: var(--color-surface);
     border-radius: var(--radius);
     box-shadow: 0 12px 32px rgba(24, 26, 43, 0.12);
@@ -445,7 +465,7 @@ tracker.assertAllHandled('ueber-uns.astro');
   }
 
   .offer-tile:hover .offer-tile-card {
-    transform: translateY(-2px);
+    transform: translate(-1.5rem, calc(3rem - 2px));
   }
 
   .offer-tile-title {
@@ -511,9 +531,6 @@ tracker.assertAllHandled('ueber-uns.astro');
        9.18:1) war nicht das gewünschte Bild — Referenz-Screenshot zeigt
        eine dunklere, satte Fläche (gemessen: fast exakt #309898,
        --color-teal-dark) mit hellem Text, wie ursprünglich vor Punkt 17.
-       Kontrast damit wieder 2.96:1 statt 9.18:1 — niedriger als der
-       4,5:1-Standard für Fließtext, ein bewusster Trade-off dieser
-       expliziten Vorgabe (siehe OPEN-QUESTIONS.md).
        NACHTRAG-2026-09-11.md N3: der abgerundete Rostorange-Akzent
        (::after, #c26d32) ist ersatzlos entfernt — er war genau das
        ockerfarbene Element, das laut LAUF-2026-09-10.md "NICHT ANFASSEN"
@@ -521,9 +538,17 @@ tracker.assertAllHandled('ueber-uns.astro');
        selben Gespräch: die diagonale Streifentextur (::before, ein
        heller Wellenmuster-Annäherung an die Referenzgrafik) ist auf
        ausdrücklichen Wunsch ebenfalls entfernt — eine reine Flatfarbe
-       ohne Textur, kein Ersatzmuster. */
+       ohne Textur, kein Ersatzmuster.
+       Live-Korrektur, noch später, dieselbe Sitzung: auf Wunsch ein
+       helleres Grün, "orientiert am Brandbook" — --color-teal (#48b0b0,
+       "Empathie", die zweite Markenfarbe laut Brandbook), eine Stufe
+       heller als --color-teal-dark, nicht die hellste Stufe --color-sage
+       (die mit hellem Text kaum noch lesbar wäre, 1.6:1). Kontrast damit
+       nochmals niedriger als --color-teal-dark's bereits unter dem
+       4,5:1-Standard liegenden 2.96:1 — ein weiterer bewusster
+       Trade-off dieser expliziten, wiederholten Vorgabe. */
     position: relative;
-    background: var(--color-teal-dark);
+    background: var(--color-teal);
     color: var(--color-bg);
     /* NACHTRAG-2026-09-11.md N2: live measures 115px inner padding on the
        (now much wider, see .quals-grid below) panel — the old clamp
@@ -560,8 +585,16 @@ tracker.assertAllHandled('ueber-uns.astro');
     gap: 0.75rem;
     /* B7 Punkt 17 "Textfont größer": was the browser's unset default
        (~16px, smaller than the rest of the page) — now matches the site's
-       own Fließtext size, not smaller, as asked. */
-    font-size: 1.25rem;
+       own Fließtext size, not smaller, as asked.
+       Live correction, 2026-09-11: asked to bump this again, taking the
+       Sprachen band's own 2.125rem/34px (.quals-lines below) as the
+       reference now that the panel has a lot more room (N2's 2:1 width,
+       the fixed viewport-height sizing) — bumped to 1.5rem rather than
+       matching 34px exactly, since these lines wrap (bold label + a full
+       sentence each) where Sprachen's are short standalone lines; 34px
+       reads fine for one short line, cramped for a wrapped one at this
+       column width. */
+    font-size: 1.5rem;
   }
 
   /* NACHTLAUF-2026-09-09.md E2: live's Ausbildung/Felderfahrung items are
@@ -619,19 +652,37 @@ tracker.assertAllHandled('ueber-uns.astro');
        how much text a given band holds. */
     .quals-grid {
       grid-template-columns: 2fr 1fr;
+      grid-template-areas: 'panel image';
       height: calc(100svh - 117px);
     }
 
+    .quals-panel {
+      grid-area: panel;
+    }
+
     .quals-image {
+      grid-area: image;
       aspect-ratio: auto;
       height: 100%;
     }
 
     /* Alternating sides: the panel is always the band's first DOM child
-       (markup stays simple/linear either way) — order flips which side it
-       renders on. */
-    .quals-band--right .quals-panel {
-      order: 2;
+       (markup stays simple/linear either way) — grid-template-areas flips
+       which side it renders on.
+       Live correction, 2026-09-11: this used to be `order: 2` on the
+       panel alone, which does swap which side the panel paints on, but
+       grid auto-placement also reassigns which TRACK each item sits in
+       by order — so on the "right" bands, the panel (now order 2) landed
+       in the narrower 1fr track and the image took the wider 2fr one,
+       silently undoing N2's 2:1 panel:image ratio on every other band
+       (visible on Felderfahrung: its text column was noticeably
+       narrower than Ausbildung/Sprachen's). Swapping the whole
+       column/area template instead keeps the panel in the 2fr track and
+       the image in the 1fr track on both sides — only which physical
+       side they render on changes. */
+    .quals-band--right .quals-grid {
+      grid-template-columns: 1fr 2fr;
+      grid-template-areas: 'image panel';
     }
 
     /* NACHTLAUF-2026-09-09.md E2 crossfade, enhanced state only (see the

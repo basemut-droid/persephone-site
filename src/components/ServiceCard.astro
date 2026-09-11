@@ -27,19 +27,6 @@ const { title, description, href, cta, tone } = Astro.props;
     gap: 1rem;
   }
 
-  /* Decorative pomegranate-seed texture, matching the live site's own
-     card background image — a scattered cluster tucked in one corner. */
-  .service-card::after {
-    content: '';
-    position: absolute;
-    inset: auto -20px -20px auto;
-    width: 180px;
-    height: 180px;
-    background: url('/textures/seed-texture.svg') no-repeat center / contain;
-    opacity: 0.9;
-    pointer-events: none;
-  }
-
   .service-card h3,
   .service-card p,
   .service-card .card-cta {
