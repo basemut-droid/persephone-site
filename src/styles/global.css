@@ -266,15 +266,18 @@ a {
 
 .button-primary {
   /* LAUF-2026-09-10.md A3 originally asked for a gradient back (Marina:
-     "sollten einen Farbverlauf haben zwischen den zwei Rottönen"), which
-     this rule had for a few commits. Corrected again, live, from actual
-     screenshots of the button at rest and on hover, pixel-sampled rather
-     than eyeballed: both states are flat solid fills, no gradient at
-     all — rest is exactly --color-accent-strong (#b33a3b), hover is
-     --color-terracotta-hover (#863232, measured, not derivable from an
-     existing token by a simple darken()). Text stays --color-bg
-     (#fbf8f5) throughout. */
-  background: var(--color-accent-strong);
+     "sollten einen Farbverlauf haben zwischen den zwei Rottönen"). A later
+     pixel-sampled screenshot correction flattened both rest and hover to
+     solid fills, reasoning the live button had no gradient at all — a
+     live correction after that (2026-09-11, screenshot of the button as
+     actually rendered) asked for the gradient back at rest specifically,
+     hover unchanged. So: rest is the two-tone gradient (--color-cta-from
+     -> --color-cta-to, i.e. #b33a3b -> #d83830, A3's original spec),
+     hover stays the flat --color-terracotta-hover fill from the
+     pixel-sampled correction — the two states were re-checked
+     independently rather than assuming one screenshot settles both. Text
+     stays --color-bg (#fbf8f5) throughout. */
+  background: linear-gradient(var(--color-cta-from), var(--color-cta-to));
   color: var(--color-bg);
 }
 
