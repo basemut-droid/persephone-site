@@ -1,6 +1,6 @@
 # Build-check report
 
-Generated 2026-09-11T20:32:37.256Z by `scripts/build-check.mjs`.
+Generated 2026-09-11T22:37:23.367Z by `scripts/build-check.mjs`.
 
 ## Every content page has a route, every route has content — PASS
 

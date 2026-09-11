@@ -1138,3 +1138,31 @@ them trace to a written brief. See `OPEN-QUESTIONS.md` #38–44 for the sign-off
 placeholder-domain warning). 390px horizontal-overflow re-checked across all touched pages
 after this whole cascade — clean except the pre-existing, pre-dating-this-session Disclaimer
 discrepancy noted above and in `OPEN-QUESTIONS.md` #41.
+
+## 2026-09-12 — Disclaimer/Impressum/Datenschutz title unification
+
+Continuing the same live-review thread a day later. Disclaimer and Impressum's titles
+matched to Datenschutz's own 2026-09-11 correction (#42 above): dropped `<PageHero>`
+entirely on all three, replaced with a plain `<h1 class="eyebrow">` inline in the body's
+existing light section — small, uppercase, teal, left-aligned, consistent across all three
+utility pages instead of each carrying its own big-banner treatment. Disclaimer's two
+PageHero-specific CSS overrides from 2026-09-11 (the forced-nowrap/font-size clamp, and the
+widened `.page-hero-inner`) are removed as dead code — neither applies once the page no
+longer renders a `.page-hero` at all.
+
+Datenschutz additionally got its twelve numbered section headings ("1. Verschlüsselte
+Übertragung" etc.) restyled to the same small/uppercase/teal look as its own title, on
+request, for one consistent visual language down the whole page — previously plain dark H2s.
+
+**Unplanned resolution:** Disclaimer's pre-existing, previously-unexplained 390px
+`scrollWidth` overshoot (419px vs. the 390px viewport, logged the day before in
+`OPEN-QUESTIONS.md` #41 after ruling out that day's own changes as the cause) disappeared
+along with `PageHero` — re-measured at exactly 390px, no overflow, after this edit. Never
+isolated to a specific cause inside `PageHero`, but the correlation is strong enough to
+record; #41 updated to reflect this rather than left as a dangling loose end.
+
+`PageHero` itself is untouched and still serves every page with a real split-hero
+masthead — only these three pure legal/utility pages moved away from it.
+
+**Verified:** `npm run build` clean; 390px re-checked on all three pages (all exactly
+390px, no overflow, including Disclaimer for the first time).

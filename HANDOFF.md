@@ -4,7 +4,15 @@ Read this first at the start of every session. History and past decisions moved 
 `docs/decisions.md` (2026-09-07) so this file stays short enough to actually read —
 see `external-review.md`'s "PROCESS NOTE" for why that matters.
 
-## Most recent run: NACHTRAG-2026-09-11 (`docs/NACHTRAG-2026-09-11.md` N1–N4) + live follow-ups
+## Most recent: 2026-09-12, Disclaimer/Impressum/Datenschutz title unification
+
+All three utility pages now use the same small eyebrow-style `<h1>` (no `PageHero` banner)
+instead of each carrying its own treatment; Datenschutz's twelve numbered section headings
+also restyled to match. Fixed, as a side effect, Disclaimer's previously-unexplained 390px
+overflow (gone along with `PageHero`). See `OPEN-QUESTIONS.md` #45 and `docs/decisions.md`'s
+2026-09-12 entry.
+
+## Previous run: NACHTRAG-2026-09-11 (`docs/NACHTRAG-2026-09-11.md` N1–N4) + live follow-ups
 
 N1–N4 done, then a long cascade of live corrections (Claudio watching over WLAN on his
 phone) that go beyond the written Nachtrag — several *supersede* earlier written decisions

@@ -295,7 +295,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-size: 0.9rem;
   }
 
+  /* Live correction, 2026-09-12: the numbered section headings should
+     read like the page's own title now does (small, uppercase, teal —
+     .eyebrow's look) rather than as large dark headings, for consistency
+     down the whole page. Styled directly rather than adding class="eyebrow"
+     to all twelve <h2> tags individually. */
   .legal-page h2 {
     margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: var(--color-accent);
   }
 </style>

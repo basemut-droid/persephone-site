@@ -1,7 +1,6 @@
 ---
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHero from '../components/PageHero.astro';
 import { parseMarkdownBlocks, paragraphs, mdInlineHtml, rewriteLocalLinks, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 const entry = await getEntry('pages', 'de/disclaimer');
@@ -20,50 +19,24 @@ tracker.assertAllHandled('disclaimer.astro');
 ---
 
 <BaseLayout locale="de" path="/disclaimer/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
-  {/* Confirmed no hero image on the live page (RUN-2026-09-07.md Phase E):
-     its raw HTML has no --awb-bg-image anywhere. */}
-  <PageHero title={heroTitle} image={false} />
-
   <section class="section">
     <div class="container section-narrow disclaimer-body">
+      {/* Live correction, 2026-09-12: matched to Datenschutz's own title
+         treatment (itself a 2026-09-11 live correction against the live
+         page) for consistency across the legal/utility pages — no
+         separate PageHero banner, just a small eyebrow-style label
+         directly in the body's own light section. Still this page's one
+         real <h1>, just styled like the site's other small section
+         labels instead of a hero title. Replaces both of this page's
+         earlier PageHero-specific fixes (the forced-one-line nowrap and
+         the widened .page-hero-inner) — neither applies to a plain h1. */}
+      <h1 class="eyebrow">{heroTitle}</h1>
       {body.map((p) => <p set:html={mdInlineHtml(p)} />)}
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  /* LAUF-2026-09-10.md B3 point 1: "Titel soll auf einer Seite" — Claudio's
-     reading is "auf einer Zeile" (one line), given the surrounding
-     complaint about the page feeling cramped. Scoped to this page's own
-     heading rather than PageHero's shared .page-hero h1 (used by
-     Datenschutz/FAQs/Impressum too, none of them flagged) — nowrap alone
-     would overflow a long title on a narrow phone, so the font shrinks
-     enough first to still fit. */
-  :global(.page-hero h1) {
-    white-space: nowrap;
-    font-size: clamp(1.35rem, 4.2vw, 3rem);
-  }
-
-  /* Live correction, 2026-09-11: the shared PageHero's own 48rem (768px)
-     max-width on .page-hero-inner made the title's centered-but-narrower
-     box start 216px to the right of .disclaimer-body's 1200px-wide text
-     below it (A1) — with a short one-line title, that reads as "the
-     heading is centered / shifted right", not left-aligned with the rest
-     of the page. Widened to match .section-narrow's own 1200px here so
-     both sit on the same left edge. Scoped to this page (not PageHero
-     itself, which FAQs/Datenschutz/Impressum also use and haven't been
-     flagged for this). The doubled class (not just
-     `:global(.page-hero-inner)`) is needed for specificity: Astro
-     compiles PageHero's own scoped rule to
-     `.page-hero-inner[data-astro-cid-xxx]`, one class + one attribute
-     selector — exactly matching a plain `:global()` single-class
-     override's specificity, so source order (not intent) would
-     otherwise decide the winner; a first attempt at this fix silently
-     lost that tie. */
-  :global(.page-hero-inner.page-hero-inner) {
-    max-width: 1200px;
-  }
-
   /* B3 point 3, corrected live via screenshot after the first pass: the
      LAUF doc's own reading of "unterlegen" (a mint background behind
      dark text — measured as the only variant clearing 4.5:1 contrast)

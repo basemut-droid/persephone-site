@@ -675,20 +675,20 @@ Live-Korrektur, zum Vermerk hier.
 ("Abstand entfernen" — wörtlich genommen, nicht auf einen kleineren Zwischenwert reduziert).
 Betrifft `CtaBand`, also auch jede Unterseiten-Schluss-CTA, die diese Komponente nutzt.
 
-## 41. Disclaimer: Titel jetzt linksbündig statt optisch zentriert
+## 41. Disclaimer: Titel jetzt linksbündig statt optisch zentriert — GELÖST
 
-Die geteilte `PageHero`-Komponente setzt `.page-hero-inner` auf `max-width: 48rem` (768px);
-zusammen mit dem darunterliegenden, durch A1 bereits auf 1200px verbreiterten Fließtext
-ergab das zwei unterschiedlich breite, unterschiedlich weit eingerückte Boxen — der kurze,
-einzeilige Titel sah dadurch zentriert/nach rechts verschoben aus, obwohl `text-align` die
-ganze Zeit `start` (links) war. Für diese Seite auf 1200px verbreitert (Seiten-eigener
-`:global()`-Override, nicht an der gemeinsamen `PageHero`-Komponente geändert, die
-FAQs/Datenschutz/Impressum ebenfalls nutzen und die dafür nicht gemeldet wurden). **Dabei
-gefunden, nicht durch diese Änderung verursacht** (per Playwright isoliert bestätigt — das
-Zurücksetzen dieser Änderung ändert nichts daran): die Disclaimer-Seite hat bei 390px einen
-horizontalen `scrollWidth` von 419px statt 390px. Kein sichtbares Element überschreitet die
-390px-Grenze (einzeln geprüft); die Ursache ist nicht gefunden. Nicht Teil dieses Laufs,
-für einen künftigen Durchgang vorgemerkt.
+War zunächst durch `PageHero`s geteiltes `.page-hero-inner` (max-width 768px) verursacht,
+das gegen den durch A1 bereits auf 1200px verbreiterten Fließtext darunter zu schmal und
+dadurch optisch zentriert wirkte. Ein Zwischenschritt (Seiten-eigener Breiten-Override) hatte
+das behoben, aber einen vorbestehenden, unabhängigen 390px-`scrollWidth`-Überschuss (419px
+statt 390px) auf derselben Seite offengelegt, dessen Ursache zunächst nicht auffindbar war.
+**Beides erledigt sich jetzt gemeinsam:** Live-Korrektur vom 12.9. hat `PageHero` auf dieser
+Seite ganz durch ein einfaches `<h1 class="eyebrow">` ersetzt (siehe #42 für den gleichen
+Schritt auf Datenschutz) — der Titel ist dadurch von Haus aus linksbündig, und der
+390px-Überschuss ist mitverschwunden (390px gemessen, kein Überlauf mehr). Vermutlich lag
+die Überlauf-Ursache also tatsächlich in `PageHero`s eigenem Rendering (z. B. der
+Reveal-Animation oder Bild-Auszeichnung), nicht in etwas dieser Seite selbst — nie einzeln
+bestätigt, aber durch das Verschwinden mit der Komponente naheliegend.
 
 ## 42. Datenschutzerklärung: kein separates Hero-Banner mehr, nur ein kleines Eyebrow-Label
 
@@ -732,3 +732,17 @@ Vier weitere Live-Korrekturen an denselben drei Bändern:
 
 Bitte alle vier im echten Browser gegenprüfen, besonders den jetzt noch niedrigeren Kontrast
 aus dem ersten Punkt.
+
+## 45. Disclaimer, Impressum, Datenschutz: Titel jetzt einheitlich als kleines Eyebrow-Label
+
+Auf direkten Wunsch tragen alle drei Seiten jetzt dieselbe Titel-Behandlung wie Datenschutz
+(#42): kein `PageHero`-Banner mehr, sondern ein `<h1 class="eyebrow">` direkt im Textblock —
+klein, großgeschrieben, türkis, linksbündig. Zusätzlich, nur auf Datenschutz: die zwölf
+nummerierten Zwischenüberschriften ("1. Verschlüsselte Übertragung" usw.) tragen jetzt
+denselben Stil, nicht mehr die größere, dunkle Standard-H2-Optik — auf Wunsch, damit die
+ganze Seite optisch durchgängig wirkt. Rechtstext an keiner der drei Stellen verändert.
+`PageHero` selbst bleibt unangetastet und wird weiterhin von den Seiten mit echtem
+Splitt-Hero verwendet (Startseite, Über uns, Angebote, Beratung, Workshops, Kennenlernen,
+Selbsthilfegruppe, Blog, FAQs) — nur diese drei reinen Rechts-/Utility-Seiten sind
+umgestellt. Bitte im echten Browser gegenprüfen, ob das auf allen drei Seiten so gewollt
+ist, insbesondere die zwölf umgestylten Datenschutz-Überschriften.
