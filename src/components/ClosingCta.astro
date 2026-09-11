@@ -9,12 +9,23 @@
 // assets (external-review.md finding #9) and never assembled together.
 //
 // Two columns: left is heading/paragraphs/button, left-aligned. Right is the
-// portrait, offset over the tile, both rounded, the photograph overlapping the
-// tile. The colourway comes entirely from the tile image itself — nothing here
-// hardcodes a per-page color. Stacks to one column on narrow viewports; the
+// portrait, offset over the tile, both squares, the photograph overlapping
+// the tile's bottom-left corner. The colourway comes entirely from the tile
+// image itself — nothing here hardcodes a per-page color, so each page's own
+// logo tone (brown, teal, dark teal, whatever that page's tile asset is)
+// carries through unchanged. Stacks to one column on narrow viewports; the
 // portrait/tile overlap is built as one relative visual unit, so it's
 // preserved automatically in the stacked layout rather than needing a second,
 // separate mobile composition.
+//
+// Live correction (2026-09-11, after the written run docs): this component
+// had drifted into two different shapes across its four call sites — this
+// "overlap" one (portrait offset over the tile) on Über uns/Angebote, and a
+// second "pair" layout (two equal squares side by side, no overlap) on
+// Workshops/Beratung. Asked to unify: same overlap shape everywhere, both
+// elements square, and the portrait corrected to sit at the tile's
+// bottom-LEFT (it was bottom-right) to match the reference. The `layout`
+// prop and its "pair" branch are gone — there is only the one shape now.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -34,11 +45,6 @@ interface Props {
   // B3 confirms Angebote's own CTA heading is already correct at 28px.
   headingSize?: 'default' | 'large';
   portraitSize?: 'default' | 'large';
-  // NACHTLAUF-2026-09-08.md B3: Angebote's live CTA is two same-size
-  // (398x398) images side by side, not this component's usual portrait-
-  // overlapping-the-tile composition — every other page's CTA keeps the
-  // default 'overlap'.
-  layout?: 'overlap' | 'pair';
 }
 const {
   heading,
@@ -51,7 +57,6 @@ const {
   tileAlt,
   headingSize = 'default',
   portraitSize = 'default',
-  layout = 'overlap',
 } = Astro.props;
 ---
 
@@ -62,7 +67,7 @@ const {
       {paragraphs.map((p) => <p>{p}</p>)}
       <a href={ctaHref} class="button button-primary">{ctaLabel}</a>
     </div>
-    <div class:list={['closing-cta-visual', { 'closing-cta-visual--pair': layout === 'pair' }]}>
+    <div class="closing-cta-visual">
       {/* Decorative brand tile — aria-hidden directly on the <img> itself
          (not just an empty alt, and not just an ancestor wrapper — the
          build-check's alt-text rule inspects each <img> tag on its own, so
@@ -72,7 +77,7 @@ const {
         <Image src={tile} alt={tileAlt} aria-hidden="true" width={500} height={500} />
       </div>
       <div class:list={['closing-cta-portrait', { 'portrait-lg': portraitSize === 'large' }]}>
-        <Image src={portrait} alt={portraitAlt} width={400} height={520} />
+        <Image src={portrait} alt={portraitAlt} width={500} height={500} />
       </div>
     </div>
   </div>
@@ -100,9 +105,11 @@ const {
     position: relative;
     max-width: 24rem;
     margin-inline: auto;
-    /* Room for the portrait to overhang the tile's edges without colliding
-       with the section padding. */
-    padding: 0 1.5rem 2.5rem 0;
+    /* Room for the portrait to overhang the tile's left/bottom edges
+       without colliding with the section padding — mirrored from the
+       original right-side padding now that the portrait sits on the
+       left (live correction, 2026-09-11). */
+    padding: 0 0 2.5rem 1.5rem;
   }
 
   .closing-cta-tile,
@@ -121,12 +128,23 @@ const {
     object-fit: cover;
   }
 
+  /* Live correction, 2026-09-11: the portrait sits at the tile's
+     bottom-LEFT (was bottom-right) and is a square like the tile, not a
+     3:4 portrait crop — this component had drifted into two different
+     shapes across its four pages (this overlap, and a separate "pair"
+     layout elsewhere in the file's history); unified to this one.
+     Second correction, same day: portrait width raised to match the tile
+     exactly (was 65%, read as "too small next to the logo") and the
+     offset deepened from -1.5rem/-2rem to -3rem/-3rem for "mehr
+     Überlappung" — two equal squares, offset enough that a clear
+     L-shaped strip of the tile still shows top and right, not just a
+     sliver. */
   .closing-cta-portrait {
     position: absolute;
-    width: 60%;
-    aspect-ratio: 3 / 4;
-    right: -1.5rem;
-    bottom: -2rem;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    left: -3rem;
+    bottom: -3rem;
     box-shadow: 0 16px 32px rgba(24, 26, 43, 0.18);
   }
 
@@ -136,31 +154,17 @@ const {
     object-fit: cover;
   }
 
-  /* NACHTLAUF-2026-09-08.md B2.3: Über uns's portrait measures 336x390,
-     larger than every other page's use of this component (230x307). */
+  /* NACHTLAUF-2026-09-08.md B2.3: Über uns's whole photo/tile pair reads
+     larger than every other page's use of this component — now that the
+     portrait always matches the tile's own size, that difference lives
+     on the shared container's own max-width instead of the portrait's
+     width alone. */
+  .closing-cta-visual:has(.portrait-lg) {
+    max-width: 30rem;
+  }
+
   .closing-cta-portrait.portrait-lg {
-    width: 87.5%;
-    aspect-ratio: 336 / 390;
-  }
-
-  /* NACHTLAUF-2026-09-08.md B3: two equal 398x398 squares side by side,
-     not an overlap — sized with flex/aspect-ratio rather than a literal
-     398px so it stays fluid at any viewport instead of only matching at
-     exactly the 1440px width the live page was measured on. */
-  .closing-cta-visual--pair {
-    display: flex;
-    gap: 1.5rem;
-    max-width: 52rem;
-    padding: 0;
-  }
-
-  .closing-cta-visual--pair .closing-cta-tile,
-  .closing-cta-visual--pair .closing-cta-portrait {
-    position: static;
-    flex: 1 1 0;
-    width: auto;
-    aspect-ratio: 1 / 1;
-    box-shadow: none;
+    width: 92%;
   }
 
   @media (min-width: 900px) {

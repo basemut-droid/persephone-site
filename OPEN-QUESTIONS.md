@@ -549,13 +549,99 @@ nachgezeichnet — dafür fehlt mir ein Werkzeug. Bitte ansehen und sagen, ob di
 Annäherung genügt oder ob die Original-Illustration eingebunden werden soll (dann
 bräuchte es die Bilddatei selbst, nicht nur einen Screenshot davon).
 
-## 33. Über uns, Qualifikationsbänder: Übergang beim Scrollen nicht mit Werkzeug prüfbar
+## 33. Über uns, Qualifikationsbänder: Übergang beim Scrollen — GELÖST (NACHTRAG N4, 11.9.)
 
-Der Crossfade (jetzt wieder auf dem ganzen Band statt nur auf dem Bild, siehe
-Code-Kommentar in `ueber-uns.astro`) kann während des kurzen Überblendmoments
-Inhalte der vorherigen Karte durchscheinen lassen — das liegt in der Natur eines
-echten Fades und lässt sich nicht ohne den Fade selbst ganz vermeiden. Ich konnte
-das eigentliche Scroll-Gefühl in diesem Lauf nicht mit einem Werkzeug prüfen
-(Playwright kann die Scroll-Position setzen, aber nicht beurteilen, ob sich der
-Übergang für einen Menschen richtig anfühlt) — bitte im echten Browser
-gegenprüfen, ob das jetzt so passt oder der Übergang noch angepasst werden muss.
+War offen, weil das Scroll-*Gefühl* sich nicht mit einem Werkzeug prüfen ließ. Claudio hat es
+im echten Browser geprüft und den Befund geliefert: die Bänder schoben sich sichtbar
+übereinander, statt sauber überzublenden ("more like a slide in whereas the original one
+vanishes while the other appears"). Ursache war `position: sticky` auf jedem Band einzeln,
+gestapelt hintereinander — dadurch schob sich das nachrückende Band optisch über das
+vorige, obwohl die Deckkraft selbst sauber überblendete. Behoben: jetzt ist nur die neue
+`[data-quals-stage]`-Hülle sticky, die drei Bänder liegen absolut übereinander an derselben
+Stelle und ausschließlich die Deckkraft ändert sich — nichts bewegt sich mehr. Siehe
+`docs/decisions.md`'s Eintrag vom 11.9.2026.
+
+## 34. Über uns, Qualifikationsbänder: mehrere Live-Korrekturen widersprechen dem Nachtrag-Text
+
+Direkt im Anschluss an N1–N4 gab es weitere Live-Korrekturen, live am Telefon über WLAN
+geprüft, die Teile des schriftlichen Nachtrags überschreiben:
+
+- **Die diagonale Wellentextur** (`.quals-panel::before`) — der Nachtrag sagte ausdrücklich,
+  sie bleibe ("ist etwas anderes und bleibt"). Auf direkten Wunsch jetzt trotzdem entfernt,
+  die Fläche ist reine Flatfarbe ohne Textur.
+- **Die Panel-Höhe** — N2 selbst sagte, die Höhe dürfe sich aus dem Inhalt ergeben (das
+  dritte Band, Sprachen, sei kürzer). Ein direkter Vergleich aller drei Original-Bänder
+  nebeneinander (Live-Screenshots) zeigte aber: alle drei sind in Wahrheit exakt gleich groß,
+  nur die Platzierung alterniert. Jetzt fix auf `calc(100svh - 117px)` gesetzt — die Fläche
+  unterhalb der Kopfleiste, gemessen bei 1440 px (Kopfleiste: 117 px, `position: sticky`,
+  kein Overlay). Die 117 px sind ein gemessener, nicht dynamisch nachgeführter Wert; ändert
+  sich die Kopfleistenhöhe künftig (z. B. durch neue Nav-Punkte), muss diese Zahl von Hand
+  nachgezogen werden.
+- **Die Zeilenbreite** — auf Wunsch jetzt "fast die ganze Seitenbreite" (eigener
+  `.quals-container`, `max-width: 1800px`, kleiner werdender Rand statt der sonst
+  sitenweiten 1200-px-Textspalte aus A1). Eine bewusste Ausnahme von der sonst
+  durchgehenden Textbreiten-Konvention, nur für diese eine Komponente.
+- **Ein neuer Slideshow-Positionsindikator** (rote Pille mit drei Punkten, rechts) — in
+  keinem der schriftlichen Aufträge erwähnt, auf Zuruf gebaut, weil die Original-Screenshots
+  (Nummer 4 und 5) ihn zeigten. Nur im Enhanced-Zustand sichtbar (JS + ≥900 px + kein
+  `prefers-reduced-motion`), sitzt in `[data-quals-stage]` selbst, damit er beim
+  Weiterscrollen zur ClosingCta-Sektion korrekt wieder verschwindet.
+
+Bitte im echten Browser gegenprüfen, ob diese vier Korrekturen so bleiben sollen — sie sind
+alle aus Live-Feedback in genau dieser Sitzung entstanden, nicht aus einem schriftlichen
+Auftrag.
+
+## 35. Der Rostorange-Akzent (#c26d32) — Widerspruch zwischen N3 und dem echten Original
+
+N3 (`docs/NACHTRAG-2026-09-11.md`) ordnet die Entfernung dieses abgerundeten Akzents
+ausdrücklich an, als Teil des projektweiten Ocker-Verbots aus `docs/LAUF-2026-09-10.md`s
+"NICHT ANFASSEN" (dort ist wörtlich von der Hero-Kurve `#EDA444` die Rede). Diese Sitzung
+hat er die Entfernung befolgt — sie ist umgesetzt.
+
+**Aber:** In derselben Sitzung wurden mir zum Vergleich Live-Screenshots der drei
+Original-Qualifikationsbänder geschickt, und alle drei zeigen genau diesen
+Rostorange-Bogen mit dünner heller Linie darüber als festen Bestandteil der
+Original-Illustration — kein Ausreißer, sondern die eigentliche Grafik. Das ist ein anderer
+Farbton (`#c26d32`, "Rostorange") als die Hero-Kurve (`#EDA444`, "Ocker"), auf die sich das
+NICHT-ANFASSEN-Verbot ursprünglich bezog.
+
+Ich habe den Akzent **nicht** wieder eingebaut — N3s Entscheidung ist eine schriftliche
+Entscheidung auf der Aufzeichnung, und die Live-Nachrichten in dieser Sitzung haben ihn
+nicht ausdrücklich zurückgefordert, nur zum Vergleich gezeigt. Aber der Widerspruch ist real
+und braucht eine bewusste Entscheidung: gilt das Ocker-Verbot wirklich für jeden
+orange-artigen Ton projektweit (dann bleibt der Akzent draußen), oder war es spezifisch für
+die Hero-Kurve gemeint (dann könnte dieser andere Ton zurück, weil er zur echten
+Originalgrafik gehört)?
+
+## 36. ClosingCta (Foto+Logo) — auf allen vier Seiten vereinheitlicht, zwei ältere Entscheidungen überschrieben
+
+Live-Feedback (Telefon-Screenshots) verglich die vier Verwendungen dieser Komponente
+(Über uns, Angebote, Workshops, Beratung) und fand sie uneinheitlich. Ergebnis dieser
+Sitzung: **eine** gemeinsame Form für alle vier — Foto und Logo beide quadratisch, gleich
+groß, Foto unten-links über das Logo versetzt (mit spürbarer Überlappung, kein schmaler
+Rand). Die eigene Logofarbe jeder Seite bleibt unverändert (Braun/Beige, Terrakotta, Blaugrau,
+Türkis — je nach Seite).
+
+Das überschreibt zwei ältere, schriftlich festgehaltene Entscheidungen:
+
+- **`NACHTLAUF-2026-09-08.md` B3** (Angebote: zwei gleich große Bilder nebeneinander, kein
+  Überlappen) — war ohnehin schon durch `LAUF-2026-09-10.md` B8 Punkt 30 zurückgenommen
+  worden (Foto/Logo sollen sich überlappen).
+- **`LAUF-2026-09-10.md` B10 Punkt 29 / B11 Punkt 32** (Workshops, Beratung: "gleich große
+  Quadrate … **ohne** Überlappung", `layout="pair"`) — diese Sitzung hat das `layout`-Prop
+  und den ganzen "pair"-Zweig ersatzlos entfernt; Workshops und Beratung überlappen jetzt
+  genauso wie die anderen beiden Seiten.
+
+Bitte bestätigen, dass die eine gemeinsame Form für alle vier Seiten so gewollt ist —
+insbesondere, dass Workshops/Beratung jetzt auch überlappen sollen, obwohl der
+ursprüngliche Auftrag dort ausdrücklich "ohne Überlappung" verlangt hatte.
+
+## 37. Über uns, "Beratung & Coaching"/"Workshops & trainings"-Kacheln — Größenverhältnis zweimal live nachjustiert
+
+Nach dem Umzug der Kacheln von Angebote nach Über uns (N1) kam zweimal Live-Feedback zum
+Größenverhältnis von farbiger Fläche und weißer Textkarte: erst war die Karte zu groß (fast
+deckungsgleich mit der Fläche), dann — nachdem die Karte verkleinert war — die Fläche zu
+groß im Vergleich zur (jetzt kleineren) Karte. Aktueller Stand: Fläche 78 % Breite
+(rechtsbündig), Karte 70 % Breite (unten-links versetzt, Inhaltshöhe). Kein exaktes
+Referenzmaß aus einem Original-Screenshot verfügbar — nach Augenmaß im Gespräch
+angeglichen. Bitte im echten Browser gegenprüfen.

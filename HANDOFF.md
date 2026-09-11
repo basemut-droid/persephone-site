@@ -4,7 +4,34 @@ Read this first at the start of every session. History and past decisions moved 
 `docs/decisions.md` (2026-09-07) so this file stays short enough to actually read —
 see `external-review.md`'s "PROCESS NOTE" for why that matters.
 
-## Most recent run: LAUF-2026-09-10 (`docs/LAUF-2026-09-10.md`) + live follow-ups
+## Most recent run: NACHTRAG-2026-09-11 (`docs/NACHTRAG-2026-09-11.md` N1–N4) + live follow-ups
+
+N1–N4 done, then a long cascade of live corrections (Claudio watching over WLAN on his
+phone) that go beyond the written Nachtrag — several *supersede* earlier written decisions
+rather than just implement them, so check `OPEN-QUESTIONS.md` #34–37 before assuming the
+current code is the final word:
+
+- N1: the "Button-Kästchen" tiles moved from Angebote to Über uns (misfiled originally).
+- N2/live: qualification bands are 2:1 panel:image, fixed-height (`100svh - 117px`,
+  live-corrected from N2's own "height follows content" text once a side-by-side of all
+  three original bands showed they're actually identical), near-full-bleed width, plus a
+  new slideshow-position indicator not in any written brief.
+- N3: the rust-orange accent (`#c26d32`) removed per the ochre ban — but flagged in
+  `OPEN-QUESTIONS.md` #35, since the true original screenshots shown live this session do
+  feature that exact accent as part of the illustration, not a stray element.
+- N4: the crossfade rebuilt so the bands overlay at a fixed position (only opacity
+  changes) instead of each being independently `position: sticky`, which had been reading
+  as a slide-over rather than a fade.
+- ClosingCta (photo+logo, 4 pages) unified to one shape — square portrait, bottom-left
+  overlap, sized to match the tile — reversing Workshops/Beratung's "no overlap" decision
+  from `LAUF-2026-09-10.md` B10/B11. See `OPEN-QUESTIONS.md` #36.
+- Dev server is running with `--host` on the LAN (`http://192.168.178.44:4321/`) for this
+  review — stop it (`astro dev stop`) once done; it's this machine's own dev server, not a
+  deployment, and the IP is only reachable on this WLAN.
+
+Full record: `docs/decisions.md`'s "Nachtrag 2026-09-11" entry.
+
+## Previous run: LAUF-2026-09-10 (`docs/LAUF-2026-09-10.md`) + live follow-ups
 
 Several rounds of live screenshot corrections followed the written run below —
 Kontakt's card heights/panel columns, `.button-primary`'s color, Kontakt's hero,
@@ -192,10 +219,13 @@ that matter most:
 
 ## Next step
 
-`docs/LAUF-2026-09-10.md` is fully worked through — Teile A, B, C, D all done (see
-`docs/decisions.md`'s matching entry). Pick up from `OPEN-QUESTIONS.md` #25–30 for
-what's waiting on Marina/Claudio from this run specifically, or the rest of that
-file for everything still open from earlier runs. `docs/NACHTLAUF-2026-09-09.md`'s
-Teil F (repo hygiene — stray uncommitted files Claudio noticed in VS Code) is still
-open too, waiting on a decision about `Claude outputs/` and the other untracked docs
-sitting in the working tree.
+`docs/LAUF-2026-09-10.md` and `docs/NACHTRAG-2026-09-11.md` (N1–N4) are both fully worked
+through — see `docs/decisions.md`'s two matching entries. Pick up from
+`OPEN-QUESTIONS.md` #34–37 first — these are the ones from this run's live-correction
+cascade that *reverse* earlier written decisions (ClosingCta overlap on Workshops/Beratung,
+the qualification bands' fixed-equal-size height, the rust-orange accent's removal) and
+need an explicit yes rather than being assumed settled; #25–33 are the rest of what's
+waiting on Marina/Claudio from the last two runs specifically, or the rest of that file for
+everything still open from earlier runs. `docs/NACHTLAUF-2026-09-09.md`'s Teil F (repo
+hygiene — stray uncommitted files Claudio noticed in VS Code) is still open too, waiting on
+a decision about `Claude outputs/` and the other untracked docs sitting in the working tree.

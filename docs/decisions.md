@@ -1000,3 +1000,86 @@ uncommitted files) was explicitly out of scope for this run, per the brief itsel
 Build (`npm run build`) and `npx astro check` both clean after every commit above; only the
 pre-existing non-blocking `astro.config.mjs` placeholder-domain warning remains (blocked on
 the hosting decision, see `OPEN-QUESTIONS.md` #6).
+
+## Nachtrag 2026-09-11 (`docs/NACHTRAG-2026-09-11.md` N1–N4) + live follow-up corrections
+
+N1–N4 done first, in order, then a long cascade of live corrections continued in the same
+session (Claudio watching over WLAN on his phone as changes landed) that go beyond the
+written Nachtrag text — see `OPEN-QUESTIONS.md` #34–37 for the ones that need his/Marina's
+sign-off, since several of them supersede earlier written decisions rather than just
+implementing them.
+
+**N1** — the colored-tile/oversized-card pattern ("Button-Kästchen", `LAUF-2026-09-10.md`
+B8 Punkt 19) was misfiled under Angebote; Marina's screenshot for that point actually shows
+Über uns's "Beratung & Coaching (i.A.u.S.)"/"Workshops & trainings" cards. Moved: the
+`.offer-tile` markup/CSS now lives in `ueber-uns.astro` (replacing the ServiceCard grid
+NACHTLAUF-2026-09-09.md E3 had put there), content unchanged (own label/description/href).
+Angebote's copy removed ersatzlos, not replaced — the paragraph the tiles had displaced
+there (`introPara2`) was independently already ordered removed by the same B8 Punkt 24, so
+restoring it would have contradicted that.
+
+**N2** — qualification-band panel:image column ratio corrected from 1:1 to 2:1 (live
+measures 888:444), padding raised toward the measured 115px. Superseded by a same-session
+live correction: see below.
+
+**N3** — the rust-orange accent circle (`#c26d32`, `.quals-panel::after`) removed, per the
+project-wide ochre ban. See `OPEN-QUESTIONS.md` #35 — a same-session comparison against the
+true original page shows this exact accent as part of the original illustration, not a
+stray element, which is now flagged as an open contradiction rather than resolved silently.
+
+**N4** — the qualification-band crossfade rebuilt: previously each band was itself
+`position: sticky`, stacked in flow, which read as the next band sliding up over the
+previous one. Now only a new `[data-quals-stage]` wrapper is sticky; the bands sit
+absolutely stacked at the same position inside it, so only opacity ever changes. Verified
+via Playwright scroll-position sampling (not just visual inspection): at four scroll
+fractions through the section, all three bands' `top`/`left` stayed identical to each other
+at every sample — confirming nothing moves, only crossfades.
+
+**Live corrections after N1–N4, same session** (see `OPEN-QUESTIONS.md` #34 for the full
+list and the sign-off ask):
+- Qualification-band panel's diagonal wave texture removed entirely (Nachtrag's own text
+  said it should stay; a direct live instruction overrode that).
+- Panel height changed from content-derived (N2's own text) to a fixed
+  `calc(100svh - 117px)` — a live side-by-side comparison of all three original bands showed
+  they're actually identical in size, alternating only in left/right placement, not height.
+  117px is `.site-header`'s measured height at 1440px, hardcoded rather than read live via
+  JS — a fragile number if the header's own height ever changes.
+- Row width changed to a page-scoped near-full-bleed `.quals-container` (`max-width:1800px`,
+  small vw-based gutter) instead of the shared `.container` — a deliberate one-off exception
+  to the site's usual ~1200px reading-width convention (A1), only for this component.
+- A slideshow-position indicator (three-dot pill, terracotta, right-aligned) added — not in
+  any written brief, built from the reference screenshots Claudio sent. Enhancement-only
+  (mirrors the crossfade's own JS/motion/width gates); lives inside `[data-quals-stage]`
+  itself specifically so it disappears once the user scrolls past the section (an earlier
+  `position: fixed` version kept showing all the way through the ClosingCta section below —
+  caught and fixed in the same session via a screenshot Claudio sent from that section).
+- `ClosingCta` (the shared photo+logo component, four pages: Über uns, Angebote, Workshops,
+  Beratung) unified to one shape — portrait square (was 3:4), moved from bottom-right to
+  bottom-left of the tile, sized to match the tile exactly (was 60-92% width) with a deeper
+  offset for more visible overlap. The `layout` prop and its "pair" (no-overlap, equal
+  squares) branch are removed entirely — Workshops/Beratung now overlap too, which reverses
+  `LAUF-2026-09-10.md` B10 Punkt 29 / B11 Punkt 32's explicit "ohne Überlappung". Per-page
+  logo colors are untouched (they come from each page's own tile asset, never hardcoded in
+  the component).
+- Über uns's own offer-tile (N1's moved cards) proportions adjusted twice in the same
+  live loop: the white card first shrunk (was nearly the same height as the colored square,
+  leaving only a thin sliver of it visible), then the colored square itself shrunk to match
+  the card's new smaller scale (78% width, right-aligned) once the card alone looked
+  undersized next to the still-full-size square. See `OPEN-QUESTIONS.md` #37.
+
+**Verified:** `npm run build` clean after every change in this run (only the pre-existing
+non-blocking placeholder-domain warning). 1440px and 390px checked with Playwright,
+JavaScript on and off, for every touched component — no horizontal overflow at 390px, all
+qualification-band content and both offer-tiles reachable with JavaScript disabled (the
+`:has()`/native-flow fallback paths were never touched by this run's changes). The "blank
+image" and "no visible qualification bands" false alarms hit mid-session both turned out to
+be Playwright screenshot-tooling artifacts (native `loading="lazy"` images not painting in
+an isolated `elementHandle.screenshot()` or an un-scrolled `fullPage` capture, and a
+heavily-downscaled full-page PNG being hard to read by eye) — confirmed non-issues by
+scrolling incrementally like a real visitor before re-screenshotting, not fixed by any code
+change.
+
+**Dev server hosted on the LAN for live review** (`astro dev --host --background`,
+`http://192.168.178.44:4321/`) — this is this machine's own dev server reachable over WLAN,
+not a deployment; stop it (`astro dev stop`) once the review session is done, and remember
+the IP is only valid on this network / while this machine is on.

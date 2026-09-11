@@ -3,7 +3,6 @@ import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ClosingCta from '../components/ClosingCta.astro';
-import ServiceCard from '../components/ServiceCard.astro';
 import logoKongruenz from '../assets/pages/ueber-uns/logo-kongruenz-und-authentizitaet.png';
 import marinaPortrait from '../assets/shared/marina-von-persephone.jpg';
 import granatapfel from '../assets/hero/granatapfel-fruchtbarkeit.png';
@@ -153,93 +152,162 @@ tracker.assertAllHandled('ueber-uns.astro');
      wrapper adds no layout of its own until the script below opts a
      capable, motion-OK, ≥900px viewport into it, so a plain render (no
      JS, old browser, prefers-reduced-motion, or narrow viewport) is
-     pixel-identical to the previous three-independent-bands markup. */}
+     pixel-identical to the previous three-independent-bands markup.
+
+     NACHTRAG-2026-09-11.md N4: the previous enhanced layout made each
+     band itself `position: sticky; top: 0`, stacked one after another in
+     normal flow — visually that reads as the next band sliding up and
+     covering the previous one while scrolling, not a fade in place
+     (Claudio: "more like a slide in whereas the original vanishes while
+     the other appears"). The new [data-quals-stage] wrapper is the fix:
+     it alone becomes the sticky viewport, and the bands inside it are
+     absolutely stacked on top of each other at the exact same spot —
+     opacity is then the only thing that ever changes, so nothing moves.
+     The scroller itself still gets an explicit multi-viewport-tall height
+     (set by the script below) purely to keep the same three-stage scroll
+     distance as before. */}
   <div class="quals-scroller" data-quals-scroller>
-    {
-      qualBands.map((band) => (
-        <section class={`reveal quals-band quals-band--${band.side}`} data-quals-band>
-          <div class="container quals-container">
-            <div class="quals-grid">
-              <div class="quals-panel">
-                <h2 class="quals-heading">{band.heading}</h2>
-                {band.kind === 'list' ? (
-                  <ul class="quals-list">
-                    {band.items.map((item) => (
-                      <li set:html={mdInlineHtml(item)} />
-                    ))}
-                  </ul>
-                ) : (
-                  <div class="quals-list quals-lines">
-                    {band.items.map((line) => (
-                      <p>{line}</p>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div class="quals-image">
-                <Image src={granatapfel} alt="" aria-hidden="true" width={1000} height={800} />
+    <div class="quals-stage" data-quals-stage>
+      {
+        qualBands.map((band) => (
+          <section class={`reveal quals-band quals-band--${band.side}`} data-quals-band>
+            {/* Live correction (same session as N2-N4): "almost the width
+               of the page", explicitly wider than the site's usual
+               .container (max-width 1248px) — deliberate full-bleed
+               treatment for this one component, not a reuse-before-you-
+               build violation (CLAUDE.md's rule cuts both ways: it also
+               means not forcing every section into the shared .container
+               when the live design genuinely wants something wider). */}
+            <div class="quals-container">
+              <div class="quals-grid">
+                <div class="quals-panel">
+                  <h2 class="quals-heading">{band.heading}</h2>
+                  {band.kind === 'list' ? (
+                    <ul class="quals-list">
+                      {band.items.map((item) => (
+                        <li set:html={mdInlineHtml(item)} />
+                      ))}
+                    </ul>
+                  ) : (
+                    <div class="quals-list quals-lines">
+                      {band.items.map((line) => (
+                        <p>{line}</p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div class="quals-image">
+                  <Image src={granatapfel} alt="" aria-hidden="true" width={1000} height={800} />
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-      ))
-    }
+          </section>
+        ))
+      }
+      {/* Live correction: a slideshow-position indicator (a small pill
+         with one dot per band, the current one highlighted) sitting to
+         the right — matches the original page, which shows this next to
+         the alternating panel/image bands. Lives inside [data-quals-stage]
+         itself, not as a scroller-level sibling: the stage is what's
+         position:sticky, so nesting the indicator here means it's pinned
+         (and disappears) exactly in step with the bands it's indexing —
+         a sibling positioned `fixed` to the viewport instead would keep
+         showing long after the crossfade section has scrolled by, since
+         .quals-scroller--enhanced never gets removed once scrolled past.
+         Enhancement-only: it only means anything once there's an actual
+         "current slide" (the crossfade state below), so it's hidden by
+         default and only shown once .quals-scroller--enhanced is
+         present — the same gate the crossfade itself uses. */}
+      <div class="quals-indicator" data-quals-indicator aria-hidden="true">
+        {qualBands.map((_, i) => <span class="quals-indicator-dot" data-quals-dot={i} />)}
+      </div>
+    </div>
   </div>
 
   <script>
     // NACHTLAUF-2026-09-09.md E2 — scroll-linked crossfade, progressive
     // enhancement in the same spirit as global.css's .reveal (A6): opt in
-    // only once IntersectionObserver exists, prefers-reduced-motion isn't
-    // set, and the viewport is wide enough for the alternating two-column
-    // band layout this crossfade is built for (matches the existing
-    // 900px breakpoint the bands themselves already use). Everyone else
-    // keeps the plain stacked-bands render with its own existing .reveal
-    // fade-in untouched.
+    // only once prefers-reduced-motion isn't set and the viewport is wide
+    // enough for the alternating two-column band layout this crossfade is
+    // built for (matches the existing 900px breakpoint the bands
+    // themselves already use). Everyone else keeps the plain
+    // stacked-bands render with its own existing .reveal fade-in
+    // untouched.
+    //
+    // NACHTRAG-2026-09-11.md N4: switched from IntersectionObserver
+    // (which needed each band to occupy its own moving scroll slot — the
+    // very thing that caused the "slide" look) to reading scroll progress
+    // directly off the scroller's own bounding box. The bands no longer
+    // move at all (see the CSS below), so there's nothing left for an
+    // observer to watch; the active band is simply whichever third of the
+    // scroller's height the viewport currently sits over.
     const scroller = document.querySelector<HTMLElement>('[data-quals-scroller]');
+    const stage = document.querySelector<HTMLElement>('[data-quals-stage]');
+    const indicator = document.querySelector<HTMLElement>('[data-quals-indicator]');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (scroller && !prefersReducedMotion && 'IntersectionObserver' in window && window.matchMedia('(min-width: 900px)').matches) {
+    if (scroller && stage && !prefersReducedMotion && window.matchMedia('(min-width: 900px)').matches) {
       const bands = [...scroller.querySelectorAll<HTMLElement>('[data-quals-band]')];
+      const dots = indicator ? [...indicator.querySelectorAll<HTMLElement>('[data-quals-dot]')] : [];
       scroller.classList.add('quals-scroller--enhanced');
-      // Hand full control of these bands' opacity to the observer below —
-      // otherwise BaseLayout's own generic .reveal-pending toggle and this
-      // one would both be driving the same property.
+      // Hand full control of these bands' opacity to the scroll handler
+      // below — otherwise BaseLayout's own generic .reveal-pending toggle
+      // and this one would both be driving the same property.
       bands.forEach((b) => b.classList.remove('reveal', 'reveal-pending'));
-      const io = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) entry.target.classList.toggle('is-quals-active', entry.isIntersecting);
-        },
-        { threshold: 0 },
-      );
-      bands.forEach((b) => io.observe(b));
+      // Explicit scroll distance: one full viewport per band, same total
+      // as the old "each band is its own 100vh sticky slide" approach.
+      scroller.style.height = `${bands.length * 100}vh`;
+
+      let queued = false;
+      function updateActive() {
+        queued = false;
+        const rect = scroller!.getBoundingClientRect();
+        const scrollable = rect.height - window.innerHeight;
+        const progress = scrollable > 0 ? Math.min(Math.max(-rect.top, 0), scrollable) / scrollable : 0;
+        const active = Math.min(bands.length - 1, Math.floor(progress * bands.length));
+        bands.forEach((b, i) => b.classList.toggle('is-quals-active', i === active));
+        dots.forEach((d, i) => d.classList.toggle('is-quals-active', i === active));
+      }
+      function onScroll() {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(updateActive);
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', updateActive);
+      updateActive();
     }
   </script>
 
-  {/* NACHTLAUF-2026-09-09.md E3: Claudio's call — the photo+overlapping-
-     card layout below (NIGHT-RUN.md Phase 4.2 / external-review.md #4b)
-     stays out of the render for now in favor of the same teal
-     ServiceCard/"ERFAHRE MEHR" gradient cards the homepage already uses
-     for Beratung & Coaching / Workshops & Einzeltrainings (screenshot
-     07 in docs/screenshots/2026-09-09-feedback/) — same content
-     (title/description/href from `teasers`), reusing ServiceCard/
-     .service-grid rather than building a second version of that shape
-     (CLAUDE.md "reuse before you build"). The photo-teaser markup/style
-     it replaces is commented out just below rather than deleted: it's
-     the calibrated real-photo layout (FEEDBACK-2026-09-08.md #1's
-     measurements, confirmed same size as the live photos in screenshot
-     06) for whenever real photos exist and Marina edits this in the
-     CMS. */}
+  {/* docs/NACHTRAG-2026-09-11.md N1: the colored-tile/oversized-card
+     pattern ("Button-Kästchen") belongs here, not on Angebote — Marina's
+     screenshot for LAUF-2026-09-10.md B8 Punkt 19 showed these exact two
+     cards ("Beratung & Coaching (i.A.u.S.)" / "Workshops & trainings"),
+     which only exist on Über uns; a misreading filed it under Angebote
+     instead. The shape itself (colored bg tile + oversized text card
+     overlapping it, same superimposition idea as ClosingCta's
+     photo/logo pair) is unchanged from that build — only its page moved,
+     per N1's "Gestaltung übernommen, nicht der Ort". Content stays
+     exactly what it was here before (`teasers`' own label/description/
+     href from this page's markdown, unrelated to N1's move). The
+     photo+overlapping-card layout below (NIGHT-RUN.md Phase 4.2 /
+     external-review.md #4b) stays commented out for the same reason as
+     before — NACHTLAUF-2026-09-09.md E3 — the calibrated real-photo
+     layout (FEEDBACK-2026-09-08.md #1's measurements) for whenever real
+     photos exist. */}
   <section class="section section-alt">
     <div class="container">
-      <div class="service-grid">
+      <div class="offer-tiles">
         {
           teasers.map((t, i) => (
-            <ServiceCard
-              title={t.label}
-              description={t.description}
-              href={t.href}
-              cta="Erfahre mehr"
-              tone={i === 0 ? 'teal-dark' : 'teal'}
-            />
+            <a href={t.href} class="offer-tile">
+              <div class={`offer-tile-bg offer-tile-bg--${i === 0 ? 'teal-dark' : 'teal'}`} aria-hidden="true" />
+              <div class="offer-tile-card">
+                <h3 class="offer-tile-title">{t.label}</h3>
+                <p>{t.description}</p>
+                <span class="offer-tile-cta">Erfahre mehr</span>
+              </div>
+            </a>
           ))
         }
       </div>
@@ -317,6 +385,89 @@ tracker.assertAllHandled('ueber-uns.astro');
     }
   }
 
+  /* docs/NACHTRAG-2026-09-11.md N1 — moved here verbatim from
+     angebote.astro (LAUF-2026-09-10.md B8 Punkt 19's original build):
+     same overlap idea as ClosingCta's tile/portrait — a colored square
+     behind, a smaller card offset over its bottom-left corner.
+     Live correction, 2026-09-11: originally the card nearly matched the
+     tile's own height (top:1.5rem to bottom:-1.5rem, 82% width), leaving
+     only a thin sliver of the colored square visible — same complaint as
+     ClosingCta's old proportions, fixed the same way just now: the
+     background tile is square (was 4/3) and the card shrinks to a
+     bottom-left-anchored, content-sized box so the square actually reads
+     as a square instead of a border peeking out from behind the card. */
+  .offer-tiles {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .offer-tile {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    color: var(--color-text);
+    padding: 0 0 3rem 1.5rem;
+  }
+
+  /* Live correction, 2026-09-11: the square background tile was still
+     the tile's full column width (100%) while the card above it had
+     already been shrunk to 68% — leaving the background noticeably
+     bigger than the card sitting on it, the opposite of a matched pair.
+     Shrunk to a size close to the card's own (78%, right-aligned) so the
+     two read as similarly-sized offset elements, the same relationship
+     ClosingCta's tile/portrait pair now has. */
+  .offer-tile-bg {
+    width: 78%;
+    margin-left: auto;
+    border-radius: var(--radius);
+    aspect-ratio: 1 / 1;
+  }
+
+  .offer-tile-bg--teal-dark {
+    background: var(--color-teal-dark);
+  }
+
+  .offer-tile-bg--teal {
+    background: var(--color-teal);
+  }
+
+  .offer-tile-card {
+    position: absolute;
+    left: 0;
+    bottom: -1.5rem;
+    width: 70%;
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    box-shadow: 0 12px 32px rgba(24, 26, 43, 0.12);
+    padding: 1.5rem 1.75rem;
+    transition: transform 0.18s ease;
+  }
+
+  .offer-tile:hover .offer-tile-card {
+    transform: translateY(-2px);
+  }
+
+  .offer-tile-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+  }
+
+  .offer-tile-card p {
+    margin: 0 0 1rem;
+  }
+
+  .offer-tile-cta {
+    font-weight: 600;
+    color: var(--color-accent-strong);
+  }
+
+  @media (min-width: 700px) {
+    .offer-tiles {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
   /* Qualification bands (NACHTLAUF-2026-09-08.md B2.1) — three full-bleed
      two-column rows, alternating sides. Page-scoped, not global.css: this
      shape (a solid-color column stretching the full row height, paired
@@ -336,6 +487,15 @@ tracker.assertAllHandled('ueber-uns.astro');
     height: 100%;
     display: flex;
     align-items: center;
+    /* Live correction: deliberately not the shared .container (max-width
+       1248px) — "almost the width of the page", not the site's usual
+       reading-width measure. 2vw keeps a small gutter that grows with the
+       viewport instead of a fixed one that would look cramped on very
+       wide screens or too tight on narrower ones. */
+    width: 100%;
+    max-width: 1800px;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 2vw, 2rem);
   }
 
   .quals-grid {
@@ -353,14 +513,26 @@ tracker.assertAllHandled('ueber-uns.astro');
        --color-teal-dark) mit hellem Text, wie ursprünglich vor Punkt 17.
        Kontrast damit wieder 2.96:1 statt 9.18:1 — niedriger als der
        4,5:1-Standard für Fließtext, ein bewusster Trade-off dieser
-       expliziten Vorgabe (siehe OPEN-QUESTIONS.md). Die Fläche bekommt
-       außerdem eine dezente grafische Textur (::before/::after unten),
-       eine Annäherung an die Illustration im Referenz-Screenshot, keine
-       exakte Nachbildung — dafür fehlt ein Werkzeug zur Bildgenerierung. */
+       expliziten Vorgabe (siehe OPEN-QUESTIONS.md).
+       NACHTRAG-2026-09-11.md N3: der abgerundete Rostorange-Akzent
+       (::after, #c26d32) ist ersatzlos entfernt — er war genau das
+       ockerfarbene Element, das laut LAUF-2026-09-10.md "NICHT ANFASSEN"
+       projektweit ausgeschlossen ist. Live-Korrektur direkt danach, im
+       selben Gespräch: die diagonale Streifentextur (::before, ein
+       heller Wellenmuster-Annäherung an die Referenzgrafik) ist auf
+       ausdrücklichen Wunsch ebenfalls entfernt — eine reine Flatfarbe
+       ohne Textur, kein Ersatzmuster. */
     position: relative;
     background: var(--color-teal-dark);
     color: var(--color-bg);
-    padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 5vw, 3rem);
+    /* NACHTRAG-2026-09-11.md N2: live measures 115px inner padding on the
+       (now much wider, see .quals-grid below) panel — the old clamp
+       topped out at 3-4rem (48-64px) because it was sized for a
+       half-width column, not this one's two-thirds. 8vw reaches the
+       115px (7.1875rem) cap right around 1440px viewport width, where
+       it was measured; verified 86.4px at 1440 with 6vw first, corrected
+       to 8vw. */
+    padding: clamp(2.5rem, 8vw, 7.1875rem);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -368,38 +540,6 @@ tracker.assertAllHandled('ueber-uns.astro');
     text-align: center;
     overflow: hidden;
     border-radius: 1rem;
-  }
-
-  /* Dezente Wellenlinien, heller Türkiston, niedrige Deckkraft — steht
-     hinter dem Text (z-index), reine Annäherung an die Grafik im
-     Referenz-Screenshot. */
-  .quals-panel::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: repeating-linear-gradient(
-      115deg,
-      rgba(251, 248, 245, 0.07) 0px,
-      rgba(251, 248, 245, 0.07) 2px,
-      transparent 2px,
-      transparent 34px
-    );
-    pointer-events: none;
-  }
-
-  /* Abgerundete Akzentform unten links, in der im Screenshot gemessenen
-     Rostorange-Farbe, mit einer dünnen helleren Linie darüber. */
-  .quals-panel::after {
-    content: '';
-    position: absolute;
-    left: -15%;
-    bottom: -25%;
-    width: 70%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: #c26d32;
-    box-shadow: 0 -3px 0 rgba(251, 248, 245, 0.35);
-    pointer-events: none;
   }
 
   .quals-heading,
@@ -463,9 +603,23 @@ tracker.assertAllHandled('ueber-uns.astro');
   }
 
   @media (min-width: 900px) {
+    /* NACHTRAG-2026-09-11.md N2: live measures the panel:image column
+       split at 888:444 — exactly 2:1, not the 1:1 this had.
+       Live correction, same session: all three bands are actually the
+       same fixed size on the original — only their left/right placement
+       alternates, not their height (an earlier reading of N2 had the
+       third band, Sprachen, shorter for having less content; live
+       comparison screenshots of all three original bands side by side
+       showed identical panel/image dimensions throughout, so that
+       reading is superseded here). Fixed to (100svh - header height)
+       instead — the header is 117px tall at this width (measured,
+       site-header isn't a fixed overlay so this doesn't need to account
+       for double-counting it), so each band fills exactly the area below
+       the nav on first view, the same value on all three regardless of
+       how much text a given band holds. */
     .quals-grid {
-      grid-template-columns: 1fr 1fr;
-      min-height: 26rem;
+      grid-template-columns: 2fr 1fr;
+      height: calc(100svh - 117px);
     }
 
     .quals-image {
@@ -481,29 +635,39 @@ tracker.assertAllHandled('ueber-uns.astro');
     }
 
     /* NACHTLAUF-2026-09-09.md E2 crossfade, enhanced state only (see the
-       script above): each band becomes a full-viewport sticky slide that
-       pins at the top and covers the previous one as it comes in — the
-       classic "later sibling paints over earlier" scroll-stack technique,
-       needing no scroll-position math or extra spacer height, since the
-       bands' own stacked block height already provides the scroll
-       distance. */
-    /* LAUF-2026-09-10.md B7 Punkt 18 moved this fade from the whole band
-       onto .quals-image alone, to stop the incoming band's own text from
-       going semi-transparent mid-fade. A later live correction asked for
-       "ein Fade" where "der zweite Teil ersetzt den ersten" — a clean,
-       atomic crossfade of each complete band, not a partial one — so the
-       fade is back on the whole band. Bleed during the brief mid-transition
-       moment (one band's opaque content showing faintly through the
-       other's) is the nature of an actual crossfade, not fully eliminable
-       without dropping the fade itself; flagged in OPEN-QUESTIONS.md for a
-       look at the real scroll interaction, which this session couldn't
-       verify (Playwright drives scroll position, not a human's felt sense
-       of the transition). */
-    .quals-scroller--enhanced .quals-band {
+       script above). NACHTRAG-2026-09-11.md N4 rebuilt this: the earlier
+       version made each band itself `position: sticky`, stacked one after
+       another — visually a "later sibling paints over earlier" slide, not
+       a fade in place (Claudio: "currently it is more like a slide in
+       whereas the original one vanishes while the other appears"). Now
+       only [data-quals-stage] is sticky — a single full-viewport window
+       that stays pinned for the whole scroller's scroll distance — and
+       the bands inside it are stacked on top of each other at the exact
+       same position (position: absolute; inset: 0), so opacity is the
+       only thing that ever changes; nothing slides or moves. The
+       scroller's own height (bands.length * 100vh, set by the script)
+       is what still gives the three-stage scroll distance, now decoupled
+       from the bands' own positioning. */
+    .quals-scroller--enhanced {
+      position: relative;
+    }
+
+    .quals-scroller--enhanced .quals-stage {
       position: sticky;
       top: 0;
       height: 100vh;
       overflow: hidden;
+    }
+
+    /* Both bands' opacity transitions run on the same 0.6s and are
+       triggered in the same instant (the script flips both classes
+       together), so the outgoing band is still fading down while the
+       incoming one is fading up — an overlapping crossfade, never an
+       empty gap between them (NACHTRAG-2026-09-11.md N4's requirement). */
+    .quals-scroller--enhanced .quals-band {
+      position: absolute;
+      inset: 0;
+      height: 100%;
       opacity: 0;
       transition: opacity 0.6s ease;
     }
@@ -515,13 +679,55 @@ tracker.assertAllHandled('ueber-uns.astro');
     .quals-scroller--enhanced .quals-grid {
       height: 100%;
     }
+
+    /* Live correction: slideshow-position indicator, shown only once the
+       crossfade is actually running (enhanced state) — a small vertical
+       pill in the site's terracotta, one dot per band, the current one
+       filled in white. Fixed to the viewport's right edge (matches the
+       reference: it stays in place while the bands crossfade behind it,
+       same sticky-viewport logic as .quals-stage). Qualified with
+       .quals-scroller--enhanced (not just the bare .quals-indicator
+       class) so this reliably beats the base display:none below
+       regardless of source order — an equal-specificity override placed
+       after it in the file would otherwise win instead. */
+    .quals-scroller--enhanced .quals-indicator {
+      display: flex;
+    }
+  }
+
+  .quals-indicator {
+    display: none;
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.4rem;
+    background: var(--color-terracotta-dark);
+    border-radius: 999px;
+  }
+
+  .quals-indicator-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: rgba(251, 248, 245, 0.4);
+    transition: background-color 0.3s ease;
+  }
+
+  .quals-indicator-dot.is-quals-active {
+    background: var(--color-bg);
   }
 
   /* Photo + overlapping text-card teasers (external-review.md finding
      #4b). Currently unused — NACHTLAUF-2026-09-09.md E3 swapped the
-     teasers themselves for ServiceCard/.service-grid above, but this CSS
-     stays as part of the commented-out backup markup's documentation
-     (uncomment both together). Page-scoped, not global.css: this exact
+     teasers themselves for ServiceCard/.service-grid (itself replaced by
+     .offer-tiles above, NACHTRAG-2026-09-11.md N1), but this CSS stays as
+     part of the commented-out backup markup's documentation (uncomment
+     both together). Page-scoped, not global.css: this exact
      photo/card-overlap shape doesn't exist anywhere else on the site yet
      — see CLAUDE.md's "reuse before you build" rule, which cuts both
      ways: it also means not promoting a one-off to global.css
