@@ -675,20 +675,17 @@ Live-Korrektur, zum Vermerk hier.
 ("Abstand entfernen" — wörtlich genommen, nicht auf einen kleineren Zwischenwert reduziert).
 Betrifft `CtaBand`, also auch jede Unterseiten-Schluss-CTA, die diese Komponente nutzt.
 
-## 41. Disclaimer: Titel jetzt linksbündig statt optisch zentriert — GELÖST
+## 41. Disclaimer: 390px-Überlauf — GELÖST, echte Ursache gefunden (siehe #45)
 
-War zunächst durch `PageHero`s geteiltes `.page-hero-inner` (max-width 768px) verursacht,
-das gegen den durch A1 bereits auf 1200px verbreiterten Fließtext darunter zu schmal und
-dadurch optisch zentriert wirkte. Ein Zwischenschritt (Seiten-eigener Breiten-Override) hatte
-das behoben, aber einen vorbestehenden, unabhängigen 390px-`scrollWidth`-Überschuss (419px
-statt 390px) auf derselben Seite offengelegt, dessen Ursache zunächst nicht auffindbar war.
-**Beides erledigt sich jetzt gemeinsam:** Live-Korrektur vom 12.9. hat `PageHero` auf dieser
-Seite ganz durch ein einfaches `<h1 class="eyebrow">` ersetzt (siehe #42 für den gleichen
-Schritt auf Datenschutz) — der Titel ist dadurch von Haus aus linksbündig, und der
-390px-Überschuss ist mitverschwunden (390px gemessen, kein Überlauf mehr). Vermutlich lag
-die Überlauf-Ursache also tatsächlich in `PageHero`s eigenem Rendering (z. B. der
-Reveal-Animation oder Bild-Auszeichnung), nicht in etwas dieser Seite selbst — nie einzeln
-bestätigt, aber durch das Verschwinden mit der Komponente naheliegend.
+War zunächst durch `PageHero`s `.page-hero-inner` (max-width 768px) mit-verursacht; ein
+Zwischenschritt entfernte `PageHero` auf dieser Seite testweise ganz, wodurch der Überlauf
+verschwand — aber das war ein Nebeneffekt, keine Erklärung. Mit `PageHero` am 12.9.
+zurückgeholt (#45) kam der Überlauf zurück, diesmal bis zur echten Ursache verfolgt:
+Disclaimers eigener `white-space: nowrap`-Zusatz für den einzeiligen Titel hatte eine
+Schriftgrößen-Untergrenze (1,35rem), die bei 390px tatsächlich zu breit für den Titeltext
+ist — der Text lief unsichtbar (kein abgeschnittener Text, nur ein `scrollWidth`-Überschuss)
+29px über den verfügbaren Platz hinaus. Direkt gemessen und auf 1,15rem gesenkt, die
+kleinste tatsächlich passende Größe. Siehe #45 für die volle Aufzeichnung.
 
 ## 42. Datenschutzerklärung: kein separates Hero-Banner mehr, nur ein kleines Eyebrow-Label
 
@@ -733,16 +730,28 @@ Vier weitere Live-Korrekturen an denselben drei Bändern:
 Bitte alle vier im echten Browser gegenprüfen, besonders den jetzt noch niedrigeren Kontrast
 aus dem ersten Punkt.
 
-## 45. Disclaimer, Impressum, Datenschutz: Titel jetzt einheitlich als kleines Eyebrow-Label
+## 45. Disclaimer, Impressum, Datenschutz, FAQs: Titel jetzt wirklich linksbündig — GELÖST, in zwei Anläufen
 
-Auf direkten Wunsch tragen alle drei Seiten jetzt dieselbe Titel-Behandlung wie Datenschutz
-(#42): kein `PageHero`-Banner mehr, sondern ein `<h1 class="eyebrow">` direkt im Textblock —
-klein, großgeschrieben, türkis, linksbündig. Zusätzlich, nur auf Datenschutz: die zwölf
-nummerierten Zwischenüberschriften ("1. Verschlüsselte Übertragung" usw.) tragen jetzt
-denselben Stil, nicht mehr die größere, dunkle Standard-H2-Optik — auf Wunsch, damit die
-ganze Seite optisch durchgängig wirkt. Rechtstext an keiner der drei Stellen verändert.
-`PageHero` selbst bleibt unangetastet und wird weiterhin von den Seiten mit echtem
-Splitt-Hero verwendet (Startseite, Über uns, Angebote, Beratung, Workshops, Kennenlernen,
-Selbsthilfegruppe, Blog, FAQs) — nur diese drei reinen Rechts-/Utility-Seiten sind
-umgestellt. Bitte im echten Browser gegenprüfen, ob das auf allen drei Seiten so gewollt
-ist, insbesondere die zwölf umgestylten Datenschutz-Überschriften.
+Erster Anlauf (2026-09-11 abends) war ein Missverständnis: Disclaimer/Impressum/Datenschutz
+wurden auf ein kleines Eyebrow-Label umgestellt (kein `PageHero`-Banner mehr). Richtiggestellt
+2026-09-12: **alle vier Seiten sollen den großen roten `PageHero`-Titel behalten** (wie FAQs
+ihn schon hatte) — nur wirklich linksbündig statt nur optisch zentriert, und *nur der
+Haupttitel* — Datenschutz' zwölf nummerierte Zwischenüberschriften ("1. Verschlüsselte
+Übertragung" usw.) bleiben im Eyebrow-Stil (kurz versehentlich mit zurückgesetzt, auf
+Zuruf sofort wieder hergestellt). `PageHero` ist auf allen drei Seiten wieder da.
+
+**Eigentlich behoben, zentral in der Komponente:** `PageHero.astro`s `.page-hero-inner` hatte
+`max-width: 48rem` (768px), während der Fließtext darunter auf jeder dieser vier Seiten
+längst auf A1s 1200px läuft — zwei unterschiedlich breite, beide zentrierte Boxen, wodurch
+ein kurzer, einzeiliger Titel optisch zentriert/nach rechts verschoben wirkte, obwohl
+`text-align` durchgehend `start` (links) war. Jetzt einheitlich `1200px`, für alle vier
+Seiten auf einen Schlag (keine Seiten-eigenen Overrides mehr nötig).
+
+**Dabei ein echter, bisher übersehener Bug gefunden und behoben:** Disclaimers eigener
+Zusatz (`white-space: nowrap` + Schriftgrößen-Clamp, damit der Titel auf einer Zeile bleibt)
+hatte eine untere Grenze von 1,35rem, die bei 390px tatsächlich zu breit ist — der Text lief
+sichtbar 29px über den verfügbaren Platz hinaus (als horizontaler `document.scrollWidth`-
+Überschuss, nicht als sichtbar abgeschnittener Text, weil das umschließende Element selbst
+innerhalb der Grenze blieb, während der nicht umbrechende Text darüber hinaus zeichnete).
+Direkt gemessen statt geraten: 1,15rem ist die kleinste Größe, die bei 390px tatsächlich
+passt (340px von verfügbaren 350px). Grenze entsprechend gesenkt.

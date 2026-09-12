@@ -4,13 +4,18 @@ Read this first at the start of every session. History and past decisions moved 
 `docs/decisions.md` (2026-09-07) so this file stays short enough to actually read —
 see `external-review.md`'s "PROCESS NOTE" for why that matters.
 
-## Most recent: 2026-09-12, Disclaimer/Impressum/Datenschutz title unification
+## Most recent: 2026-09-12, PageHero title alignment (FAQs/Disclaimer/Impressum/Datenschutz)
 
-All three utility pages now use the same small eyebrow-style `<h1>` (no `PageHero` banner)
-instead of each carrying its own treatment; Datenschutz's twelve numbered section headings
-also restyled to match. Fixed, as a side effect, Disclaimer's previously-unexplained 390px
-overflow (gone along with `PageHero`). See `OPEN-QUESTIONS.md` #45 and `docs/decisions.md`'s
-2026-09-12 entry.
+An initial pass wrongly swapped Disclaimer/Impressum/Datenschutz's big red `PageHero` title
+for a small eyebrow-style one — corrected within the hour: **all four pages keep the big
+red `PageHero` title** (Datenschutz's twelve numbered `<h2>`s are the one thing that *does*
+stay small/eyebrow-styled). The real, correctly-scoped fix: `PageHero.astro`'s own
+`.page-hero-inner` was capped at 768px against these pages' 1200px-wide (A1) body text
+below it — a short title's own narrower centered box read as optically centered even
+though `text-align` was always `start`. Fixed once, centrally, at 1200px. Also found and
+fixed a real (previously invisible) bug this surfaced: Disclaimer's own nowrap/font-size
+title override had a floor that didn't actually fit at 390px — measured and lowered.
+See `OPEN-QUESTIONS.md` #41/#45 and `docs/decisions.md`'s 2026-09-12 entry.
 
 ## Previous run: NACHTRAG-2026-09-11 (`docs/NACHTRAG-2026-09-11.md` N1–N4) + live follow-ups
 

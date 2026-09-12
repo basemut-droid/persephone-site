@@ -1,6 +1,7 @@
 ---
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
 import { parseMarkdownBlocks, paragraphs, mdInlineHtml, rewriteLocalLinks, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 const entry = await getEntry('pages', 'de/disclaimer');
@@ -19,24 +20,47 @@ tracker.assertAllHandled('disclaimer.astro');
 ---
 
 <BaseLayout locale="de" path="/disclaimer/" title={`${entry.data.title} – Persephone`} description={entry.data.description}>
+  {/* Confirmed no hero image on the live page (RUN-2026-09-07.md Phase E):
+     its raw HTML has no --awb-bg-image anywhere.
+     Live correction, 2026-09-12: reverted a same-week detour to a plain
+     eyebrow-style <h1> instead of this banner — misread; Claudio wants
+     Disclaimer/Impressum/Datenschutz to look like FAQs' own big-red-title
+     PageHero banner, only genuinely left-aligned (fixed centrally in
+     PageHero.astro's own .page-hero-inner width, not per-page). */}
+  <PageHero title={heroTitle} image={false} />
+
   <section class="section">
     <div class="container section-narrow disclaimer-body">
-      {/* Live correction, 2026-09-12: matched to Datenschutz's own title
-         treatment (itself a 2026-09-11 live correction against the live
-         page) for consistency across the legal/utility pages — no
-         separate PageHero banner, just a small eyebrow-style label
-         directly in the body's own light section. Still this page's one
-         real <h1>, just styled like the site's other small section
-         labels instead of a hero title. Replaces both of this page's
-         earlier PageHero-specific fixes (the forced-one-line nowrap and
-         the widened .page-hero-inner) — neither applies to a plain h1. */}
-      <h1 class="eyebrow">{heroTitle}</h1>
       {body.map((p) => <p set:html={mdInlineHtml(p)} />)}
     </div>
   </section>
 </BaseLayout>
 
 <style>
+  /* LAUF-2026-09-10.md B3 point 1: "Titel soll auf einer Seite" — Claudio's
+     reading is "auf einer Zeile" (one line), given the surrounding
+     complaint about the page feeling cramped. Scoped to this page's own
+     heading rather than PageHero's shared .page-hero h1 (used by
+     Datenschutz/FAQs/Impressum too, none of them flagged for this) —
+     nowrap alone would overflow a long title on a narrow phone, so the
+     font shrinks enough first to still fit.
+     Live correction, 2026-09-12: the 1.35rem floor didn't actually fit —
+     found via the same 390px overflow this session traced back here
+     (document scrollWidth 419px vs. a 390px viewport, invisible at a
+     glance since the h1's own box stayed within bounds while the nowrap
+     TEXT itself painted 29px past it — getBoundingClientRect on the
+     element doesn't reveal that, only measuring the text range directly
+     does). Directly measured this title's own intrinsic width at each
+     candidate size against the 350px available (390px viewport minus the
+     shared 2×20px page gutter): 1.35rem (the old floor) needs 399px,
+     1.2rem still needs 355px, 1.15rem is the first that actually fits
+     (340px) with a small margin. The previous "not live-measured against
+     an actual phone" note (HANDOFF.md) turns out to have mattered. */
+  :global(.page-hero h1) {
+    white-space: nowrap;
+    font-size: clamp(1.15rem, 4.2vw, 3rem);
+  }
+
   /* B3 point 3, corrected live via screenshot after the first pass: the
      LAUF doc's own reading of "unterlegen" (a mint background behind
      dark text — measured as the only variant clearing 4.5:1 contrast)

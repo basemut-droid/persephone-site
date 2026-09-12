@@ -68,7 +68,18 @@ const {
   }
 
   .page-hero-inner {
-    max-width: 48rem;
+    /* Live correction, 2026-09-12: the old 48rem (768px) cap sat inside
+       this centered banner while the body text below it (FAQs,
+       Disclaimer, Impressum, Datenschutz — every page using this plain
+       image={false} variant) runs the site's own A1 width of 1200px.
+       Two different widths, both centered via margin-inline:auto, means
+       a short title's own centered-but-narrower box starts well to the
+       right of the wider text below it — text-align was "start" (left)
+       the whole time, but next to a wider left edge below it, that reads
+       as "the title is centered/shifted right", not left-aligned.
+       Matched to 1200px so the title sits on the exact same left edge as
+       the body text under it on every page that uses this banner. */
+    max-width: 1200px;
   }
 
   .page-hero h1 {

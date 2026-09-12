@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
 ---
 
 <BaseLayout
@@ -8,17 +9,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   title="Datenschutzerklärung – Persephone"
   description="Informationen darüber, wie Persephone mit Deinen Daten umgeht."
 >
+  {/* Confirmed no hero image on the live page (RUN-2026-09-07.md Phase E):
+     its raw HTML has no --awb-bg-image anywhere. Live correction,
+     2026-09-12: reverted a same-week detour (a side-by-side against a
+     live screenshot had read as no PageHero banner at all) — Claudio
+     wants this page to look like FAQs' own big-red-title PageHero
+     banner instead, just genuinely left-aligned (fixed centrally in
+     PageHero.astro). */}
+  <PageHero title="Datenschutzerklärung" image={false} />
+
   <section class="section">
     <div class="container section-narrow legal-page">
-    {/* Live correction, 2026-09-11: a side-by-side against the live
-       page showed no separate PageHero banner here at all — the title
-       is a small uppercase eyebrow label directly above the byline, same
-       light background as the body, not a big red H1 in its own beige
-       band. Still a real (and the page's only) <h1> for semantics/SEO,
-       just styled with .eyebrow rather than the hero treatment — the
-       same "h1/h2 wearing .eyebrow's look" pattern Über uns already uses
-       for its own small section labels. */}
-    <h1 class="eyebrow">Datenschutzerklärung</h1>
     <p class="byline">Marina Bletsas | Stand: 12.06.2026</p>
 
     <p>
@@ -296,10 +297,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   /* Live correction, 2026-09-12: the numbered section headings should
-     read like the page's own title now does (small, uppercase, teal —
-     .eyebrow's look) rather than as large dark headings, for consistency
-     down the whole page. Styled directly rather than adding class="eyebrow"
-     to all twelve <h2> tags individually. */
+     read like Über uns's own small section labels (e.g. "WER DIR HIER
+     BEGEGNET") — small, uppercase, teal — not as large dark headings,
+     for consistency down the whole page. Only the page's own main title
+     stays the big red PageHero banner (clarified separately, same
+     session, after an earlier pass wrongly applied this same small-label
+     look to the title too); this only touches the in-body <h2>s. Styled
+     directly rather than adding class="eyebrow" to all twelve <h2> tags
+     individually. */
   .legal-page h2 {
     margin-top: 2.5rem;
     margin-bottom: 0.75rem;

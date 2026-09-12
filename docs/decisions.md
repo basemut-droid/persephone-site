@@ -1139,30 +1139,40 @@ placeholder-domain warning). 390px horizontal-overflow re-checked across all tou
 after this whole cascade — clean except the pre-existing, pre-dating-this-session Disclaimer
 discrepancy noted above and in `OPEN-QUESTIONS.md` #41.
 
-## 2026-09-12 — Disclaimer/Impressum/Datenschutz title unification
+## 2026-09-12 — Disclaimer/Impressum/Datenschutz title: a misread, corrected same day, and the actual fix
 
-Continuing the same live-review thread a day later. Disclaimer and Impressum's titles
-matched to Datenschutz's own 2026-09-11 correction (#42 above): dropped `<PageHero>`
-entirely on all three, replaced with a plain `<h1 class="eyebrow">` inline in the body's
-existing light section — small, uppercase, teal, left-aligned, consistent across all three
-utility pages instead of each carrying its own big-banner treatment. Disclaimer's two
-PageHero-specific CSS overrides from 2026-09-11 (the forced-nowrap/font-size clamp, and the
-widened `.page-hero-inner`) are removed as dead code — neither applies once the page no
-longer renders a `.page-hero` at all.
+The first pass this day (dropping `<PageHero>` for a small eyebrow-style `<h1>` on all
+three pages, matching Datenschutz's own 2026-09-11 change) was a misread of what Claudio
+wanted — he clarified within the hour: all four pages using this banner (FAQs included)
+should keep the big red `PageHero` title, just genuinely left-aligned instead of only
+optically centered — and that this applies to the page's own main title only. Reverted:
+`<PageHero>` restored on Disclaimer/Impressum/Datenschutz. Datenschutz's twelve numbered
+`<h2>`s got reverted to plain dark headings in the same pass and then put back to the
+small/uppercase/teal look within the hour, once it was clear only the page's own main
+title (not the in-body section headings) was the misread — they were never part of the
+correction, just briefly caught by an overly broad revert.
 
-Datenschutz additionally got its twelve numbered section headings ("1. Verschlüsselte
-Übertragung" etc.) restyled to the same small/uppercase/teal look as its own title, on
-request, for one consistent visual language down the whole page — previously plain dark H2s.
+**The actual, correctly-scoped fix:** `PageHero.astro`'s own `.page-hero-inner` had
+`max-width: 48rem` (768px) while the body text below it on every one of these four pages
+(FAQs, Disclaimer, Impressum, Datenschutz) runs A1's 1200px — two differently-sized,
+independently-centered boxes, so a short one-line title's own narrower centered box sat
+well right of the wider text under it. `text-align` was `start` (left) the entire time;
+next to a wider left edge below it, that reads as "centered", not left-aligned. Fixed once,
+centrally, in `PageHero.astro` itself (1200px, matching `.section-narrow`) — covers all
+four pages without a per-page override, since none of them have a legitimate reason to
+use a narrower banner than their own body text.
 
-**Unplanned resolution:** Disclaimer's pre-existing, previously-unexplained 390px
-`scrollWidth` overshoot (419px vs. the 390px viewport, logged the day before in
-`OPEN-QUESTIONS.md` #41 after ruling out that day's own changes as the cause) disappeared
-along with `PageHero` — re-measured at exactly 390px, no overflow, after this edit. Never
-isolated to a specific cause inside `PageHero`, but the correlation is strong enough to
-record; #41 updated to reflect this rather than left as a dangling loose end.
+**A real, previously-undiagnosed bug found in the process:** restoring `PageHero` on
+Disclaimer brought back the 390px `scrollWidth` overshoot logged the day before
+(`OPEN-QUESTIONS.md` #41) — this time traced to ground instead of left open. Disclaimer's
+own `white-space: nowrap` + font-size clamp (LAUF-2026-09-10.md B3 point 1, "title on one
+line") had a 1.35rem floor that doesn't actually fit this title at 390px — the nowrap text
+paints 29px past its own box (invisible via `getBoundingClientRect` on the element, which
+stays within bounds; only measuring the text range directly, or the document's own
+`scrollWidth`, reveals it). Measured candidate sizes directly against the 350px available
+width rather than guessing: 1.35rem needs 399px, 1.2rem needs 355px, 1.15rem is the first
+that actually fits (340px). Lowered the clamp's floor to 1.15rem.
 
-`PageHero` itself is untouched and still serves every page with a real split-hero
-masthead — only these three pure legal/utility pages moved away from it.
-
-**Verified:** `npm run build` clean; 390px re-checked on all three pages (all exactly
-390px, no overflow, including Disclaimer for the first time).
+**Verified:** `npm run build` clean; 390px re-checked on all four pages (FAQs included) —
+all exactly 390px, no overflow, Disclaimer's included, now via the real fix rather than as
+a side effect of removing `PageHero`.

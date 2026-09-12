@@ -1,6 +1,7 @@
 ---
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
 import { parseMarkdownBlocks, paragraphs, mdInlineHtml, BlockTracker } from '../lib/parseMarkdownBlocks';
 
 const entry = await getEntry('pages', 'de/impressum');
@@ -23,13 +24,16 @@ const metaDescription = 'Impressum und Offenlegung von Persephone – Marina Ble
 ---
 
 <BaseLayout locale="de" path="/impressum/" title={`${entry.data.title} – Persephone`} description={metaDescription}>
+  {/* Confirmed no hero image on the live page (RUN-2026-09-07.md Phase E):
+     its raw HTML has no --awb-bg-image anywhere. Live correction,
+     2026-09-12: reverted a same-week detour to a plain eyebrow-style
+     <h1> — Claudio wants this page to look like FAQs' own big-red-title
+     PageHero banner, just genuinely left-aligned (fixed centrally in
+     PageHero.astro). */}
+  <PageHero title={heroTitle} image={false} />
+
   <section class="section">
     <div class="container section-narrow">
-      {/* Live correction, 2026-09-12: matched to Datenschutz/Disclaimer's
-         own title treatment — no separate PageHero banner, a small
-         eyebrow-style label directly in the body's own light section
-         instead. Still this page's one real <h1>. */}
-      <h1 class="eyebrow">{heroTitle}</h1>
       {body.map((p) => <p set:html={p} />)}
     </div>
   </section>
