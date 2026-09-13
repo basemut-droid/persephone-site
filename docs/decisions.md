@@ -73,6 +73,17 @@ was never an undecided domain — only where it should point was undecided, and 
 now settled). `public/robots.txt` had the same placeholder hardcoded separately
 (doesn't derive from `site`) and needed the same fix independently.
 
+**`docs/DATENSCHUTZBEAUFTRAGTER-BRIEFING.md` reworked** to match everything above —
+this was the last stale artifact of tonight's changes: it still described Microsoft
+Forms as the contact-form plan, the Bookings calendar as auto-loading with no fix in
+sight, and hosting as undecided. Updated section by section against tonight's actual
+work, and the Kommentare tension from above is carried into it explicitly as the
+top-priority question for the reviewer, not smoothed over. First deploy to
+`neu.persephone.at` succeeded during this same session (Actions run #2, commit
+`77ccc6e`, ~1m19s) after fixing an unrelated YAML syntax error in `deploy.yml` (an
+unquoted colon inside the workflow's `name:` field, caught by GitHub's own parser
+before secrets even mattered).
+
 **Still open, deliberately not done tonight:**
 - The actual DNS cutover (A/CNAME) and the WordPress backup that must precede it
   (START-CHECKLISTE.md Teil 2, points 1 and 8) — both need the owner's attention while
