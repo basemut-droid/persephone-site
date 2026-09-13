@@ -1,0 +1,6 @@
+name = "persephone-cms-oauth"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET are set as secrets, not here --
+# see README.md. Never commit real values for those.

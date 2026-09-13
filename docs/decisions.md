@@ -98,6 +98,28 @@ Also wrote `docs/LAUNCH-TAG-RUNBOOK.md`, consolidating `START-CHECKLISTE.md` Tei
 with everything decided/found tonight into one ordered, attended-by-a-human checklist
 for the actual cutover day, rather than leaving it spread across three documents.
 
+**CMS editor prepared** (everything code-side, none of it deployed yet — that needs
+credentials only the owner has): `public/admin/config.yml` switched from
+`git-gateway`/Netlify Identity (never viable once hosting was easyname, not Netlify)
+to `backend: name: github` with a `base_url` placeholder pointing at a broker that
+doesn't exist yet. All six previously-missing `site` schema sections
+(`nav`/`painPoints`/`philosophy`/`founder`/`newsletter`/`footer`/`common`) added,
+matching `src/content.config.ts` field-for-field — previously only `meta`/`hero`/
+`services` existed as a pattern example. Also fixed a real mismatch found while doing
+this: the blog collection's `category` field was still a single `string` widget, but
+`content.config.ts` widened it to `z.array(z.string())` back on FIXES-2026-09-07.md
+task 3 — the CMS config was never updated to match, meaning editing a post's category
+through the CMS would have saved the wrong shape.
+
+Wrote the actual OAuth broker (`cms-oauth-worker/worker.js` + `wrangler.toml` +
+`README.md`) — a small Cloudflare Worker implementing the two routes Decap's GitHub
+backend expects (`/auth`, `/callback`) and the documented postMessage handshake back
+to the CMS popup. This is real, untested code — it follows Decap's documented
+contract but has never actually been deployed or exercised against a real GitHub
+OAuth App. The three remaining steps (Cloudflare account, GitHub OAuth App, `wrangler
+deploy` + pasting the resulting URL into `config.yml`) all need the owner's own
+accounts and are written out in `cms-oauth-worker/README.md`.
+
 **Still open, deliberately not done tonight:**
 - The actual DNS cutover (A/CNAME) and the WordPress backup that must precede it
   (START-CHECKLISTE.md Teil 2, points 1 and 8) — both need the owner's attention while
