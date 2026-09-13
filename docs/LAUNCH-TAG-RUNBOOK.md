@@ -14,9 +14,12 @@ Hosting-Konto mit der Live-Seite, oder einfach: es muss jemand echt hinschauen).
 - ✅ Hosting entschieden und eingerichtet: easyname, Domain bereits dort.
 - ✅ E-Mail-Umzug bestätigt: Testmail an marinabletsas@persephone.at hin und
   zurück funktioniert.
-- ✅ Kontaktformular technisch fertig (`public/kontakt-senden.php`), inklusive
-  eines Envelope-Absender-Fixes für DMARC-Ausrichtung — **aber noch nie echt
-  getestet** (siehe Punkt 3 unten).
+- ⚠️ Kontaktformular technisch fertig (`public/kontakt-senden.php`) — **echt
+  getestet, und die Mail landete im Spam-Ordner.** Ein wahrscheinlicher Fix
+  (Envelope-Absender für DMARC-Ausrichtung) wurde danach geschrieben und
+  committet (`d0bf770`), aber **zum Zeitpunkt des fehlgeschlagenen Tests noch
+  nicht gepusht/deployed** — der Fix selbst wurde also noch nie ausprobiert.
+  Siehe Punkt 3 unten: erst pushen und neu deployen, dann erneut testen.
 - ✅ Terminkalender auf Klick-zum-Laden umgestellt, kein Cookie-Banner mehr nötig.
 - ✅ Datenschutzerklärung korrigiert (noch nicht von Marina freigegeben, noch
   nicht rechtlich geprüft — siehe `DATENSCHUTZBEAUFTRAGTER-BRIEFING.md`).
@@ -36,10 +39,15 @@ Hosting-Konto mit der Live-Seite, oder einfach: es muss jemand echt hinschauen).
 2. ⬜ **`neu.persephone.at` einmal wirklich durchklicken**, auf echtem Handy und
    Desktop. Ich habe nur geprüft, dass nichts horizontal überläuft und dass der
    Build fehlerfrei durchläuft — wie es sich anfühlt, hat noch niemand gesehen.
-3. ⬜ **Das Kontaktformular echt absenden**, auf `neu.persephone.at`, und prüfen,
-   ob die Mail bei marinabletsas@persephone.at ankommt (auch im Spam-Ordner
-   nachsehen). Das ist der einzige Weg, den SPF-/DMARC-Fix von heute Nacht
-   wirklich zu bestätigen — ich kann von hier aus kein Formular absenden.
+3. ⬜ **Zuerst `git push` für die beiden liegen gebliebenen Commits**
+   (`d0bf770`, `26df2bd`) und den Deploy abwarten. **Dann erst** das
+   Kontaktformular auf `neu.persephone.at` erneut absenden und prüfen, ob die
+   Mail bei marinabletsas@persephone.at ankommt (auch im Spam-Ordner
+   nachsehen) — der erste Test (vor dem Fix) landete im Spam. Falls es
+   weiterhin im Spam landet: prüfen, ob easyname eine DKIM-Signierung für
+   ausgehende Mails anbietet (eine Hosting-Einstellung, kein Code-Fix), und ob
+   der SPF-Eintrag inzwischen vollständig propagiert ist. Ich kann von hier
+   aus kein Formular absenden — das muss ein Mensch tun.
 4. ⬜ **Marina liest die korrigierte Datenschutzerklärung** und gibt den Wortlaut
    frei (`src/pages/datenschutz.astro`) — insbesondere die in
    `DATENSCHUTZBEAUFTRAGTER-BRIEFING.md` Punkt 1 offen gelassene Frage zum

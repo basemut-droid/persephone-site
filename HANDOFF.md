@@ -4,7 +4,58 @@ Read this first at the start of every session. History and past decisions moved 
 `docs/decisions.md` (2026-09-07) so this file stays short enough to actually read —
 see `external-review.md`'s "PROCESS NOTE" for why that matters.
 
-## Most recent: 2026-09-12, PageHero title alignment (FAQs/Disclaimer/Impressum/Datenschutz)
+## Most recent: 2026-09-13, night run toward launch — ACTIVE BUG, read "Next step" first
+
+The owner decided to go live "tomorrow" and asked for a night run to get everything
+ready. Full reasoning for every decision below is in `docs/decisions.md`'s four
+matching entries ("Night run toward launch", "Kontakt form implemented", "Hosting
+decision", the Datenschutzbeauftragter-briefing rework, and the CMS-prep entry) —
+this section is the short version. `docs/LAUNCH-TAG-RUNBOOK.md` is the ordered,
+attended-by-a-human checklist for the actual cutover day; don't duplicate it here.
+
+**What got built and deployed:**
+- **Hosting decided and live**: easyname (small Webhosting package, prepaid to May
+  2028; domain moved there too). The owner's household had already bought it before
+  a same-day Hetzner analysis finished — real purchase won over recommendation.
+- **Kontakt form rebuilt in-house** (`public/kontakt-senden.php`) — Microsoft Forms
+  turned out unable to accept an external `<form>` POST at all; web3forms was
+  considered and dropped for processing on US servers. The PHP script sends
+  straight to marinabletsas@persephone.at, no third party, no database.
+- **Kennenlernen's Bookings calendar switched to click-to-load** — removes the need
+  for a site-wide cookie banner (`src/pages/kennenlernen.astro`).
+- **Datenschutzerklärung corrected** against the actual code (`src/pages/datenschutz.astro`)
+  — new Hosting section, corrected Kontakt/Cookies sections, Matomo and Kommentare
+  marked "planned, not active" rather than deleted or left wrong. **Not Marina's
+  sign-off, not the DSB's review yet** — see `docs/DATENSCHUTZBEAUFTRAGTER-BRIEFING.md`,
+  reworked the same night, which flags the Kommentare-section wording as a real,
+  deliberately unresolved tension (it was kept on the owner's explicit instruction
+  despite matching the exact pattern Marina's own fuer-marina.md #12 argued against).
+- **Redirects verified and expanded** (`public/.htaccess`) against the live site's
+  actual sitemap.xml — caught and fixed a wrong blog slug in the old list
+  (`ist-unfruchtbarkeit-immer-noch-frauensache-2`, missing its "-2").
+- **Deploy pipeline built and proven**: `.github/workflows/deploy.yml` builds and
+  FTPS-uploads to easyname, deliberately targeting `neu.persephone.at`'s folder
+  (`apps/wordpress-180662/`) rather than the account root — **the live WordPress
+  site shares this same easyname account**, one level up
+  (`apps/wordpress-124063/`), and must never be touched by this workflow. A real
+  deploy succeeded (GitHub Actions run #2) after fixing an unrelated YAML syntax
+  error (an unquoted colon in the workflow's own `name:` field).
+- **CMS editor prepared but not deployed**: `public/admin/config.yml` switched from
+  Netlify Identity/`git-gateway` (never viable on easyname) to a GitHub backend, all
+  six previously-missing `site` schema sections added, and a real (untested) OAuth
+  broker written (`cms-oauth-worker/`). Needs the owner's own Cloudflare + GitHub
+  OAuth App to actually go live — steps in `cms-oauth-worker/README.md`. Treat as
+  separate from launch, not urgent.
+
+**Active bug, found by the owner testing the live form, not yet fixed in what's
+deployed:** a real contact-form submission landed in Marina's spam folder. A likely
+cause was found and fixed in the code (`kontakt-senden.php`'s `mail()` call had no
+envelope-sender override, which can fail DMARC's strict SPF alignment —
+`persephone.at`'s DNS has `aspf=s`) — **but that fix (commit `d0bf770`) was not yet
+pushed to GitHub when the failing test happened**, so it has never actually been
+tried. See "Next step" below; this is priority zero for the next session.
+
+## Previous: 2026-09-12, PageHero title alignment (FAQs/Disclaimer/Impressum/Datenschutz)
 
 An initial pass wrongly swapped Disclaimer/Impressum/Datenschutz's big red `PageHero` title
 for a small eyebrow-style one — corrected within the hour: **all four pages keep the big
@@ -202,58 +253,55 @@ scripts — see recent commit messages for examples.
 
 ## Known gaps — not fixed, not this run's call
 
-See `OPEN-QUESTIONS.md` for the full list with options and recommendations. The ones
-that matter most:
+See `OPEN-QUESTIONS.md` for the full list with options and recommendations.
+**Resolved since the list below was last written, no longer open:** the hosting
+placeholder in `astro.config.mjs` (#6, now `persephone.at`); Kontakt's missing
+submission endpoint (#4, #25 — now the in-house PHP script, see tonight's entry
+above); the cookie-banner cost of the Bookings embed (#0c — now click-to-load,
+banner no longer needed, pending confirmation it's legally sufficient, see the DSB
+briefing). The ones that still matter:
 
+- **Datenschutzerklärung needs the owner's *and* the DSB's sign-off** (#3) — a
+  corrected draft exists now (see tonight's entry above) but is not reviewed or
+  approved. `docs/DATENSCHUTZBEAUFTRAGTER-BRIEFING.md` lists the specific open legal
+  questions, top one being the Kommentare-section wording tension.
 - **EN/IT must not be published until the owner reads them line by line** (#7b) —
-  the English homepage was found to drop the required training-status disclosure
-  entirely. `noindex` + sitemap exclusion are in place as a stopgap.
-- **Datenschutzerklärung needs the owner's sign-off** (#3) — a legal document, not a
-  code decision, and needs a re-check at launch against whatever the site actually
-  loads by then.
-- **Termine's/Kennenlernen's direct calendar embed costs a cookie banner** (#0c) —
-  owner decision, implemented as asked; the consent-banner trade-off is hers.
-- **The ochre/amber hero decoration** (#0b) and **Selbsthilfe Steiermark logo
-  permission** (#0) — both since resolved/decided; see `OPEN-QUESTIONS.md` for
-  the record.
-- **Kontakt's form has no submission endpoint yet** (#4, #25) — Microsoft Forms is
-  the decided approach, but no actual form exists yet to point it at. The new
-  Kontakt page's fields now match Marina's own Claude Design prototype rather than
-  the earlier ad-hoc set.
-- **Kontakt's Anliegen options: three or four?** (#26) — the earlier "no fifth
-  option, four total" decision and the new prototype's three options actually
-  conflict; this run kept the prototype's three (it's the newer record) but did not
-  resolve the conflict itself.
-- **Kontakt's "Termin buchen"** (#27) links to `/kennenlernen/` for now rather than
-  the prototype's overlay — the safer default, not a final call.
-- **`astro.config.mjs`'s domain is a placeholder** (#6) — blocked on the hosting
-  decision.
-- **Two proposed color values need Marina's sign-off, not just correctness**
-  (#28) — `--color-teal-darker` for the footer's green text, and whether the
-  Angebote-dropdown teal (B9) is legible enough as-is.
-- **Mobile rendering (390px)** was checked this run with Playwright (not the ad-hoc
-  CLI screenshot approach — see the Session note above) across Über uns, Angebote,
-  Kontakt, and FAQs, JavaScript on and off; no overflow or broken layout found. Not
-  exhaustively re-checked on every page this run touched, though nothing about the
-  changes themselves is width-dependent in a new way — worth a pass on a real
-  device before launch regardless.
-- Two of the ten meta descriptions carry a wording question back to the owner
-  ("psychodukativ", "(i.A.u.S)" without a period — fuer-marina.md Frage 16); 301
-  redirects for the domain switch are blocked on hosting (#15) but now include
-  `/termine/`→`/kennenlernen/` (`docs/START-CHECKLISTE.md` Teil 3).
-- **B10 Punkt 28 ("Gut zu wissen" styling) could not be confirmed** (#30) — the
-  screenshot Marina attached doesn't match what the current shared accordion CSS
-  actually renders; left unchanged rather than guessed at.
+  unchanged, still gating on the training-status disclosure fix.
+- **Kontakt's Anliegen options**: now three (`frage`/`kooperation`/`sonstiges`) —
+  the phone field was also dropped. Matches what's actually built; the older
+  three-vs-four conflict (#26) is moot now that the field set changed again.
+- **Kontakt's "Termin buchen"** (#27) still links to `/kennenlernen/` rather than
+  an overlay — unchanged, still the safer default not a final call.
+- **Two proposed color values need Marina's sign-off** (#28) — unchanged.
+- **Mobile rendering (390px)** — unchanged from the note below; **additionally,
+  nobody has clicked through the actual deployed site on a real phone yet** (see
+  `docs/LAUNCH-TAG-RUNBOOK.md` point 2).
+- **CMS editor** is prepared in code but not deployed (see tonight's entry above,
+  `cms-oauth-worker/README.md`) — separate from launch, not urgent.
+- Two of the ten meta descriptions still carry a wording question (fuer-marina.md
+  Frage 16); **redirects are no longer blocked on hosting** — implemented and
+  expanded in `public/.htaccess`, see tonight's entry above.
+- **B10 Punkt 28 ("Gut zu wissen" styling) could not be confirmed** (#30) — unchanged.
 
 ## Next step
 
-`docs/LAUF-2026-09-10.md` and `docs/NACHTRAG-2026-09-11.md` (N1–N4) are both fully worked
-through — see `docs/decisions.md`'s two matching entries. Pick up from
-`OPEN-QUESTIONS.md` #34–37 first — these are the ones from this run's live-correction
-cascade that *reverse* earlier written decisions (ClosingCta overlap on Workshops/Beratung,
-the qualification bands' fixed-equal-size height, the rust-orange accent's removal) and
-need an explicit yes rather than being assumed settled; #25–33 are the rest of what's
-waiting on Marina/Claudio from the last two runs specifically, or the rest of that file for
-everything still open from earlier runs. `docs/NACHTLAUF-2026-09-09.md`'s Teil F (repo
-hygiene — stray uncommitted files Claudio noticed in VS Code) is still open too, waiting on
-a decision about `Claude outputs/` and the other untracked docs sitting in the working tree.
+**Priority zero, before anything else:** two commits from last night
+(`d0bf770` — the mail() envelope-sender fix — and `26df2bd` — CMS prep) are sitting
+local-only, never pushed. Push them, wait for the deploy workflow to finish, then
+have someone submit the Kontakt form on the real site again and check whether it
+still lands in spam. If it does, the envelope-sender fix wasn't sufficient — look at
+whether easyname offers DKIM-signing for outbound mail (a hosting-level setting, not
+a code fix) and whether the SPF record has had time to fully propagate. Don't assume
+the fix worked without an actual retest — it was never tried before context cleared.
+
+After that's confirmed, work through `docs/LAUNCH-TAG-RUNBOOK.md` top to bottom —
+it's the single ordered checklist for the rest of launch day, consolidated from
+`docs/START-CHECKLISTE.md` Teil 2 and everything found last night. Everything on it
+needs the owner's (or Marina's, or the DSB's) attention, not more unattended code
+work — see that file's own closing line.
+
+Older backlog, still valid but lower priority than the above: `OPEN-QUESTIONS.md`
+#34–37 (live-correction-cascade reversals needing an explicit yes) and #25–33
+(waiting on Marina/Claudio from earlier runs). `docs/NACHTLAUF-2026-09-09.md`'s Teil F
+(repo hygiene — `Claude outputs/` and other untracked docs sitting in the working
+tree) is also still open.
