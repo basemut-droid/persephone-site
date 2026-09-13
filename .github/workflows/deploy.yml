@@ -15,7 +15,7 @@
 #   FTP_SERVER    the hostname shown on the account's Datenblatt
 #   FTP_USERNAME  e.g. 197091ftp1
 #   FTP_PASSWORD  set/reset via the pencil icon on the FTP Zugaenge page
-name: Deploy to easyname (staging: neu.persephone.at)
+name: "Deploy to easyname (staging: neu.persephone.at)"
 
 on:
   push:
