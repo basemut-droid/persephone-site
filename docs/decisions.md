@@ -6,6 +6,208 @@ can stay a "current state only" document (`external-review.md`'s "PROCESS NOTE" 
 
 ---
 
+# Night run toward launch — 2026-09-13
+
+Scope: get everything ready for a deliberate, attended cutover the next day — not an
+unattended DNS flip, which stayed out of scope on purpose (see reasoning below).
+
+**Critical finding before any deploy work: WordPress and the planned staging target
+share one easyname account.** persephone.at's live A record and the FTP account's
+root both lead to `apps/wordpress-124063/`. An unattended deploy script pointed at
+the account's root could have overwritten the live site's files overnight with nobody
+watching. Resolved by using `neu.persephone.at` instead, confirmed via Web-FTP to
+point at a **separate, currently-nonexistent** folder (`apps/wordpress-180662/` —
+likely an abandoned setup from an earlier Avada attempt Marina made herself; easyname
+returns its own 404 there, not WordPress's, meaning nothing meaningful exists to lose).
+`.github/workflows/deploy.yml` targets that folder explicitly, never the account root.
+
+**Decisions made this session, each confirmed with the owner first:**
+- Kennenlernen's Microsoft Bookings calendar switched to click-to-load (a button, not
+  an automatic iframe) — implemented in `kennenlernen.astro`. This reopens
+  FIXES-2026-09-07.md task 5e's "embed directly" call, which fuer-marina.md's own
+  13c had already recommended reversing; removes the need for a cookie banner
+  site-wide, which launching tomorrow made worth actually doing rather than continuing
+  to defer.
+- Matomo: deferred to post-launch per the owner (Marina wants it specifically, as a
+  more ethical alternative to Google Analytics — not a generic pick). The
+  Datenschutzerklärung's Matomo section is marked "planned, not yet active" rather
+  than deleted, so it doesn't need rewriting again once it's actually installed.
+- The Kommentare section is being **kept** in the Datenschutzerklärung despite
+  describing a feature that doesn't exist yet, per an explicit instruction from the
+  owner this session. **Flagged, not silently followed:** this sits in real tension
+  with the exact principle Marina herself raised in fuer-marina.md #12 — "a policy
+  describing processing that isn't happening is as wrong as one hiding processing
+  that is." Marked "planned, not yet active" (same treatment as Matomo) as the closest
+  available compromise, but the underlying tension is on the record here rather than
+  quietly resolved.
+
+**Datenschutzerklärung rewritten** (`src/pages/datenschutz.astro`, Stand bumped to
+13.09.2026): added a new Hosting section (easyname GmbH, Canettistraße 5/10, 1100
+Wien — verified against WKO/Firmenbuch, not guessed); corrected Kontakt mit uns to
+drop the phone field (no longer collected) and describe the actual mechanism (direct
+email forward, no database); corrected Cookies to state plainly that the site sets
+none of its own (the previous text described login/language/consent cookies that
+don't apply to this static build — the same class of inaccuracy as Matomo/Kommentare,
+found while fixing those, not part of the original ask); updated Terminplanung to
+describe the click-to-load mechanism. **Not Marina's sign-off** — corrected against
+verifiable facts (the actual code, easyname's real registered address) and flagged
+here for her own final read, same standard as everything else marked "planned, not
+yet active."
+
+**Redirects (`public/.htaccess`) verified and expanded against the live site's actual
+sitemap.xml/post-sitemap.xml/page-sitemap.xml/category-sitemap.xml/author-sitemap.xml**
+rather than trusting START-CHECKLISTE.md Teil 3's list as final (it was already marked
+"unvollständig"). Found and fixed: the live blog slug is actually
+`ist-unfruchtbarkeit-immer-noch-frauensache-2` (WordPress added "-2" at some point) —
+the existing list had it without the suffix, which would have redirected the wrong
+URL and left the real one to 404. Also found `/nl-danke/` (a newsletter confirmation
+page with no new-site equivalent, sent home) and confirmed category/author archive
+pages exist (sent to `/blog/`), neither previously on record. Added a www->apex
+redirect, since the live sitemap lists everything under `www.` but the new site is
+configured for the apex domain. **Known, accepted gap:** WordPress media URLs
+(`/wp-content/uploads/...`) have no redirect and will 404 — fixing this needs the
+WordPress media export/backup (Teil 2 point 1), out of scope tonight.
+
+**`astro.config.mjs`'s placeholder domain resolved** to `https://persephone.at` (this
+was never an undecided domain — only where it should point was undecided, and that's
+now settled). `public/robots.txt` had the same placeholder hardcoded separately
+(doesn't derive from `site`) and needed the same fix independently.
+
+**Still open, deliberately not done tonight:**
+- The actual DNS cutover (A/CNAME) and the WordPress backup that must precede it
+  (START-CHECKLISTE.md Teil 2, points 1 and 8) — both need the owner's attention while
+  awake, not an unattended overnight action, given the shared-account risk just found.
+- GitHub repo secrets (`FTP_SERVER`/`FTP_USERNAME`/`FTP_PASSWORD`) — not added by this
+  session; the deploy workflow has not yet actually run.
+- Recommended, not yet done: password-protect `neu.persephone.at` via easyname's
+  Passwortschutz feature while it's used as a staging target, so a search engine
+  doesn't index a half-finished copy of the site before the real cutover (the German
+  pages currently carry no `noindex` at all, unlike `/en/`/`/it/`).
+- The CMS backend (`backend: github` + OAuth app + broker function) — unrelated to
+  launch readiness; Marina's editor access was never on tomorrow's critical path.
+
+---
+
+# Kontakt form implemented — 2026-09-13
+
+Built against the easyname decision below: `public/kontakt-senden.php`, a small
+in-house PHP script, replaces both previously-considered options (Microsoft Forms
+— discovered mid-session not to actually accept POSTs from an external `<form>`,
+only reachable via its own hosted page or an iframe embed; and web3forms — an
+already-made choice from a prior, undocumented session, reopened and dropped once
+found to process submissions on AWS US-East, a third-country transfer for content
+already flagged as likely Art.-9-adjacent in `docs/DATENSCHUTZBEAUFTRAGTER-BRIEFING.md`
+§4.2). The script sends straight to marinabletsas@persephone.at with the visitor's
+address as `Reply-To`, stores nothing, and needs no new Datenschutzerklärung entry —
+it runs on the same host and sends within the domain's own mail reputation.
+
+`ContactForm.astro`'s `action` now points at it; a new `/kontakt-danke/` page (a flat
+sibling route, not `/kontakt/danke/`, to avoid restructuring `kontakt.astro` into a
+folder for one subpage) is the success redirect target, added to `build-check.mjs`'s
+"never linked from nav" allowlist alongside `/404/` and `/admin/` for the same reason.
+A failed/bypassed submission (native HTML5 `required`/`type="email"` should prevent
+this for real users) redirects to `/kontakt/?fehler=1` with no visible error banner —
+deliberately left minimal since that path is effectively unreachable except by
+deliberately bypassing the browser, not a normal-user scenario worth building UI for.
+
+**Depends on a DNS change made by the owner, same session:** persephone.at's SPF
+record needed `include:spf.easyname.com` merged in (confirmed against easyname's own
+support docs) alongside the existing Microsoft/MailerLite includes, so mail sent by
+this script from easyname isn't flagged as spoofed by the receiving (Microsoft 365)
+side. Applied and saved by the owner during this session; not independently
+re-verified by a test send as of this entry.
+
+**Also added:** `.github/workflows/deploy.yml` — builds the site and uploads `dist/`
+to easyname via FTPS on every push to `master`, so that a Decap CMS edit (once the
+CMS backend itself is wired, still open, see below) actually reaches the live site
+instead of sitting committed but undeployed. Needs three repo secrets
+(`FTP_SERVER`/`FTP_USERNAME`/`FTP_PASSWORD`) added in GitHub before it will run;
+not yet exercised end-to-end against the real easyname account.
+
+**Still open, unaffected by this work:**
+- The CMS backend (`backend: github` + OAuth app + broker function) — Marina still
+  can't log into the editor until this exists.
+- `astro.config.mjs`'s placeholder domain — deliberately left alone this session;
+  the real value is `https://persephone.at`, ready to set once the owner confirms
+  it's time (see that file's own TODO).
+- Everything else already listed as open in `START-CHECKLISTE.md` and `OPEN-QUESTIONS.md`.
+
+---
+
+# Hosting decision — superseded same day, 2026-09-13
+
+**Superseded below, same day, by a purchase already made:** the owner's household had
+already bought easyname shared webhosting (small tier, prepaid through May 2028) and
+moved the persephone.at domain there before this analysis happened. Real, sunk,
+prepaid cost beats a same-shape recommendation that hadn't been spent yet — **the
+actual decision is easyname**, not Hetzner. The reasoning below stays in the record
+because it's what confirmed easyname was a fine choice and not something to reverse:
+easyname is Vienna-based (Austria) and processes entirely in the EU, so every point
+made below about Hetzner's EU-only processing avoiding a third-country
+Datenschutzerklärung clause applies equally (arguably better — Austrian, not just EU,
+for an Austrian business) to easyname. It's shared/managed webhosting (FTP/SFTP,
+presumably no root/SSH on the small tier — not yet confirmed), so the "nothing to
+maintain" reasoning against a raw VPS also holds. The GitHub-OAuth broker function for
+the CMS still needs somewhere else to run (a Cloudflare Worker, still unresolved) —
+that conclusion doesn't change with the provider.
+
+**Action item this purchase created, now resolved:** the domain moved to easyname
+*before* the DNS-record inventory step in `START-CHECKLISTE.md` Teil 2 point 2
+happened, and apparently before this was flagged as a risk. Confirmed 2026-09-13 by
+round-trip test email to/from marinabletsas@persephone.at: Microsoft 365 mail
+(`MX`/`SPF`/`DKIM`/`autodiscover`) survived the move and works. No outstanding risk
+here — noted for the record since it could easily have gone the other way.
+
+---
+
+# Original analysis, now superseded — Hetzner Webhosting S over Cloudflare/Netlify/VPS
+
+Reasoning, weighed in this order (kept for the record; see superseding note above —
+easyname was substituted for Hetzner in every place this reasoning mentions Hetzner):
+
+- **Netlify (option A in `START-CHECKLISTE.md`)** ruled out first: the CMS config
+  already written (`git-gateway`) depends on Netlify Identity, which was discontinued
+  for new projects — the option's main advantage doesn't reliably exist anymore.
+- **Cloudflare Pages** was the leading alternative — free, and the natural home for the
+  CMS's GitHub-OAuth broker function either way — but was ruled out on a GDPR ground
+  found while reviewing `docs/DATENSCHUTZBEAUFTRAGTER-BRIEFING.md` §3.8: Hetzner is a
+  German company processing entirely in the EU, so the Datenschutzerklärung's hosting
+  line needs no third-country/processor disclosure at all. Cloudflare is a US company;
+  using it would add a second third-country disclosure (Microsoft Bookings already
+  needs one, per the same briefing) to a site that handles Art.-9-adjacent data. Not
+  disqualifying on its own, but avoidable for a cost difference of about €2/month.
+- **Staying with the current WordPress host (option B)** was rejected as deferring the
+  decision rather than making it, and it means continuing to pay for a WordPress plan
+  the new static site doesn't need.
+- **A raw Hetzner Cloud VPS** (~€3/mo cheapest tier) was considered and rejected:
+  unmanaged, meaning the project would take on OS security updates, web server setup,
+  and TLS renewal indefinitely — directly against the "fast nichts zu pflegen"
+  (practically nothing to maintain) selling point already on record in
+  `docs/fuer-marina.md`'s comparison table.
+- **Hetzner Webhosting S** (€1.60/mo excl. VAT, confirmed live 2026-09-13; ~€1.90–1.92
+  with VAT) wins on all three axes: EU-only processing, no server to maintain (managed,
+  Apache-based, static files served from `/public_html`), and the cheapest option in
+  practice once the VPS's hidden maintenance cost is counted. Confirmed to support pure
+  static sites with no PHP requirement. Its 10GB storage, unlimited mailboxes, and PHP
+  process/memory limits are all far beyond what a static Astro build needs — email
+  stays on Microsoft 365 exactly as it is; nothing moves to Hetzner's mailboxes.
+
+**Consequences still open, not yet decided:**
+- Deployment is SFTP/FTPS only on the S tier (no SSH, no git push) — a CI step (e.g. a
+  GitHub Action building the Astro site and SFTPing `dist/` to `/public_html`) will be
+  needed in place of Cloudflare/Netlify-style push-to-deploy.
+- The CMS's GitHub-OAuth broker function still needs somewhere to run, since S-tier
+  Webhosting has no SSH/custom backend support — a Cloudflare Worker (free) is the
+  likely answer, still to be set up.
+- `astro.config.mjs`'s placeholder-domain `// TODO` stays open until the actual
+  domain/hosting is provisioned — a provisioning step, not a decision.
+- Domain registrar/DNS management is unaffected by this choice and stays wherever it
+  is now; only the site's `A`/`CNAME` record changes at cutover (see
+  `START-CHECKLISTE.md` Teil 2, point 8, on leaving `MX`/`SPF`/`DKIM`/`autodiscover`
+  untouched).
+
+---
+
 # Lauf — 2026-09-10 (`docs/LAUF-2026-09-10.md`, complete)
 
 Marina's 34-point feedback list (`docs/feedback-2026-09-10/`) plus a new Kontaktseite

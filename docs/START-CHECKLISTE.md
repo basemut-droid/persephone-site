@@ -7,8 +7,18 @@ Stand 7.9.2026, abends. Diese Liste gab es bisher nicht; sie fasst zusammen, was
 
 # Teil 1 — Hosting, Redaktionssystem und Marinas Frage 9 sind **eine** Entscheidung
 
-Das ist der wichtigste Befund dieses Dokuments. Bisher standen drei Dinge getrennt in den
-Notizen; tatsächlich hängen sie an derselben Wahl.
+**Hosting-Teil entschieden, 2026-09-13 — siehe `docs/decisions.md`:** easyname
+(kleines Webhosting-Paket, bezahlt bis Mai 2028; Domain ebenfalls dort). Die
+Analyse A/B/C unten ist historisch stehen gelassen — sie hat die Entscheidung mit
+vorbereitet (bestätigt z. B., dass EU-Verarbeitung wichtig war), wurde aber am
+selben Tag durch einen bereits getätigten Kauf überholt, bevor sie umgesetzt wurde.
+**Das Redaktionssystem (Weg C, `backend: github` + OAuth-Vermittlung) und Marinas
+Frage 9 bleiben davon unberührt offen** — easyname hat vermutlich kein SSH auf dem
+kleinen Tarif, die Vermittlungsfunktion braucht weiterhin einen separaten Dienst
+(Cloudflare Worker, noch nicht eingerichtet).
+
+Das war ursprünglich der wichtigste Befund dieses Dokuments: drei Dinge standen
+getrennt in den Notizen, hängen aber an derselben Wahl.
 
 `dist/admin/config.yml` sagt es selbst, im Kopfkommentar:
 
@@ -143,28 +153,40 @@ müssen.
 
 # Teil 3 — Die bekannten Weiterleitungen
 
-Alle am 7.9.2026 gegen die Live-Seite geprüft. **Unvollständig** — siehe Punkt 3 oben.
+**Implementiert in `public/.htaccess`, 2026-09-13** (docs/decisions.md) — gegen die
+Live-Sitemap (`sitemap.xml`, `post-sitemap.xml`, `page-sitemap.xml`,
+`category-sitemap.xml`, `author-sitemap.xml`) geprüft und dabei erweitert/korrigiert
+gegenüber der Liste vom 7.9., die als "unvollständig" markiert war:
 
 | alt (persephone.at) | neu |
 |---|---|
+| `www.persephone.at/*` | `persephone.at/*` (die Live-Sitemap listet alles unter `www.`, die neue Seite ist auf die Apex-Domain konfiguriert) |
 | `/angebote-2/` | `/angebote/` |
 | `/datenschutzerklaerung/` | `/datenschutz/` |
+| `/termine/` | `/kennenlernen/` |
+| `/nl-danke/` | `/` (neu gefunden, stand nirgends — die Newsletter-Bestätigung läuft jetzt komplett über MailerLite, keine eigene Seite mehr nötig) |
 | `/maenner-im-kinderwunsch-mythos-stille-staerke/` | `/blog/maenner-im-kinderwunsch-mythos-stille-staerke/` |
 | `/texte-stimmen-lieder/` | `/blog/texte-stimmen-lieder/` |
 | `/zwischen-lichterglanz-und-leere/` | `/blog/zwischen-lichterglanz-und-leere/` |
 | `/einsam-im-kinderwunschprozess/` | `/blog/einsam-im-kinderwunschprozess/` |
-| `/ist-unfruchtbarkeit-immer-noch-frauensache/` | `/blog/ist-unfruchtbarkeit-immer-noch-frauensache/` |
+| `/ist-unfruchtbarkeit-immer-noch-frauensache-2/` | `/blog/ist-unfruchtbarkeit-immer-noch-frauensache/` |
 | `/maenner-im-kinderwunsch-mythos-maennerohnmacht/` | `/blog/maenner-im-kinderwunsch-mythos-maennerohnmacht/` |
-| `/termine/` | `/kennenlernen/` |
+| `/category/*`, `/author/*` | `/blog/` |
 
-Die letzte Zeile ist neu (NACHTLAUF-2026-09-08.md C2): Marina hat die Seite
-„Kennenlernen" genannt, der Besitzer hat am 8.9. entschieden, dass der Pfad mitwandert
+**Korrektur gegenüber der alten Liste:** der Artikel-Slug ist live tatsächlich
+`ist-unfruchtbarkeit-immer-noch-frauensache-2` (mit "-2" — WordPress hat das
+irgendwann angehängt). Die alte Liste hatte die Version ohne "-2" — das hätte die
+falsche URL weitergeleitet und den echten Artikel unredirected 404en lassen.
+
+Die vorletzte Zeile ist seit dem 8.9. bekannt (NACHTLAUF-2026-09-08.md C2): Marina hat
+die Seite „Kennenlernen" genannt, der Besitzer hat entschieden, dass der Pfad mitwandert
 (OPEN-QUESTIONS.md #8/#24) — umgesetzt, `/termine/` gibt es im Rebuild nicht mehr.
 
 Unverändert und ohne Weiterleitung: `/`, `/ueber-uns/`, `/beratung/`, `/workshops/`,
 `/selbsthilfegruppe/`, `/blog/`, `/kontakt/`, `/faqs/`, `/impressum/`,
 `/disclaimer/`, `/newsletter/`.
 
-**Alle sechs Blogartikel liegen live direkt an der Wurzel.** Das ist die folgenreichste
-Änderung: ohne Weiterleitungen laufen sämtliche bestehenden Links auf die Artikel und alle
-Suchmaschinentreffer ins Leere.
+**Noch nicht gelöst, bewusst außerhalb des heutigen Umfangs:** WordPress-Medien-URLs
+(`/wp-content/uploads/...`) haben keine Entsprechung auf der neuen Seite — ein direkter
+alter Bildlink (z.B. aus der Google-Bildersuche) läuft ins Leere. Das bräuchte den
+WordPress-Medien-Export, siehe Punkt 1 oben (Backup).

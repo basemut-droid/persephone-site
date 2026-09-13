@@ -4,13 +4,14 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // ============================================================================
-  // TODO — BLOCKED ON THE HOSTING DECISION, SEE OPEN-QUESTIONS.md #14.
-  // This placeholder feeds every page's canonical URL, og:url, and the sitemap.
-  // Replace with the real production domain once hosting is decided — do not
-  // guess at a domain here.
-  // ============================================================================
-  site: 'https://persephone.example',
+  // Hosting decided 2026-09-13 (docs/decisions.md): easyname, real domain
+  // persephone.at (already owned, moved there — this was never a "pick a new
+  // domain" question, only "where does it point"). Set here even while the
+  // build is staged on neu.persephone.at ahead of cutover: canonical URLs
+  // should already point at the real future domain, not the staging one —
+  // see public/robots.txt's Sitemap line, which had the same placeholder and
+  // needed the same fix, since it doesn't derive from this value.
+  site: 'https://persephone.at',
 
   i18n: {
     defaultLocale: 'de',

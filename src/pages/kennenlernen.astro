@@ -35,28 +35,47 @@ const intro = 'Das online Kennenlernen (ca. 20 Min.) ist kostenfrei und dient de
 
   <section class="section">
     <div class="container">
-      {/* FIXES-2026-09-07.md task 5e — decision by the owner's husband,
-         2026-09-07: go back to the calendar embedded directly, without the
-         click-to-load step this session had built as the consent-safer
-         alternative. That earlier version's own comment explained the
-         trade-off it was avoiding; recorded now in OPEN-QUESTIONS.md
-         instead, as a decision for the owner rather than settled by
-         code — an unconditional iframe here contacts Microsoft on every
-         page view, before any consent, which is the one thing on this
-         otherwise tracker-free site that makes a cookie banner necessary.
-         Implementing what was asked; not adding a banner on this run's own
-         initiative either way. */}
-      <iframe
-        src={bookingUrl}
-        width="100%"
-        height="750"
-        style="border:0"
-        title="Terminbuchung"
-        class="booking-iframe"
-      />
-      <p class="booking-fallback">
-        Lädt der Kalender nicht? <a href={bookingUrl}>Direkt bei Microsoft buchen</a>.
-      </p>
+      {/* Reopened 2026-09-13 (docs/decisions.md) — FIXES-2026-09-07.md
+         task 5e's direct-embed call is superseded: launching tomorrow made
+         "an unconditional iframe needs a site-wide cookie banner" a real
+         cost to pay tonight rather than a documented trade-off to defer,
+         and fuer-marina.md's own later recommendation (13c, "Möglichkeit
+         2") already pointed here after Marina's own questions about the
+         banner. Click-to-load avoids Microsoft being contacted on page
+         view entirely, so no banner is needed anywhere on the site. The
+         <noscript><style> hides the button when JavaScript is off, so a
+         no-JS visitor sees only the always-present direct link below,
+         never an inert button. */}
+      <div class="booking-embed">
+        <button type="button" class="button button-primary" id="booking-load-button">
+          Kalender laden
+        </button>
+        <noscript>
+          <style>
+            #booking-load-button {
+              display: none;
+            }
+          </style>
+        </noscript>
+        <p class="booking-fallback">
+          Beim Laden wird eine Verbindung zu Microsoft aufgebaut, um den Kalender anzuzeigen.
+          <a href={bookingUrl}>Direkt bei Microsoft buchen</a> geht auch ohne diesen Schritt.
+        </p>
+      </div>
+
+      <script is:inline define:vars={{ bookingUrl }}>
+        const button = document.getElementById('booking-load-button');
+        button?.addEventListener('click', () => {
+          const iframe = document.createElement('iframe');
+          iframe.src = bookingUrl;
+          iframe.width = '100%';
+          iframe.height = '750';
+          iframe.style.border = '0';
+          iframe.title = 'Terminbuchung';
+          iframe.className = 'booking-iframe';
+          button.replaceWith(iframe);
+        });
+      </script>
     </div>
   </section>
 

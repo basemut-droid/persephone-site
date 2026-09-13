@@ -10,13 +10,26 @@
 ---
 
 <!--
-  TODO(contact form backend): action="#" is a placeholder. C3 point 1 —
-  a Microsoft Form is the decided destination, but its URL doesn't exist
-  yet; this needs to be connected once it does (either swap this <form>'s
-  action, or replace it with an embedded Microsoft Form entirely — that
-  choice isn't made either).
+  Backend, 2026-09-13 (docs/decisions.md): Microsoft Forms turned out not
+  to work as a plain <form> target (it only accepts submissions through
+  its own hosted page, not an external POST), and web3forms was dropped
+  for processing the message on US servers — see that entry for both.
+  Posts instead to public/kontakt-senden.php, a small script that runs on
+  easyname (the site's own host) and forwards straight to Marina's inbox;
+  nothing is stored anywhere in between.
 -->
-<form class="contact-form" method="post" action="#" novalidate>
+<!--
+  Live-Korrektur, 2026-09-13: `novalidate` kam offenbar unbesehen aus dem
+  Claude-Design-Prototypen mit (der eine eigene JS-Validierung hatte, die
+  hier nie mitgebaut wurde, siehe LAUF-2026-09-10.md C3) und blieb ohne
+  Ersatz stehen — Pflichtfelder (Name, E-Mail, Anliegen, Zustimmung)
+  hatten dadurch faktisch keine Prüfung: ein leeres Formular ließ sich
+  klicklos absenden, ohne jede Rückmeldung. Entfernt, damit die native
+  HTML5-Validierung (required/type="email") greift — funktioniert ganz
+  ohne JavaScript, keine eigene Validierungslogik nötig. Kein Ersatz für
+  das fehlende echte Absendeziel (weiterhin offen), aber verhindert
+  zumindest, dass unvollständige Anfragen unbemerkt "durchgehen". -->
+<form class="contact-form" method="post" action="/kontakt-senden.php">
   <div class="field">
     <label for="contact-name">Dein Name *</label>
     <input id="contact-name" name="name" type="text" required autocomplete="name" />

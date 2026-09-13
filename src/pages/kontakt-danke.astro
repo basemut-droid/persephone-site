@@ -1,0 +1,29 @@
+---
+// Redirect target for public/kontakt-senden.php after a successful send
+// (see docs/decisions.md, Hosting-Entscheidung 2026-09-13 for why this is
+// a plain PHP script on easyname rather than web3forms/Microsoft Forms).
+// A separate flat page, not "/kontakt/danke/", to avoid restructuring
+// kontakt.astro into a folder just for this one subpage — same reasoning
+// as blog/ staying the only nested route in src/pages.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+---
+
+<BaseLayout
+  locale="de"
+  path="/kontakt-danke/"
+  title="Nachricht gesendet – Persephone"
+  description="Deine Nachricht ist bei Marina angekommen."
+>
+  <PageHero title="Danke für deine Nachricht" image={false} />
+
+  <section class="section">
+    <div class="container section-narrow legal-page">
+      <p>
+        Deine Nachricht ist angekommen. Ich melde mich in der Regel innerhalb von 48 Stunden bei
+        Dir zurück.
+      </p>
+      <p><a href="/kontakt/">Zurück zur Kontaktseite</a></p>
+    </div>
+  </section>
+</BaseLayout>

@@ -116,9 +116,11 @@ function addResult(id, title, blocking, violations) {
     }
   }
   for (const route of routes.keys()) {
-    // Never linked to on purpose: the 404 page, and the Decap CMS admin
-    // panel (accessed directly at /admin/, not from the site's own nav).
-    if (route === '/404/' || route.startsWith('/admin/')) continue;
+    // Never linked to on purpose: the 404 page, the Decap CMS admin panel
+    // (accessed directly at /admin/, not from the site's own nav), and the
+    // Kontakt form's success page (reached only via public/kontakt-senden.php's
+    // redirect after a send, see docs/decisions.md 2026-09-13).
+    if (route === '/404/' || route.startsWith('/admin/') || route === '/kontakt-danke/') continue;
     if (!linkTargets.has(route)) {
       violations.push(`${route} is built but no <a href> anywhere in the site points at it`);
     }

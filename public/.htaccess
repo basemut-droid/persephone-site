@@ -1,0 +1,55 @@
+# 301 redirects from the old WordPress URL structure. See
+# docs/START-CHECKLISTE.md Teil 3 for the original list and
+# docs/decisions.md (2026-09-13) for how it was verified and expanded
+# against the live site's actual sitemap.xml before writing this file.
+#
+# NOT yet active anywhere: this only takes effect once uploaded to whichever
+# host actually answers for persephone.at. It currently only reaches the
+# neu.persephone.at staging copy, where none of these old paths are ever
+# requested, so it is inert there by design until the real cutover.
+
+RewriteEngine On
+
+# www -> apex domain. The live site's own sitemap.xml lists every URL under
+# www.persephone.at; the new site (astro.config.mjs) is configured for the
+# apex domain instead. Without this, any bookmark or indexed link to the
+# www version would 404 instead of redirecting.
+RewriteCond %{HTTP_HOST} ^www\.persephone\.at$ [NC]
+RewriteRule ^(.*)$ https://persephone.at/$1 [R=301,L]
+
+# Individual page moves.
+RewriteRule ^angebote-2/?$ /angebote/ [R=301,L]
+RewriteRule ^datenschutzerklaerung/?$ /datenschutz/ [R=301,L]
+RewriteRule ^termine/?$ /kennenlernen/ [R=301,L]
+
+# Newsletter double-opt-in confirmation page -- the new site's newsletter
+# flow runs entirely through MailerLite's own hosted forms (see
+# astro.config.mjs's /newsletter redirect), so this WordPress-only page has
+# no direct equivalent. Sent home rather than left to 404.
+RewriteRule ^nl-danke/?$ / [R=301,L]
+
+# Blog posts. Slugs match exactly what the live sitemap.xml lists today
+# (2026-09-13) -- note ist-unfruchtbarkeit-immer-noch-frauensache-2 carries a
+# "-2" WordPress added to the slug at some point. START-CHECKLISTE.md's
+# earlier list was missing that suffix and would have redirected the wrong
+# URL, leaving the real live one to 404 -- caught by checking the sitemap
+# directly rather than trusting the existing list as final.
+RewriteRule ^maenner-im-kinderwunsch-mythos-stille-staerke/?$ /blog/maenner-im-kinderwunsch-mythos-stille-staerke/ [R=301,L]
+RewriteRule ^texte-stimmen-lieder/?$ /blog/texte-stimmen-lieder/ [R=301,L]
+RewriteRule ^zwischen-lichterglanz-und-leere/?$ /blog/zwischen-lichterglanz-und-leere/ [R=301,L]
+RewriteRule ^einsam-im-kinderwunschprozess/?$ /blog/einsam-im-kinderwunschprozess/ [R=301,L]
+RewriteRule ^ist-unfruchtbarkeit-immer-noch-frauensache-2/?$ /blog/ist-unfruchtbarkeit-immer-noch-frauensache/ [R=301,L]
+RewriteRule ^maenner-im-kinderwunsch-mythos-maennerohnmacht/?$ /blog/maenner-im-kinderwunsch-mythos-maennerohnmacht/ [R=301,L]
+
+# WordPress category/author archive pages (confirmed present via
+# category-sitemap.xml / author-sitemap.xml) -- no direct equivalent on the
+# new site, sent to the blog index rather than left to 404.
+RewriteRule ^category/.*$ /blog/ [R=301,L]
+RewriteRule ^author/.*$ /blog/ [R=301,L]
+
+# Known gap, NOT solved by this file: WordPress media URLs
+# (/wp-content/uploads/...) have no equivalent here -- the new site's images
+# are Astro-processed with hashed filenames. A direct old image link (e.g.
+# from a Google Image Search result) will 404. Fixing this would need the
+# WordPress media export/backup, which is outside tonight's scope -- see
+# docs/decisions.md and START-CHECKLISTE.md point 1 (WordPress backup).

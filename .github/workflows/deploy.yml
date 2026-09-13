@@ -1,0 +1,49 @@
+# Builds the site and uploads dist/ to easyname on every push to master.
+# See docs/decisions.md (Hosting-Entscheidung 2026-09-13): easyname is
+# FTP/SFTP-only, no git-based deploy, so without this a Decap CMS edit
+# would sit committed in the repo but never actually reach the live site.
+#
+# Deliberately targets neu.persephone.at's folder, NOT the FTP account's
+# root -- the live WordPress site (apps/wordpress-124063/) shares this same
+# FTP account, one level up, and must never be touched by this workflow.
+# Confirmed via Web-FTP, 2026-09-13: apps/wordpress-180662/ (the folder
+# neu.persephone.at's subdomain config points at) does not exist yet --
+# nothing to lose there, and the FTP upload will create it on first run.
+#
+# Requires three repository secrets (Settings -> Secrets and variables ->
+# Actions), taken from the easyname panel's FTP Zugaenge page / "Datenblatt":
+#   FTP_SERVER    the hostname shown on the account's Datenblatt
+#   FTP_USERNAME  e.g. 197091ftp1
+#   FTP_PASSWORD  set/reset via the pencil icon on the FTP Zugaenge page
+name: Deploy to easyname (staging: neu.persephone.at)
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Upload dist/ via FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./dist/
+          # neu.persephone.at's own folder (confirmed via Web-FTP, see the
+          # note at the top of this file) -- NOT "./", which would land in
+          # the FTP account's shared root next to the live WordPress site.
+          server-dir: ./apps/wordpress-180662/

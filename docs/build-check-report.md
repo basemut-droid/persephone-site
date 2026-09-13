@@ -1,6 +1,6 @@
 # Build-check report
 
-Generated 2026-09-12T06:06:42.144Z by `scripts/build-check.mjs`.
+Generated 2026-09-13T20:06:36.281Z by `scripts/build-check.mjs`.
 
 ## Every content page has a route, every route has content — PASS
 
@@ -30,9 +30,9 @@ No violations found.
 
 No violations found.
 
-## astro.config.mjs "site" is not a placeholder — FAIL (non-blocking)
+## astro.config.mjs "site" is not a placeholder — PASS
 
-- astro.config.mjs "site" is "https://persephone.example" — a placeholder, not a real production domain
+No violations found.
 
 ## Every heading in a source content file appears in its built page — PASS
 

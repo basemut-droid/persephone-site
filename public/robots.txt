@@ -23,4 +23,4 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-Sitemap: https://persephone.example/sitemap-index.xml
+Sitemap: https://persephone.at/sitemap-index.xml
