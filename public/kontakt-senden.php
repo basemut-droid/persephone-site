@@ -86,7 +86,14 @@ $headers = [
     'Content-Type: text/plain; charset=UTF-8',
 ];
 
-$erfolg = mail($empfaenger, $betreff, $text, implode("\r\n", $headers));
+// 5. Parameter setzt den technischen Envelope-Absender auf eine
+// @persephone.at-Adresse -- ohne das setzt der Server oft eine eigene
+// Adresse (z.B. www-data@servername) ein, was die Absenderdomain der
+// sichtbaren From-Zeile widerspricht. persephone.at hat eine strikte
+// DMARC-SPF-Ausrichtung (aspf=s in der DNS), die genau das verlangt --
+// ohne diesen Parameter könnte die Mail deshalb im Spam landen, obwohl
+// SPF selbst (siehe Kommentar oben) bereits stimmt.
+$erfolg = mail($empfaenger, $betreff, $text, implode("\r\n", $headers), '-fno-reply@persephone.at');
 
 header('Location: ' . ($erfolg ? '/kontakt-danke/' : '/kontakt/?fehler=1'));
 exit;

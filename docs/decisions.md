@@ -84,6 +84,20 @@ top-priority question for the reviewer, not smoothed over. First deploy to
 unquoted colon inside the workflow's `name:` field, caught by GitHub's own parser
 before secrets even mattered).
 
+**Final review pass, after the first successful deploy:** found and fixed a real bug
+in `kontakt-senden.php` — PHP's `mail()` was called without its 5th parameter (the
+envelope-sender override), meaning the technical sender would likely default to
+something like `www-data@<servername>` rather than an `@persephone.at` address. Given
+persephone.at's DMARC record uses `aspf=s` (strict SPF alignment, confirmed in its DNS
+zone), a mismatched envelope sender could fail DMARC alignment and land in spam even
+with the SPF fix already in place. Fixed by passing `-fno-reply@persephone.at` as the
+5th parameter. **Not yet verified by an actual test send** — that still needs someone
+to submit the real form and check the inbox, which is on `docs/LAUNCH-TAG-RUNBOOK.md`.
+
+Also wrote `docs/LAUNCH-TAG-RUNBOOK.md`, consolidating `START-CHECKLISTE.md` Teil 2
+with everything decided/found tonight into one ordered, attended-by-a-human checklist
+for the actual cutover day, rather than leaving it spread across three documents.
+
 **Still open, deliberately not done tonight:**
 - The actual DNS cutover (A/CNAME) and the WordPress backup that must precede it
   (START-CHECKLISTE.md Teil 2, points 1 and 8) — both need the owner's attention while
