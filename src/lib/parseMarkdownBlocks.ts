@@ -5,9 +5,13 @@
 // "the paragraphs under this heading" or "this list" without duplicating
 // the copy into separate typed frontmatter fields. Handles exactly the
 // markdown shapes this site's own content actually uses — headings,
-// paragraphs, `- ` lists, and a paragraph that's just a single
-// `[label](href)` link (this site's convention for a CTA) — not a general
-// markdown parser.
+// paragraphs, `- `/`*  `/`+ ` lists (all three are valid CommonMark bullet
+// markers, and Decap CMS's markdown widget re-serializes existing `-`
+// lists as `*` on every save through /admin/ — confirmed 2026-09-15 by a
+// real CMS test save silently emptying Selbsthilfegruppe's meeting-details
+// list when this only recognized `-`), and a paragraph that's just a
+// single `[label](href)` link (this site's convention for a CTA) — not a
+// general markdown parser.
 
 export type MdBlock =
   | { type: 'heading'; level: number; text: string }
@@ -33,10 +37,10 @@ export function parseMarkdownBlocks(body: string): MdBlock[] {
       blocks.push({ type: 'heading', level: headingMatch[1].length, text: headingMatch[2].trim() });
       continue;
     }
-    if (chunk.split('\n').every((line) => /^-\s+/.test(line.trim()))) {
+    if (chunk.split('\n').every((line) => /^[-*+]\s+/.test(line.trim()))) {
       blocks.push({
         type: 'list',
-        items: chunk.split('\n').map((line) => line.trim().replace(/^-\s+/, '')),
+        items: chunk.split('\n').map((line) => line.trim().replace(/^[-*+]\s+/, '')),
       });
       continue;
     }
