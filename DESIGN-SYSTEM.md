@@ -36,8 +36,8 @@ by the file's own comments against `docs/brand/Brandbook.pdf`. Components consum
 | `--color-text-muted` | `#181a2b` (since NACHTLAUF-2026-09-08.md A1; was `#32373c`) | — | FAQ answers, blog listing byline, Termine/Kennenlernen's fallback notice, PageHero's hero-intro, homepage's blog-fallback notice. The old value was a WordPress default gray that had leaked in, not a deliberate second text tone — now identical to `--color-text`, kept as a separate token in case a real muted tone is wanted later |
 | `--color-text-on-accent` | `#f3ece6` | — | text on colored fills (service cards, CTA band) |
 | `--color-sage` | `#90c8c0` | Salbei (Geborgenheit) | service-card "sage" tone, blog-teaser image placeholder bg, `ImagePlaceholder.astro`'s panel, Workshops' sage list-marker icons, `.icon-circle-sage` (Beratung's accordion toggle) |
-| `--color-teal` | `#48b0b0` | Türkis (Empathie) | service-card "teal" tone; `--color-band-bg` (newsletter strip); `.icon-list-check .icon` (checkmark/meeting-detail circles, since NACHTLAUF-2026-09-08.md A1 — was `--color-teal-dark`) |
-| `--color-teal-dark` | `#309898` | Tiefes Türkis | `--color-accent` → eyebrows, hover states, focus ring, card-button text; Über uns's qualification-band panels (B2.1) |
+| `--color-teal` | `#48b0b0` | Türkis (Empathie) | service-card "teal" tone; `--color-band-bg` (newsletter strip); `.icon-list-check .icon` (checkmark/meeting-detail circles, since NACHTLAUF-2026-09-08.md A1 — was `--color-teal-dark`); **Über uns's qualification-band panels, moved here 2026-09-11** ("orientiere Dich am Brandbook" — was `--color-teal-dark` per B2.1 below, until a live correction the same session asked for a step lighter). Contrast against the panel's light text: computed from the token's own hex values via the WCAG relative-luminance formula, **≈2.4:1** — lower than `--color-teal-dark`'s already-under-standard 2.96:1, and well under the usual 4.5:1 body-text target. A deliberate, repeated trade-off on record (`OPEN-QUESTIONS.md` #31/#44), not fixed here — still awaiting an explicit yes. |
+| `--color-teal-dark` | `#309898` | Tiefes Türkis | `--color-accent` → eyebrows, hover states, focus ring, card-button text |
 | `--color-terracotta` | `#b33a3b` | Granatapfelrot (primary) | `--color-accent-strong` → H1, nav links, footer border/copyright, `.button-primary` fill, `.icon-circle` (section icons, Kontakt's eyebrow icons) |
 | `--color-terracotta-dark` | `#d83830` | Leuchtrot | `.icon-circle-terracotta-dark` (FAQs' accordion toggle). Briefly back in `.button-primary` mid-session as a gradient partner (LAUF-2026-09-10.md A3) — corrected again the same session once actual screenshots of the button were pixel-sampled: both states are flat solid fills, no gradient. `--color-cta-from`/`--color-cta-to` are unused again. |
 | `--color-terracotta-hover` | `#863232` | — (not a brand-book tone) | **New, LAUF-2026-09-10.md's Kontakt follow-up.** `.button-primary`'s hover fill, pixel-measured from a screenshot — not derivable from an existing token by a simple darken(). |
@@ -118,10 +118,19 @@ h2/h3 stay at 400 regardless, unaffected either way.
   cap (`.post-header`/`.post-body`/`.post-author`) was removed outright rather than
   raised, for the same reason — the surrounding `.container` already gives the right
   width once nothing overrides it.
-- **`PageHero.astro`'s own intro paragraph stays at `48rem` (768px)**, untouched by A1 —
-  that's the plain-banner hero variant's short lede line, not a body-text column, and
-  nothing in Marina's 2026-09-10 feedback named it. `OPEN-QUESTIONS.md` #17's older note
-  about this being unrecorded drift (rather than a deliberate choice) still stands.
+- **`PageHero.astro`'s plain-banner variant (`.page-hero-inner`) is now `1200px`,
+  not `48rem` (768px)** — that 768px figure (and this doc's own now-corrected cross-
+  reference to `OPEN-QUESTIONS.md` #17, which is actually about `.hero-grid`'s height,
+  unrelated) described a pre-2026-09-12 state. Fixed centrally in `PageHero.astro`
+  itself, for a real, previously-invisible reason: the title/intro block sat in its
+  own narrower centered box while the body text below it (Disclaimer, Impressum,
+  Datenschutz, FAQs) already ran at A1's 1200px — two different centered widths made
+  a short, genuinely left-aligned title *read* as centered/shifted right, since its
+  narrower box's left edge sat well right of the wider text below. Now both share the
+  same 1200px left edge. This also means `OPEN-QUESTIONS.md` #9's original comparison
+  (768px vs. `.section-narrow`'s 896px) no longer describes the current numbers at
+  all — updated there rather than left stale, and reopened as a fresh question since
+  the intro is now *wider* than body copy, not narrower.
 
 ## Buttons
 
@@ -253,12 +262,13 @@ bug this mechanism exists to prevent from recurring.
 Fixed directly (mechanical, no design judgment involved):
 
 - `ServiceCard`'s `.card-button` now uses `var(--radius)` instead of a hardcoded `4px`.
-- The footer background is now `var(--color-footer-bg)` (`#e9dccd`) instead of a bare hex
-  literal repeated in two places (the footer itself and the wave-divider SVG). **Flag:**
-  this color is not one of the brand book's 8 official tones — it was picked by the earlier
-  parsing session to visually match the live site. Confirm with the client whether it
-  should become an official tone (e.g. a tint of Warmes Elfenbein) before more pages lean
-  on it.
+- The footer background was tokenized as `var(--color-footer-bg)` (`#e9dccd`) instead of a
+  bare hex literal repeated in two places (the footer itself and the wave-divider SVG). **This
+  was itself superseded, LAUF-2026-09-10.md A5:** `#e9dccd` never actually matched the live
+  site (a fresh live measurement found `--color-bg-alt`, `#f3ece6`, instead) — the token and
+  its literal were deleted from the project outright, not just overridden. Kept here only as
+  the record of the original mechanical fix; see the Colors section and Footer spec above for
+  the current, correct value.
 - **The trapped-scope `.section` bug** (see the warning near the top of this doc) — found
   when the client measured the newsletter band's padding directly from a screenshot and it
   didn't match this doc's own numbers. Root cause confirmed via `git diff HEAD` (the band's
@@ -278,9 +288,10 @@ Fixed directly (mechanical, no design judgment involved):
   the homepage's other block of centered copy (pain-points) — no new value invented.
 - `CtaBand`'s internal eyebrow→h2→copy→button rhythm relied entirely on bare browser
   default margins (`h2 { margin: 0 0 0.5em }`, `p { margin: 0 0 1em }`), which is why it
-  read as cramped even once the outer section padding was fixed. Now uses explicit
-  `--space-6`/`--space-7` (see the spacing-scale section below for what that does and does
-  not mean about the rest of the site).
+  read as cramped even once the outer section padding was fixed. Given an explicit
+  `--space-7` pre-button gap (a live correction later removed the h2→copy gap entirely
+  rather than tokenizing it — see the spacing-scale section below for the current,
+  corrected state of what this does and does not mean about the rest of the site).
 
 Investigated, decided by the client, and implemented (see conversation for the full
 question/answer; summarized here for the record):
@@ -383,6 +394,36 @@ the accordion mechanism itself doesn't hardcode either:
 `.icon-circle-sm` (2.5rem) and the two color modifiers are themselves small variants
 of the existing `.icon-circle` (3.5rem, terracotta) documented under "Icon set" above.
 
+## Qualification bands (Über uns only, page-scoped in `ueber-uns.astro`)
+
+Not a shared component — this exact shape doesn't exist anywhere else on the
+site (CLAUDE.md's "reuse before you build" cuts both ways: also don't promote
+a one-off speculatively). Three full-bleed two-column rows (Ausbildung/
+Felderfahrung/Sprachen), sides alternating panel-left/panel-right/panel-left.
+
+- **Panel:** flat `--color-teal` fill (no texture, no decorative accent —
+  both a diagonal wave texture and a rounded rust-orange accent were tried
+  and then removed on direct request, 2026-09-11), light (`--color-bg`) text,
+  centered content, `1rem` corner radius.
+- **Deliberate exception to the site's usual container width:** its own
+  `.quals-container` caps at `1800px`, not the shared `.container`'s `1248px`
+  — "almost the width of the page," a one-off, not a reuse-before-you-build
+  violation.
+- **≥900px:** panel:image splits `2fr 1fr` (a measured 2:1, confirmed
+  identical across all three bands despite one early reading guessing the
+  Sprachen band was shorter), fixed to `calc(100svh - 117px)` — the viewport
+  height minus the header's own measured height, so each band fills exactly
+  the space below the nav on first view regardless of how much text it
+  holds. `117px` is a measured constant, not derived from the header's own
+  actual rendered height — revisit by hand if the header ever changes.
+- **Scroll crossfade, ≥900px + JS + no `prefers-reduced-motion` (progressive
+  enhancement, same contract as `.reveal` below — plain stacked bands
+  otherwise):** the three bands sit absolutely stacked at the same position
+  inside one sticky `[data-quals-stage]` wrapper; only `opacity` ever
+  changes (`0.6s ease`), nothing moves. A small position-indicator pill
+  (one dot per band) sits inside the same sticky wrapper, visible only in
+  the enhanced state.
+
 ## Scroll reveal (NACHTLAUF-2026-09-08.md A6)
 
 `.reveal` in `global.css` plus a small script in `BaseLayout.astro` — a fade-in-on-
@@ -413,20 +454,20 @@ uses it — this is the build-from-this list for Phase 3.
 
 | Component | Purpose | Props | Used by |
 |---|---|---|---|
-| `Header.astro` | Sticky site header: logo, primary nav (with one dropdown), CTA button, language switcher, mobile burger | `locale`, `path`, `nav: {items, cta, ctaHref}`, `switcherLabel` | `BaseLayout` (every page) |
+| `Header.astro` | Sticky site header: logo, primary nav (with one dropdown), CTA button, language switcher, mobile burger | `locale`, `path`, `nav: {items, cta, ctaHref}`, `switcherLabel`, `availableLocales?` | `BaseLayout` (every page) |
 | `Footer.astro` | Site footer: wave divider, brand column (signet + tagline + newsletter link), link columns, copyright | `locale`, `footer: {tagline, newsletterEyebrow, newsletterCta, columns, copyright}` | `BaseLayout` (every page) |
 | `LanguageSwitcher.astro` | DE/EN/IT dropdown (globe icon + `details`/`summary`) | `locale`, `path`, `label` | `Header` only |
 | `PageHero.astro` | Slim intro banner for subpages: eyebrow + h1 + optional intro paragraph, on `--color-bg-alt` | `eyebrow?`, `title`, `intro?` | Every existing subpage: angebote, beratung, workshops, termine, selbsthilfegruppe, ueber-uns, kontakt, newsletter, faqs, disclaimer, blog/index |
 | `HomePage.astro` | The entire homepage composition (hero, pain points, services, philosophy, founder, blog teasers, newsletter CTA) — a one-off page assembly, not a reusable building block | `locale`, `path` | `pages/index.astro`, `pages/en/index.astro`, `pages/it/index.astro` |
-| `ServiceCard.astro` | Colored "tone" card for one service/offering: title, description, CTA pill, pomegranate-seed texture | `title`, `description`, `href`, `cta`, `tone: 'sage'\|'teal'\|'teal-dark'` | `HomePage` services grid; `angebote.astro` |
+| `ServiceCard.astro` | Colored "tone" card for one service/offering: title, description, CTA pill. Each tone is a two-color gradient (`sage`, `teal`, or `teal-dark`, see its own `<style>`), not a flat fill. **No decorative texture** — the earlier pomegranate-seed corner texture was removed on direct request, 2026-09-11; don't reintroduce it without a fresh ask | `title`, `description`, `href`, `cta`, `tone: 'sage'\|'teal'\|'teal-dark'` | `HomePage` services grid; Über uns's Beratung/Workshops teasers used this too until `NACHTRAG-2026-09-11.md` N1 replaced them with `.offer-tiles` (page-scoped, not this component) |
 | `ValueTile.astro` | Small label + description list item | `title`, `description` | `HomePage` philosophy section only |
 | `QuoteStack.astro` | Staggered "descending" pull-quote layout (a deliberate echo of the Persephone-descent motif — see its own code comment) | `quotes: string[]` | `HomePage` pain-points section only |
 | `BlogTeaserCard.astro` | Horizontal image+text card for one blog post teaser, with an image-pending placeholder state | `href`, `title`, `category?`, `heroImage?`, `heroImageAlt?`, `readMoreLabel` | `HomePage` blog-teasers section; `blog/index.astro` |
-| `CtaBand.astro` | Full-bleed colored strip: eyebrow/heading/paragraphs/button — **the** shared closing-CTA pattern, built explicitly so every page's CTA stays pixel-identical | `eyebrow?`, `heading?`, `paragraphs`, `ctaLabel`, `ctaHref` | `HomePage` (newsletter section); `angebote`, `workshops`, `beratung`, `ueber-uns` |
-| `ClosingCta.astro` | The other closing-CTA pattern (distinct from `CtaBand` above): heading/paragraphs/button beside a portrait photo overlapping a decorative tile. `headingSize`/`portraitSize: 'default'\|'large'` opt one instance into Über uns's own measured 48px heading / 336x390 portrait (NACHTLAUF-2026-09-08.md B2.3) without changing every other page's default (28px / 230x307). `layout: 'overlap'\|'pair'` switches the whole visual from the portrait-over-tile overlap to two equal same-size images side by side — Angebote's own live composition (B3) | `heading`, `paragraphs`, `ctaLabel`, `ctaHref`, `portrait`, `portraitAlt`, `tile`, `tileAlt`, `headingSize?`, `portraitSize?`, `layout?` | `angebote`, `workshops`, `beratung`, `ueber-uns` |
+| `CtaBand.astro` | Full-bleed colored strip: eyebrow/heading/paragraphs/button — built so it stays pixel-identical everywhere it's used. **Currently used in exactly one place** (see "Used by") — despite the name, it is *not* the four standalone pages' closing CTA; that's `ClosingCta` below, a different component with a different visual shape | `eyebrow?`, `heading?`, `paragraphs`, `ctaLabel`, `ctaHref` | `HomePage` (newsletter section) only |
+| `ClosingCta.astro` | The standalone pages' shared closing-CTA pattern: heading/paragraphs/button beside a portrait photo overlapping a decorative tile's bottom-left corner, both square. **Unified to one shape 2026-09-11** — this component had drifted into two visually different layouts across its four call sites (this "overlap" shape vs. a "pair" shape, two equal same-size images side by side, no overlap); the `layout: 'overlap'\|'pair'` prop and the whole "pair" branch are **gone**, there is only the one shape now. `headingSize`/`portraitSize: 'default'\|'large'` still opt Über uns's own instance into a bigger heading (48px vs. every other page's 28px) and a larger visual container (30rem vs. 24rem max-width) — not fixed pixel dimensions as an earlier version of this doc claimed: portrait and tile both request a uniform 500×500 source image and scale fluidly within their (CSS-sized) container | `heading`, `paragraphs`, `ctaLabel`, `ctaHref`, `portrait`, `portraitAlt`, `tile`, `tileAlt`, `headingSize?`, `portraitSize?` | `angebote`, `workshops`, `beratung`, `ueber-uns` |
 | `ImagePlaceholder.astro` | "Photo pending" stand-in (NACHTLAUF-2026-09-08.md A4): a flat brand-palette panel with the fruit-icon signet muted to a soft monochrome watermark and a "Foto folgt" label — replaces an earlier grey diagonal-stripe pattern | `tone?: 'sage'\|'beige'`, `label?` | `ueber-uns.astro`'s closing teasers |
 | `DraftNotice.astro` | Top-of-page warning banner for unreviewed AI-translated locales | `text` | `BaseLayout`, conditionally (`en`/`it` currently) |
-| `ContactForm.astro` | The Kontakt page's form: name/phone/email/topic/message/consent + honeypot. Not wired to a backend yet (see its TODO); copy is inline German literals, not props — will need i18n work before EN/IT contact pages exist | — (no props) | `kontakt.astro` only |
+| `ContactForm.astro` | The Kontakt page's form: name/email/topic/message/consent + honeypot (the phone field it once had is gone — dropped 2026-09-10, not asked for anywhere on record). **Wired to a real backend since 2026-09-13**: posts to `public/kontakt-senden.php`, an in-house PHP script that emails Marina directly, no third party. Copy is inline German literals, not props — will need i18n work before EN/IT contact pages exist. Its three topic options (`frage`/`kooperation`/`sonstiges`) still contradict an earlier, separate four-option decision, never reconciled — see `OPEN-QUESTIONS.md` #26, genuinely open | — (no props) | `kontakt.astro` only |
 
 ## Header & navigation spec
 
@@ -436,12 +477,23 @@ uses it — this is the build-from-this list for Phase 3.
 - **Sticky behavior:** `position: sticky; top: 0; z-index: 50`. No scroll-triggered style
   change is implemented (no shrink, no shadow-on-scroll, no background change on scroll —
   the header always reads as the same flat `--color-bg` as the hero below it).
-- **Dropdown (desktop):** built on native `<details>`/`<summary>` (no JS beyond the burger
-  toggle). Menu panel: `position: absolute`, white (`--color-surface`) background,
+- **Dropdown (desktop):** **not** native `<details>`/`<summary>` (unlike the language
+  switcher below) — a real `<a>` for navigation plus a separate toggle `<button>`
+  (`aria-expanded`/`hidden`, driven by a small script) for the submenu. A native
+  `<details>` can only either navigate *or* disclose a submenu, never both from one
+  element, which a single-tap touch interaction needs (`external-review.md` finding
+  #0) — this replaced an earlier `<details>`-based version for exactly that reason.
+  Mouse users additionally get open-on-hover (with a short close delay so a diagonal
+  pointer path doesn't close it prematurely) as a convenience; keyboard and touch
+  always have the explicit button, including Escape-to-close. Menu panel:
+  `position: absolute`, white (`--color-surface`) background,
   `box-shadow: 0 8px 24px rgba(0,0,0,.12)`, `border-radius: var(--radius)`, `min-width: 220px`,
   items padded `0.6rem 1.25rem` with `--color-bg-alt` hover. The only animation is the caret
-  glyph rotating 180° over `0.15s ease` on open; the panel itself has no open/close
-  transition (native `<details>` toggle is instant).
+  glyph rotating 180° over `0.15s ease` on open — the trigger link's own text color does
+  **not** change on open (a live correction reverted an earlier version that switched it
+  to `--color-accent`, so "Angebote" now keeps its resting `--color-accent-strong` even
+  while its submenu is open); the panel itself has no open/close transition, the `hidden`
+  attribute toggle is instant.
 - **Burger breakpoint:** `900px`. Below it, the toggle button appears (44×44px tap target)
   and the entire `<nav>` (links + CTA + language switcher) is hidden until `.is-open` is
   toggled by a small inline `<script>`.
@@ -485,7 +537,8 @@ One shared rule set, defined once in `global.css` rather than per component:
 | **Focus-visible** | `outline: 3px solid var(--color-accent); outline-offset: 2px;` | Applied globally to `a`, `button`, `input`, `textarea`, `.button` — the single focus-ring definition for the whole site |
 | **Hover (buttons)** | `transform: translateY(-1px)` over `0.15s ease` | `.button` base class (primary + outline) |
 | **Hover (footer/nav-dropdown links)** | Underline and/or `opacity`/color change, no transform | Footer links, nav-dropdown items, lang-switcher items — plain links deliberately don't get the button's lift |
-| **Open (`<details>` dropdowns)** | Caret rotates 180°; summary text switches to `--color-accent` | Nav dropdown, language switcher |
+| **Open (nav dropdown)** | Caret rotates 180°; trigger link's own text color does **not** change (reverted from an earlier version that switched it to `--color-accent` — a live correction asked for it to keep its resting color) | Nav dropdown only — not a native `<details>` anymore, see Header spec below |
+| **Open (language switcher)** | Summary text switches to `--color-accent` (still a native `<details>`/`<summary>`, unlike the nav dropdown) | Language switcher only |
 | **Active** | **Not defined anywhere in the codebase.** No `:active` rule exists for buttons or links — a gap, not a deliberate choice. | — |
 | **Disabled** | **Not defined anywhere in the codebase.** No form input, button, or link has `:disabled`/`[disabled]` styling — `ContactForm` doesn't yet handle a submitting/disabled state. | — |
 
@@ -514,12 +567,15 @@ extraction, not a designed scale.
 **Proposed scale — defined as real tokens in `global.css`, but NOT YET ADOPTED site-wide.**
 Same situation as the `--weight-heading`/`.heading-black` token flagged earlier in this
 doc: defining a token is not the same as it being the live scale. As of now, `--space-1`
-through `--space-9` exist as CSS custom properties and are used in exactly one place —
-`CtaBand`'s internal eyebrow→h2→copy→button rhythm (`--space-6`, `--space-7`). Every other
-spacing value listed in the "ad hoc" audit above is still exactly as ad hoc as described;
-nothing else on the site references these tokens yet. Don't read their existence as "the
-site now has a spacing scale" — it has nine unused-almost-everywhere tokens and one
-component that uses two of them.
+through `--space-9` exist as CSS custom properties and are used in exactly **one** place —
+`CtaBand`'s pre-button paragraph gap (`--space-7`). **`--space-6` is defined but
+currently unused anywhere**: it was briefly `CtaBand`'s h2→copy gap too, but a live
+correction (2026-09-11) asked for that gap removed entirely ("Abstand entfernen," taken
+literally, not reduced to a smaller step on this scale) — `.cta-inner h2` is a bare
+`margin-bottom: 0` now, not `--space-6`. Every other spacing value listed in the "ad hoc"
+audit above is still exactly as ad hoc as described; nothing else on the site references
+these tokens yet. Don't read their existence as "the site now has a spacing scale" — it
+has nine unused-almost-everywhere tokens and one component that uses one of them.
 
 | Token | Value | Adopted by | Would replace (nearest current use, elsewhere) |
 |---|---|---|---|
@@ -528,7 +584,7 @@ component that uses two of them.
 | `--space-3` | `1rem` (16px) | *(none yet)* | form field gaps (`1rem`, `1.25rem` rounds down) |
 | `--space-4` | `1.5rem` (24px) | *(none yet)* | card/grid gaps (`1.5rem`); closest to the `24px` hero paragraph margin |
 | `--space-5` | `2rem` (32px) | *(none yet)* | header padding, philosophy/founder gaps round up from `2.5rem`? — see note |
-| `--space-6` | `2.5rem` (40px) | **`CtaBand` h2 margin-bottom** | section-heading margin, grid gaps (`2.5rem`) |
+| `--space-6` | `2.5rem` (40px) | *(none — see note above; was briefly `CtaBand`'s h2 margin-bottom, removed 2026-09-11)* | section-heading margin, grid gaps (`2.5rem`) |
 | `--space-7` | `3rem` (48px) | **`CtaBand` last-paragraph margin-bottom** | section padding-block minimum, footer padding-top |
 | `--space-8` | `5rem` (80px) | *(none yet)* | section padding-block maximum |
 | `--space-9` | `6rem` (96px) | *(none yet)* | footer-wave gap |

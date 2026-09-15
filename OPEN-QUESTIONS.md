@@ -255,20 +255,26 @@ match — verified via `npm run build`'s blocking `internal-links-resolve` check
 would have failed on a stale link. `docs/START-CHECKLISTE.md` Teil 3 has the redirect
 this needs at launch (`/termine/` → `/kennenlernen/`).
 
-## 9. PageHero's intro line is narrower than the body content below it
+## 9. PageHero's intro line width vs. body content — premise changed, reopened 2026-09-15
 
-`PageHero.astro`'s intro paragraph uses `max-width: 48rem` (768px), while
-`.section-narrow` — every subpage's body content, and the homepage's own pain-points
-section — is `56rem` (896px). Both values are real and in active use; they just apply
-to different elements.
+**Superseded numbers, not a stale close:** this was originally about
+`PageHero.astro`'s intro paragraph at `48rem` (768px) — *narrower* than
+`.section-narrow`'s `56rem` (896px) body-text column, a plausible deliberate
+typographic choice (a short lede reading better narrower than full body copy).
+That's no longer the actual situation: a 2026-09-12 fix (`OPEN-QUESTIONS.md` #45)
+raised `.page-hero-inner`'s width to `1200px` for an unrelated reason (fixing an
+optically-off-center title on Disclaimer/Impressum/Datenschutz/FAQs) — and the
+intro paragraph, sitting inside that same box, came along with it. It's now
+**wider** than `.section-narrow`'s 896px, not narrower — the original question's
+premise (a deliberately narrow lede) no longer matches the code, and this was
+never revisited as its own decision.
 
-**Question:** is the narrower hero intro deliberate (a common typographic choice — a
-short lede often reads better narrower than full body copy), or should it match
-`.section-narrow` for consistency? Not changed — colours/fonts/spacing/layout are
-settled, and this is exactly that kind of call.
-
-**Recommendation:** leave as-is unless it looks wrong in the screenshots in
-`docs/screenshots/`; if so, it's a one-line change in `PageHero.astro`.
+**Question, freshly asked:** now that the intro paragraph is *wider* than the
+body-text column below it rather than narrower, does that still look right?
+Check the screenshots in `docs/screenshots/` (any subpage using the plain-banner
+`PageHero` variant — Disclaimer, Impressum, Datenschutz, FAQs) — if the wider
+intro reads oddly next to the narrower text following it, this may want its own
+narrower cap again, independent of `.page-hero-inner`'s title-alignment fix.
 
 ---
 
