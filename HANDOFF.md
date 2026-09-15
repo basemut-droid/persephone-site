@@ -137,6 +137,32 @@ knowing without opening that file:
 - **Kontakt's Anliegen options are still genuinely unresolved, not moot** —
   corrected an earlier hasty note tonight; see `OPEN-QUESTIONS.md` #26.
 
+## Code review pass — 2026-09-15, two real bugs fixed
+
+A high-effort `/code-review` over `src/`, `public/`, `scripts/` found and got
+two real, confirmed bugs fixed same night, plus one already-known issue
+re-confirmed:
+
+- **Fixed, currently-live-impact bug:** Decap's markdown widget re-serializes
+  `-` lists as `*` on every CMS save; `parseMarkdownBlocks.ts`'s list
+  detection only recognized `-`, so any list-containing page resaved through
+  `/admin/` silently lost that list with no build error. Confirmed this had
+  already happened — Selbsthilfegruppe's meeting-details list (date/time/
+  address) was genuinely empty in the built output from tonight's own CMS
+  test save. Fixed by accepting all three CommonMark bullet markers
+  (`-`/`*`/`+`); verified the list renders again.
+- **Fixed, security gap in tonight's own new code:** the CMS OAuth broker
+  (`cms-auth.php`/`cms-callback.php`) had no CSRF `state` parameter — a login-
+  CSRF gap. Added (session-stored, `hash_equals`-checked). **Not yet retested
+  against the real server** — this adds a session cookie to a login flow that
+  already had Passwortschutz/ModSecurity interactions found earlier tonight.
+  **Next session: redo the end-to-end `/admin/` login test before trusting
+  this works.**
+- **Already known, re-confirmed, not fixed:** Decap strips YAML frontmatter
+  comments (decision-provenance notes) on every save — same finding reported
+  live during tonight's CMS test, still unresolved, your call whether it's
+  worth fixing.
+
 ## Documentation cleanup — 2026-09-15
 
 `OPEN-QUESTIONS.md` and `DESIGN-SYSTEM.md` had both drifted — several stale
@@ -157,6 +183,9 @@ Working tree is clean.
 2. **Check whether easyname has replied** to the ModSecurity support ticket
    sent tonight; only re-send or escalate if there's been no response after a
    reasonable wait.
+2b. **Redo the `/admin/` login test** — tonight's CSRF fix added a session
+   cookie to the flow after it was last tested working; confirm it still
+   logs in cleanly before relying on it.
 3. Once both are resolved: work through `docs/LAUNCH-TAG-RUNBOOK.md` top to
    bottom — the single ordered checklist for the rest of launch day. Everything
    on it needs the owner's (or Marina's, or the DSB's) attention, not more
