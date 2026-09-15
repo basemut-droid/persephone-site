@@ -185,7 +185,21 @@ collections:
         required: false
         i18n: true
         field: { label: "Kategorie", name: "category", widget: "string" }
-      - { label: "Titelbild", name: "heroImage", widget: "image", required: false, i18n: "duplicate" }
+      - label: "Titelbild"
+        name: "heroImage"
+        widget: "image"
+        required: false
+        i18n: "duplicate"
+        # Relative to this file's own folder (src/content/blog/de/), not the
+        # public_folder-style absolute path Decap uses by default -- Astro's
+        # content-collection `image()` schema (content.config.ts) resolves
+        # heroImage as an import relative to the entry file, not a public
+        # URL. Confirmed by testing: the default global media_folder/
+        # public_folder setting below produces a path ("/assets/uploads/...")
+        # that fails the build with [ImageNotFound] the moment an image is
+        # actually uploaded through this field.
+        media_folder: "../../../assets/uploads"
+        public_folder: "../../../assets/uploads"
       - { label: "Bild Alt-Text", name: "heroImageAlt", widget: "string", required: false, i18n: true }
       - { label: "Entwurf", name: "draft", widget: "boolean", default: true }
       - { label: "Inhalt", name: "body", widget: "markdown", i18n: true }
@@ -231,7 +245,14 @@ collections:
           - { label: "Titel (Browser-Tab)", name: "title", widget: "string" }
           - { label: "Meta-Beschreibung (Suchmaschinen)", name: "description", widget: "text", required: false }
           - { label: "Ursprüngliche Live-URL (nicht ändern)", name: "sourceUrl", widget: "string" }
-          - { label: "Titelbild", name: "heroImage", widget: "image", required: false }
+          - label: "Titelbild"
+            name: "heroImage"
+            widget: "image"
+            required: false
+            # Same fix as blog's heroImage above -- relative to this file's
+            # own folder (src/content/pages/de/), same required depth.
+            media_folder: "../../../assets/uploads"
+            public_folder: "../../../assets/uploads"
           - { label: "Bild Alt-Text", name: "heroImageAlt", widget: "string", required: false }
           - label: "Seiteninhalt"
             name: "body"
@@ -303,7 +324,15 @@ collections:
       - { label: "Ende", name: "endDate", widget: "datetime", required: false, i18n: "duplicate" }
       - { label: "Ort", name: "location", widget: "string", i18n: "duplicate" }
       - { label: "Online?", name: "isOnline", widget: "boolean", default: false, i18n: "duplicate" }
-      - { label: "Bild", name: "image", widget: "image", required: false, i18n: "duplicate" }
+      - label: "Bild"
+        name: "image"
+        widget: "image"
+        required: false
+        i18n: "duplicate"
+        # Same fix as blog's heroImage above -- relative to this file's own
+        # folder (src/content/events/de/), same required depth.
+        media_folder: "../../../assets/uploads"
+        public_folder: "../../../assets/uploads"
       - { label: "Preis", name: "price", widget: "string", required: false, i18n: true }
       - { label: "Anmeldelink", name: "registrationUrl", widget: "string", required: false, i18n: "duplicate" }
       - { label: "Entwurf", name: "draft", widget: "boolean", default: true }
