@@ -5,17 +5,24 @@
 # and hosting is easyname, not Netlify, so git-gateway was never an option
 # here (see docs/decisions.md, Hosting-Entscheidung 2026-09-13).
 #
-# base_url points at a small Cloudflare Worker that brokers GitHub's OAuth
-# handshake (GitHub requires a client secret for the token exchange, which
-# must never reach the browser). The worker's source lives in
-# cms-oauth-worker/ at the repo root — see cms-oauth-worker/README.md for the
-# one-time setup (a GitHub OAuth App + deploying the worker). Once deployed,
-# replace the placeholder URL below with the worker's real one.
+# base_url + auth_endpoint point at a small PHP broker deployed alongside the
+# site itself (public/cms-auth.php + public/cms-callback.php) that brokers
+# GitHub's OAuth handshake (GitHub requires a client secret for the token
+# exchange, which must never reach the browser). Replaces an earlier
+# Cloudflare Worker plan — see docs/decisions.md, 2026-09-15, for why a
+# second provider wasn't worth it here. See docs/CMS-BROKER-SETUP.md for the
+# one-time setup (the GitHub OAuth App + uploading the gitignored secrets
+# file by hand via FTP).
+#
+# Currently pointed at neu.persephone.at for testing, per this project's
+# test-before-real-domain pattern — swap to the real domain only once
+# cutover has actually happened (see HANDOFF.md).
 backend:
   name: github
   repo: basemut-droid/persephone-site
   branch: main
-  base_url: "https://REPLACE-WITH-YOUR-WORKER-URL.workers.dev" # TODO: set after deploying cms-oauth-worker/
+  base_url: "https://neu.persephone.at"
+  auth_endpoint: "cms-auth.php"
 
 media_folder: "src/assets/uploads"
 public_folder: "/assets/uploads"

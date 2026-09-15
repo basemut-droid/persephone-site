@@ -6,6 +6,49 @@ can stay a "current state only" document (`external-review.md`'s "PROCESS NOTE" 
 
 ---
 
+# CMS OAuth broker built as PHP — 2026-09-15
+
+Implemented the plan from the entry below, exactly as written in
+`HANDOFF.md`'s "Exact plan for building the PHP broker" section — nothing
+re-decided.
+
+**`public/cms-auth.php`** builds GitHub's authorize URL (`client_id`,
+`redirect_uri` derived from the current request's own host so it works
+unchanged against both `neu.persephone.at` and, later, the real domain,
+`scope=repo,user`) and redirects. **`public/cms-callback.php`** exchanges the
+returned `code` for a token and returns Decap's documented postMessage
+handshake — same handshake shape the deleted Cloudflare Worker
+(`cms-oauth-worker/worker.js`, see commit `26df2bd`) used, since that shape is
+Decap's contract, not an implementation detail either version was free to
+change. Implements the token exchange with curl when available, falling back
+to `file_get_contents` + a stream context otherwise — genuinely untested
+against easyname's actual PHP build (no PHP CLI available locally to lint
+either file directly; reviewed by hand instead). Deliberately avoided PHP
+8.1's `never` return type, since easyname's exact PHP version hasn't been
+confirmed yet.
+
+**`public/cms-secrets.local.php`** exists locally only as a placeholder
+(`REPLACE-ME` constants) — confirmed still gitignored (`git check-ignore`
+matches it, `git status` never lists it) and never staged. The real Client
+ID/Secret only exist once the owner creates the GitHub OAuth App, which needs
+their own GitHub account/browser and so couldn't happen this session — that
+and the one-time FTP upload of the real secrets file are the two steps left,
+written up step-by-step in the new `docs/CMS-BROKER-SETUP.md` (replacing the
+deleted `cms-oauth-worker/README.md`'s role).
+
+**`public/admin/config.yml`** updated: `backend.base_url` set to
+`https://neu.persephone.at` (this project's test-before-real-domain pattern —
+swap to the real domain only after actual cutover, which has not happened),
+`backend.auth_endpoint: "cms-auth.php"` added, and the stale comment block
+describing the Cloudflare Worker replaced.
+
+Verified `npm run build` stays clean (all eleven `build-check.mjs` rules
+still pass) and that both new PHP files land in `dist/` as plain
+passthrough files, same as the already-deployed `kontakt-senden.php` — Astro's
+build never touches `public/`'s contents, it only copies them.
+
+---
+
 # CMS OAuth broker reconsidered: PHP on easyname, not Cloudflare — 2026-09-15
 
 The `cms-oauth-worker/` Cloudflare Worker built on 2026-09-13 is superseded before
