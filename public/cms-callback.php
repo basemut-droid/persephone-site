@@ -76,6 +76,19 @@ function fehlerseite(string $nachricht): void
     exit;
 }
 
+// Gegenstueck zu cms-auth.php's state-Erzeugung -- ohne diese Pruefung koennte
+// jemand einen eigenen, gueltigen GitHub-Code hier unterschieben (Login-CSRF,
+// gefunden von einem /code-review-Durchlauf, 2026-09-15). hash_equals statt
+// ==, damit der Vergleich nicht per Timing verraet, wie viele Zeichen schon
+// uebereinstimmen.
+session_start();
+$expectedState = $_SESSION['cms_oauth_state'] ?? null;
+unset($_SESSION['cms_oauth_state']); // ein state gilt nur fuer einen Versuch
+$state = $_GET['state'] ?? null;
+if (!is_string($expectedState) || !is_string($state) || !hash_equals($expectedState, $state)) {
+    fehlerseite('Ungueltiger oder fehlender "state"-Parameter -- Login-Versuch abgebrochen oder moeglicher CSRF-Versuch. Bitte den Login erneut ueber /admin/ starten.');
+}
+
 $code = $_GET['code'] ?? null;
 if (!is_string($code) || $code === '') {
     fehlerseite('Fehlender "code"-Parameter -- Login-Versuch abgebrochen oder ungueltig.');
