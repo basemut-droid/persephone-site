@@ -25,16 +25,16 @@ status` doesn't list it) and was never staged. `public/admin/config.yml`'s
 `npm run build` stays clean (all 11 build-check rules pass) — the PHP files
 pass through `public/` untouched, same as `kontakt-senden.php` already does.
 
-**Not done, and can't be done unattended — needs the owner:** creating the
-actual GitHub OAuth App (needs the owner's GitHub account/browser), replacing
-the placeholder secrets with its real Client ID/Secret and uploading that one
-file by hand via FTP (next to the already-deployed PHP files, in
-`apps/wordpress-180662/`), and then the real login test at
-`https://neu.persephone.at/admin/`. Full step-by-step: new
-`docs/CMS-BROKER-SETUP.md` (replaces the deleted `cms-oauth-worker/README.md`'s
-role). One thing to watch noted there: `neu.persephone.at` has Passwortschutz
-(HTTP Basic Auth), which may prompt once per browser session before the OAuth
-redirect completes — expected, not a sign of breakage.
+**Done same session, with the owner (his own GitHub account, not Marina's
+yet):** GitHub OAuth App created, real Client ID/Secret uploaded by hand via
+Web-FTP, and **the login test succeeded** — `/admin/` → "Login with GitHub" →
+dropped into the real Decap CMS editor at `https://neu.persephone.at/admin/`.
+Along the way, found and fixed a real, hosting-level (not code-level) block:
+easyname's ModSecurity firewall was rejecting GitHub's OAuth callback outright
+— full reasoning, the fix, and what's still open before real cutover (a
+ModSecurity exception needed on the live domain too, and Marina's own GitHub
+access) are in `docs/decisions.md`'s matching 2026-09-15 entry. Step-by-step
+setup record: new `docs/CMS-BROKER-SETUP.md`.
 
 ## Previous: 2026-09-15, CMS pages scoped out + OAuth broker rebuilt as PHP
 
@@ -395,9 +395,12 @@ briefing). The ones that still matter:
 - **Mobile rendering (390px)** — unchanged from the note below; **additionally,
   nobody has clicked through the actual deployed site on a real phone yet** (see
   `docs/LAUNCH-TAG-RUNBOOK.md` point 2).
-- **CMS login broker** is built (`public/cms-auth.php`/`cms-callback.php`) but
-  needs the owner's GitHub OAuth App + a hand-uploaded secrets file before it
-  can actually be tested — see `docs/CMS-BROKER-SETUP.md`. Separate from
+- **CMS login broker works** (tested end-to-end on `neu.persephone.at` with
+  the owner's own GitHub account) but two things are still open before Marina
+  can actually use it herself, and before real cutover — see tonight's entry
+  above: (1) a scoped easyname ModSecurity exception, needed on the live
+  domain too since the same firewall block will otherwise recur there; (2)
+  Marina's own GitHub account + repo-collaborator access. Separate from
   launch, not urgent.
 - Two of the ten meta descriptions still carry a wording question (fuer-marina.md
   Frage 16); **redirects are no longer blocked on hosting** — implemented and
@@ -428,6 +431,8 @@ Older backlog, still valid but lower priority than the above: `OPEN-QUESTIONS.md
 tree) is also still open.
 
 Also open, whenever the owner has a spare moment (not launch-blocking): the CMS
-broker built today needs its three manual steps from `docs/CMS-BROKER-SETUP.md`
-(GitHub OAuth App, FTP-upload the real secrets file, test login) before Marina
-can actually use `/admin/`.
+broker itself now works (tested end-to-end tonight), but before Marina can
+actually use it, and before real cutover, still need (1) an easyname Support
+ticket for a scoped ModSecurity exception so the live domain doesn't need its
+whole firewall off, and (2) Marina's own GitHub account added as a repo
+collaborator — see tonight's entry above.

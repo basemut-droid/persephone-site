@@ -6,6 +6,61 @@ can stay a "current state only" document (`external-review.md`'s "PROCESS NOTE" 
 
 ---
 
+# CMS login broker tested end-to-end; a real ModSecurity block found and fixed for staging — 2026-09-15
+
+Continuation of the same day's broker build (entry below). The owner walked
+through the remaining manual steps himself: created the GitHub OAuth App
+(callback `https://neu.persephone.at/cms-callback.php`), wrote the real
+Client ID/Secret into `public/cms-secrets.local.php`, and uploaded that one
+file by hand via easyname's Web-FTP, confirmed sitting next to the
+already-deployed `cms-auth.php`/`cms-callback.php`. First login attempt from
+`https://neu.persephone.at/admin/` failed with easyname's own 406 "Security
+incident detected" page — a real bug, not a config mistake, found and fixed
+this session rather than left open.
+
+**Root cause:** GitHub attaches an `iss=https://github.com/login/oauth`-style
+parameter (RFC 9207 issuer identification, a platform-wide GitHub security
+feature, not something either broker version chose or can turn off) to every
+OAuth callback. easyname's **ModSecurity** application firewall has a rule
+flagging any query parameter that decodes to a full URL as a likely
+SSRF/open-redirect attack, and blocked the request before `cms-callback.php`
+ever ran — confirmed by inspecting the failing URL together and finding
+"Mod Security" toggled on in the hosting panel.
+
+**Two places this setting exists, confirmed by checking both:** Webhosting →
+Webserver Einstellungen has a single Mod Security toggle described as
+applying "für alle deine Subdomains" — since this same easyname account also
+hosts the live WordPress site, flipping that would have also dropped the live
+site's firewall protection, so it was deliberately left alone. Instead, found
+a genuinely per-subdomain override: Subdomains → `neu.persephone.at` →
+Erweiterte Einstellungen has its own "Application Firewall aktivieren"
+checkbox, scoped to that one subdomain's webspace path
+(`/apps/wordpress-180662/`) only. Unchecked that one — confirmed it does not
+touch the live site — and the login then completed successfully.
+
+**Open, deliberately not resolved today — before the real cutover, not
+blocking anything now:** this isn't a one-time fix. GitHub sends the same
+`iss` parameter on every single login, not just the first, so whatever
+subdomain the broker points at needs this exception in place permanently, for
+as long as anyone logs into `/admin/`. On the live domain, the per-subdomain
+checkbox is a much worse trade-off than on password-gated staging: leaving the
+whole live site's firewall off permanently is a standing security regression,
+and asking Marina to manually toggle a hosting-panel setting before every edit
+defeats the entire point of giving her a simple web editor. The right fix is
+an easyname Support ticket asking for a scoped ModSecurity exception (just the
+`/cms-callback.php` path, or just the specific rule ID, which their own logs
+would show) — not started, needs doing before cutover.
+
+**Also open:** today's test used the owner's own GitHub account (already has
+repo-owner write access). Marina doesn't have a GitHub account yet, and even
+once she does, she needs to be added as a collaborator on
+`basemut-droid/persephone-site` before she can use `/admin/` herself —
+Decap's GitHub backend commits as whoever logs in, so login alone isn't
+enough without repo write access on the other side. Not started today,
+deliberately deferred until closer to actually handing the CMS to her.
+
+---
+
 # CMS OAuth broker built as PHP — 2026-09-15
 
 Implemented the plan from the entry below, exactly as written in
