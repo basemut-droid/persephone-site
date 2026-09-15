@@ -17,6 +17,11 @@ pnpm-debug.log*
 .env
 .env.production
 
+# CMS OAuth broker secret (GitHub Client Secret) -- must NEVER be committed,
+# this repo is public. Uploaded once by hand via FTP, not through the
+# automated deploy. See HANDOFF.md's CMS-broker section for the full plan.
+public/cms-secrets.local.php
+
 # macOS-specific files
 .DS_Store
 

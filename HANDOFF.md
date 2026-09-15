@@ -4,7 +4,94 @@ Read this first at the start of every session. History and past decisions moved 
 `docs/decisions.md` (2026-09-07) so this file stays short enough to actually read —
 see `external-review.md`'s "PROCESS NOTE" for why that matters.
 
-## Most recent: 2026-09-13, night run toward launch — ACTIVE BUG, read "Next step" first
+## Most recent: 2026-09-15, CMS pages scoped out + OAuth broker rebuilt as PHP
+
+Continuation of the 2026-09-13 night run below, picking up the CMS work that was
+deliberately left for later. Contact-form retest (see that entry's active bug) is
+**still not done** — owner says tomorrow, not yet confirmed either way.
+
+**CMS now covers 9 of 12 standalone pages, not just the homepage.** Was asked
+directly whether Workshops/Selbsthilfegruppe/etc.'s text would be editable — it
+wasn't, `config.yml` never had a `pages` collection at all. Added one, using `files`
+(one entry per page, its own exact field list) rather than `folder` with one shared
+schema — Decap only writes back fields it's been told about for a file it saves, so a
+shared schema risked silently dropping a field a specific page needs. Verified every
+page's real frontmatter before writing this. Covers: workshops, selbsthilfegruppe (+
+its `principles` list), ueber-uns (+ heroImage), disclaimer, faqs, impressum, blog's
+intro page, kennenlernen/kontakt (title+description+sourceUrl only — their visible
+copy is hardcoded in the .astro file, not the content body). **Deliberately excluded,
+don't add without real work first:** angebote.md (`recognitionPanel`'s dynamic-keyed
+offers dict) and beratung.md (`formatBadges`'s dict) — no clean Decap widget
+represents either without changing their on-disk shape, which would break those
+pages' own lookups; datenschutzerklaerung.md — frozen archival record, never
+rendered, editing it here would look like it does something and wouldn't. Verified
+by diffing `dist/` before/after: only `dist/admin/config.yml` changed, every actual
+page's output is byte-identical.
+
+**Found and fixed a real, confirmed bug** (not theoretical — reproduced it):
+Decap's global `media_folder`/`public_folder` produces a public-URL-style path
+(`/assets/uploads/...`) in saved frontmatter, but Astro's content-collection
+`image()` schema resolves `heroImage`/`image` fields as a relative import from the
+entry file's own location — mismatched, and confirmed to fail the build with
+`[ImageNotFound]` the moment anyone uploads an image through blog/events/workshops/
+ueber-uns's image fields. Fixed with a per-field `media_folder`/`public_folder`
+override (`../../../assets/uploads`, matching the relative-path convention
+ueber-uns.md's own hardcoded heroImage already used). Also verified working.
+
+**CMS OAuth broker rebuilt as a plan for PHP-on-easyname, replacing the
+Cloudflare Worker built 2026-09-13 — not yet actually implemented.** The owner
+asked why Cloudflare was needed again given it was rejected for hosting over its
+US/third-country status — good catch, worth the full reasoning in
+`docs/decisions.md`'s matching 2026-09-15 entry. Short version: the broker only
+ever runs for the site owner's own admin login, never for a visitor, so it isn't
+the same category of thing a Datenschutzerklärung discloses — but Cloudflare was
+still dropped anyway, for consistency with every other choice this project has
+made (an already-vetted provider beats a new one whenever it can do the job).
+`cms-oauth-worker/` (the Cloudflare code) is deleted.
+
+### Exact plan for building the PHP broker — next session, do this
+
+1. **Two new PHP files in `public/`** (deploys automatically via the existing
+   pipeline, no separate deploy step needed):
+   - `public/cms-auth.php` — builds GitHub's OAuth authorize URL
+     (`https://github.com/login/oauth/authorize`) with `client_id` (from the
+     secrets file below), `redirect_uri` pointing at `cms-callback.php` on the
+     same domain, and `scope=repo,user`; redirects there.
+   - `public/cms-callback.php` — reads `$_GET['code']`, POSTs it to
+     `https://github.com/login/oauth/access_token` along with `client_id` and
+     `client_secret` (use curl if available, `file_get_contents` with a stream
+     context as a fallback if not — check which easyname's PHP actually
+     supports), gets back an access token, and returns the same postMessage
+     handshake HTML `cms-oauth-worker/worker.js` used to return (that file is
+     deleted, but see `docs/decisions.md`'s 2026-09-13 entry or GitHub history
+     at commit `26df2bd` for the exact handshake shape if needed — the key
+     part: the popup waits for the opener to send any message, then replies
+     with `authorization:github:success:` + JSON `{token, provider: 'github'}`).
+2. **The secret**: create `public/cms-secrets.local.php` containing just
+   `<?php define('GITHUB_CLIENT_ID', '...'); define('GITHUB_CLIENT_SECRET', '...');`
+   — no closing `?>` tag, no other output, so a direct URL request to it executes
+   silently rather than leaking anything. **Already added to `.gitignore`** —
+   confirm it's never staged before committing anything else. This file gets
+   uploaded **once, by hand, via FTP** (Web-FTP or an FTP client), sitting next to
+   the deployed files — the automated git-based deploy will never touch it, and
+   won't delete it either (FTP-Deploy-Action doesn't remove files absent from its
+   source by default). `cms-auth.php`/`cms-callback.php` `require` it.
+3. **GitHub OAuth App**: same as the original plan, but the callback URL is now
+   `https://<domain>/cms-callback.php` instead of a `*.workers.dev` URL. **Test
+   against `neu.persephone.at` first**, matching this whole project's own
+   test-before-real-domain pattern — one thing to watch: that subdomain has
+   Passwortschutz (HTTP Basic Auth) on it, which may prompt once per browser
+   session before the OAuth redirect can complete; shouldn't block it, but worth
+   knowing if it looks stuck.
+4. **`config.yml`**: set `backend.base_url` to the domain being tested against,
+   and add `backend.auth_endpoint: "cms-auth.php"` (Decap appends this to
+   `base_url` for the login-initiation URL; the callback path is independent,
+   controlled entirely by whatever `redirect_uri` `cms-auth.php` itself sends to
+   GitHub, so no matching config key needed for it).
+5. Test end-to-end: `/admin/`, "Login with GitHub", confirm it drops into the
+   editor. Then swap `base_url` to the real domain once cutover has happened.
+
+## Previous: 2026-09-13, night run toward launch — ACTIVE BUG, read "Next step" first
 
 The owner decided to go live "tomorrow" and asked for a night run to get everything
 ready. Full reasoning for every decision below is in `docs/decisions.md`'s four

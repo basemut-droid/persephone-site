@@ -6,6 +6,43 @@ can stay a "current state only" document (`external-review.md`'s "PROCESS NOTE" 
 
 ---
 
+# CMS OAuth broker reconsidered: PHP on easyname, not Cloudflare — 2026-09-15
+
+The `cms-oauth-worker/` Cloudflare Worker built on 2026-09-13 is superseded before
+ever being deployed. The owner asked, correctly, why Cloudflare was needed again
+given it was rejected for hosting specifically over its US/third-country status —
+worth stopping to actually reason through rather than wave past.
+
+**The reasoning that resolved it:** Cloudflare-as-hosting would have sat between
+every visitor and the site — every page view, routed through a US company, squarely
+the kind of processing a Datenschutzerklärung has to disclose. The OAuth broker is
+different in kind: it only ever runs when the site owner herself logs into the admin
+editor, never for a visitor. A privacy policy discloses processing of visitors' data;
+an internal tool the owner uses to manage her own content isn't the same category.
+That reasoning is offered here as reasoning, not as a settled legal conclusion — it
+was not put to the DSB, and doesn't need to be, precisely because it's about internal
+tooling rather than visitor data.
+
+**Decided anyway: build it as PHP on easyname instead**, not because Cloudflare was
+legally required to be disclosed, but for consistency with every other choice this
+project has made — Hetzner/easyname over Cloudflare for hosting, the in-house PHP
+script over web3forms for the contact form. Introducing a second provider to answer
+a question that a already-vetted one can avoid entirely isn't worth it just because
+this particular instance's disclosure case happens to be weaker.
+
+**Real trade-off, not free:** Cloudflare's `wrangler secret put` makes it structurally
+impossible for the GitHub OAuth Client Secret to end up in git. On easyname, the
+equivalent safety requires discipline — the secret must live in a file that's
+`.gitignore`'d and uploaded once by hand via FTP, never committed. **This matters
+more than usual because the repo is public** — a secret accidentally committed here
+would be visible to anyone on the internet, not just collaborators. The implementation
+plan in `HANDOFF.md`'s "Most recent" section spells out exactly how to avoid that.
+
+`cms-oauth-worker/` (the Cloudflare Worker code) was deleted the same day rather than
+left in the tree as dead, actively-misleading code pointing at an abandoned approach.
+
+---
+
 # Night run toward launch — 2026-09-13
 
 Scope: get everything ready for a deliberate, attended cutover the next day — not an
