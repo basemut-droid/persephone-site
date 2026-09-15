@@ -27,3 +27,12 @@ public/cms-secrets.local.php
 
 # jetbrains setting folder
 .idea/
+
+# Default save location some Claude interfaces write generated files to --
+# not a project folder. Confirmed (2026-09-15) to hold only stale/duplicate
+# copies of files that already exist properly in docs/ (some outdated, some
+# byte-identical) plus screenshots not otherwise referenced -- never the
+# source of truth for anything. Left in place on disk, not deleted outright
+# (unlike a tracked file, there'd be no way back if that turned out wrong);
+# just kept out of git going forward.
+Claude outputs/
