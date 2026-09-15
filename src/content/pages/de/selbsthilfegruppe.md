@@ -1,21 +1,16 @@
 ---
-title: "Selbsthilfegruppe"
-# Owner's own words, docs/fuer-marina.md Frage 16 -- taken verbatim.
-description: "Die Selbsthilfegruppe Persephone bietet Austausch und Verbundenheit für Menschen, die mit unerfülltem Kinderwunsch leben – in Graz und online."
-sourceUrl: "https://www.persephone.at/selbsthilfegruppe/"
-# The three principle labels — absent from the extraction entirely
-# (FIXES-2026-09-07.md task 2e.2). Read off the owner's screenshot of the
-# live page and confirmed 2026-09-07 against its raw HTML (fa-shield-alt,
-# fa-heart, fa-users). Order matches the three paragraphs below.
+title: Selbsthilfegruppe
+description: Die Selbsthilfegruppe Persephone bietet Austausch und Verbundenheit
+  für Menschen, die mit unerfülltem Kinderwunsch leben – in Graz und online.
+sourceUrl: https://www.persephone.at/selbsthilfegruppe/
 principles:
   - icon: shield
-    label: "Verschwiegenheit"
+    label: Verschwiegenheit
   - icon: heart
-    label: "Respekt"
+    label: Respekt
   - icon: group
-    label: "Peer-Support"
+    label: Peer-Support
 ---
-
 Angebote
 
 # Selbsthilfegruppe
@@ -50,9 +45,9 @@ Die Teilnahme ist kostenlos, eine verbindliche Anmeldung jedoch erforderlich.
 
 ### Nächstes SHG-Treffen
 
-- Sonntag, 4. Oktober 2026
-- 15-17 Uhr
-- Lauzilgasse 25, 8020 Graz (Jugend am Werk, links vom Fitnessstudio)
+* Sonntag, 4. Oktober 2026
+* 15-17 Uhr
+* Lauzilgasse 25, 8020 Graz (Jugend am Werk, links vom Fitnessstudio)
 
 [Melde Dich an](https://forms.cloud.microsoft/e/gMNUsAsMrn)
 
