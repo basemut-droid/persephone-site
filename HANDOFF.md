@@ -6,16 +6,18 @@ what's actually current, so it stays short enough to read. Full open-item tracke
 (with options/recommendations) is `OPEN-QUESTIONS.md`; the ordered, attended
 cutover-day checklist is `docs/LAUNCH-TAG-RUNBOOK.md`. Don't duplicate either here.
 
-## Priority zero: contact-form spam retest, still not done
+## Priority zero: contact-form spam retest — submitted tonight, awaiting Marina
 
-A real contact-form submission landed in spam. A likely cause was found and fixed
-(`kontakt-senden.php`'s `mail()` had no envelope-sender override — `-fno-reply@persephone.at`
-added as the 5th parameter, since `persephone.at`'s DMARC uses strict SPF alignment,
-`aspf=s`) and is deployed — but **never actually retested**. Next session: have
-someone submit the real Kontakt form again and check whether it still lands in spam.
-If it does, look at whether easyname offers DKIM-signing for outbound mail (a
-hosting-level setting, not a code fix) and whether SPF has had time to propagate.
-Full reasoning: `docs/decisions.md`, "Night run toward launch — 2026-09-13".
+A real contact-form submission had landed in spam before. A likely cause was found
+and fixed (`kontakt-senden.php`'s `mail()` had no envelope-sender override —
+`-fno-reply@persephone.at` added as the 5th parameter, since `persephone.at`'s DMARC
+uses strict SPF alignment, `aspf=s`) and is deployed. **The owner submitted a fresh
+test through the real form tonight (2026-09-15)** — result not yet known, waiting to
+hear from Marina which folder it landed in. **Next session: check with her first
+before doing anything else here.** If it's still landing in spam, look at whether
+easyname offers DKIM-signing for outbound mail (a hosting-level setting, not a code
+fix) and whether SPF has had time to propagate. Full reasoning: `docs/decisions.md`,
+"Night run toward launch — 2026-09-13".
 
 ## CMS: what works, what's still open
 
@@ -28,15 +30,17 @@ both the broker build and tonight's login test (including a real easyname ModSec
 bug found and fixed): `docs/decisions.md`'s three 2026-09-15 entries.
 
 **Still open before Marina can actually use it, and before real cutover:**
-- **A scoped easyname ModSecurity exception is needed on the live domain.**
-  GitHub's OAuth callback always carries a parameter easyname's firewall
-  misreads as an attack (blocks with its own 406 page) — fixed for
-  `neu.persephone.at` via that subdomain's own firewall checkbox
-  (Subdomains → `neu.persephone.at` → Erweiterte Einstellungen), but the
-  live domain has no such per-subdomain lever and no Passwortschutz gate in
-  front of it, so leaving its firewall off entirely is a real, standing
-  security regression rather than a one-time toggle. **A ready-to-send
-  support message for this is below.**
+- **A scoped easyname ModSecurity exception is needed on the live domain —
+  support ticket sent 2026-09-15, awaiting their reply.** GitHub's OAuth
+  callback always carries a parameter easyname's firewall misreads as an
+  attack (blocks with its own 406 page) — fixed for `neu.persephone.at` via
+  that subdomain's own firewall checkbox (Subdomains → `neu.persephone.at` →
+  Erweiterte Einstellungen), but the live domain has no such per-subdomain
+  lever and no Passwortschutz gate in front of it, so leaving its firewall
+  off entirely is a real, standing security regression rather than a
+  one-time toggle. The message sent is below, kept for reference in case a
+  follow-up is needed. **Next session: check whether easyname has replied
+  before re-sending or trying anything else.**
 - **Marina isn't a GitHub collaborator yet.** Today's test used the owner's
   own GitHub account. She needs her own GitHub account (created) and
   collaborator access on `basemut-droid/persephone-site` (repo → Settings →
@@ -137,8 +141,12 @@ knowing without opening that file:
 
 ## Next step
 
-1. **Contact-form retest** (priority zero above).
-2. Send the ModSecurity support message above, or an equivalent, to easyname.
+1. **Check with Marina** where tonight's contact-form test landed (priority
+   zero above) — both this and the ModSecurity ticket below are now waiting
+   on someone else's reply, not on more unattended work.
+2. **Check whether easyname has replied** to the ModSecurity support ticket
+   sent tonight; only re-send or escalate if there's been no response after a
+   reasonable wait.
 3. Once both are resolved: work through `docs/LAUNCH-TAG-RUNBOOK.md` top to
    bottom — the single ordered checklist for the rest of launch day. Everything
    on it needs the owner's (or Marina's, or the DSB's) attention, not more
