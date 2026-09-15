@@ -35,45 +35,35 @@ Du kannst Deine Antworten einfach neben die Fragen schreiben oder Claudio sagen.
 >
 > Offen für Dich sind damit noch: der Test selbst (Frage 9), eine kleine Rückfrage bei
 > **Frage 10** und die **Datenschutzerklärung (Frage 11)**.
+>
+> **Neu seit dem 7. September abends:** Teil 4 am Ende dieses Dokuments, Fragen 12 bis 19.
+> Wichtig davon sind **Frage 12** (Deine Datenschutzerklärung beschreibt eine
+> Besucherstatistik und eine Kommentarfunktion, die es auf der neuen Seite nicht gibt) und
+> **Frage 13** (der eingebettete Terminkalender macht vermutlich ein Cookie-Banner auf
+> jeder Seite nötig — das ist Deine Entscheidung).
 
 ---
 
-# Dringend, unabhängig vom Umbau: Das Kontaktformular kommt nicht an
+# Erledigt: Das Kontaktformular kommt wieder an
 
-Das betrifft nicht die neue Website, sondern Deine jetzige — und es ist der wichtigste
-Punkt in diesem Dokument.
+Hier stand bis zum 7. September der dringendste Punkt dieses Dokuments — Nachrichten aus
+dem Kontaktformular Deiner jetzigen Website kamen nicht bei Dir an. Jemand füllte das
+Formular aus, bekam eine Bestätigung angezeigt, und die Nachricht erreichte Dich nie.
 
-Nachrichten aus dem Kontaktformular sollten an **marinabletsas@persephone.at** gehen,
-tun es aber gerade nicht. Das heißt: Jemand füllt das Formular aus, drückt auf Senden,
-bekommt eine Bestätigung angezeigt — und die Nachricht erreicht Dich nie. Auf der
-Kontaktseite steht keine E-Mail-Adresse als Alternative, nur das Formular. Für diese
-Person gibt es also im Moment gar keinen funktionierenden Weg zu Dir. Unklar ist auch,
-seit wann das so ist.
+**Claudio hat das am 7. September gelöst.** Du musst dazu nichts mehr tun.
 
-**Sofort, damit das Loch zu ist:** Setz eine E-Mail-Adresse sichtbar auf die
-Kontaktseite. Dann hat jemand, dessen Formular ins Leere läuft, wenigstens einen zweiten
-Weg — heute, nicht erst nach dem Umbau.
+Falls Du wissen willst, was dahintersteckte: WordPress-Formulare verschicken die Nachricht
+standardmäßig „von" der Adresse der Person, die sie abschickt. Microsoft 365 prüft, ob der
+sendende Server überhaupt berechtigt ist, in deren Namen zu schreiben — ist er nicht — und
+wirft die Nachricht weg oder legt sie in den Junk-Ordner. Diese Kombination geht sehr
+häufig genau so kaputt.
 
-**Dann die Ursache, in dieser Reihenfolge:**
+**Ein Rest bleibt trotzdem sinnvoll:** Solange auf der Kontaktseite keine E-Mail-Adresse
+sichtbar steht, gibt es für jemanden, dessen Formular aus irgendeinem Grund scheitert,
+keinen zweiten Weg zu Dir. Eine Zeile mit Deiner Adresse ist billiger als jede verlorene
+Anfrage.
 
-1. **Junk-Ordner** von marinabletsas@persephone.at durchsehen. Erstaunlich oft liegen die
-   Nachrichten einfach dort.
-2. **Eine Testnachricht** über das Formular an Dich selbst schicken, damit klar ist, ob
-   gar nichts ankommt oder nur manches.
-3. **In den Formular-Einstellungen** nachsehen: Welche Empfängeradresse ist eingetragen,
-   und welche Absenderadresse verwendet das Formular?
-
-**Was vermutlich dahintersteckt:** WordPress-Formulare verschicken die Nachricht
-standardmäßig „von" der E-Mail-Adresse der Person, die sie abschickt. Microsoft 365
-prüft, ob der versendende Server überhaupt berechtigt ist, in deren Namen zu schreiben —
-ist er nicht — und wirft die Nachricht weg oder schiebt sie in den Junk-Ordner. Diese
-Kombination aus WordPress-Formular und Microsoft-365-Postfach geht sehr häufig genau so
-kaputt. Die saubere Lösung ist, das Formular über Dein Microsoft-Konto angemeldet senden
-zu lassen, mit Deiner eigenen Adresse als Absender und der Adresse des Absenders nur im
-Feld „Antworten an".
-
-Für die neue Website ist das ohnehin eingeplant — siehe Frage 10. Aber bis die online
-ist, sollte die jetzige Seite funktionieren.
+Für die neue Website ist ohnehin ein anderer Weg geplant — siehe Frage 10.
 
 ---
 
@@ -513,6 +503,308 @@ kümmert sich Claudio darum.
 
 ---
 
+# Teil 4 — Neu dazugekommen (7. September, abends)
+
+Nach einer vollständigen Überprüfung aller Seiten gegen Deine jetzige Website sind noch
+ein paar Punkte aufgetaucht. Die meisten sind klein. Zwei sind wichtig.
+
+## 12. Deine Datenschutzerklärung beschreibt zwei Dinge, die es nicht mehr gibt
+
+Das gehört zu Frage 11, ist aber erst jetzt aufgefallen und ist der wichtigste neue Punkt.
+
+Deine jetzige Datenschutzerklärung hat einen Abschnitt **„Matomo Webanalyse"** und einen
+Abschnitt über **Kommentare**. Beide wurden unverändert übernommen. Die neue Website hat
+aber weder eine Besucherstatistik noch eine Kommentarfunktion — ich habe den gesamten
+fertigen Code danach durchsucht: es gibt keine einzige Analysefunktion darin.
+
+**Warum das nicht egal ist:** Eine Datenschutzerklärung, die eine Datenverarbeitung
+beschreibt, die gar nicht stattfindet, ist genauso falsch wie eine, die eine fehlende
+verschweigt. Sie sagt Deinen Besucherinnen etwas über sich zu, das nicht stimmt.
+
+**Was zu tun ist:** Beide Abschnitte gehören gestrichen oder umgeschrieben — aber das ist
+eine juristische Entscheidung, keine technische. Bitte nimm es mit in die Prüfung, die Du
+bei Frage 11 ohnehin machst.
+
+Dasselbe gilt für den Abschnitt über **Cookies**: die neue Seite setzt von sich aus keine.
+Der eingebettete Terminkalender von Microsoft tut es möglicherweise — siehe Punkt 13.
+
+> **Deine Antwort:** „Kommt darauf an, ob ich WP benutze."
+
+**Nachtrag dazu, 8.9.:** Das hängt tatsächlich nicht daran. Auch wenn Du in WordPress
+*arbeitest* (Weg B oder C aus Frage 9), ist das, was Deine Besucherinnen sehen, die neue
+Seite — und die hat keine Besucherstatistik, egal wo Du Deine Texte tippst. Die
+Datenschutzerklärung muss beschreiben, was die **veröffentlichte Seite** tut.
+
+Die eigentliche Frage dahinter ist eine andere, und die stand in Deiner Fassung noch nicht
+drin: **willst Du überhaupt eine Besucherstatistik?** Sie ist unten als **Frage 20**
+ergänzt. Von Deiner Antwort dort hängt ab, ob der Matomo-Abschnitt gestrichen oder neu
+geschrieben wird.
+
+## 13. Der Terminkalender: bequemer für Deine Besucherinnen, aber er hat einen Preis
+
+Claudio hat entschieden, den Buchungskalender direkt in die Seite einzubetten, statt nur
+darauf zu verlinken. Für Deine Besucherinnen ist das angenehmer: ein Klick weniger, der
+Kalender ist einfach da.
+
+Der Preis: Sobald jemand die Terminseite öffnet, wird Microsoft kontaktiert — auch wenn
+die Person gar nichts anklickt. Nach europäischem Datenschutzrecht macht das
+höchstwahrscheinlich ein **Cookie-Banner** notwendig. Also dieses Fenster, das man
+wegklicken muss, auf **jeder** Seite, für **jede** Besucherin.
+
+Ohne diesen eingebetteten Kalender bräuchte Deine neue Website gar kein Banner. Sie lädt
+sonst nichts von außen: die Schrift liegt auf dem eigenen Server, es gibt keine
+Besucherstatistik, keine eingebundenen Videos, nichts.
+
+Es gibt drei Möglichkeiten:
+
+1. **Kalender eingebettet lassen** — bequemster Weg zur Terminbuchung, dafür ein Banner
+   auf jeder Seite.
+2. **Kalender lädt erst auf Klick** („Kalender laden — dabei wird eine Verbindung zu
+   Microsoft aufgebaut"). Ein Klick mehr, kein Banner.
+3. **Nur ein Link zu Microsoft**, so wie es Deine jetzige Website macht. Kein Banner.
+
+**Das ist Deine Entscheidung, nicht Claudios** — sie hängt an Deiner Datenschutzerklärung.
+
+> **Deine Antwort:** „Mir wäre nicht bekannt, dass ein Cookie-Banner auf JEDER Seite einer
+> Website aufpoppt… Wenn ich einen Cookie-Banner brauche, dann muss ich auch in der
+> Datenschutzerklärung erklären, was diese Extra-Cookies sind und was sie tun: Kann mir das
+> Claude zuverlässig sagen?… Obviously soll der Cookie-Banner dann auch technisch
+> funktionieren."
+
+## 13a. Zuerst: Du hast recht, und ich hatte es falsch formuliert
+
+**Ein Banner erscheint nicht auf jeder Seite.** Er erscheint einmal, beim ersten Besuch,
+auf der Seite, auf der jemand ankommt. Die Entscheidung wird gespeichert, und danach ist er
+weg — beim Weiterklicken und bei späteren Besuchen. Mein Satz „auf jeder Seite, für jede
+Besucherin" war überzogen; er beschreibt schlecht gebaute Banner, nicht die Regel.
+
+Das verschiebt die Abwägung deutlich zu Deinen Gunsten. Danke fürs Nachhaken.
+
+## 13b. Deine eigentliche Frage: Kann ich Dir zuverlässig sagen, was die Cookies tun?
+
+**Ehrliche Antwort: nein, nicht zuverlässig genug für einen Rechtstext.** Ich kann Dir
+sagen, was ich **gemessen** habe — und das habe ich gerade getan.
+
+Ich habe Deine Buchungsseite aufgerufen, ohne mich anzumelden, und nachgesehen, was sie
+ablegt. Stand 8.9.2026:
+
+**Weiterleitung:** `outlook.office.com` leitet weiter auf `bookings.cloud.microsoft`. Es
+sind also **zwei** Microsoft-Adressen im Spiel, nicht eine.
+
+**Zwei Cookies:**
+
+| Name | was erkennbar ist |
+|---|---|
+| `ClientId` | eine Kennung für den Browser des Besuchers |
+| `msal.cache.encryption` | gehört zur Microsoft-Anmeldebibliothek |
+
+**Elf Einträge im lokalen Speicher**, unter anderem `olk-OwaClientId` (eine weitere
+Kennung), `olk-OwaLocale` und `olk-OwaSessionCount` (Sprache, Zählung der Sitzungen),
+`olk-isTimeZoneCacheAvailable` (Zeitzone) — und **`mats-telemetry-profile-id`**.
+
+Der letzte ist der rechtlich heikle: „telemetry profile id" ist eine Kennung zur
+Nutzungsmessung. Das ist keine Funktion, die für das Buchen nötig wäre.
+
+**Warum ich das trotzdem nicht als verlässliche Grundlage bezeichne:**
+
+- Ich habe es als **eigene Seite** gemessen, nicht eingebettet in Deiner Website. Im
+  eingebetteten Zustand verhalten sich Browser unterschiedlich — manche trennen oder
+  blockieren solche Speicher.
+- **Namen und Zweck können sich jederzeit ändern.** Microsoft veröffentlicht für diese
+  Einbettung keine vollständige, verbindliche Cookie-Liste. Meine Messung ist eine
+  Momentaufnahme, keine Zusage.
+- Wer bei Microsoft angemeldet ist, bekommt möglicherweise mehr.
+
+Eine Datenschutzerklärung, die eine Liste nennt, die morgen nicht mehr stimmt, ist genau
+das Problem, das Du bei Frage 12 gerade behebst.
+
+## 13c. Deshalb eine geänderte Empfehlung: Möglichkeit 2
+
+Du hast geschrieben, ein Banner sei ein akzeptabler Tausch, **wenn** Du erklären kannst,
+was passiert. Genau diese Bedingung erfüllt Möglichkeit 2 besser als Möglichkeit 1:
+
+**Der Kalender lädt erst, wenn jemand darauf klickt.** Vorher steht dort eine Fläche mit
+einem Satz: „Kalender laden — dabei wird eine Verbindung zu Microsoft aufgebaut."
+
+- **Kein Banner nötig**, weil vor dem Klick nichts geladen wird.
+- **Die Datenschutzerklärung braucht keine Cookie-Liste** — sie muss nur beschreiben, was
+  beim Klick passiert. Dieser Satz bleibt richtig, auch wenn Microsoft morgen etwas ändert.
+- **Ein Klick mehr** für jemanden, der buchen will. Nicht mehr.
+- Diese Variante war schon einmal gebaut und wurde wieder entfernt — sie zurückzuholen ist
+  keine Arbeit.
+
+Möglichkeit 1 (eingebettet, mit Banner) bleibt möglich. Dann brauchst Du aber ein
+Einwilligungswerkzeug, das den Kalender bis zur Zustimmung **wirklich blockiert** — nicht
+eines, das nur ein Fenster zeigt und trotzdem lädt. Das ist zusätzliche Technik, zusätzliche
+Pflege, und die Cookie-Liste bleibt trotzdem ungewiss.
+
+**Meine Empfehlung: Möglichkeit 2.** Du bekommst fast die volle Bequemlichkeit, brauchst
+kein Banner, und Deine Datenschutzerklärung sagt etwas, das dauerhaft wahr bleibt.
+
+> **Deine Entscheidung:**
+
+## 14. Das Logo der Selbsthilfe Steiermark
+
+Am Fuß der Selbsthilfegruppe-Seite steht jetzt ein türkisfarbenes Band mit dem Logo der
+Selbsthilfe Steiermark und dem Satz, dass Eure Gruppe Teil dieses Netzwerks ist — genau
+so, wie es auf Deiner jetzigen Website schon ist.
+
+Es ist ein fremdes Logo. Auf Deiner Seite steht es im Rahmen einer bestehenden
+Partnerschaft, das ist der übliche und richtige Zusammenhang. Trotzdem die Frage, damit
+niemand später überrascht ist: **Ist mit der Selbsthilfe Steiermark abgesprochen, dass Du
+ihr Logo verwendest?** Eine kurze Bestätigung per Mail reicht völlig.
+
+> **Deine Antwort:** „duh" — also ja, ist abgesprochen. ✓ **Erledigt, keine weitere Frage.**
+
+## 15. Der Satz, der bei Google über Deiner Seite steht
+
+Wenn jemand „Persephone Kinderwunsch" googelt, steht über dem Suchergebnis ein Titel.
+Bei Deiner jetzigen Website steht dort schlicht **„Homepage - Persephone"** — das sagt
+niemandem etwas.
+
+Auf der neuen Website steht dort jetzt: **„Persephone – Navigationshilfe im Sturm des
+Kinderwunsches"**.
+
+Claudio findet ihn gut und hat ihn freigegeben. Aber es ist Dein Satz in der Auslage, und
+Du solltest ihn einmal gelesen haben. Wenn Du lieber einen anderen möchtest, sag ihn
+einfach — es ist eine Zeile.
+
+> **Deine Antwort:** „ja" ✓ **Der Titel bleibt.**
+
+## 16. Zehn Seiten haben noch keine Kurzbeschreibung für Google
+
+Unter dem Titel steht bei Google noch ein, zwei Sätze. Für zehn Seiten fehlen die:
+Über uns, Angebote, Beratung, Workshops, Selbsthilfegruppe, Kontakt, Termine, Disclaimer,
+Datenschutz und die Blog-Übersicht. FAQs und Impressum haben schon welche, und jeder
+Blogartikel bringt seine eigene mit.
+
+Deine jetzige Website hat für die meisten davon auch keine — es geht hier also nichts
+verloren. Google denkt sich dann selbst einen Satz aus der Seite zusammen, was meistens
+ganz brauchbar ist.
+
+Wenn Du magst, schreib je einen Satz pro Seite: worum es dort geht, für wen. **Erfinden
+wollen wir sie nicht** — es sind Deine Worte über Deine Angebote. Kein Zeitdruck, das
+kann auch nach dem Start kommen.
+
+> **Deine Antwort:** alle zehn geschrieben ✓ — sie werden wortgetreu übernommen:
+
+| Seite | Beschreibung |
+|---|---|
+| Über uns | Dr.in Marina Bletsas, Gründerin von Persephone, begleitet Einzelne und Paare durch die Kinderwunschkrise – psychodukativ und beratend (i.A.u.S). |
+| Angebote | Beratung, Workshops und Selbsthilfegruppe für Einzelne und Paare im unerfüllten Kinderwunsch: ein orientierender Überblick über die Angebote von Persephone. |
+| Beratung | Psychosoziale Begleitung (Beratung i.A.u.S) für Einzelne und Paare, die sich in der Kinderwunschkrise Orientierung, Entlastung und eine gemeinsame Sprache wünschen. |
+| Workshops | Psychoedukative Workshops zu psychischer Gesundheit, Beziehung und Kommunikation bei unerfülltem Kinderwunsch, für Einzelne und Paare. |
+| Selbsthilfegruppe | Die Selbsthilfegruppe Persephone bietet Austausch und Verbundenheit für Menschen, die mit unerfülltem Kinderwunsch leben – in Graz und online. |
+| Kontakt | Fragen, persönliche Anliegen oder berufliche Anfragen: Hier erreichst Du Marina von Persephone direkt. |
+| Kennenlernen | Vereinbare unkompliziert ein kostenloses, unverbindliches Kennenlernen mit Marina von Persephone. |
+| Disclaimer | Persephone bietet keine Psychotherapie und versteht sich nicht als Ersatz für eine psychotherapeutische Behandlung bei krankheitswertigem psychischen Leiden. |
+| Datenschutz | Informationen darüber, wie Persephone mit Deinen Daten umgeht. |
+| Blog | Essays und Reflexionen über psychische Gesundheit und Beziehung in der reproduktiven Krise und das Leben mit unerfülltem Kinderwunsch. |
+
+**Zwei winzige Rückfragen, bevor sie so eingebaut werden** — Deine Worte werden nicht
+stillschweigend geändert:
+
+1. In der ersten steht **„psychodukativ"**. Gemeint ist vermutlich „psychoedukativ". Soll
+   ich das korrigieren?
+2. Du schreibst **„(i.A.u.S)"** ohne Punkt am Ende; auf Deiner Website steht sonst überall
+   **„i.A.u.S."** mit Punkt. Soll ich das angleichen?
+
+> Antwort:
+
+## 17. Wie soll die Terminseite heißen?
+
+Sie heißt im Moment schlicht **„Termine"**. Das sagt nicht, was dort passiert — nämlich
+ein kostenloses, unverbindliches Kennenlerngespräch von zwanzig Minuten.
+
+Etwas wie „Kennenlernen" oder „Erstgespräch vereinbaren" würde mehr Menschen dazu
+bringen, überhaupt draufzuklicken. Aber das ist Deine Sprache, und Du triffst den Ton
+besser als wir.
+
+> **Deine Antwort:** „Kennenlernen" ✓ **Die Seite heißt künftig „Kennenlernen"** — im Menü,
+> als Überschrift und im Suchergebnis.
+
+## 18. Englisch und Italienisch — der ehrliche Stand
+
+Das gehört eigentlich zu Frage 9, ist aber wichtig genug für einen eigenen Punkt.
+
+**Der Auftrag war, die Seite auch auf Englisch und Italienisch anzubieten.** Übersetzt
+ist bisher **nur die Startseite**, in beiden Sprachen. Alle anderen Seiten und alle sechs
+Blogartikel gibt es nur auf Deutsch.
+
+Zwei Dinge dazu, die Du wissen solltest:
+
+**Erstens:** Beide Übersetzungen sind maschinell entstanden und **hat noch niemand
+gelesen**. Sie sind deshalb vorerst gesperrt — Suchmaschinen finden sie nicht, und sie
+stehen in keinem Menü. Das bleibt so, bis Du sie gelesen hast. Du sprichst beide Sprachen;
+niemand sonst hier kann beurteilen, ob das nach Dir klingt.
+
+**Zweitens, und das ist der ernste Teil:** Auf den englischen und italienischen Seiten
+fehlen im Moment **Impressum, Datenschutzerklärung und Disclaimer vollständig**. Auf den
+deutschen Seiten stehen sie unten auf jeder Seite. In Österreich muss ein Impressum aber
+auf der gesamten Website erreichbar sein, nicht nur im deutschen Teil — und der
+Disclaimer ist genau die Seite, die erklärt, dass Persephone keine Psychotherapie
+anbietet. Das wird repariert, bevor irgendetwas davon online geht.
+
+**Die eigentliche Frage an Dich:** Wie viel soll übersetzt werden? Alles — vierzehn Seiten
+plus sechs Blogartikel — bedeutet, dass Du am Ende ungefähr zwanzig Seiten Text auf
+Englisch und noch einmal zwanzig auf Italienisch gegenlesen musst, davon einige mit
+rechtlich heiklen Formulierungen über Deine Ausbildung.
+
+**Claudios Vorschlag wäre:** in Etappen. Zuerst nur die Seiten, die jemand wirklich
+braucht, um Dich zu verstehen und zu erreichen — Startseite, Über uns, die drei
+Angebotsseiten, Kontakt, und die drei rechtlichen Seiten. Der Blog kommt später oder
+bleibt deutsch. So sind es neun Seiten statt zwanzig, und die deutsche Website kann
+online gehen, ohne darauf zu warten.
+
+> **Deine Antwort:** „ja" ✓ **Neun Seiten in Etappen, der Blog bleibt vorerst deutsch.**
+> Du liest sie gegen, bevor irgendetwas davon sichtbar wird.
+
+## 19. Vier Gestaltungsfragen, die Claudio heute entschieden hat
+
+Nur zur Kenntnis — widersprich, wenn Dir etwas davon nicht gefällt.
+
+- **Die kleinen türkisfarbenen Überschriften** über den Abschnitten sind künftig überall
+  türkis. Auf Deiner jetzigen Website sind sie auf manchen Seiten türkis und auf anderen
+  rot — das war vermutlich nie Absicht.
+- **Der Ausbildungs-Block auf „Über uns"** bekommt wieder das kräftige türkise Band mit
+  weißer Schrift, so wie auf Deiner jetzigen Seite. Dort stehen Deine Qualifikationen,
+  und die sollen auffallen.
+- **Die Blogtitel in der Übersicht** bleiben dunkel und normal geschrieben, statt rot und
+  in Großbuchstaben wie bisher. Ruhiger und besser lesbar.
+- **Das Datum in der Blogliste** steht künftig als „16 / JULI 2026" statt „16 / 07, 2026".
+
+
+## 20. Möchtest Du wissen, wie viele Menschen Deine Seite besuchen?
+
+Hängt mit Frage 12 und 13 zusammen, deshalb hier gleich mit.
+
+Deine jetzige Website zählt Besuche mit einem Programm namens Matomo. Die neue Website
+zählt im Moment **gar nichts** — sie weiß nicht, wie viele Menschen kommen, welche Seite
+am meisten gelesen wird oder ob jemand über Google findet.
+
+Drei Möglichkeiten:
+
+1. **Gar keine Statistik.** Am einfachsten und datensparsamsten: nichts zu erklären,
+   nichts einzuwilligen, der Matomo-Abschnitt fliegt aus der Datenschutzerklärung. Du
+   weißt dafür nicht, ob und wie Deine Seite gefunden wird.
+2. **Eine Statistik ohne Cookies, auf Deinem eigenen Server.** Zählt Besuche, ohne
+   einzelne Personen wiederzuerkennen. Braucht nach überwiegender Auffassung kein
+   Einwilligungsfenster, aber weiterhin einen Absatz in der Datenschutzerklärung.
+3. **Matomo wie bisher.** Vertraut, und der Text steht schon in Deiner Erklärung — bringt
+   aber die Einwilligungsfrage zurück.
+
+**Was steckt dahinter, praktisch:** Wenn Du irgendwann wissen willst, ob ein Blogartikel
+gelesen wird oder ob sich das Schreiben lohnt, brauchst Du Möglichkeit 2 oder 3. Wenn Dir
+das egal ist, ist 1 die ruhigste Lösung.
+
+Claudio wollte das nicht allein entscheiden, weil es Deine Seite und Deine Erklärung
+betrifft.
+
+> Antwort:
+
+
+---
+
 ## Zusammengefasst
 
 | | Frage | Aufwand |
@@ -527,7 +819,30 @@ kümmert sich Claudio darum.
 | 8 | ~~Newsletter-Seite?~~ ✓ entschieden: wie bisher | — |
 | 9 | ~~Welcher Weg?~~ ✓ Weg A wird getestet | 15 Min. Test |
 | 10 | ~~Kontaktformular?~~ ✓ Microsoft Forms, Seiten getrennt · offen: Name der 5. Option | 1 Min. |
-| 11 | Datenschutzerklärung lesen und freigeben | in Ruhe |
+| 11 | Datenschutzerklärung lesen und freigeben | **offen** |
+| 12 | ~~Matomo und Kommentare~~ → hängt an Frage 20, nicht an WordPress | mit 20 |
+| 13 | Terminkalender: Banner-Frage geklärt, Empfehlung geändert → **Möglichkeit 2** | **offen, 2 Min.** |
+| 14 | ~~Logo Selbsthilfe Steiermark~~ ✓ abgesprochen | — |
+| 15 | ~~Titel bei Google~~ ✓ bleibt | — |
+| 16 | ~~Zehn Kurzbeschreibungen~~ ✓ geschrieben · zwei Rückfragen | 1 Min. |
+| 17 | ~~Name der Terminseite~~ ✓ „Kennenlernen" | — |
+| 18 | ~~Übersetzungsumfang~~ ✓ neun Seiten, Blog deutsch | — |
+| 19 | Vier Gestaltungsentscheidungen — nur zur Kenntnis | — |
+| 20 | Besucherstatistik: keine, cookiefrei, oder Matomo? | **offen, 5 Min.** |
 
-Punkt 11 ist der einzige, der wirklich wichtig ist. Alles andere lässt sich später
-jederzeit ändern.
+**Offen sind jetzt noch vier:**
+
+- **13** — Kalender eingebettet mit Banner, oder erst auf Klick? Meine Empfehlung hat sich
+  nach Deiner Rückfrage geändert: **Möglichkeit 2**, weil Du dann nichts erklären musst,
+  was sich morgen ändern kann. Zwei Minuten.
+- **20** — willst Du eine Besucherstatistik? Davon hängt ab, was mit dem Matomo-Abschnitt
+  passiert (Frage 12).
+- **11** — die Datenschutzerklärung lesen und freigeben. Am besten zuletzt, wenn 13 und 20
+  entschieden sind, weil beide den Text betreffen.
+- **16** — zwei winzige Rückfragen zu Deinen Beschreibungen (ein Tippfehler, eine
+  Abkürzung).
+
+Und aus Frage 10 steht weiterhin offen, wie die **fünfte Auswahl im Kontaktformular**
+heißen soll — für Kooperations- und Presseanfragen.
+
+Alles andere ist entschieden.
