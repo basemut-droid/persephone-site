@@ -63,7 +63,22 @@ one pass — it's a small decorative detail once the shape itself is known.
 
 </details>
 
-## 0c. Termine's calendar is embedded directly again — this costs a cookie banner
+## 0c. Termine's calendar embed vs. cookie banner — RESOLVED 2026-09-13: click-to-load, no banner
+
+Went back and forth (embedded directly per the owner's husband 2026-09-07, which
+would have needed a site-wide cookie banner — see the original entry preserved
+below), then settled during the 2026-09-13 night run: Kennenlernen's (the page's
+new name/URL, see #24) Bookings calendar loads only on click, not automatically
+on page load. Confirmed in `src/pages/kennenlernen.astro`. No cookie banner
+needed as a result. Full reasoning: `docs/decisions.md`, "Night run toward
+launch — 2026-09-13".
+
+**Not fully closed:** whether this is *legally* sufficient (rather than just
+technically banner-free) is part of the Datenschutzerklärung's outstanding
+DSB/owner sign-off — see #3/#16, not a separate open item here.
+
+<details>
+<summary>Original entry (kept for the record)</summary>
 
 Decision by the owner's husband, 2026-09-07: go back to embedding the Microsoft
 Bookings calendar directly on `/termine/`, without the click-to-load button a
@@ -84,6 +99,8 @@ alternatives — the click-to-load version that was briefly built and then
 reverted, or a plain link out to Microsoft (what the live site does today) —
 both keep the site banner-free. No consent banner has been added on this run's
 own initiative either way; that decision, and its wording if wanted, is yours.
+
+</details>
 
 ## 1. Ten pages ship no meta description — ERLEDIGT 2026-09-08
 
@@ -140,7 +157,19 @@ this one point; that's not a bug to reconcile away without the wife's sign-off.
   deployment) loads at launch time — cookies, analytics, embedded forms (Microsoft
   Bookings/Forms are both referenced in the body text), fonts.
 
-## 4. Kontakt's form has nowhere to submit yet — DECIDED, BLOCKED ON A FORM URL
+## 4. Kontakt's form has nowhere to submit yet — RESOLVED 2026-09-13: in-house PHP script
+
+Microsoft Forms (the plan below) turned out mid-session not to accept a POST from
+an external `<form>` at all — only reachable via its own hosted page or an iframe
+embed. Replaced with `public/kontakt-senden.php`, a small in-house script that sends
+straight to `marinabletsas@persephone.at`, no third party, no database. Full
+reasoning: `docs/decisions.md`, "Kontakt form implemented — 2026-09-13".
+
+The field set changed too along the way (phone dropped, topic options rebuilt
+against a newer prototype) — that part is **not** resolved, see #26.
+
+<details>
+<summary>Original entry (kept for the record)</summary>
 
 Decided (`fuer-marina.md` Q10 / `external-review.md` 2c): **Microsoft Forms**, same
 service already used for the Selbsthilfegruppe registration, submitting to
@@ -161,6 +190,8 @@ drei Vorschläge verworfen; die Kontaktseite bleibt, wie sie ist, mit vier Optio
 (Beratung, Workshops & Trainings, Selbsthilfegruppe, Sonstiges) — genau wie die Live-Seite.
 **Nichts ergänzen.**
 
+</details>
+
 ## 5. Not a decision — just worth knowing
 
 Several `<li>` elements in the live Über-uns page's "Ausbildung"/"Felderfahrung" lists
@@ -170,20 +201,11 @@ response at some point. Zero visible effect on the live page, and the actual vis
 text matches genuine content documented elsewhere — just an FYI in case the owner
 wants to clean up the live WordPress page's HTML source at some point.
 
-## 6. `astro.config.mjs`'s `site` is still a placeholder — BLOCKED ON HOSTING
+## 6. `astro.config.mjs`'s `site` — RESOLVED 2026-09-13: set to `https://persephone.at`
 
-`site: 'https://persephone.example'` — every built page's canonical URL, `og:url`, and
-the sitemap all derive from this, and all of them are currently wrong. Left as a
-placeholder deliberately: guessing a production domain isn't this run's call, and the
-real value depends on the hosting decision, not just the domain — see
-`docs/external-review.md`'s "DECISIONS PENDING" section (domain, hosting, and where
-the owner writes are three independent choices, and hosting gates everything else —
-the contact form endpoint, deploy config, the Datenschutz re-check, and the DNS
-cutover).
-
-**Recommendation:** decide hosting first (a European static host simplifies the
-Datenschutzerklärung's processor disclosure), then set `site` to the real domain in
-one line. `astro.config.mjs` carries a prominent `// TODO` marking exactly where.
+Hosting decided (easyname), domain resolved. Confirmed current in
+`astro.config.mjs`. Full reasoning: `docs/decisions.md`, "Night run toward
+launch — 2026-09-13".
 
 ## 7. EN/IT: tote Links auf den Locale-Startseiten — ERLEDIGT in Run B1, 8.9.2026
 
@@ -367,22 +389,14 @@ im Repo standen) und in `faqs.astro` als strukturierte Daten hinterlegt
 Abschnitte statt der Live-Seite eigener JS-Filter-Reiter — passend zum Rest der
 Seite, die interaktive Gruppierungen durchgehend ohne Pflicht-JavaScript baut.
 
-## 15. 301-Weiterleitungen — blockiert durch die Hosting-Entscheidung
+## 15. 301-Weiterleitungen — ERLEDIGT 2026-09-13
 
-Drei URL-Muster ändern sich:
-
-| live | Rebuild |
-|---|---|
-| `/angebote-2/` | `/angebote/` |
-| `/datenschutzerklaerung/` | `/datenschutz/` |
-| `/<artikel-slug>/` (Blogartikel direkt an der Wurzel) | `/blog/<artikel-slug>/` |
-
-Ohne Weiterleitungen laufen beim Domainwechsel alle bestehenden Links und alle
-Suchmaschinentreffer ins Leere — betrifft **jeden** Blogartikel. Wie das eingerichtet wird,
-hängt vom Hosting ab.
-
-**Nichts zu tun, bis die Hosting-Entscheidung steht** — aber es gehört auf die Liste der
-Dinge, die vor dem Umschalten fertig sein müssen.
+Alle drei Muster bestätigt in `public/.htaccess`: `/angebote-2/` → `/angebote/`,
+`/datenschutzerklaerung/` → `/datenschutz/`, Blogartikel-Wurzel → `/blog/...`
+(inklusive des einen live gefundenen Sonderfalls,
+`ist-unfruchtbarkeit-immer-noch-frauensache-2`). Gegen die echte
+Live-Sitemap geprüft und erweitert, nicht nur die drei hier gelisteten Muster
+— volle Begründung: `docs/decisions.md`, "Night run toward launch — 2026-09-13".
 
 ## 16. Datenschutzerklärung — die eine Wortänderung gehört Marina explizit gezeigt
 
@@ -471,26 +485,25 @@ steht in `docs/START-CHECKLISTE.md` Teil 3.
 
 # Neu aus LAUF-2026-09-10.md
 
-## 25. Kontakt-Formular: kein Absendeweg — DECIDED, BLOCKED ON EINER URL
+## 25. Kontakt-Formular: kein Absendeweg — siehe #4, ERLEDIGT 2026-09-13
 
-Beschlossen ist ein Microsoft-Formular; die Formular-URL fehlt aber bis heute. Die
-neue Kontaktseite (Teil C) hat die Felder aus Marinas Prototyp gebaut
-(`ContactForm.astro`: Name, E-Mail, Anliegen, Nachricht), aber `<form action="#">`
-ist ein sichtbarer Platzhalter — siehe den `TODO`-Kommentar direkt im Component. Sobald
-die Formular-URL existiert: entweder `action` darauf umbiegen, oder das `<form>` ganz
-durch ein eingebettetes Microsoft-Formular ersetzen (diese Wahl ist selbst offen, siehe
-Punkt 27 unten).
+Duplikat von #4 oben (gleiche Frage, aus einem späteren Lauf erneut aufgenommen) —
+dort als erledigt markiert, nicht hier separat.
 
-## 26. Kontakt: drei oder vier Anliegen-Optionen? — WIDERSPRUCH, NICHT AUFGELÖST
+## 26. Kontakt: drei oder vier Anliegen-Optionen? — WIDERSPRUCH, WEITER NICHT AUFGELÖST
 
-Der Prototyp (`docs/mockups/kontakt-prototype.dc.html`) bietet drei Optionen: „Frage zu
-Persephone", „Kooperation & Presse", „Sonstiges". Beschlossen waren an anderer Stelle
-**vier** Anliegen-Optionen, ausdrücklich ohne fünfte (siehe Punkt "Kontakt's Anliegen
-dropdown" in `HANDOFF.md`, Entscheidung 2026-09-08). Dieser Lauf hat sich für die drei
-aus dem Prototyp entschieden, weil er der jüngere Stand ist (LAUF-2026-09-10.md C3.2) —
-aber das löst den Widerspruch nicht auf, es wählt nur eine Seite davon. Marina/Claudio:
-bitte entscheiden, ob die vierte Option zurückkommt oder die frühere Vier-Optionen-
-Entscheidung selbst überholt ist.
+**Nachgeprüft gegen den aktuellen Code, nicht nur gegen eine ältere Zusammenfassung:**
+`ContactForm.astro`/`kontakt-senden.php` liefern heute tatsächlich die drei Optionen
+aus dem Prototyp (`frage`/`kooperation`/`sonstiges`), das Telefonfeld ist ebenfalls
+entfernt — beides bestätigt im Code selbst, inklusive eines eigenen Kommentars direkt
+in `ContactForm.astro`, der genau diesen Widerspruch schon benennt ("a real
+contradiction between the two records"). Eine frühere Notiz in `HANDOFF.md` hatte das
+als "moot" bezeichnet — das war **zu voreilig**: es gibt bis heute keine Aufzeichnung
+einer bewussten Entscheidung, die die früheren vier Optionen (Beratung, Workshops &
+Trainings, Selbsthilfegruppe, Sonstiges) zugunsten der drei Prototyp-Optionen
+aufgehoben hätte. Der Code hat sich einfach durch den Kontakt-Neubau (LAUF-2026-09-10.md
+Teil C) so ergeben, nicht durch eine erneute Entscheidung. **Weiterhin offen:** Marina/
+Claudio bitte entscheiden, welches der beiden Themen-Sets tatsächlich gewünscht ist.
 
 ## 27. Kontakt: „Termin buchen" — Overlay oder eigene Seite?
 
