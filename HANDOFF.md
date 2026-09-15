@@ -163,6 +163,12 @@ re-confirmed:
   live during tonight's CMS test, still unresolved, your call whether it's
   worth fixing.
 
+**Also rewrote `README.md`** — it still described the project as an early
+"Phase 1" homepage-only prototype (wrong font listed, CMS called "not usable,"
+only 4 pages listed in the structure tree). Rewritten to match reality and
+added a "Documentation map" section explaining what each doc in this project
+is for.
+
 ## Documentation cleanup — 2026-09-15
 
 `OPEN-QUESTIONS.md` and `DESIGN-SYSTEM.md` had both drifted — several stale
