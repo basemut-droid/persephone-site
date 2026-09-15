@@ -1,65 +1,96 @@
 # Persephone — Website Rebuild
 
 Astro rebuild of [persephone.at](https://persephone.at/) (currently WordPress + the Avada
-theme). Phase 1: reproduce the homepage 1:1 visually, cleaner technically, with the
-DE/EN/IT and blog/events infrastructure already in place for phase 2.
+theme), for Marina Bletsas's psychotherapy/coaching practice. All 14 pages (homepage + 12
+standalone pages + blog) are built and content-complete, with a working CMS editor and a
+deploy pipeline to the real host (easyname) — this is a pre-launch site, not an early
+prototype. **Read [HANDOFF.md](HANDOFF.md) first** for exactly what's done, what's still
+open, and what to do next — this file only covers what the codebase *is*, not its current
+state.
 
-## Status (Phase 1)
+## Documentation map
 
-- ✅ Homepage rebuilt for `de` (default), `en`, `it` — content in
-  `src/content/site/*.json`. **`de.json` is the real, verbatim copy from the live site.
-  `en.json` and `it.json` are AI-drafted translations, flagged `"reviewStatus": "ai-draft"`
-  and shown with a banner on the page — have a native speaker check these before launch.**
-- ✅ Blog + events content collections wired up (`src/content.config.ts`), with 4 stub
-  blog posts (titles/teasers only — full article text still needs migrating from WP).
-- ⏳ Not yet real: `/newsletter/` redirects to the external MailerLite form, matching
-  the live site (no local newsletter provider is wired in — see OPEN-QUESTIONS.md #2);
-  the consent/cookie banner isn't implemented (none was found active on the live site
-  — see `docs/external-review.md` 3c for the one thing that would require one); colors/
-  fonts are inferred from the live site's CSS, cross-checked against
-  `docs/brand/Brandbook.pdf` — see `src/styles/global.css` for details.
+This project keeps a deliberately layered set of docs — each has one job, don't duplicate
+between them:
 
-## Assumptions made — please confirm
+- **[CLAUDE.md](CLAUDE.md)** — standing rules for working in this repo (stack, the
+  content/archive split, "reuse before you build," never one-off CSS).
+- **[HANDOFF.md](HANDOFF.md)** — current state only: what's done, what's open, what's
+  next. Read this at the start of every session.
+- **[docs/decisions.md](docs/decisions.md)** — the full append-only history: every past
+  session's reasoning, in detail, newest first.
+- **[OPEN-QUESTIONS.md](OPEN-QUESTIONS.md)** — every item still waiting on the owner,
+  Marina, or Claudio, with options and a recommendation.
+- **[DESIGN-SYSTEM.md](DESIGN-SYSTEM.md)** — the design tokens, components, and layout
+  specs, kept fact-checked against the actual code in `src/styles/global.css` and
+  `src/components/`.
+- **[docs/LAUNCH-TAG-RUNBOOK.md](docs/LAUNCH-TAG-RUNBOOK.md)** — the ordered, attended
+  checklist for the actual cutover day.
 
-| Item | What was assumed | Why |
-|---|---|---|
-| Colors | Teal (#48b0b0/#309898/#90c8c0) + terracotta (#b33a3b/#d83830) on cream (#fbf8f5/#f3ece6), ink text #181a2b | Read from the live site's own CSS custom properties — not an official CD doc |
-| Fonts | Body: DM Sans · Headings: Jost | DM Sans confirmed in the page's own inline styles; Jost is self-hosted alongside it and is the best fit for the remaining weights found |
-| Newsletter provider | None wired — form is a provider-agnostic stub | Nothing in the live site's markup pointed to a specific provider |
-| Consent/cookie tool | None implemented | No consent-management script was found running on the live site |
+## Stack
+
+- **Astro 7**, static output, deployed via GitHub Actions → FTPS → easyname.
+- **DM Sans** — the only font, self-hosted via `@fontsource` (no external font requests).
+- **i18n**: `de` (default, unprefixed) / `en` / `it` — only the homepage is translated so
+  far, and EN/IT stay `noindex`ed until the owner reads them line by line (see
+  `HANDOFF.md`).
+- **Content collections** (`src/content.config.ts`): `pages` (one flowing markdown body
+  per standalone page — deliberately unstructured, since different pages need very
+  different components, see `DESIGN-SYSTEM.md`'s "Page composition" section), `blog`,
+  `site` (nav/footer/homepage text), and `events` (schema exists, not used yet — no real
+  event content, a phase-2 placeholder).
+- **Decap CMS** (`public/admin/`) — GitHub-backed, via a self-hosted PHP OAuth broker
+  (`public/cms-auth.php`/`cms-callback.php`, not a third-party service). Built and tested
+  end-to-end; see `HANDOFF.md` for what's still needed before Marina can use it herself.
 
 ## Project structure
 
 ```
 src/
-  content.config.ts       # blog, events, and site (text) collection schemas
+  content.config.ts        # pages, blog, events, site collection schemas
   content/
-    site/{de,en,it}.json   # every homepage + nav/footer string, per locale
-    blog/{de,en,it}/*.md    # blog posts (Decap's "multiple folders" i18n layout)
-    events/{de,en,it}/*.md  # same layout, ready for phase 2
-  i18n/utils.ts            # locale helpers, language-switcher path logic
-  layouts/BaseLayout.astro # head/meta/OG/hreflang/schema.org, header+footer shell
-  components/              # Header, Footer, LanguageSwitcher, HomePage, cards, etc.
+    pages/de/*.md           # one markdown body per standalone page (see BlockTracker below)
+    site/{de,en,it}.json    # nav/footer/homepage text, per locale
+    blog/{de,en,it}/*.md    # blog posts
+    events/{de,en,it}/      # schema-only, unused so far
+  lib/parseMarkdownBlocks.ts # splits a page's markdown body into blocks; BlockTracker
+                              # asserts every block is rendered or explicitly excluded
+  i18n/utils.ts              # locale helpers, language-switcher path logic
+  layouts/BaseLayout.astro   # head/meta/OG/hreflang/schema.org, header+footer shell
+  components/                # Header, Footer, PageHero, ServiceCard, ClosingCta, etc.
+                              # — see DESIGN-SYSTEM.md's Component inventory
   pages/
     index.astro, en/index.astro, it/index.astro
-    404.astro, impressum.astro, datenschutz.astro
+    angebote.astro, beratung.astro, workshops.astro, selbsthilfegruppe.astro,
+    ueber-uns.astro, kontakt.astro, kennenlernen.astro, faqs.astro, disclaimer.astro,
+    impressum.astro, datenschutz.astro, blog/, 404.astro
+  styles/global.css          # every design token + shared layout class (see the warning
+                              # in DESIGN-SYSTEM.md about why this must stay global, never
+                              # scoped inside one component)
 public/
-  admin/                   # Decap CMS (not usable until deployed — see config.yml)
-  robots.txt               # explicitly allows AI/LLM crawlers (GEO)
+  admin/                     # Decap CMS config
+  cms-auth.php, cms-callback.php   # the OAuth broker (see docs/CMS-BROKER-SETUP.md)
+  kontakt-senden.php         # Kontakt form's own backend — in-house, no third party
+  cms-secrets.local.php      # gitignored, never committed — uploaded by hand via FTP
+  robots.txt                 # explicitly allows AI/LLM crawlers (GPTBot, ClaudeBot, etc.)
 ```
 
 ## Commands
 
-| Command           | Action                                      |
-| ------------------ | -------------------------------------------- |
-| `npm run dev`       | Local dev server at `localhost:4321`         |
-| `npm run build`     | Production build to `./dist/`                |
-| `npm run preview`   | Preview the production build locally          |
+| Command | Action |
+| --- | --- |
+| `npm run dev` | Local dev server at `localhost:4321` |
+| `npm run build` | Production build to `./dist/`, then `scripts/build-check.mjs` — blocks on missing alt text, unrendered schema fields, broken internal links, unlabeled links, and missing meta descriptions |
+| `npm run preview` | Preview the production build locally |
 
-## Editing text without touching code (once deployed)
+Per `CLAUDE.md`: start the dev server with `astro dev --background`, manage it with
+`astro dev stop`/`status`/`logs`, rather than a plain foreground `npm run dev`.
 
-All site copy lives in `src/content/site/{de,en,it}.json`. Once the site is deployed and
-a Decap CMS backend is wired up (see the comments in `public/admin/config.yml`), your
-wife will be able to edit these through a web form instead of JSON — one tab per
-language. Blog posts and events work the same way, one folder per language under
-`src/content/blog/` and `src/content/events/`.
+## Editing text through the CMS
+
+Once the CMS is fully rolled out (see `HANDOFF.md` for what's still open — an easyname
+firewall exception and Marina's own GitHub access), she'll edit most pages' text and
+images through `/admin/`, a real web form — no code, no git, no terminal. Two pages
+(`angebote.md`'s `recognitionPanel`, `beratung.md`'s `formatBadges`) aren't editable this
+way yet — their content has a shape no Decap widget represents cleanly without real
+follow-up work.
