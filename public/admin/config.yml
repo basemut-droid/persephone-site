@@ -190,6 +190,105 @@ collections:
       - { label: "Entwurf", name: "draft", widget: "boolean", default: true }
       - { label: "Inhalt", name: "body", widget: "markdown", i18n: true }
 
+  # --- Standalone pages (src/content/pages/de/*.md) ---
+  #
+  # Uses `files` (one entry per page, its own exact field list — same
+  # pattern as the "site" collection above), NOT `folder` with one shared
+  # field list. Reason: Decap only ever writes back the fields it's been
+  # told about for that file, so a shared/generic list risks silently
+  # dropping a field a specific page actually needs whenever ANY field on
+  # that file is saved through the editor. Listing each page individually
+  # means the fields declared here always match that file's real frontmatter
+  # exactly (verified against every file in src/content/pages/de/,
+  # 2026-09-15).
+  #
+  # DELIBERATELY NOT INCLUDED, don't add without building real support first:
+  #   - angebote.md: has `recognitionPanel`, a nested structure keyed by
+  #     arbitrary offer names (the ten-statement self-recognition selector's
+  #     data) — no clean Decap widget represents this without changing its
+  #     on-disk shape, which would break angebote.astro's lookups.
+  #   - beratung.md: has `formatBadges`, a dictionary keyed by format name
+  #     ("Einzelberatung"/"Paarberatung") — same class of problem.
+  #   - datenschutzerklaerung.md: a frozen archival record, never rendered
+  #     (src/pages/datenschutz.astro is the real, hand-maintained page) —
+  #     editing this here would look like it does something and wouldn't.
+  #
+  # IMPORTANT for whoever edits body text through this: each page's
+  # component (parseMarkdownBlocks.ts + BlockTracker) finds specific
+  # sections by matching heading text exactly. Editing paragraph text is
+  # always safe. Renaming or deleting a `##`/`###` heading is NOT silently
+  # ignored — it fails the next build loudly (naming the missing heading),
+  # rather than quietly changing the page's layout. If a heading needs to
+  # change, a developer should update the matching .astro file in the same
+  # change.
+  - name: "pages"
+    label: "Weitere Seiten"
+    files:
+      - name: "workshops"
+        label: "Workshops & Einzeltrainings"
+        file: "src/content/pages/de/workshops.md"
+        fields: &page_fields_standard
+          - { label: "Titel (Browser-Tab)", name: "title", widget: "string" }
+          - { label: "Meta-Beschreibung (Suchmaschinen)", name: "description", widget: "text", required: false }
+          - { label: "Ursprüngliche Live-URL (nicht ändern)", name: "sourceUrl", widget: "string" }
+          - { label: "Titelbild", name: "heroImage", widget: "image", required: false }
+          - { label: "Bild Alt-Text", name: "heroImageAlt", widget: "string", required: false }
+          - label: "Seiteninhalt"
+            name: "body"
+            widget: "markdown"
+            hint: "Absätze frei bearbeiten. Überschriften (##, ###) nicht umbenennen oder löschen — siehe Hinweis oben in der Konfiguration."
+      - name: "selbsthilfegruppe"
+        label: "Selbsthilfegruppe"
+        file: "src/content/pages/de/selbsthilfegruppe.md"
+        fields:
+          - { label: "Titel (Browser-Tab)", name: "title", widget: "string" }
+          - { label: "Meta-Beschreibung (Suchmaschinen)", name: "description", widget: "text", required: false }
+          - { label: "Ursprüngliche Live-URL (nicht ändern)", name: "sourceUrl", widget: "string" }
+          - label: "Die drei Grundsätze"
+            name: "principles"
+            widget: "list"
+            fields:
+              - { label: "Symbol", name: "icon", widget: "string", hint: "z.B. shield, heart, group — siehe Icon.astro für gültige Namen." }
+              - { label: "Bezeichnung", name: "label", widget: "string" }
+          - label: "Seiteninhalt"
+            name: "body"
+            widget: "markdown"
+            hint: "Absätze frei bearbeiten. Überschriften (##, ###) nicht umbenennen oder löschen — siehe Hinweis oben in der Konfiguration."
+      - name: "ueber-uns"
+        label: "Über uns"
+        file: "src/content/pages/de/ueber-uns.md"
+        fields: *page_fields_standard
+      - name: "disclaimer"
+        label: "Disclaimer"
+        file: "src/content/pages/de/disclaimer.md"
+        fields: *page_fields_standard
+      - name: "faqs"
+        label: "FAQs"
+        file: "src/content/pages/de/faqs.md"
+        fields: *page_fields_standard
+      - name: "impressum"
+        label: "Impressum"
+        file: "src/content/pages/de/impressum.md"
+        fields: *page_fields_standard
+      - name: "blog-intro"
+        label: "Blog (Übersichtsseite)"
+        file: "src/content/pages/de/blog.md"
+        fields: *page_fields_standard
+      - name: "kennenlernen"
+        label: "Kennenlernen (nur Titel/Meta — sichtbarer Text ist im Code)"
+        file: "src/content/pages/de/kennenlernen.md"
+        fields:
+          - { label: "Titel (Browser-Tab)", name: "title", widget: "string" }
+          - { label: "Meta-Beschreibung (Suchmaschinen)", name: "description", widget: "text", required: false }
+          - { label: "Ursprüngliche Live-URL (nicht ändern)", name: "sourceUrl", widget: "string" }
+      - name: "kontakt"
+        label: "Kontakt (nur Titel/Meta — sichtbarer Text ist im Code)"
+        file: "src/content/pages/de/kontakt.md"
+        fields:
+          - { label: "Titel (Browser-Tab)", name: "title", widget: "string" }
+          - { label: "Meta-Beschreibung (Suchmaschinen)", name: "description", widget: "text", required: false }
+          - { label: "Ursprüngliche Live-URL (nicht ändern)", name: "sourceUrl", widget: "string" }
+
   # --- Events: same locale-folder pattern, ready for phase 2 ---
   - name: "events"
     label: "Termine"
