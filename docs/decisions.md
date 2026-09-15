@@ -6,6 +6,87 @@ can stay a "current state only" document (`external-review.md`'s "PROCESS NOTE" 
 
 ---
 
+# Documentation cleanup pass: OPEN-QUESTIONS.md, DESIGN-SYSTEM.md, repo hygiene — 2026-09-15
+
+Same night as the CMS broker work above, a separate, deliberate cleanup pass —
+requested explicitly because both docs and the working tree had gotten
+"convoluted." Scope: fix facts, don't invent, log genuine doubts as questions
+rather than deciding them — same standard as everything else in this project.
+
+**`OPEN-QUESTIONS.md`:** five stale entries (#0c, #4, #6, #15, #25) marked
+resolved with a short pointer to their real record in this file, following the
+file's own existing pattern for closed items (a stub, not a blanket deletion,
+so a closed question doesn't get re-investigated from scratch). **One real,
+previously-missed drift caught in the process:** #26 (Kontakt's three-vs-four
+Anliegen options) had been called "moot" in an earlier `HANDOFF.md` note — false;
+verified against the actual shipped code (`ContactForm.astro`/`kontakt-senden.php`,
+which even carries its own code comment naming this exact contradiction) and
+found no recorded decision ever reconciled the two option sets. Corrected to
+say so plainly rather than let a hasty note stand as settled.
+
+**`DESIGN-SYSTEM.md`:** a full fact-check against `global.css` and every
+component/page it describes (not against the doc's own prior text), per an
+explicit instruction to fix facts only, not declutter the historical
+"was X, now Y, because" annotations (those are decision-provenance, the kind
+of thing this project's `CLAUDE.md` asks to keep, unlike `HANDOFF.md`'s pure
+duplication). Confirmed drift, all from later live corrections nobody looped
+back to this doc for:
+- Über uns's qualification-band panels moved color (`--color-teal-dark` →
+  `--color-teal`, 2026-09-11) — computed the resulting contrast directly from
+  the token's own hex values via the WCAG formula (≈2.4:1, lower than the
+  already-substandard 2.96:1 it replaced) rather than asserting a number
+  without deriving it.
+- `ServiceCard`'s pomegranate-seed texture, removed entirely (`OPEN-QUESTIONS`
+  #39) — doc still described it.
+- `ClosingCta`'s `layout: 'overlap'|'pair'` prop and its fixed pixel
+  dimensions, both gone since a 2026-09-11 unification to one shape — doc
+  still described the old two-shape version.
+- `CtaBand`'s "Used by" column wrongly duplicated `ClosingCta`'s page list —
+  it's HomePage-only; those four pages use the other component.
+- The nav dropdown's rebuild from native `<details>` to a button+JS mechanism
+  (a `<details>` can't both navigate and disclose, `external-review.md` #0) —
+  doc still described the old, since-replaced version, including a
+  since-reverted color-on-open behavior. Language switcher, unaffected, still
+  works as documented — split the two apart where they'd been wrongly lumped
+  together in the Interaction States table.
+- `ContactForm`'s inventory row said "not wired to a backend" and listed a
+  phone field, both stale since the in-house PHP script and a field-set
+  change.
+- `PageHero`'s plain-banner width is `1200px`, not the `48rem`/768px this doc
+  claimed — changed 2026-09-12 for a title-alignment fix that never got
+  reflected here; the doc's own `OPEN-QUESTIONS` cross-reference (#17) was
+  also simply wrong (that entry is about `.hero-grid`'s height). Updated
+  `OPEN-QUESTIONS.md` #9 to match — its whole premise (a narrower lede)
+  no longer describes the code, so it's reopened with corrected numbers
+  rather than left stale.
+- `--space-6`'s "adopted by `CtaBand`" claim was stale — that gap was removed
+  entirely on request, 2026-09-11; only `--space-7` is genuinely in use.
+- A `--color-footer-bg`/`#e9dccd` mention in the historical "Gap-closing
+  pass" section was never marked superseded by its own later removal.
+
+Added a proper "Qualification bands" section (previously just one color-table
+cell) reflecting the current build in full: flat color, no texture/accent,
+2:1 panel:image split, the full-bleed width exception, and the scroll-
+crossfade mechanism.
+
+**Repo hygiene:** `docs/fuer-marina.md` had a large, complete, coherent edit
+(a full "Teil 4," Fragen 12–20, Marina's own recorded answers through an
+updated summary table) sitting uncommitted since before this session —
+already cited by name elsewhere in already-committed docs, strong evidence
+it was meant to be committed alongside an earlier session's work and simply
+got missed. Same situation for ten more run-record docs
+(`FEEDBACK-2026-09-08.md`, `NACHTLAUF-2026-09-09.md`, `NACHTRAG-2026-09-11.md`,
+`PRUEFUNG-B1.md`, `RUN-2026-09-07-B/-B1/-B2.md`, `UEBERGABE-CHAT.md`,
+`UEBERSETZUNG.md`, `VERGLEICH-2026-09-07.md`) and two QA screenshot batches —
+all committed now. `Claude outputs/` (6.7MB — screenshots plus stale or
+duplicate copies of files that already exist properly in `docs/`, matching
+the default save location some Claude interfaces write generated files to,
+not a project folder) is `.gitignore`'d rather than deleted outright — unlike
+a tracked file, there'd be no way back if that judgment turned out wrong;
+left in place on disk for a human to review.
+
+---
+
 # CMS login broker tested end-to-end; a real ModSecurity block found and fixed for staging — 2026-09-15
 
 Continuation of the same day's broker build (entry below). The owner walked

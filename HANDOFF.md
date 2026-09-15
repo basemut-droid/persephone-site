@@ -134,10 +134,20 @@ knowing without opening that file:
   (`docs/LAUNCH-TAG-RUNBOOK.md` point 2).
 - Two of the ten meta descriptions still carry a wording question
   (`docs/fuer-marina.md` Frage 16).
-- Repo hygiene: several untracked docs/screenshot folders (from earlier
-  sessions) are still sitting in the working tree, uncommitted — `docs/fuer-marina.md`
-  also has a pending uncommitted edit predating tonight's session. Neither
-  touched this session; still open.
+- **Kontakt's Anliegen options are still genuinely unresolved, not moot** —
+  corrected an earlier hasty note tonight; see `OPEN-QUESTIONS.md` #26.
+
+## Documentation cleanup — 2026-09-15
+
+`OPEN-QUESTIONS.md` and `DESIGN-SYSTEM.md` had both drifted — several stale
+open items, and `DESIGN-SYSTEM.md` describing code as it used to be rather
+than as it is now (a color that moved, a removed component prop, a rebuilt
+nav dropdown, among others). Fact-checked and fixed; full list of what was
+wrong and why: `docs/decisions.md`'s matching 2026-09-15 entry. Also closed
+the repo-hygiene backlog — `docs/fuer-marina.md`'s long-pending edit and ten
+more untracked history docs/screenshot folders are committed now; `Claude
+outputs/` (stale/duplicate content, not a project folder) is `.gitignore`'d.
+Working tree is clean.
 
 ## Next step
 
